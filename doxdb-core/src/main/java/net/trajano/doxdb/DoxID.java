@@ -1,5 +1,6 @@
 package net.trajano.doxdb;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -11,7 +12,20 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Archimedes
  */
-public final class DoxID {
+public final class DoxID implements
+    Serializable {
+
+    /**
+     * Set of allowed characters in the ID. Letters or numbers only. This
+     * provides higher than 128-bits but less than 256-bits of randommess.
+     */
+    private static final char[] ALLOWED;
+
+    /**
+     * This is transpose of the {@link #ALLOWED} array used to look up
+     * characters to ensure they are allowed.
+     */
+    private static final boolean[] ALLOWED_MAP;
 
     /**
      * Size of the ID in bytes.
@@ -19,14 +33,21 @@ public final class DoxID {
     public static final int LENGTH = 32;
 
     /**
-     * Set of allowed characters in the ID. Every printable US-ASCII character
-     * except for space, quote, double quote and ampersand are allowed.
+     * bare_field_name.
      */
-    private static final char[] ALLOWED = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~".toCharArray();
+    private static final long serialVersionUID = -1726922680838907757L;
+
+    static {
+        ALLOWED = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+        ALLOWED_MAP = new boolean[256];
+        for (final char allowedChar : ALLOWED) {
+            ALLOWED_MAP[allowedChar] = true;
+        }
+    }
 
     /**
      * Generate a new instance with a randomized ID value.
-     * 
+     *
      * @return
      */
     public static DoxID generate() {
@@ -37,6 +58,9 @@ public final class DoxID {
 
     private final char[] b = new char[LENGTH];
 
+    /**
+     * Calculated hashcode value.
+     */
     private final int hash;
 
     private DoxID() {
@@ -45,23 +69,28 @@ public final class DoxID {
         int currentHash = LENGTH;
         for (int i = 0; i < LENGTH; ++i) {
             final int rand = random.nextInt(0, ALLOWED.length);
-            b[i] = (char) ALLOWED[rand];
+            b[i] = ALLOWED[rand];
             currentHash += b[i];
         }
         hash = currentHash;
 
     }
 
-    public DoxID(String s) {
+    public DoxID(final String s) {
 
         if (s.length() != LENGTH) {
             throw new IllegalArgumentException("input needs to be " + LENGTH + " in length.");
         }
         int currentHash = LENGTH;
-        char[] chars = s.toCharArray();
+        final char[] chars = s.toCharArray();
         for (int i = 0; i < LENGTH; ++i) {
-            b[i] = chars[i];
-            currentHash += chars[i];
+            if (ALLOWED_MAP[chars[i]]) {
+                b[i] = chars[i];
+                currentHash += chars[i];
+            } else {
+                throw new IllegalArgumentException("Invalid character for DoxID");
+            }
+
         }
         hash = currentHash;
     }
@@ -73,6 +102,9 @@ public final class DoxID {
             return true;
         }
         if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof DoxID)) {
             return false;
         }
         final DoxID other = (DoxID) obj;

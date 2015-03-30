@@ -4,7 +4,7 @@
     <parent>
         <groupId>net.trajano</groupId>
         <artifactId>trajano</artifactId>
-        <version>11.1</version>
+        <version>12</version>
     </parent>
     <groupId>net.trajano.doxdb</groupId>
     <artifactId>doxdb</artifactId>
@@ -12,6 +12,14 @@
     <packaging>pom</packaging>
     <name>doxdb</name>
     <description>A data framework to allow storing of structured data using JDBC.</description>
+    <modules>
+        <module>doxdb-core</module>
+        <module>doxdb-ejb</module>
+        <module>doxdb-rest</module>
+        <module>doxdb-sample</module>
+        <module>doxdb-sample-ejb</module>
+        <module>doxdb-sample-web</module>
+    </modules>
     <scm>
         <connection>scm:git:https://github.com/trajano/${project.artifactId}</connection>
         <developerConnection>scm:git:ssh://git@github.com/trajano/${project.artifactId}.git</developerConnection>
@@ -22,7 +30,7 @@
         <site>
             <id>gh-pages</id>
             <name>Trajano Github Pages</name>
-            <url>github:http://site.trajano.net/jetng/</url>
+            <url>github:http://site.trajano.net/doxdb/</url>
         </site>
     </distributionManagement>
     <properties>
@@ -44,32 +52,21 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>openid-connect-jaspic-sample</artifactId>
+                <artifactId>doxdb-rest</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>openid-connect-provider</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>openid-connect-provider-ejb</artifactId>
+                <artifactId>doxdb-sample-ejb</artifactId>
                 <version>${project.version}</version>
                 <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>openid-connect-provider-sample</artifactId>
+                <artifactId>doxdb-sample-web</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>openid-connect-sample</artifactId>
-                <version>${project.version}</version>
-                <type>ear</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -83,7 +80,7 @@
         <dependency>
             <groupId>net.trajano.commons</groupId>
             <artifactId>commons-testing</artifactId>
-            <version>2.1.0-SNAPSHOT</version>
+            <version>2.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -227,6 +224,25 @@
                     <version>2.4</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <extensions>true</extensions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ejb-plugin</artifactId>
+                    <version>2.3</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath/>
+                            </manifest>
+                        </archive>
+                        <ejbVersion>3.2</ejbVersion>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>3.0.0</version>
@@ -259,28 +275,17 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.5.3</version>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>bundle-manifest</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>manifest</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>net.trajano.mojo</groupId>
+                <artifactId>m2e-codestyle-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.trajano</groupId>
+                        <artifactId>coding-standards</artifactId>
+                        <version>2.1.1-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>net.trajano</groupId>
-                <artifactId>coding-standards</artifactId>
-                <version>2.0.0</version>
-            </extension>
-        </extensions>
     </build>
     <reporting>
         <plugins>
@@ -365,31 +370,16 @@
                     <plugin>
                         <groupId>net.trajano.mojo</groupId>
                         <artifactId>m2e-codestyle-maven-plugin</artifactId>
-                        <version>1.1.0</version>
                         <executions>
                             <execution>
                                 <goals>
                                     <goal>configure</goal>
                                 </goals>
-                                <configuration>
-                                    <codeStyleBaseUrl>codestyle</codeStyleBaseUrl>
-                                </configuration>
                             </execution>
                         </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>net.trajano</groupId>
-                                <artifactId>coding-standards</artifactId>
-                                <version>2.0.0</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-    <modules>
-    	<module>doxdb-ejb</module>
-    	<module>doxdb-core</module>
-    </modules>
 </project>

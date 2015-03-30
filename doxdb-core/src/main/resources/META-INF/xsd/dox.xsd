@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://doxdb.trajano.net/schema/"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	jxb:extensionBindingPrefixes="xjc" targetNamespace="http://doxdb.trajano.net/schema/"
+	jxb:version="2.0" attributeFormDefault="unqualified"
+	elementFormDefault="qualified">
+	<annotation>
+		<appinfo>
+			<jxb:globalBindings generateIsSetMethod="true">
+				<xjc:serializable uid="20150101" />
+			</jxb:globalBindings>
+		</appinfo>
+	</annotation>
+	<element name="dox-persistence">
+		<complexType>
+			<sequence>
+				<element type="tns:DoxType" name="dox" minOccurs="1"
+					maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		<unique name="uniqueName">
+			<selector xpath="dox" />
+			<field xpath="@name" />
+		</unique>
+	</element>
+	<complexType name="DoxType">
+		<sequence>
+			<element name="schema" type="tns:SchemaType" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="name" type="NMTOKEN" use="required" />
+		<attribute name="size" type="positiveInteger" default="1073741824">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Size of the content in bytes. Defaults to 1GB.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+		<attribute name="oob" type="boolean" default="false">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Indicates whether OOB tables should be created.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+		<attribute name="readAll" type="boolean" default="true">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>If true, this will allow access to the readAll method
+							for the collection. This is normally true for small collections.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+		<attribute name="oobSize" type="positiveInteger" default="2147483647">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Size of an OOB in bytes. Defaults to 2GB. Ignored if
+							oob is false.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+	</complexType>
+	<complexType name="SchemaType">
+		<annotation>
+			<appinfo>
+				<jxb:class>
+					<jxb:javadoc>A schema definition.
+					</jxb:javadoc>
+				</jxb:class>
+			</appinfo>
+		</annotation>
+		<sequence>
+			<element name="oob" type="token" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="version" type="positiveInteger" use="required">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Specifies the version identifier for the schema.
+						</jxb:javadoc>
+						<jxb:baseType name="java.lang.Integer" />
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+		<attribute name="uri" type="anyURI" use="required" />
+	</complexType>
+</schema>
