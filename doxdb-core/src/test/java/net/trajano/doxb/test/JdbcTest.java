@@ -1,6 +1,5 @@
 package net.trajano.doxb.test;
 
-import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -20,11 +19,10 @@ public class JdbcTest {
     public void testPersistence() throws Exception {
 
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        // Connection c = DriverManager.getConnection("jdbc:derby:memory:" +
-        // UUID.randomUUID() + ";create=true");
+        Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
 
-        Connection c = DriverManager.getConnection("jdbc:derby://" + InetAddress.getLocalHost()
-                .getHostName() + ":1527/sun-appserv-samples;create=true;upgrade=true");
+//        Connection c = DriverManager.getConnection("jdbc:derby://" + InetAddress.getLocalHost()
+//                .getHostName() + ":1527/sun-appserv-samples;create=true;upgrade=true");
 
         DoxDAO dao = new DoxDAO(c, "sample");
         DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))

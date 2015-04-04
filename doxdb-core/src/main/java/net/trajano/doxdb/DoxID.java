@@ -19,10 +19,10 @@ public final class DoxID {
     public static final int LENGTH = 32;
 
     /**
-     * Set of allowed characters in the ID. Every printable US-ASCII character
-     * except for space, quote, double quote and ampersand are allowed.
+     * Set of allowed characters in the ID. Letters or numbers only. This
+     * provides higher than 128-bits but less than 256-bits of randommess.
      */
-    private static final char[] ALLOWED = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~".toCharArray();
+    private static final char[] ALLOWED = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
     /**
      * Generate a new instance with a randomized ID value.
@@ -73,6 +73,9 @@ public final class DoxID {
             return true;
         }
         if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof DoxID)) {
             return false;
         }
         final DoxID other = (DoxID) obj;
