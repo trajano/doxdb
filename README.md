@@ -54,8 +54,10 @@ Storage files are kept in MIME multipart message format.  This allows adding
 additional meta data without changing the structure and allows for the document
 content to be stored as is.
 
+Since JDBC is used and byte arrays are avoided in the implementation, the
 [Out of band data][1] such as embedded images or file attachments are stored
-in the file system as-is for performance.
+in the database rather than being managed outside the database for extra
+performance.  This simplifies the architecture implementations.
 
 
 Comparison with other data stores

@@ -30,21 +30,64 @@ public class DoxDAO {
 
     private final String updateSql;
 
+    private final String copyToTombstoneSql;
+
+    private final String oobDeleteSql;
+
+    private final String oobInsertSql;
+
+    private final String oobReadContentSql;
+
+    private final String oobReadSql;
+
+    private final String oobReadForUpdateSql;
+
+    private final String oobUpdateSql;
+
+    private boolean hasOob;
+
     public DoxDAO(final Connection c, final String tableName) {
 
+        this(c, new DoxConfiguration(tableName));
+    }
+
+    public DoxDAO(final Connection c, final DoxConfiguration configuration) {
+
         this.c = c;
-        this.tableName = tableName;
+        this.tableName = configuration.getTableName();
+        this.hasOob = configuration.isHasOob();
         try {
             createTable();
             insertSql = "insert into " + tableName + " (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?, ?,?,?,?,?,?)";
+            oobInsertSql = "insert into " + tableName + "OOB (CONTENT, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON) values (?,?,?,?,?,?,?,?)";
+
             readSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + " E where E.DOXID=?";
+            oobReadSql = "select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + "OOB E where E.DOXID=? and E.REFERENCE = ?";
+
             readForUpdateSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + " E where E.DOXID=? AND E.VERSION = ? FOR UPDATE";
+            // when reading for update on the OOB data it will lock all the OOB
+            // records not just the one referenced by the name.
+            oobReadForUpdateSql = "select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + "OOB E where E.DOXID=? FOR UPDATE";
+
             readContentSql = "select E.CONTENT from " + tableName + " E where E.ID=?";
+            oobReadContentSql = "select E.CONTENT from " + tableName + "OOB E where E.ID=?";
+
             updateSql = "update " + tableName + " set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1 where ID=? and VERSION=?";
+            oobUpdateSql = "update " + tableName + "OOB set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1 where ID=? and VERSION=?";
+
+            copyToTombstoneSql = "insert into " + tableName + "TOMBSTONE (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + " where id = ? and version = ?";
             deleteSql = "delete from " + tableName + " where ID=? and VERSION=?";
+            oobDeleteSql = "delete from " + tableName + "OOB where ID=? and VERSION=?";
             for (final String sql : new String[] { insertSql, readSql, readContentSql, updateSql, deleteSql, readForUpdateSql }) {
                 c.prepareStatement(sql)
                         .close();
+            }
+
+            if (hasOob) {
+                for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql }) {
+                    c.prepareStatement(sql)
+                            .close();
+                }
             }
 
         } catch (final SQLException e) {
@@ -93,8 +136,6 @@ public class DoxDAO {
 
         try {
             DocumentMeta meta = readMetaForLock(id, version);
-            String copyToTombstoneSql = "insert into " + tableName + "TOMBSTONE (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + " where id = ? and version = ?";
-            System.out.println(copyToTombstoneSql);
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             PreparedStatement s = c.prepareStatement(copyToTombstoneSql);
             s.setString(1, principal.toString());
@@ -184,6 +225,28 @@ public class DoxDAO {
                 c.prepareStatement("CREATE TABLE " + tableName + "TOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")
                         .executeUpdate();
                 c.prepareStatement("ALTER TABLE " + tableName + "TOMBSTONE  add unique (DOXID)")
+                        .executeUpdate();
+            }
+            // An OOB table would have a reference label for the parent record
+            // but it needs to be unique. However in the tombstone it does not
+            // need to be unique. Also on the tombstone it does not reference
+            // the record by the primary key because the record may not have
+            // been deleted on the primary key level but the OOB data has been
+            // removed.
+            if (hasOob && !c.getMetaData()
+                    .getTables(null, null, tableName, null)
+                    .next()) {
+                c.prepareStatement("CREATE TABLE " + tableName + "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))")
+                        .executeUpdate();
+                c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (DOXID, REFERENCE)")
+                        .executeUpdate();
+                c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (PARENTID, REFERENCE)")
+                        .executeUpdate();
+                c.prepareStatement("ALTER TABLE " + tableName + "OOB add foreign key (PARENTID) references " + tableName + "(ID)")
+                        .executeUpdate();
+                c.prepareStatement("CREATE TABLE " + tableName + "OOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTDOXID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")
+                        .executeUpdate();
+                c.prepareStatement("ALTER TABLE " + tableName + "OOBTOMBSTONE  add unique (DOXID, REFERENCE)")
                         .executeUpdate();
             }
         } catch (final SQLException e) {
