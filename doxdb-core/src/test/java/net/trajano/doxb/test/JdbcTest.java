@@ -17,58 +17,28 @@ import com.google.common.io.Resources;
 public class JdbcTest {
 
     @Test
-    public void testPersistence() throws Exception {
-
-        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
-
-        // Connection c = DriverManager.getConnection("jdbc:derby://" +
-        // InetAddress.getLocalHost()
-        // .getHostName() +
-        // ":1527/sun-appserv-samples;create=true;upgrade=true");
-
-        DoxDAO dao = new DoxDAO(c, "sample");
-        DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        System.out.println(d1);
-        System.out.println(d2);
-        byte[] buffer1 = new byte[5000];
-        ByteStreams.readFully(dao.readContent(d1), buffer1);
-        byte[] buffer2 = new byte[5000];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), buffer2);
-        Assert.assertArrayEquals(buffer1, buffer2);
-        int d1Version = dao.getVersion(d1);
-        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
-        c.commit();
-        c.close();
-    }
-
-    @Test
     public void testOobPersistence() throws Exception {
 
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
+        final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
 
-        DoxConfiguration doxConfiguration = new DoxConfiguration();
+        final DoxConfiguration doxConfiguration = new DoxConfiguration();
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
-        DoxDAO dao = new DoxDAO(c, doxConfiguration);
-        DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+        final DoxDAO dao = new DoxDAO(c, doxConfiguration);
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
-        DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+        final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
         System.out.println(d1);
         System.out.println(d2);
-        byte[] buffer1 = new byte[5000];
+        final byte[] buffer1 = new byte[5000];
         ByteStreams.readFully(dao.readContent(d1), buffer1);
-        byte[] buffer2 = new byte[5000];
+        final byte[] buffer2 = new byte[5000];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), buffer2);
         Assert.assertArrayEquals(buffer1, buffer2);
-        int d1Version = dao.getVersion(d1);
+        final int d1Version = dao.getVersion(d1);
         dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
         c.commit();
         c.close();
@@ -102,4 +72,34 @@ public class JdbcTest {
     // // System.out.println(emf);
     // // emf.close();
     // }
+
+    @Test
+    public void testPersistence() throws Exception {
+
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
+
+        // Connection c = DriverManager.getConnection("jdbc:derby://" +
+        // InetAddress.getLocalHost()
+        // .getHostName() +
+        // ":1527/sun-appserv-samples;create=true;upgrade=true");
+
+        final DoxDAO dao = new DoxDAO(c, "sample");
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        System.out.println(d1);
+        System.out.println(d2);
+        final byte[] buffer1 = new byte[5000];
+        ByteStreams.readFully(dao.readContent(d1), buffer1);
+        final byte[] buffer2 = new byte[5000];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), buffer2);
+        Assert.assertArrayEquals(buffer1, buffer2);
+        final int d1Version = dao.getVersion(d1);
+        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
+        c.commit();
+        c.close();
+    }
 }
