@@ -30,8 +30,8 @@ public class JdbcTest {
                 .getInput(), new DoxPrincipal("PRINCE"));
         final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
-        System.out.println(d1);
-        System.out.println(d2);
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
         final byte[] buffer1 = new byte[5000];
         ByteStreams.readFully(dao.readContent(d1), buffer1);
         final byte[] buffer2 = new byte[5000];
