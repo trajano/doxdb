@@ -90,8 +90,7 @@ public class JdbcTest {
                 .getInput(), new DoxPrincipal("PRINCE"));
         final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
-        System.out.println(d1);
-        System.out.println(d2);
+        Assert.assertFalse(d1.equals(d2));
         final byte[] buffer1 = new byte[5000];
         ByteStreams.readFully(dao.readContent(d1), buffer1);
         final byte[] buffer2 = new byte[5000];
