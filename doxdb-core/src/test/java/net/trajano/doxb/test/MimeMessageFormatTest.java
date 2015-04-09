@@ -35,9 +35,12 @@ public class MimeMessageFormatTest {
         mimeMultipart.writeTo(baos);
         baos.close();
 
+        final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+
         final MimeMultipart mimeMultipartr = new MimeMultipart(new ByteArrayDataSource(baos.toByteArray(), MediaType.MULTIPART_FORM_DATA));
         Assert.assertEquals(2, mimeMultipartr.getCount());
         mimeMultipartr.getBodyPart(0)
-        .writeTo(System.out);
+                .writeTo(baos2);
+        Assert.assertTrue(new String(baos2.toByteArray()).startsWith("<?xml"));
     }
 }
