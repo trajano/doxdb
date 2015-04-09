@@ -7,13 +7,13 @@ import javax.persistence.Converter;
 public class DoxPrincipalConverter implements AttributeConverter<DoxPrincipal, String> {
 
     @Override
-    public String convertToDatabaseColumn(DoxPrincipal doxPrincipal) {
+    public String convertToDatabaseColumn(final DoxPrincipal doxPrincipal) {
 
         return doxPrincipal.toString();
     }
 
     @Override
-    public DoxPrincipal convertToEntityAttribute(String val) {
+    public DoxPrincipal convertToEntityAttribute(final String val) {
 
         return new DoxPrincipal(val);
     }

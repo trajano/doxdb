@@ -12,14 +12,33 @@ public final class DoxPrincipal implements Principal {
 
     private final String principalName;
 
-    public DoxPrincipal(String principalName) {
+    public DoxPrincipal(final Principal principal) {
+
+        principalName = principal.getName();
+    }
+
+    public DoxPrincipal(final String principalName) {
 
         this.principalName = principalName;
     }
 
-    public DoxPrincipal(Principal principal) {
+    @Override
+    public boolean equals(final Object obj) {
 
-        this.principalName = principal.getName();
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        final DoxPrincipal other = (DoxPrincipal) obj;
+        return Objects.equals(other.principalName, principalName);
+    }
+
+    @Override
+    public String getName() {
+
+        return principalName;
     }
 
     @Override
@@ -29,24 +48,7 @@ public final class DoxPrincipal implements Principal {
     }
 
     @Override
-    public boolean equals(Object obj) {
-
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        DoxPrincipal other = (DoxPrincipal) obj;
-        return Objects.equals(other.principalName, principalName);
-    }
-
-    @Override
     public String toString() {
-
-        return principalName;
-    }
-
-    @Override
-    public String getName() {
 
         return principalName;
     }

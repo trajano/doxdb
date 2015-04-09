@@ -14,19 +14,19 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class DoxID {
 
     /**
-     * Size of the ID in bytes.
-     */
-    public static final int LENGTH = 32;
-
-    /**
      * Set of allowed characters in the ID. Letters or numbers only. This
      * provides higher than 128-bits but less than 256-bits of randommess.
      */
     private static final char[] ALLOWED = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
     /**
+     * Size of the ID in bytes.
+     */
+    public static final int LENGTH = 32;
+
+    /**
      * Generate a new instance with a randomized ID value.
-     * 
+     *
      * @return
      */
     public static DoxID generate() {
@@ -45,20 +45,20 @@ public final class DoxID {
         int currentHash = LENGTH;
         for (int i = 0; i < LENGTH; ++i) {
             final int rand = random.nextInt(0, ALLOWED.length);
-            b[i] = (char) ALLOWED[rand];
+            b[i] = ALLOWED[rand];
             currentHash += b[i];
         }
         hash = currentHash;
 
     }
 
-    public DoxID(String s) {
+    public DoxID(final String s) {
 
         if (s.length() != LENGTH) {
             throw new IllegalArgumentException("input needs to be " + LENGTH + " in length.");
         }
         int currentHash = LENGTH;
-        char[] chars = s.toCharArray();
+        final char[] chars = s.toCharArray();
         for (int i = 0; i < LENGTH; ++i) {
             b[i] = chars[i];
             currentHash += chars[i];

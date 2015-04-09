@@ -36,6 +36,9 @@ public abstract class DoxEntity {
     @Column(nullable = false, updatable = false)
     private Date createdOn;
 
+    @Column(nullable = false, length = DoxID.LENGTH, updatable = false)
+    private DoxID doxId;
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private long id;
@@ -46,9 +49,6 @@ public abstract class DoxEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date lastUpdatedOn;
-
-    @Column(nullable = false, length = DoxID.LENGTH, updatable = false)
-    private DoxID doxId;
 
     @Version
     private int version;
@@ -66,6 +66,11 @@ public abstract class DoxEntity {
     public Date getCreatedOn() {
 
         return createdOn;
+    }
+
+    public DoxID getDoxID() {
+
+        return doxId;
     }
 
     public DoxPrincipal getLastUpdatedBy() {
@@ -88,11 +93,6 @@ public abstract class DoxEntity {
         return null;
     }
 
-    public DoxID getDoxID() {
-
-        return doxId;
-    }
-
     public void setContent(final byte[] content) {
 
         this.content = content;
@@ -108,6 +108,11 @@ public abstract class DoxEntity {
         this.createdOn = createdOn;
     }
 
+    public void setDoxID(final DoxID doxId) {
+
+        this.doxId = doxId;
+    }
+
     public void setLastUpdatedBy(final DoxPrincipal lastUpdatedBy) {
 
         this.lastUpdatedBy = lastUpdatedBy;
@@ -116,11 +121,6 @@ public abstract class DoxEntity {
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
         this.lastUpdatedOn = lastUpdatedOn;
-    }
-
-    public void setDoxID(final DoxID doxId) {
-
-        this.doxId = doxId;
     }
 
 }

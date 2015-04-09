@@ -7,13 +7,13 @@ import javax.persistence.Converter;
 public class DoxIDConverter implements AttributeConverter<DoxID, String> {
 
     @Override
-    public String convertToDatabaseColumn(DoxID doxid) {
+    public String convertToDatabaseColumn(final DoxID doxid) {
 
         return doxid.toString();
     }
 
     @Override
-    public DoxID convertToEntityAttribute(String val) {
+    public DoxID convertToEntityAttribute(final String val) {
 
         return new DoxID(val);
     }

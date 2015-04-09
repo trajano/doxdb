@@ -43,6 +43,7 @@ public class JdbcTest {
         c.commit();
         c.close();
     }
+
     // System.out.println(ID.generate());
     // System.out.println(ID.generate());
     // System.out.println(ID.generate());

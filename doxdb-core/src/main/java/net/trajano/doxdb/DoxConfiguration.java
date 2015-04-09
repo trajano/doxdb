@@ -2,22 +2,22 @@ package net.trajano.doxdb;
 
 /**
  * Configuration for a Dox
- * 
+ *
  * @author Archimedes
  */
 public class DoxConfiguration {
-
-    private String tableName;
 
     private boolean hasOob;
 
     private boolean hasTemporal;
 
+    private String tableName;
+
     public DoxConfiguration() {
 
     }
 
-    public DoxConfiguration(String tableName) {
+    public DoxConfiguration(final String tableName) {
 
         this.tableName = tableName;
     }
@@ -27,19 +27,9 @@ public class DoxConfiguration {
         return tableName;
     }
 
-    public void setTableName(String tableName) {
-
-        this.tableName = tableName;
-    }
-
     public boolean isHasOob() {
 
         return hasOob;
-    }
-
-    public void setHasOob(boolean hasOob) {
-
-        this.hasOob = hasOob;
     }
 
     public boolean isHasTemporal() {
@@ -47,8 +37,18 @@ public class DoxConfiguration {
         return hasTemporal;
     }
 
-    public void setHasTemporal(boolean hasTemporal) {
+    public void setHasOob(final boolean hasOob) {
+
+        this.hasOob = hasOob;
+    }
+
+    public void setHasTemporal(final boolean hasTemporal) {
 
         this.hasTemporal = hasTemporal;
+    }
+
+    public void setTableName(final String tableName) {
+
+        this.tableName = tableName;
     }
 }

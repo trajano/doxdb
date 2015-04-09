@@ -9,19 +9,19 @@ import org.junit.Test;
 public class PrincipalTest {
 
     @Test
-    public void testEqualsHashCodeToString() throws Exception {
+    public void testEqualsHashCodePrincipalConstructor() throws Exception {
 
         final DoxPrincipal p1 = new DoxPrincipal("ARCH");
-        final DoxPrincipal p2 = new DoxPrincipal("ARCH");
+        final DoxPrincipal p2 = new DoxPrincipal(p1);
         assertEquals(p1, p2);
         assertEquals(p1.hashCode(), p2.hashCode());
     }
 
     @Test
-    public void testEqualsHashCodePrincipalConstructor() throws Exception {
+    public void testEqualsHashCodeToString() throws Exception {
 
         final DoxPrincipal p1 = new DoxPrincipal("ARCH");
-        final DoxPrincipal p2 = new DoxPrincipal(p1);
+        final DoxPrincipal p2 = new DoxPrincipal("ARCH");
         assertEquals(p1, p2);
         assertEquals(p1.hashCode(), p2.hashCode());
     }

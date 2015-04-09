@@ -8,13 +8,13 @@ public class DocumentMeta {
 
     private Date createdOn;
 
+    private DoxID doxId;
+
     private long id;
 
     private DoxPrincipal lastUpdatedBy;
 
     private Date lastUpdatedOn;
-
-    private DoxID doxId;
 
     private int version;
 
@@ -23,49 +23,9 @@ public class DocumentMeta {
         return createdBy;
     }
 
-    public void setCreatedBy(DoxPrincipal createdBy) {
-
-        this.createdBy = createdBy;
-    }
-
     public Date getCreatedOn() {
 
         return createdOn;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-
-        this.createdOn = createdOn;
-    }
-
-    public long getId() {
-
-        return id;
-    }
-
-    public void setId(long id) {
-
-        this.id = id;
-    }
-
-    public DoxPrincipal getLastUpdatedBy() {
-
-        return lastUpdatedBy;
-    }
-
-    public void setLastUpdatedBy(DoxPrincipal lastUpdatedBy) {
-
-        this.lastUpdatedBy = lastUpdatedBy;
-    }
-
-    public Date getLastUpdatedOn() {
-
-        return lastUpdatedOn;
-    }
-
-    public void setLastUpdatedOn(Date lastUpdatedOn) {
-
-        this.lastUpdatedOn = lastUpdatedOn;
     }
 
     public DoxID getDoxId() {
@@ -73,9 +33,19 @@ public class DocumentMeta {
         return doxId;
     }
 
-    public void setDoxId(DoxID doxId) {
+    public long getId() {
 
-        this.doxId = doxId;
+        return id;
+    }
+
+    public DoxPrincipal getLastUpdatedBy() {
+
+        return lastUpdatedBy;
+    }
+
+    public Date getLastUpdatedOn() {
+
+        return lastUpdatedOn;
     }
 
     public int getVersion() {
@@ -83,7 +53,37 @@ public class DocumentMeta {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setCreatedBy(final DoxPrincipal createdBy) {
+
+        this.createdBy = createdBy;
+    }
+
+    public void setCreatedOn(final Date createdOn) {
+
+        this.createdOn = createdOn;
+    }
+
+    public void setDoxId(final DoxID doxId) {
+
+        this.doxId = doxId;
+    }
+
+    public void setId(final long id) {
+
+        this.id = id;
+    }
+
+    public void setLastUpdatedBy(final DoxPrincipal lastUpdatedBy) {
+
+        this.lastUpdatedBy = lastUpdatedBy;
+    }
+
+    public void setLastUpdatedOn(final Date lastUpdatedOn) {
+
+        this.lastUpdatedOn = lastUpdatedOn;
+    }
+
+    public void setVersion(final int version) {
 
         this.version = version;
     }

@@ -20,7 +20,7 @@ public class DoxdbPersistenceUnitInfo implements PersistenceUnitInfo {
     private List<ClassTransformer> transformers = new ArrayList<>();
 
     @Override
-    public void addTransformer(ClassTransformer transformer) {
+    public void addTransformer(final ClassTransformer transformer) {
 
         transformers.add(transformer);
 
@@ -94,7 +94,7 @@ public class DoxdbPersistenceUnitInfo implements PersistenceUnitInfo {
         try {
             return URI.create("http://doxdb.trajano.net/")
                     .toURL();
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             return null;
         }
     }
@@ -109,7 +109,6 @@ public class DoxdbPersistenceUnitInfo implements PersistenceUnitInfo {
     public Properties getProperties() {
 
         final Properties properties = new Properties();
-
 
         // .build());
 

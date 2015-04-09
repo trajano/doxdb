@@ -16,23 +16,13 @@ public class DoxDAO {
 
     private final Connection c;
 
+    private final String copyToTombstoneSql;
+
     private final String deleteSql;
 
+    private boolean hasOob;
+
     private final String insertSql;
-
-    private final String readContentSql;
-
-    private final String readSql;
-
-    private final String readForUpdateSql;
-
-    private final String tableName;
-
-    private final String updateSql;
-
-    private final String updateVersionSql;
-
-    private final String copyToTombstoneSql;
 
     private final String oobDeleteSql;
 
@@ -40,24 +30,29 @@ public class DoxDAO {
 
     private final String oobReadContentSql;
 
-    private final String oobReadSql;
-
     private final String oobReadForUpdateSql;
+
+    private final String oobReadSql;
 
     private final String oobUpdateSql;
 
-    private boolean hasOob;
+    private final String readContentSql;
 
-    public DoxDAO(final Connection c, final String tableName) {
+    private final String readForUpdateSql;
 
-        this(c, new DoxConfiguration(tableName));
-    }
+    private final String readSql;
+
+    private final String tableName;
+
+    private final String updateSql;
+
+    private final String updateVersionSql;
 
     public DoxDAO(final Connection c, final DoxConfiguration configuration) {
 
         this.c = c;
-        this.tableName = configuration.getTableName();
-        this.hasOob = configuration.isHasOob();
+        tableName = configuration.getTableName();
+        hasOob = configuration.isHasOob();
         try {
             createTable();
             insertSql = "insert into " + tableName + " (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?, ?,?,?,?,?,?)";
@@ -83,13 +78,13 @@ public class DoxDAO {
             oobDeleteSql = "delete from " + tableName + "OOB where ID=? and VERSION=?";
             for (final String sql : new String[] { insertSql, readSql, readContentSql, updateSql, updateVersionSql, deleteSql, readForUpdateSql }) {
                 c.prepareStatement(sql)
-                        .close();
+                .close();
             }
 
             if (hasOob) {
                 for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql }) {
                     c.prepareStatement(sql)
-                            .close();
+                    .close();
                 }
             }
 
@@ -98,14 +93,59 @@ public class DoxDAO {
         }
     }
 
+    public DoxDAO(final Connection c, final String tableName) {
+
+        this(c, new DoxConfiguration(tableName));
+    }
+
+    /**
+     * Attaching will increment the doxid record version.
+     *
+     * @param doxId
+     * @param reference
+     * @param in
+     * @param version
+     * @param principal
+     */
+    public void attach(final DoxID doxId,
+            final String reference,
+            final InputStream in,
+            final int version,
+            final DoxPrincipal principal) {
+
+        try {
+            final DocumentMeta meta = readMetaAndLock(doxId, version);
+
+            // if the reference record already exists then do an update
+
+            final PreparedStatement s = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS);
+            final Timestamp ts = new Timestamp(System.currentTimeMillis());
+            s.setBinaryStream(1, in);
+            s.setString(2, doxId.toString());
+            s.setLong(3, meta.getId());
+            s.setString(4, reference);
+            s.setString(5, principal.getName());
+            s.setTimestamp(6, ts);
+            s.setString(7, principal.getName());
+            s.setTimestamp(8, ts);
+            s.setInt(9, version);
+            s.executeUpdate();
+
+            incrementVersionNumber(meta.getId(), version);
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+
+    }
+
     public DoxID create(final InputStream in,
-            DoxPrincipal principal) {
+            final DoxPrincipal principal) {
 
         try {
             final DoxID doxId = DoxID.generate();
 
-            PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            Timestamp ts = new Timestamp(System.currentTimeMillis());
+            final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            final Timestamp ts = new Timestamp(System.currentTimeMillis());
             s.setBinaryStream(1, in);
             s.setString(2, doxId.toString());
             s.setString(3, principal.getName());
@@ -114,7 +154,7 @@ public class DoxDAO {
             s.setTimestamp(6, ts);
             s.setInt(7, 1);
             s.executeUpdate();
-            ResultSet rs = s.getGeneratedKeys();
+            final ResultSet rs = s.getGeneratedKeys();
             rs.next();
             return doxId;
         } catch (final SQLException e) {
@@ -122,140 +162,20 @@ public class DoxDAO {
         }
     }
 
-    public int getVersion(DoxID id) {
+    private void createOobTables() throws SQLException {
 
-        return readMeta(id).getVersion();
-    }
-
-    /**
-     * Deletes make a copy of the current record to their respective tombstone
-     * table
-     * 
-     * @param id
-     * @param version
-     */
-    public void delete(DoxID id,
-            int version,
-            DoxPrincipal principal) {
-
-        try {
-            DocumentMeta meta = readMetaAndLock(id, version);
-            Timestamp ts = new Timestamp(System.currentTimeMillis());
-
-            if (hasOob) {
-                String oobCopyAllToTombstoneSql = "insert into " + tableName + "OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + "OOB where parentid = ?";
-                PreparedStatement copy = c.prepareStatement(oobCopyAllToTombstoneSql);
-                copy.setString(1, principal.toString());
-                copy.setTimestamp(2, ts);
-                copy.setLong(3, meta.getId());
-                int copyCount = copy.executeUpdate();
-
-                String oobDeleteAllSql = "delete from " + tableName + "OOB where PARENTID = ?";
-                PreparedStatement del = c.prepareStatement(oobDeleteAllSql);
-                del.setLong(1, meta.getId());
-                int delCount = del.executeUpdate();
-                if (copyCount != delCount) {
-                    throw new PersistenceException("Mismatch in moving OOB to tombstone");
-                }
-            }
-
-            // c.prepareStatement("CREATE TABLE " + tableName +
-            // "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))")
-            PreparedStatement s = c.prepareStatement(copyToTombstoneSql);
-            s.setString(1, principal.toString());
-            s.setTimestamp(2, ts);
-            s.setLong(3, meta.getId());
-            s.setInt(4, meta.getVersion());
-            s.executeUpdate();
-
-            PreparedStatement t = c.prepareStatement(deleteSql);
-            t.setLong(1, meta.getId());
-            t.setInt(2, meta.getVersion());
-            int deletedRows = t.executeUpdate();
-            if (deletedRows != 1) {
-                throw new PersistenceException("problem with the delete");
-            }
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
-        }
-    }
-
-    public DocumentMeta readMeta(DoxID id) {
-
-        try {
-            PreparedStatement s = c.prepareStatement(readSql);
-            s.setString(1, id.toString());
-            ResultSet rs = s.executeQuery();
-            if (!rs.next()) {
-                throw new EntityNotFoundException();
-            }
-            DocumentMeta meta = new DocumentMeta();
-            meta.setId(rs.getLong(1));
-            meta.setDoxId(new DoxID(rs.getString(2)));
-            meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
-            meta.setCreatedOn(rs.getTimestamp(4));
-            meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
-            meta.setLastUpdatedOn(rs.getTimestamp(6));
-            meta.setVersion(rs.getInt(7));
-            return meta;
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
-        }
-    }
-
-    private void incrementVersionNumber(long id,
-            int version) throws SQLException {
-
-        PreparedStatement u = c.prepareStatement(updateVersionSql);
-        u.setLong(1, id);
-        u.setInt(2, version);
-        u.executeUpdate();
-
-    }
-
-    /**
-     * This will read the meta data for a record for locking. The version number
-     * is not touched.
-     * 
-     * @param id
-     * @param version
-     * @return
-     * @throws SQLException
-     */
-    private DocumentMeta readMetaAndLock(DoxID id,
-            int version) throws SQLException {
-
-        PreparedStatement s = c.prepareStatement(readForUpdateSql);
-        s.setString(1, id.toString());
-        s.setInt(2, version);
-        ResultSet rs = s.executeQuery();
-        if (!rs.next()) {
-            throw new OptimisticLockException();
-        }
-        DocumentMeta meta = new DocumentMeta();
-        meta.setId(rs.getLong(1));
-        meta.setDoxId(new DoxID(rs.getString(2)));
-        meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
-        meta.setCreatedOn(rs.getTimestamp(4));
-        meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
-        meta.setLastUpdatedOn(rs.getTimestamp(6));
-        meta.setVersion(rs.getInt(7));
-        return meta;
-    }
-
-    public InputStream readContent(DoxID id) {
-
-        try {
-            PreparedStatement s = c.prepareStatement(readContentSql);
-            s.setLong(1, readMeta(id).getId());
-            ResultSet rs = s.executeQuery();
-            if (!rs.next()) {
-                throw new EntityNotFoundException();
-            }
-            return rs.getBinaryStream(1);
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
-        }
+        c.prepareStatement("CREATE TABLE " + tableName + "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))")
+        .executeUpdate();
+        c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (DOXID, REFERENCE)")
+        .executeUpdate();
+        c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (PARENTID, REFERENCE)")
+        .executeUpdate();
+        c.prepareStatement("ALTER TABLE " + tableName + "OOB add foreign key (PARENTID, DOXID) references " + tableName + "(ID, DOXID)")
+        .executeUpdate();
+        c.prepareStatement("CREATE TABLE " + tableName + "OOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")
+        .executeUpdate();
+        c.prepareStatement("ALTER TABLE " + tableName + "OOBTOMBSTONE  add unique (DOXID, REFERENCE)")
+        .executeUpdate();
     }
 
     public void createTable() {
@@ -265,15 +185,15 @@ public class DoxDAO {
                     .getTables(null, null, tableName, null)
                     .next()) {
                 c.prepareStatement("CREATE TABLE " + tableName + "(ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))")
-                        .executeUpdate();
+                .executeUpdate();
                 c.prepareStatement("ALTER TABLE " + tableName + " add unique (DOXID)")
-                        .executeUpdate();
+                .executeUpdate();
                 c.prepareStatement("ALTER TABLE " + tableName + " add unique (ID, DOXID)")
-                        .executeUpdate();
+                .executeUpdate();
                 c.prepareStatement("CREATE TABLE " + tableName + "TOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")
-                        .executeUpdate();
+                .executeUpdate();
                 c.prepareStatement("ALTER TABLE " + tableName + "TOMBSTONE  add unique (DOXID)")
-                        .executeUpdate();
+                .executeUpdate();
             }
             // An OOB table would have a reference label for the parent record
             // but it needs to be unique. However in the tombstone it does not
@@ -292,59 +212,139 @@ public class DoxDAO {
 
     }
 
-    private void createOobTables() throws SQLException {
-
-        c.prepareStatement("CREATE TABLE " + tableName + "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))")
-                .executeUpdate();
-        c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (DOXID, REFERENCE)")
-                .executeUpdate();
-        c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (PARENTID, REFERENCE)")
-                .executeUpdate();
-        c.prepareStatement("ALTER TABLE " + tableName + "OOB add foreign key (PARENTID, DOXID) references " + tableName + "(ID, DOXID)")
-                .executeUpdate();
-        c.prepareStatement("CREATE TABLE " + tableName + "OOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")
-                .executeUpdate();
-        c.prepareStatement("ALTER TABLE " + tableName + "OOBTOMBSTONE  add unique (DOXID, REFERENCE)")
-                .executeUpdate();
-    }
-
     /**
-     * Attaching will increment the doxid record version.
-     * 
-     * @param doxId
-     * @param reference
-     * @param in
+     * Deletes make a copy of the current record to their respective tombstone
+     * table
+     *
+     * @param id
      * @param version
-     * @param principal
      */
-    public void attach(DoxID doxId,
-            String reference,
-            InputStream in,
-            int version,
-            DoxPrincipal principal) {
+    public void delete(final DoxID id,
+            final int version,
+            final DoxPrincipal principal) {
 
         try {
-            DocumentMeta meta = readMetaAndLock(doxId, version);
+            final DocumentMeta meta = readMetaAndLock(id, version);
+            final Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-            // if the reference record already exists then do an update
+            if (hasOob) {
+                final String oobCopyAllToTombstoneSql = "insert into " + tableName + "OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + "OOB where parentid = ?";
+                final PreparedStatement copy = c.prepareStatement(oobCopyAllToTombstoneSql);
+                copy.setString(1, principal.toString());
+                copy.setTimestamp(2, ts);
+                copy.setLong(3, meta.getId());
+                final int copyCount = copy.executeUpdate();
 
-            PreparedStatement s = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS);
-            Timestamp ts = new Timestamp(System.currentTimeMillis());
-            s.setBinaryStream(1, in);
-            s.setString(2, doxId.toString());
+                final String oobDeleteAllSql = "delete from " + tableName + "OOB where PARENTID = ?";
+                final PreparedStatement del = c.prepareStatement(oobDeleteAllSql);
+                del.setLong(1, meta.getId());
+                final int delCount = del.executeUpdate();
+                if (copyCount != delCount) {
+                    throw new PersistenceException("Mismatch in moving OOB to tombstone");
+                }
+            }
+
+            // c.prepareStatement("CREATE TABLE " + tableName +
+            // "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))")
+            final PreparedStatement s = c.prepareStatement(copyToTombstoneSql);
+            s.setString(1, principal.toString());
+            s.setTimestamp(2, ts);
             s.setLong(3, meta.getId());
-            s.setString(4, reference);
-            s.setString(5, principal.getName());
-            s.setTimestamp(6, ts);
-            s.setString(7, principal.getName());
-            s.setTimestamp(8, ts);
-            s.setInt(9, version);
+            s.setInt(4, meta.getVersion());
             s.executeUpdate();
 
-            incrementVersionNumber(meta.getId(), version);
+            final PreparedStatement t = c.prepareStatement(deleteSql);
+            t.setLong(1, meta.getId());
+            t.setInt(2, meta.getVersion());
+            final int deletedRows = t.executeUpdate();
+            if (deletedRows != 1) {
+                throw new PersistenceException("problem with the delete");
+            }
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
+    }
 
+    public int getVersion(final DoxID id) {
+
+        return readMeta(id).getVersion();
+    }
+
+    private void incrementVersionNumber(final long id,
+            final int version) throws SQLException {
+
+        final PreparedStatement u = c.prepareStatement(updateVersionSql);
+        u.setLong(1, id);
+        u.setInt(2, version);
+        u.executeUpdate();
+
+    }
+
+    public InputStream readContent(final DoxID id) {
+
+        try {
+            final PreparedStatement s = c.prepareStatement(readContentSql);
+            s.setLong(1, readMeta(id).getId());
+            final ResultSet rs = s.executeQuery();
+            if (!rs.next()) {
+                throw new EntityNotFoundException();
+            }
+            return rs.getBinaryStream(1);
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    public DocumentMeta readMeta(final DoxID id) {
+
+        try {
+            final PreparedStatement s = c.prepareStatement(readSql);
+            s.setString(1, id.toString());
+            final ResultSet rs = s.executeQuery();
+            if (!rs.next()) {
+                throw new EntityNotFoundException();
+            }
+            final DocumentMeta meta = new DocumentMeta();
+            meta.setId(rs.getLong(1));
+            meta.setDoxId(new DoxID(rs.getString(2)));
+            meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
+            meta.setCreatedOn(rs.getTimestamp(4));
+            meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
+            meta.setLastUpdatedOn(rs.getTimestamp(6));
+            meta.setVersion(rs.getInt(7));
+            return meta;
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    /**
+     * This will read the meta data for a record for locking. The version number
+     * is not touched.
+     *
+     * @param id
+     * @param version
+     * @return
+     * @throws SQLException
+     */
+    private DocumentMeta readMetaAndLock(final DoxID id,
+            final int version) throws SQLException {
+
+        final PreparedStatement s = c.prepareStatement(readForUpdateSql);
+        s.setString(1, id.toString());
+        s.setInt(2, version);
+        final ResultSet rs = s.executeQuery();
+        if (!rs.next()) {
+            throw new OptimisticLockException();
+        }
+        final DocumentMeta meta = new DocumentMeta();
+        meta.setId(rs.getLong(1));
+        meta.setDoxId(new DoxID(rs.getString(2)));
+        meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
+        meta.setCreatedOn(rs.getTimestamp(4));
+        meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
+        meta.setLastUpdatedOn(rs.getTimestamp(6));
+        meta.setVersion(rs.getInt(7));
+        return meta;
     }
 }

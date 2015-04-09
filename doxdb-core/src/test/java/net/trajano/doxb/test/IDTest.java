@@ -27,14 +27,18 @@ public class IDTest {
 
         final DoxID generated = DoxID.generate();
         EqualsTestUtil.assertEqualsImplementedCorrectly(new Callable<DoxID>() {
+
             @Override
             public DoxID call() throws Exception {
+
                 return generated;
             }
         });
         EqualsTestUtil.assertEqualsImplementedCorrectly(new Callable<DoxID>() {
+
             @Override
             public DoxID call() throws Exception {
+
                 return generated;
             }
         });
