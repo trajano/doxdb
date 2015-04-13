@@ -16,7 +16,7 @@ public class SampleBean extends AbstractDoxDAOBean {
 
         DoxConfiguration doxConfiguration = new DoxConfiguration();
         doxConfiguration.setHasOob(true);
-        doxConfiguration.setTableName("Sample");
+        doxConfiguration.setTableName("DoxdbSample");
         return doxConfiguration;
     }
 

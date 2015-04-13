@@ -8,11 +8,10 @@ import java.sql.SQLException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
-
-import com.ibm.jbatch.container.exception.PersistenceException;
 
 /**
  * This will be extended by the EJBs. This does not provide extension points for
@@ -37,8 +36,6 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
     @PostConstruct
     public void init() {
 
-        System.out.println("!!!INIT");
-        System.out.println(ds);
         try {
             connection = ds.getConnection();
             dao = new JdbcDoxDAO(connection, buildConfiguration());
