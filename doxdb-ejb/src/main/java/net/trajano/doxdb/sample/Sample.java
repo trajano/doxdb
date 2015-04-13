@@ -1,22 +1,23 @@
 package net.trajano.doxdb.sample;
 
-import java.sql.Connection;
-
 import javax.ejb.Stateless;
 
+import net.trajano.doxdb.AbstractDoxDAOBean;
 import net.trajano.doxdb.DoxConfiguration;
-import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
 @Stateless
 // @NamedQueries(@NamedQuery(name = "DoxEntity.readByDoxId", lockMode =
 // LockModeType.OPTIMISTIC, query =
 // "select e from DoxEntity e where e.doxId = :doxId"))
-public class Sample extends JdbcDoxDAO {
+public class Sample extends AbstractDoxDAOBean {
 
-    public Sample(Connection c, DoxConfiguration configuration) {
+    @Override
+    protected DoxConfiguration buildConfiguration() {
 
-        super(c, configuration);
-        // TODO Auto-generated constructor stub
+        DoxConfiguration doxConfiguration = new DoxConfiguration();
+        doxConfiguration.setHasOob(true);
+        doxConfiguration.setTableName("Sample");
+        return doxConfiguration;
     }
 
 }
