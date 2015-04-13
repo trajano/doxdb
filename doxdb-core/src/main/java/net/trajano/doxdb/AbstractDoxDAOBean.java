@@ -2,13 +2,13 @@ package net.trajano.doxdb;
 
 import java.io.InputStream;
 import java.security.Principal;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.sql.XAConnection;
-import javax.sql.XADataSource;
+import javax.sql.DataSource;
 
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
@@ -30,16 +30,18 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
      * can co-exist with JPA and other operations.
      */
     @Resource(name = "doxdbDataSource", lookup = "java:comp/DefaultDataSource")
-    private XADataSource ds;
+    private DataSource ds;
 
-    private XAConnection connection;
+    private Connection connection;
 
     @PostConstruct
     public void init() {
 
+        System.out.println("!!!INIT");
+        System.out.println(ds);
         try {
-            connection = ds.getXAConnection();
-            dao = new JdbcDoxDAO(connection.getConnection(), buildConfiguration());
+            connection = ds.getConnection();
+            dao = new JdbcDoxDAO(connection, buildConfiguration());
         } catch (SQLException e) {
             throw new PersistenceException(e);
         }
