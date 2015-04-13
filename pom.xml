@@ -15,6 +15,7 @@
     <modules>
         <module>doxdb-core</module>
         <module>doxdb-ejb</module>
+        <module>doxdb-sample</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/trajano/${project.artifactId}</connection>
