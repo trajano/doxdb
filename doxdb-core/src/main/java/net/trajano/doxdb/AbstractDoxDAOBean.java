@@ -29,7 +29,7 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
      * The data source. It is required that the datasource be XA enabled so it
      * can co-exist with JPA and other operations.
      */
-    @Resource(name = "doxdbDataSource")
+    @Resource(name = "doxdbDataSource", lookup = "java:comp/DefaultDataSource")
     private XADataSource ds;
 
     private XAConnection connection;

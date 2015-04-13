@@ -9,7 +9,7 @@ import net.trajano.doxdb.DoxConfiguration;
 // @NamedQueries(@NamedQuery(name = "DoxEntity.readByDoxId", lockMode =
 // LockModeType.OPTIMISTIC, query =
 // "select e from DoxEntity e where e.doxId = :doxId"))
-public class Sample extends AbstractDoxDAOBean {
+public class SampleBean extends AbstractDoxDAOBean {
 
     @Override
     protected DoxConfiguration buildConfiguration() {
