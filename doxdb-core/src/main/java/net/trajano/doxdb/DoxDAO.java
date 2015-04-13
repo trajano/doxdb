@@ -27,6 +27,8 @@ public class DoxDAO {
 
     private final String oobCheckSql;
 
+    private final String oobTombstoneDeleteSql;
+
     private final String oobDeleteSql;
 
     private final String oobInsertSql;
@@ -63,7 +65,8 @@ public class DoxDAO {
 
             readSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + " E where E.DOXID=?";
             oobReadSql = "select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + "OOB E where E.DOXID=? and E.REFERENCE = ?";
-            oobCheckSql = String.format("select id, version from %s where doxid = ? and reference = ? for update", tableName + "OOB");
+            oobCheckSql = String.format("select id, version from %s where parentid = ? and reference = ? for update", tableName + "OOB");
+            oobTombstoneDeleteSql = String.format("delete from %s where doxid = ? and reference = ?", tableName + "OOBTOMBSTONE");
             readForUpdateSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + " E where E.DOXID=? AND E.VERSION = ? FOR UPDATE";
             // when reading for update on the OOB data it will lock all the OOB
             // records not just the one referenced by the name.
@@ -87,7 +90,7 @@ public class DoxDAO {
             }
 
             if (hasOob) {
-                for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql, oobCheckSql }) {
+                for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql, oobCheckSql, oobTombstoneDeleteSql }) {
                     c.prepareStatement(sql)
                             .close();
                 }
@@ -122,11 +125,10 @@ public class DoxDAO {
             final DocumentMeta meta = readMetaAndLock(doxId, version);
 
             final PreparedStatement check = c.prepareStatement(oobCheckSql);
-            check.setString(1, doxId.toString());
+            check.setLong(1, meta.getId());
             check.setString(2, reference);
-            final ResultSet checkRs = check.executeQuery();
 
-            // TODO check tombstone as well
+            final ResultSet checkRs = check.executeQuery();
 
             if (checkRs.next()) {
                 // if the reference record already exists then do an update
@@ -144,21 +146,31 @@ public class DoxDAO {
                 if (count != 1) {
                     throw new PersistenceException("unable to update OOB");
                 }
-            } else {
+                incrementVersionNumber(meta.getId(), version);
+                return;
 
-                final PreparedStatement s = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS);
-                final Timestamp ts = new Timestamp(System.currentTimeMillis());
-                s.setBinaryStream(1, in);
-                s.setString(2, doxId.toString());
-                s.setLong(3, meta.getId());
-                s.setString(4, reference);
-                s.setString(5, principal.getName());
-                s.setTimestamp(6, ts);
-                s.setString(7, principal.getName());
-                s.setTimestamp(8, ts);
-                s.setInt(9, version);
-                s.executeUpdate();
             }
+
+            // Delete any tombstone data if one exists
+            final PreparedStatement checkTombStone = c.prepareStatement(oobTombstoneDeleteSql);
+            checkTombStone.setString(1, doxId.toString());
+            checkTombStone.setString(2, reference);
+            checkTombStone.executeUpdate();
+
+            // Insert a new OOB record
+
+            final PreparedStatement s = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS);
+            final Timestamp ts = new Timestamp(System.currentTimeMillis());
+            s.setBinaryStream(1, in);
+            s.setString(2, doxId.toString());
+            s.setLong(3, meta.getId());
+            s.setString(4, reference);
+            s.setString(5, principal.getName());
+            s.setTimestamp(6, ts);
+            s.setString(7, principal.getName());
+            s.setTimestamp(8, ts);
+            s.setInt(9, version);
+            s.executeUpdate();
             incrementVersionNumber(meta.getId(), version);
         } catch (final SQLException e) {
             throw new PersistenceException(e);
@@ -332,6 +344,8 @@ public class DoxDAO {
             if (copyCount != delCount) {
                 throw new PersistenceException("Mismatch in moving OOB to tombstone");
             }
+            incrementVersionNumber(meta.getId(), version);
+
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }

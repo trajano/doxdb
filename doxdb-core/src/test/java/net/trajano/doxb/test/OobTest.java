@@ -86,6 +86,71 @@ public class OobTest {
         c.commit();
     }
 
+    /**
+     * Detaching an OOB will move it to the tombstone.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testDetachUpdateOob() throws Exception {
+
+        final DoxConfiguration doxConfiguration = new DoxConfiguration();
+        doxConfiguration.setTableName("sample");
+        doxConfiguration.setHasOob(true);
+        final DoxDAO dao = new DoxDAO(c, doxConfiguration);
+
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+
+        try {
+            dao.readOobContent(d1, "ref");
+            Assert.fail();
+        } catch (final EntityNotFoundException e) {
+            // Expected
+        }
+
+        final int version1 = dao.getVersion(d1);
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+
+        Assert.assertNotNull(dao.readOobContent(d1, "ref"));
+
+        final int version2 = dao.getVersion(d1);
+        dao.detach(d1, "ref", version2, new DoxPrincipal("PRINSIPEDEL"));
+
+        Assert.assertTrue(version2 > version1);
+
+        try {
+            dao.readOobContent(d1, "ref");
+            Assert.fail();
+        } catch (final EntityNotFoundException e) {
+            // Expected
+        }
+
+        final int version3 = dao.getVersion(d1);
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), version3, new DoxPrincipal("PRINSIPEUP"));
+
+        Assert.assertTrue(String.format("Expected versions %d > %d", version3, version2), version3 > version2);
+        dao.readContent(d1);
+
+        final byte[] buffer1 = new byte[200];
+        ByteStreams.readFully(dao.readOobContent(d1, "ref"), buffer1);
+
+        final byte[] buffer2 = new byte[200];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), buffer2);
+        Assert.assertArrayEquals(buffer1, buffer2);
+
+        final int d1Version = dao.getVersion(d1);
+        Assert.assertTrue(d1Version > version3);
+        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
+
+        c.commit();
+    }
+
     @Test
     public void testOobPersistence() throws Exception {
 
