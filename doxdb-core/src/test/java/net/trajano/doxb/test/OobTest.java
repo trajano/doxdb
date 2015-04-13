@@ -3,6 +3,8 @@ package net.trajano.doxb.test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import javax.persistence.EntityNotFoundException;
+
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
@@ -18,6 +20,12 @@ import com.google.common.io.Resources;
 
 public class OobTest {
 
+    static byte[] sample1;
+
+    static byte[] sample2;
+
+    private Connection c;
+
     @Before
     public void setupJdbc() throws Exception {
 
@@ -26,17 +34,57 @@ public class OobTest {
 
     }
 
-    static byte[] sample1;
-
-    static byte[] sample2;
-
     @After
     public void tearDownJdbc() throws Exception {
 
         c.close();
     }
 
-    private Connection c;
+    /**
+     * Detaching an OOB will move it to the tombstone.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testDetachOob() throws Exception {
+
+        final DoxConfiguration doxConfiguration = new DoxConfiguration();
+        doxConfiguration.setTableName("sample");
+        doxConfiguration.setHasOob(true);
+        final DoxDAO dao = new DoxDAO(c, doxConfiguration);
+
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+
+        try {
+            dao.readOobContent(d1, "ref");
+            Assert.fail();
+        } catch (final EntityNotFoundException e) {
+            // Expected
+        }
+
+        final int version1 = dao.getVersion(d1);
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+
+        Assert.assertNotNull(dao.readOobContent(d1, "ref"));
+
+        final int version2 = dao.getVersion(d1);
+        dao.detach(d1, "ref", version2, new DoxPrincipal("PRINSIPEUP"));
+
+        Assert.assertTrue(version2 > version1);
+
+        try {
+            dao.readOobContent(d1, "ref");
+            Assert.fail();
+        } catch (final EntityNotFoundException e) {
+            // Expected
+        }
+        dao.readContent(d1);
+        c.commit();
+    }
 
     @Test
     public void testOobPersistence() throws Exception {
@@ -75,7 +123,7 @@ public class OobTest {
     /**
      * When updating an OOB entry it will replace it in place. It won't keep the
      * history.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -89,11 +137,11 @@ public class OobTest {
                 .getInput(), new DoxPrincipal("PRINCE"));
         dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
-        int version1 = dao.getVersion(d1);
+        final int version1 = dao.getVersion(d1);
         dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), version1, new DoxPrincipal("PRINSIPE"));
 
-        int version2 = dao.getVersion(d1);
+        final int version2 = dao.getVersion(d1);
         dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
                 .getInput(), version2, new DoxPrincipal("PRINSIPEUP"));
 
