@@ -3,9 +3,9 @@ package net.trajano.doxb.test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.DoxPrincipal;
+import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,8 +14,6 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Resources;
 
 public class JdbcTest {
-
-    
 
     // System.out.println(ID.generate());
     // System.out.println(ID.generate());
@@ -58,12 +56,45 @@ public class JdbcTest {
         // .getHostName() +
         // ":1527/sun-appserv-samples;create=true;upgrade=true");
 
-        final DoxDAO dao = new DoxDAO(c, "sample");
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
         final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
         final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
         Assert.assertFalse(d1.equals(d2));
+        final byte[] buffer1 = new byte[5000];
+        ByteStreams.readFully(dao.readContent(d1), buffer1);
+        final byte[] buffer2 = new byte[5000];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), buffer2);
+        Assert.assertArrayEquals(buffer1, buffer2);
+        final int d1Version = dao.getVersion(d1);
+        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
+        c.commit();
+        c.close();
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
+
+        // Connection c = DriverManager.getConnection("jdbc:derby://" +
+        // InetAddress.getLocalHost()
+        // .getHostName() +
+        // ":1527/sun-appserv-samples;create=true;upgrade=true");
+
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        Assert.assertFalse(d1.equals(d2));
+
+        dao.updateContent(d1, Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
+
         final byte[] buffer1 = new byte[5000];
         ByteStreams.readFully(dao.readContent(d1), buffer1);
         final byte[] buffer2 = new byte[5000];

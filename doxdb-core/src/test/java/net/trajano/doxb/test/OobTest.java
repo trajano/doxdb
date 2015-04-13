@@ -6,9 +6,9 @@ import java.sql.DriverManager;
 import javax.persistence.EntityNotFoundException;
 
 import net.trajano.doxdb.DoxConfiguration;
-import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.DoxPrincipal;
+import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -51,7 +51,7 @@ public class OobTest {
         final DoxConfiguration doxConfiguration = new DoxConfiguration();
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
-        final DoxDAO dao = new DoxDAO(c, doxConfiguration);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
 
         final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
@@ -97,7 +97,7 @@ public class OobTest {
         final DoxConfiguration doxConfiguration = new DoxConfiguration();
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
-        final DoxDAO dao = new DoxDAO(c, doxConfiguration);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
 
         final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
@@ -157,7 +157,7 @@ public class OobTest {
         final DoxConfiguration doxConfiguration = new DoxConfiguration();
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
-        final DoxDAO dao = new DoxDAO(c, doxConfiguration);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
         final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
         dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
@@ -197,7 +197,7 @@ public class OobTest {
         final DoxConfiguration doxConfiguration = new DoxConfiguration();
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
-        final DoxDAO dao = new DoxDAO(c, doxConfiguration);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
         final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
         dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))

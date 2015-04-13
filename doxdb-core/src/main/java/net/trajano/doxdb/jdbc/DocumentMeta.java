@@ -1,6 +1,8 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.jdbc;
 
 import java.util.Date;
+
+import net.trajano.doxdb.DoxID;
 
 public class DocumentMeta {
 

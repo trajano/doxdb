@@ -17,6 +17,8 @@ import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.xml.validation.Schema;
 
+import net.trajano.doxdb.jdbc.DoxPrincipal;
+
 @MappedSuperclass
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "doxId"))
 public abstract class DoxEntity {

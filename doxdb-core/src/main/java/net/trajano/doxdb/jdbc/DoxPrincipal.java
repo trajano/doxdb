@@ -1,4 +1,4 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.jdbc;
 
 import java.security.Principal;
 import java.util.Objects;

@@ -1,8 +1,8 @@
 package net.trajano.doxb.test;
 
 import static org.junit.Assert.assertEquals;
-import net.trajano.doxdb.DoxPrincipal;
 import net.trajano.doxdb.DoxPrincipalConverter;
+import net.trajano.doxdb.jdbc.DoxPrincipal;
 
 import org.junit.Test;
 
