@@ -27,7 +27,7 @@
         <site>
             <id>gh-pages</id>
             <name>Trajano Github Pages</name>
-            <url>github:http://site.trajano.net/jetng/</url>
+            <url>github:http://site.trajano.net/doxdb/</url>
         </site>
     </distributionManagement>
     <properties>
