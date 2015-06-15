@@ -8,6 +8,13 @@ public interface DoxDAO {
     DoxID create(InputStream in,
             Principal principal);
 
+    /**
+     * Get version for optimistic locking for the Dox.
+     * 
+     * @param id
+     *            Dox ID
+     * @return
+     */
     int getVersion(DoxID id);
 
     InputStream readOobContent(DoxID doxId,

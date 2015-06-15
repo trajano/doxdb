@@ -1,6 +1,7 @@
 package net.trajano.doxdb.sample;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -24,9 +25,20 @@ public class Initializer {
     public void init() {
 
         System.out.println("construct");
-        DoxID id = sampleBean.create(new ByteArrayInputStream("helloworld".getBytes()), new DoxPrincipal("HELLO"));
+        byte[] bytes = "helloworld".getBytes();
+        DoxID id = sampleBean.create(new ByteArrayInputStream(bytes), new DoxPrincipal("HELLO"));
         System.out.println(id);
         System.out.println(basic);
         basic.getds();
+
+        byte[] bb = new byte[bytes.length];
+        try {
+            sampleBean.readContent(id)
+                    .read(bb);
+            System.out.println(new String(bb));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

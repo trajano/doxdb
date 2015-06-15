@@ -249,7 +249,7 @@ public class JdbcDoxDAO implements DoxDAO {
             // been deleted on the primary key level but the OOB data has been
             // removed.
             if (hasOob && !c.getMetaData()
-                    .getTables(null, null, tableName, null)
+                    .getTables(null, null, (tableName + "OOB").toUpperCase(), null)
                     .next()) {
                 createOobTables();
             }
