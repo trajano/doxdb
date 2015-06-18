@@ -2,6 +2,9 @@ package net.trajano.doxb.test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Date;
+
+import javax.persistence.PersistenceException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -106,6 +109,62 @@ public class JdbcTest {
         dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
         c.commit();
         c.close();
+    }
+
+    @Test
+    public void testImport() throws Exception {
+
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
+
+        // Connection c = DriverManager.getConnection("jdbc:derby://" +
+        // InetAddress.getLocalHost()
+        // .getHostName() +
+        // ":1527/sun-appserv-samples;create=true;upgrade=true");
+
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
+        DoxID d1 = new DoxID("012345678901234567890123456789AB");
+        dao.importDox(d1, Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), new DoxPrincipal("FRESH"), new Date(5), new DoxPrincipal("PRINCE"), new Date(50));
+
+        dao.updateContent(d1, Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
+
+        final byte[] buffer1 = new byte[5000];
+        ByteStreams.readFully(dao.readContent(d1), buffer1);
+        final byte[] buffer2 = new byte[5000];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), buffer2);
+        Assert.assertArrayEquals(buffer1, buffer2);
+        final int d1Version = dao.getVersion(d1);
+        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
+        c.commit();
+        c.close();
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testFailDoubleImport() throws Exception {
+
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
+
+        // Connection c = DriverManager.getConnection("jdbc:derby://" +
+        // InetAddress.getLocalHost()
+        // .getHostName() +
+        // ":1527/sun-appserv-samples;create=true;upgrade=true");
+
+        try {
+            final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
+            DoxID d1 = new DoxID("012345678901234567890123456789AB");
+            dao.importDox(d1, Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                    .getInput(), new DoxPrincipal("FRESH"), new Date(5), new DoxPrincipal("PRINCE"), new Date(50));
+
+            dao.importDox(d1, Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                    .getInput(), new DoxPrincipal("FRESH"), new Date(5), new DoxPrincipal("PRINCE"), new Date(50));
+            c.commit();
+        } finally {
+            c.close();
+        }
     }
 
     @Test

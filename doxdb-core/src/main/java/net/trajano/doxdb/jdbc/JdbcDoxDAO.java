@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
@@ -293,7 +294,12 @@ public class JdbcDoxDAO implements DoxDAO {
             }
 
             // c.prepareStatement("CREATE TABLE " + tableName +
-            // "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))")
+            // "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID
+            // BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE
+            // VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON
+            // TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY
+            // VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION
+            // INTEGER NOT NULL, PRIMARY KEY (ID))")
             final PreparedStatement s = c.prepareStatement(copyToTombstoneSql);
             s.setString(1, principal.toString());
             s.setTimestamp(2, ts);
@@ -483,5 +489,31 @@ public class JdbcDoxDAO implements DoxDAO {
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    @Override
+    public void importDox(DoxID doxId,
+            InputStream in,
+            Principal createdBy,
+            Date createdOn,
+            Principal lastUpdatedBy,
+            Date lastUpdatedOn) {
+
+        try {
+            final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            s.setBinaryStream(1, in);
+            s.setString(2, doxId.toString());
+            s.setString(3, createdBy.getName());
+            s.setTimestamp(4, new Timestamp(createdOn.getTime()));
+            s.setString(5, lastUpdatedBy.getName());
+            s.setTimestamp(6, new Timestamp(lastUpdatedOn.getTime()));
+            s.setInt(7, 1);
+            s.executeUpdate();
+            final ResultSet rs = s.getGeneratedKeys();
+            rs.next();
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+
     }
 }

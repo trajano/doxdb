@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.security.Principal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -87,6 +88,18 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
             String reference) {
 
         return dao.readOobContent(doxId, reference);
+    }
+
+    @Override
+    public void importDox(DoxID id,
+            InputStream in,
+            Principal createdBy,
+            Date createdOn,
+            Principal lastUpdatedBy,
+            Date lastUpdatedOn) {
+
+        dao.importDox(id, in, createdBy, createdOn, lastUpdatedBy, lastUpdatedOn);
+
     }
 
     @Override
