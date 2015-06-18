@@ -17,12 +17,26 @@ public final class DoxID {
      * Set of allowed characters in the ID. Letters or numbers only. This
      * provides higher than 128-bits but less than 256-bits of randommess.
      */
-    private static final char[] ALLOWED = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+    private static final char[] ALLOWED;
+
+    /**
+     * This is transpose of the {@link #ALLOWED} array used to look up
+     * characters to ensure they are allowed.
+     */
+    private static final boolean[] ALLOWED_MAP;
 
     /**
      * Size of the ID in bytes.
      */
     public static final int LENGTH = 32;
+
+    static {
+        ALLOWED = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+        ALLOWED_MAP = new boolean[256];
+        for (final char allowedChar : ALLOWED) {
+            ALLOWED_MAP[allowedChar] = true;
+        }
+    }
 
     /**
      * Generate a new instance with a randomized ID value.
@@ -60,8 +74,13 @@ public final class DoxID {
         int currentHash = LENGTH;
         final char[] chars = s.toCharArray();
         for (int i = 0; i < LENGTH; ++i) {
-            b[i] = chars[i];
-            currentHash += chars[i];
+            if (ALLOWED_MAP[chars[i]]) {
+                b[i] = chars[i];
+                currentHash += chars[i];
+            } else {
+                throw new IllegalArgumentException("Invalid character for DoxID");
+            }
+
         }
         hash = currentHash;
     }

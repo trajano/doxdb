@@ -5,11 +5,11 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.concurrent.Callable;
 
+import org.junit.Test;
+
 import net.trajano.commons.testing.EqualsTestUtil;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxIDConverter;
-
-import org.junit.Test;
 
 public class IDTest {
 
@@ -45,6 +45,18 @@ public class IDTest {
         final DoxID rebuilt = new DoxID(generated.toString());
         assertEquals(generated, rebuilt);
         assertEquals(generated.hashCode(), rebuilt.hashCode());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidCharacter() throws Exception {
+
+        new DoxID("0123456789012345678901234567890\0");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidLength() throws Exception {
+
+        new DoxID("01234567890123");
     }
 
     @Test
