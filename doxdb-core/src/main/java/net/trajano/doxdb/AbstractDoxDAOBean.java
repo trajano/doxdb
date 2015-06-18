@@ -69,28 +69,33 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         return new DoxConfiguration(getClass().getSimpleName());
     }
 
+    @Override
     public DoxID create(InputStream in,
             Principal principal) {
 
         return dao.create(in, principal);
     }
 
+    @Override
     public int getVersion(DoxID id) {
 
         return dao.getVersion(id);
     }
 
+    @Override
     public InputStream readOobContent(DoxID doxId,
             String reference) {
 
         return dao.readOobContent(doxId, reference);
     }
 
+    @Override
     public InputStream readContent(DoxID id) {
 
         return dao.readContent(id);
     }
 
+    @Override
     public void delete(DoxID id,
             int version,
             Principal principal) {
@@ -98,6 +103,7 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         dao.delete(id, version, principal);
     }
 
+    @Override
     public void detach(DoxID doxId,
             String reference,
             int version,
@@ -106,6 +112,7 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         dao.detach(doxId, reference, version, principal);
     }
 
+    @Override
     public void attach(DoxID doxId,
             String reference,
             InputStream in,
@@ -115,6 +122,7 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         dao.attach(doxId, reference, in, version, principal);
     }
 
+    @Override
     public void updateContent(DoxID doxId,
             InputStream contentStream,
             int version,
