@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
@@ -17,6 +16,8 @@ import javax.persistence.PersistenceException;
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxImportBuilder;
+import net.trajano.doxdb.DoxImportBuilder.DoxOobImportDetails;
 
 public class JdbcDoxDAO implements DoxDAO {
 
@@ -492,25 +493,57 @@ public class JdbcDoxDAO implements DoxDAO {
     }
 
     @Override
-    public void importDox(DoxID doxId,
-            InputStream in,
-            Principal createdBy,
-            Date createdOn,
-            Principal lastUpdatedBy,
-            Date lastUpdatedOn) {
+    public void importDox(DoxImportBuilder builder) {
 
+        if (!builder.isComplete()) {
+            throw new PersistenceException("Import data " + builder + " is not complete");
+        }
+        if (builder.hasOob() && !hasOob) {
+            throw new PersistenceException("Import data " + builder + " has OOB but OOB is not enabled on " + tableName);
+        }
         try {
-            final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-            s.setBinaryStream(1, in);
-            s.setString(2, doxId.toString());
-            s.setString(3, createdBy.getName());
-            s.setTimestamp(4, new Timestamp(createdOn.getTime()));
-            s.setString(5, lastUpdatedBy.getName());
-            s.setTimestamp(6, new Timestamp(lastUpdatedOn.getTime()));
-            s.setInt(7, 1);
-            s.executeUpdate();
-            final ResultSet rs = s.getGeneratedKeys();
-            rs.next();
+            final long primaryKey;
+            {
+                final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+                s.setBinaryStream(1, builder.getContentStream());
+                s.setString(2, builder.getDoxID()
+                        .toString());
+                s.setString(3, builder.getCreatedBy()
+                        .getName());
+                s.setTimestamp(4, new Timestamp(builder.getCreatedOn()
+                        .getTime()));
+                s.setString(5, builder.getLastUpdatedBy()
+                        .getName());
+                s.setTimestamp(6, new Timestamp(builder.getLastUpdatedOn()
+                        .getTime()));
+                s.setInt(7, 1);
+                s.executeUpdate();
+                final ResultSet rs = s.getGeneratedKeys();
+                rs.next();
+                primaryKey = rs.getLong(1);
+            }
+
+            for (DoxOobImportDetails oobImportDetails : builder.getOobImportDetails()) {
+
+                final PreparedStatement os = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS);
+                os.setBinaryStream(1, oobImportDetails.getContentStream());
+                os.setString(2, builder.getDoxID()
+                        .toString());
+                os.setLong(3, primaryKey);
+                os.setString(4, oobImportDetails.getReference());
+                os.setString(5, oobImportDetails.getCreatedBy()
+                        .getName());
+                os.setTimestamp(6, new Timestamp(oobImportDetails.getCreatedOn()
+                        .getTime()));
+                os.setString(7, oobImportDetails.getLastUpdatedBy()
+                        .getName());
+                os.setTimestamp(8, new Timestamp(oobImportDetails.getLastUpdatedOn()
+                        .getTime()));
+                os.setInt(9, 1);
+                os.executeUpdate();
+                final ResultSet rs = os.getGeneratedKeys();
+                rs.next();
+            }
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
