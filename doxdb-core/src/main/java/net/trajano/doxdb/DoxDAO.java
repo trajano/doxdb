@@ -27,6 +27,18 @@ public interface DoxDAO {
             Principal principal);
 
     /**
+     * Writes the complete Dox record including OOB data to an output stream.
+     * The format is compatible for {@link #importDox(InputStream)}.
+     *
+     * @param doxID
+     *            Dox ID
+     * @param os
+     * @throws IOException
+     */
+    void exportDox(DoxID doxID,
+            OutputStream os) throws IOException;
+
+    /**
      * Get version for optimistic locking for the Dox.
      *
      * @param id
@@ -39,14 +51,11 @@ public interface DoxDAO {
      * Imports a record directly into the data store. This will fail if the
      * record already exists.
      *
-     * @param builder
-     *            import data builder
-     * @param createdBy
-     * @param createdOn
-     * @param lastUpdatedBy
-     * @param lastUpdatedOn
+     * @param is
+     *            input stream containing the data for the import.
+     * @throws IOException
      */
-    void importDox(DoxImportBuilder builder);
+    void importDox(InputStream is) throws IOException;
 
     /**
      * Reads content into a buffer. This does not return an {@link InputStream}

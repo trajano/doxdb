@@ -1,6 +1,9 @@
 package net.trajano.doxdb.jdbc;
 
+import java.util.Calendar;
 import java.util.Date;
+
+import javax.xml.bind.DatatypeConverter;
 
 import net.trajano.doxdb.DoxID;
 
@@ -30,6 +33,13 @@ public class DocumentMeta {
         return createdOn;
     }
 
+    public String getCreatedOnString() {
+
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(createdOn);
+        return DatatypeConverter.printDateTime(cal);
+    }
+
     public DoxID getDoxId() {
 
         return doxId;
@@ -48,6 +58,13 @@ public class DocumentMeta {
     public Date getLastUpdatedOn() {
 
         return lastUpdatedOn;
+    }
+
+    public String getLastUpdatedOnString() {
+
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(lastUpdatedOn);
+        return DatatypeConverter.printDateTime(cal);
     }
 
     public int getVersion() {

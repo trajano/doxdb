@@ -73,6 +73,7 @@ public class OobTest {
         dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), version1, new DoxPrincipal("PRINSIPE"));
 
+        dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
         Assert.assertNotNull(dao.readOobContent(d1, "ref", buffer));
 
         final int version2 = dao.getVersion(d1);

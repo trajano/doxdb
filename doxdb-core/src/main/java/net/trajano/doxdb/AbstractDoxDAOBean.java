@@ -83,15 +83,23 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
     }
 
     @Override
+    public void exportDox(DoxID doxID,
+            OutputStream os) throws IOException {
+
+        dao.exportDox(doxID, os);
+
+    }
+
+    @Override
     public int getVersion(DoxID id) {
 
         return dao.getVersion(id);
     }
 
     @Override
-    public void importDox(DoxImportBuilder builder) {
+    public void importDox(InputStream is) throws IOException {
 
-        dao.importDox(builder);
+        dao.importDox(is);
 
     }
 

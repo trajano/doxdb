@@ -12,15 +12,21 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
+import javax.ws.rs.core.MediaType;
 
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.DoxImportBuilder;
-import net.trajano.doxdb.DoxImportBuilder.DoxOobImportDetails;
+import net.trajano.doxdb.internal.DoxImportBuilder;
+import net.trajano.doxdb.internal.DoxImportBuilder.DoxOobImportDetails;
 
 public class JdbcDoxDAO implements DoxDAO {
 
@@ -393,13 +399,68 @@ public class JdbcDoxDAO implements DoxDAO {
     }
 
     @Override
+    public void exportDox(DoxID doxID,
+            OutputStream os) throws IOException {
+
+        try {
+            final MimeMultipart mimeMultipart = new MimeMultipart();
+            mimeMultipart.setSubType("mixed");
+
+            try (final PreparedStatement s = c.prepareStatement(readContentSql)) {
+                final DocumentMeta meta = readMeta(doxID);
+                s.setLong(1, meta.getId());
+                try (final ResultSet rs = s.executeQuery()) {
+                    if (!rs.next()) {
+                        throw new EntityNotFoundException();
+                    }
+                    final MimeBodyPart mimeBodyPart = new MimeBodyPart(rs.getBinaryStream(1));
+                    mimeBodyPart.setHeader("Created-By", meta.getCreatedBy()
+                            .getName());
+                    mimeBodyPart.setHeader("Created-On", meta.getCreatedOnString());
+                    mimeBodyPart.setHeader("Last-Updated-By", meta.getLastUpdatedBy()
+                            .getName());
+                    mimeBodyPart.setHeader("Last-Updated-On", meta.getLastUpdatedOnString());
+                    mimeBodyPart.setFileName(doxID.toString());
+                    mimeMultipart.addBodyPart(mimeBodyPart);
+                }
+                // TODO handle OOB
+            }
+            mimeMultipart.writeTo(os);
+            // final MimeBodyPart mimeBodyPart = new
+            // MimeBodyPart(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+            // .getInput());
+            // mimeBodyPart.setFileName("foo");
+            // mimeMultipart.addBodyPart(mimeBodyPart);
+            // // MimeMessage mimeMessage = new MimeMessage(session);
+            // // mimeMessage.addHeader("Content", "value");
+            // final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            // mimeMultipart.writeTo(baos);
+            // baos.close();
+            //
+            // final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+            //
+            // final MimeMultipart mimeMultipartr = new MimeMultipart(new
+            // ByteArrayDataSource(baos.toByteArray(),
+            // MediaType.MULTIPART_FORM_DATA));
+            // Assert.assertEquals(2, mimeMultipartr.getCount());
+            // mimeMultipartr.getBodyPart(0)
+            // .writeTo(baos2);
+            // Assert.assertTrue(new
+            // String(baos2.toByteArray()).startsWith("<?xml"));
+        } catch (final MessagingException | SQLException e) {
+            throw new PersistenceException(e);
+        } finally {
+
+        }
+    }
+
+    @Override
     public int getVersion(final DoxID id) {
 
         return readMeta(id).getVersion();
     }
 
-    @Override
-    public void importDox(final DoxImportBuilder builder) {
+    private void importDoxUsingBuilder(final DoxImportBuilder builder) {
 
         if (!builder.isComplete()) {
             throw new PersistenceException("Import data " + builder + " is not complete");
@@ -454,6 +515,27 @@ public class JdbcDoxDAO implements DoxDAO {
                 }
             }
         } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+
+    }
+
+    @Override
+    public void importDox(InputStream is) throws IOException {
+
+        try {
+            final MimeMultipart mmp = new MimeMultipart(new ByteArrayDataSource(is, MediaType.MULTIPART_FORM_DATA));
+            final BodyPart contentBodyPart = mmp.getBodyPart(0);
+
+            final DoxImportBuilder doxImportBuilder = new DoxImportBuilder().doxID(contentBodyPart.getFileName())
+                    .createdBy(contentBodyPart.getHeader("Created-By")[0])
+                    .createdOn(contentBodyPart.getHeader("Created-On")[0])
+                    .lastUpdatedBy(contentBodyPart.getHeader("Last-Updated-By")[0])
+                    .lastUpdatedOn(contentBodyPart.getHeader("Last-Updated-On")[0])
+                    .contentStream(contentBodyPart.getInputStream());
+
+            importDoxUsingBuilder(doxImportBuilder);
+        } catch (MessagingException | IOException e) {
             throw new PersistenceException(e);
         }
 
