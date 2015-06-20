@@ -1,6 +1,9 @@
 package net.trajano.doxdb;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.security.Principal;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,10 +20,12 @@ import net.trajano.doxdb.jdbc.JdbcDoxDAO;
  * This will be extended by the EJBs. This does not provide extension points for
  * the operations, those operations should be done on the application specific
  * versions.
- * 
+ *
  * @author Archimedes
  */
 public abstract class AbstractDoxDAOBean implements DoxDAO {
+
+    private Connection connection;
 
     private DoxDAO dao;
 
@@ -31,37 +36,21 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
     @Resource(name = "doxdbDataSource", lookup = "java:comp/DefaultDataSource")
     private DataSource ds;
 
-    private Connection connection;
+    @Override
+    public void attach(DoxID doxId,
+            String reference,
+            InputStream in,
+            int version,
+            Principal principal) {
 
-    @PostConstruct
-    public void init() {
-
-        try {
-            connection = ds.getConnection();
-            dao = new JdbcDoxDAO(connection, buildConfiguration());
-        } catch (SQLException e) {
-            throw new PersistenceException(e);
-        }
-    }
-
-    /**
-     * Closes the connection that was initialized.
-     */
-    @PreDestroy
-    public void shutdown() {
-
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new PersistenceException(e);
-        }
+        dao.attach(doxId, reference, in, version, principal);
     }
 
     /**
      * This may be overridden by classes to support other capabilities such as
      * OOB. Otherwise it will use the "simple name" of the derived class by
      * default.
-     * 
+     *
      * @return
      */
     protected DoxConfiguration buildConfiguration() {
@@ -74,32 +63,6 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
             Principal principal) {
 
         return dao.create(in, principal);
-    }
-
-    @Override
-    public int getVersion(DoxID id) {
-
-        return dao.getVersion(id);
-    }
-
-    @Override
-    public InputStream readOobContent(DoxID doxId,
-            String reference) {
-
-        return dao.readOobContent(doxId, reference);
-    }
-
-    @Override
-    public void importDox(DoxImportBuilder builder) {
-
-        dao.importDox(builder);
-
-    }
-
-    @Override
-    public InputStream readContent(DoxID id) {
-
-        return dao.readContent(id);
     }
 
     @Override
@@ -120,13 +83,72 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
     }
 
     @Override
-    public void attach(DoxID doxId,
-            String reference,
-            InputStream in,
-            int version,
-            Principal principal) {
+    public int getVersion(DoxID id) {
 
-        dao.attach(doxId, reference, in, version, principal);
+        return dao.getVersion(id);
+    }
+
+    @Override
+    public void importDox(DoxImportBuilder builder) {
+
+        dao.importDox(builder);
+
+    }
+
+    @PostConstruct
+    public void init() {
+
+        try {
+            connection = ds.getConnection();
+            dao = new JdbcDoxDAO(connection, buildConfiguration());
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    @Override
+    public int readContent(DoxID id,
+            ByteBuffer buffer) {
+
+        return dao.readContent(id, buffer);
+    }
+
+    @Override
+    public void readContentToStream(DoxID id,
+            OutputStream os) throws IOException {
+
+        dao.readContentToStream(id, os);
+
+    }
+
+    @Override
+    public int readOobContent(DoxID doxId,
+            String reference,
+            ByteBuffer buffer) {
+
+        return dao.readOobContent(doxId, reference, buffer);
+    }
+
+    @Override
+    public void readOobContentToStream(DoxID id,
+            String reference,
+            OutputStream os) throws IOException {
+
+        dao.readOobContentToStream(id, reference, os);
+
+    }
+
+    /**
+     * Closes the connection that was initialized.
+     */
+    @PreDestroy
+    public void shutdown() {
+
+        try {
+            connection.close();
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     @Override

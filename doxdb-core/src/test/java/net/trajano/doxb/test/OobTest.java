@@ -1,14 +1,11 @@
 package net.trajano.doxb.test;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 import javax.persistence.EntityNotFoundException;
-
-import net.trajano.doxdb.DoxConfiguration;
-import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.jdbc.DoxPrincipal;
-import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -18,11 +15,18 @@ import org.junit.Test;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Resources;
 
+import net.trajano.doxdb.DoxConfiguration;
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.jdbc.JdbcDoxDAO;
+
 public class OobTest {
 
     static byte[] sample1;
 
     static byte[] sample2;
+
+    private final ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
 
     private Connection c;
 
@@ -59,7 +63,7 @@ public class OobTest {
                 .getInput(), new DoxPrincipal("PRINCE"));
 
         try {
-            dao.readOobContent(d1, "ref");
+            dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
             Assert.fail();
         } catch (final EntityNotFoundException e) {
             // Expected
@@ -69,7 +73,7 @@ public class OobTest {
         dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), version1, new DoxPrincipal("PRINSIPE"));
 
-        Assert.assertNotNull(dao.readOobContent(d1, "ref"));
+        Assert.assertNotNull(dao.readOobContent(d1, "ref", buffer));
 
         final int version2 = dao.getVersion(d1);
         dao.detach(d1, "ref", version2, new DoxPrincipal("PRINSIPEUP"));
@@ -77,12 +81,12 @@ public class OobTest {
         Assert.assertTrue(version2 > version1);
 
         try {
-            dao.readOobContent(d1, "ref");
+            dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
             Assert.fail();
         } catch (final EntityNotFoundException e) {
             // Expected
         }
-        dao.readContent(d1);
+        dao.readContentToStream(d1, new ByteArrayOutputStream());
         c.commit();
     }
 
@@ -105,7 +109,7 @@ public class OobTest {
                 .getInput(), new DoxPrincipal("PRINCE"));
 
         try {
-            dao.readOobContent(d1, "ref");
+            dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
             Assert.fail();
         } catch (final EntityNotFoundException e) {
             // Expected
@@ -115,7 +119,7 @@ public class OobTest {
         dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), version1, new DoxPrincipal("PRINSIPE"));
 
-        Assert.assertNotNull(dao.readOobContent(d1, "ref"));
+        Assert.assertNotNull(dao.readOobContent(d1, "ref", buffer));
 
         final int version2 = dao.getVersion(d1);
         dao.detach(d1, "ref", version2, new DoxPrincipal("PRINSIPEDEL"));
@@ -123,7 +127,7 @@ public class OobTest {
         Assert.assertTrue(version2 > version1);
 
         try {
-            dao.readOobContent(d1, "ref");
+            dao.readOobContent(d1, "ref", buffer);
             Assert.fail();
         } catch (final EntityNotFoundException e) {
             // Expected
@@ -134,10 +138,10 @@ public class OobTest {
                 .getInput(), version3, new DoxPrincipal("PRINSIPEUP"));
 
         Assert.assertTrue(String.format("Expected versions %d > %d", version3, version2), version3 > version2);
-        dao.readContent(d1);
+        dao.readContent(d1, buffer);
 
         final byte[] buffer1 = new byte[200];
-        ByteStreams.readFully(dao.readOobContent(d1, "ref"), buffer1);
+        dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
 
         final byte[] buffer2 = new byte[200];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
@@ -166,13 +170,13 @@ public class OobTest {
                 .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
 
         final byte[] buffer1 = new byte[200];
-        ByteStreams.readFully(dao.readContent(d1), buffer1);
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = new byte[200];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), buffer2);
 
         final byte[] oobBuffer1 = new byte[200];
-        ByteStreams.readFully(dao.readOobContent(d1, "ref"), oobBuffer1);
+        dao.readOobContent(d1, "ref", ByteBuffer.wrap(oobBuffer1));
         final byte[] oobBuffer2 = new byte[200];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
                 .getInput(), oobBuffer2);
@@ -212,7 +216,7 @@ public class OobTest {
 
         Assert.assertTrue(version2 > version1);
         final byte[] buffer1 = new byte[200];
-        ByteStreams.readFully(dao.readOobContent(d1, "ref"), buffer1);
+        dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
 
         final byte[] buffer2 = new byte[200];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))

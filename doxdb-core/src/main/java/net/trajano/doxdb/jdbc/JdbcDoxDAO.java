@@ -1,6 +1,9 @@
 package net.trajano.doxdb.jdbc;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.security.Principal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,13 +30,11 @@ public class JdbcDoxDAO implements DoxDAO {
 
     private final String deleteSql;
 
-    private boolean hasOob;
+    private final boolean hasOob;
 
     private final String insertSql;
 
     private final String oobCheckSql;
-
-    private final String oobTombstoneDeleteSql;
 
     private final String oobDeleteSql;
 
@@ -44,6 +45,8 @@ public class JdbcDoxDAO implements DoxDAO {
     private final String oobReadForUpdateSql;
 
     private final String oobReadSql;
+
+    private final String oobTombstoneDeleteSql;
 
     private final String oobUpdateSql;
 
@@ -189,10 +192,9 @@ public class JdbcDoxDAO implements DoxDAO {
     public DoxID create(final InputStream in,
             final Principal principal) {
 
-        try {
-            final DoxID doxId = DoxID.generate();
+        final DoxID doxId = DoxID.generate();
+        try (final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
 
-            final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             final Timestamp ts = new Timestamp(System.currentTimeMillis());
             s.setBinaryStream(1, in);
             s.setString(2, doxId.toString());
@@ -212,48 +214,70 @@ public class JdbcDoxDAO implements DoxDAO {
 
     private void createOobTables() throws SQLException {
 
-        c.prepareStatement("CREATE TABLE " + tableName + "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))")
-                .executeUpdate();
-        c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (DOXID, REFERENCE)")
-                .executeUpdate();
-        c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (PARENTID, REFERENCE)")
-                .executeUpdate();
-        c.prepareStatement("ALTER TABLE " + tableName + "OOB add foreign key (PARENTID, DOXID) references " + tableName + "(ID, DOXID)")
-                .executeUpdate();
-        c.prepareStatement("CREATE TABLE " + tableName + "OOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")
-                .executeUpdate();
-        c.prepareStatement("ALTER TABLE " + tableName + "OOBTOMBSTONE  add unique (DOXID, REFERENCE)")
-                .executeUpdate();
+        try (final ResultSet tables = c.getMetaData()
+                .getTables(null, null, (tableName + "OOB").toUpperCase(), null)) {
+            if (tables.next()) {
+                throw new PersistenceException("OOB tables for " + tableName + " exist when they are not expected to exist");
+            }
+
+            try (PreparedStatement s = c.prepareStatement("CREATE TABLE " + tableName + "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))")) {
+                s.executeUpdate();
+            }
+            try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (DOXID, REFERENCE)")) {
+                s.executeUpdate();
+            }
+            try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (PARENTID, REFERENCE)")) {
+                s.executeUpdate();
+            }
+            try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOB add foreign key (PARENTID, DOXID) references " + tableName + "(ID, DOXID)")) {
+                s.executeUpdate();
+            }
+            try (PreparedStatement s = c.prepareStatement("CREATE TABLE " + tableName + "OOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")) {
+                s.executeUpdate();
+            }
+            try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOBTOMBSTONE  add unique (DOXID, REFERENCE)")) {
+                s.executeUpdate();
+            }
+
+        }
     }
 
     public void createTable() {
 
-        try {
+        try (ResultSet tables = c.getMetaData()
+                .getTables(null, null, tableName.toUpperCase(), null)) {
+            if (!tables.next()) {
 
-            if (!c.getMetaData()
-                    .getTables(null, null, tableName.toUpperCase(), null)
-                    .next()) {
-                c.prepareStatement("CREATE TABLE " + tableName + "(ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))")
-                        .executeUpdate();
-                c.prepareStatement("ALTER TABLE " + tableName + " add unique (DOXID)")
-                        .executeUpdate();
-                c.prepareStatement("ALTER TABLE " + tableName + " add unique (ID, DOXID)")
-                        .executeUpdate();
-                c.prepareStatement("CREATE TABLE " + tableName + "TOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")
-                        .executeUpdate();
-                c.prepareStatement("ALTER TABLE " + tableName + "TOMBSTONE  add unique (DOXID)")
-                        .executeUpdate();
-            }
-            // An OOB table would have a reference label for the parent record
-            // but it needs to be unique. However in the tombstone it does not
-            // need to be unique. Also on the tombstone it does not reference
-            // the record by the primary key because the record may not have
-            // been deleted on the primary key level but the OOB data has been
-            // removed.
-            if (hasOob && !c.getMetaData()
-                    .getTables(null, null, (tableName + "OOB").toUpperCase(), null)
-                    .next()) {
-                createOobTables();
+                try (PreparedStatement s = c.prepareStatement("CREATE TABLE " + tableName + "(ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))")) {
+                    s.executeUpdate();
+                }
+
+                try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + " add unique (DOXID)")) {
+                    s.executeUpdate();
+                }
+
+                try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + " add unique (ID, DOXID)")) {
+                    s.executeUpdate();
+                }
+                try (PreparedStatement s = c.prepareStatement("CREATE TABLE " + tableName + "TOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")) {
+                    s.executeUpdate();
+                }
+                try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "TOMBSTONE  add unique (DOXID)")) {
+                    s.executeUpdate();
+                }
+                // An OOB table would have a reference label for the parent
+                // record
+                // but it needs to be unique. However in the tombstone it does
+                // not
+                // need to be unique. Also on the tombstone it does not
+                // reference
+                // the record by the primary key because the record may not have
+                // been deleted on the primary key level but the OOB data has
+                // been
+                // removed.
+                if (hasOob) {
+                    createOobTables();
+                }
             }
         } catch (final SQLException e) {
             throw new PersistenceException(e);
@@ -374,27 +398,115 @@ public class JdbcDoxDAO implements DoxDAO {
         return readMeta(id).getVersion();
     }
 
+    @Override
+    public void importDox(final DoxImportBuilder builder) {
+
+        if (!builder.isComplete()) {
+            throw new PersistenceException("Import data " + builder + " is not complete");
+        }
+        if (builder.hasOob() && !hasOob) {
+            throw new PersistenceException("Import data " + builder + " has OOB but OOB is not enabled on " + tableName);
+        }
+        try {
+            final long primaryKey;
+
+            try (final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+                s.setBinaryStream(1, builder.getContentStream());
+                s.setString(2, builder.getDoxID()
+                        .toString());
+                s.setString(3, builder.getCreatedBy()
+                        .getName());
+                s.setTimestamp(4, new Timestamp(builder.getCreatedOn()
+                        .getTime()));
+                s.setString(5, builder.getLastUpdatedBy()
+                        .getName());
+                s.setTimestamp(6, new Timestamp(builder.getLastUpdatedOn()
+                        .getTime()));
+                s.setInt(7, 1);
+                s.executeUpdate();
+                try (final ResultSet rs = s.getGeneratedKeys()) {
+                    rs.next();
+                    primaryKey = rs.getLong(1);
+                }
+            }
+
+            for (final DoxOobImportDetails oobImportDetails : builder.getOobImportDetails()) {
+
+                try (final PreparedStatement os = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS)) {
+                    os.setBinaryStream(1, oobImportDetails.getContentStream());
+                    os.setString(2, builder.getDoxID()
+                            .toString());
+                    os.setLong(3, primaryKey);
+                    os.setString(4, oobImportDetails.getReference());
+                    os.setString(5, oobImportDetails.getCreatedBy()
+                            .getName());
+                    os.setTimestamp(6, new Timestamp(oobImportDetails.getCreatedOn()
+                            .getTime()));
+                    os.setString(7, oobImportDetails.getLastUpdatedBy()
+                            .getName());
+                    os.setTimestamp(8, new Timestamp(oobImportDetails.getLastUpdatedOn()
+                            .getTime()));
+                    os.setInt(9, 1);
+                    os.executeUpdate();
+                    try (final ResultSet rs = os.getGeneratedKeys()) {
+                        rs.next();
+                    }
+                }
+            }
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+
+    }
+
     private void incrementVersionNumber(final long id,
             final int version) throws SQLException {
 
-        final PreparedStatement u = c.prepareStatement(updateVersionSql);
-        u.setLong(1, id);
-        u.setInt(2, version);
-        u.executeUpdate();
+        try (final PreparedStatement u = c.prepareStatement(updateVersionSql)) {
+            u.setLong(1, id);
+            u.setInt(2, version);
+            u.executeUpdate();
+        }
 
     }
 
     @Override
-    public InputStream readContent(final DoxID id) {
+    public int readContent(final DoxID id,
+            ByteBuffer buffer) {
 
-        try {
-            final PreparedStatement s = c.prepareStatement(readContentSql);
+        try (final PreparedStatement s = c.prepareStatement(readContentSql)) {
             s.setLong(1, readMeta(id).getId());
-            final ResultSet rs = s.executeQuery();
-            if (!rs.next()) {
-                throw new EntityNotFoundException();
+            try (final ResultSet rs = s.executeQuery()) {
+                if (!rs.next()) {
+                    throw new EntityNotFoundException();
+                }
+                try (final InputStream ret = rs.getBinaryStream(1)) {
+                    return ret.read(buffer.array());
+                }
             }
-            return rs.getBinaryStream(1);
+        } catch (final IOException | SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    @Override
+    public void readContentToStream(final DoxID id,
+            OutputStream os) throws IOException {
+
+        try (final PreparedStatement s = c.prepareStatement(readContentSql)) {
+            s.setLong(1, readMeta(id).getId());
+            try (final ResultSet rs = s.executeQuery()) {
+                if (!rs.next()) {
+                    throw new EntityNotFoundException();
+                }
+                try (final InputStream ret = rs.getBinaryStream(1)) {
+                    int c = ret.read();
+                    while (c != -1) {
+                        os.write(c);
+                        c = ret.read();
+                    }
+                }
+            }
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
@@ -402,22 +514,22 @@ public class JdbcDoxDAO implements DoxDAO {
 
     public DocumentMeta readMeta(final DoxID id) {
 
-        try {
-            final PreparedStatement s = c.prepareStatement(readSql);
+        try (final PreparedStatement s = c.prepareStatement(readSql)) {
             s.setString(1, id.toString());
-            final ResultSet rs = s.executeQuery();
-            if (!rs.next()) {
-                throw new EntityNotFoundException();
+            try (final ResultSet rs = s.executeQuery()) {
+                if (!rs.next()) {
+                    throw new EntityNotFoundException();
+                }
+                final DocumentMeta meta = new DocumentMeta();
+                meta.setId(rs.getLong(1));
+                meta.setDoxId(new DoxID(rs.getString(2)));
+                meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
+                meta.setCreatedOn(rs.getTimestamp(4));
+                meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
+                meta.setLastUpdatedOn(rs.getTimestamp(6));
+                meta.setVersion(rs.getInt(7));
+                return meta;
             }
-            final DocumentMeta meta = new DocumentMeta();
-            meta.setId(rs.getLong(1));
-            meta.setDoxId(new DoxID(rs.getString(2)));
-            meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
-            meta.setCreatedOn(rs.getTimestamp(4));
-            meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
-            meta.setLastUpdatedOn(rs.getTimestamp(6));
-            meta.setVersion(rs.getInt(7));
-            return meta;
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
@@ -435,52 +547,84 @@ public class JdbcDoxDAO implements DoxDAO {
     private DocumentMeta readMetaAndLock(final DoxID id,
             final int version) throws SQLException {
 
-        final PreparedStatement s = c.prepareStatement(readForUpdateSql);
-        s.setString(1, id.toString());
-        s.setInt(2, version);
-        final ResultSet rs = s.executeQuery();
-        if (!rs.next()) {
-            throw new OptimisticLockException();
+        try (final PreparedStatement s = c.prepareStatement(readForUpdateSql)) {
+            s.setString(1, id.toString());
+            s.setInt(2, version);
+            try (final ResultSet rs = s.executeQuery()) {
+                if (!rs.next()) {
+                    throw new OptimisticLockException();
+                }
+                final DocumentMeta meta = new DocumentMeta();
+                meta.setId(rs.getLong(1));
+                meta.setDoxId(new DoxID(rs.getString(2)));
+                meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
+                meta.setCreatedOn(rs.getTimestamp(4));
+                meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
+                meta.setLastUpdatedOn(rs.getTimestamp(6));
+                meta.setVersion(rs.getInt(7));
+                return meta;
+            }
         }
-        final DocumentMeta meta = new DocumentMeta();
-        meta.setId(rs.getLong(1));
-        meta.setDoxId(new DoxID(rs.getString(2)));
-        meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
-        meta.setCreatedOn(rs.getTimestamp(4));
-        meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
-        meta.setLastUpdatedOn(rs.getTimestamp(6));
-        meta.setVersion(rs.getInt(7));
-        return meta;
     }
 
     @Override
-    public InputStream readOobContent(final DoxID doxId,
-            final String reference) {
+    public int readOobContent(final DoxID doxId,
+            final String reference,
+            ByteBuffer buffer) {
 
-        try {
-            final PreparedStatement s = c.prepareStatement(oobReadContentSql);
+        try (final PreparedStatement s = c.prepareStatement(oobReadContentSql)) {
+
             s.setLong(1, readMeta(doxId).getId());
             s.setString(2, reference);
             final ResultSet rs = s.executeQuery();
             if (!rs.next()) {
                 throw new EntityNotFoundException();
             }
-            return rs.getBinaryStream(1);
+            try (final InputStream ret = rs.getBinaryStream(1)) {
+                return ret.read(buffer.array());
+            }
+
+        } catch (final IOException | SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    @Override
+    public void readOobContentToStream(final DoxID doxId,
+            final String reference,
+            OutputStream os) throws IOException {
+
+        try (final PreparedStatement s = c.prepareStatement(oobReadContentSql)) {
+
+            s.setLong(1, readMeta(doxId).getId());
+            s.setString(2, reference);
+            final ResultSet rs = s.executeQuery();
+            if (!rs.next()) {
+                throw new EntityNotFoundException();
+            }
+            try (final InputStream ret = rs.getBinaryStream(1)) {
+                int c = ret.read();
+                while (c != -1) {
+                    os.write(c);
+                    c = ret.read();
+                }
+            }
+
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
     }
 
     @Override
-    public void updateContent(DoxID doxId,
-            InputStream contentStream,
-            int version,
-            Principal principal) {
+    public void updateContent(final DoxID doxId,
+            final InputStream contentStream,
+            final int version,
+            final Principal principal) {
 
         try {
             final Timestamp ts = new Timestamp(System.currentTimeMillis());
             final DocumentMeta meta = readMetaAndLock(doxId, version);
-            PreparedStatement u = c.prepareStatement(updateSql);
+            final PreparedStatement u = c.prepareStatement(updateSql);
             u.setBinaryStream(1, contentStream);
             u.setString(2, principal.getName());
             u.setTimestamp(3, ts);
@@ -490,63 +634,5 @@ public class JdbcDoxDAO implements DoxDAO {
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
-    }
-
-    @Override
-    public void importDox(DoxImportBuilder builder) {
-
-        if (!builder.isComplete()) {
-            throw new PersistenceException("Import data " + builder + " is not complete");
-        }
-        if (builder.hasOob() && !hasOob) {
-            throw new PersistenceException("Import data " + builder + " has OOB but OOB is not enabled on " + tableName);
-        }
-        try {
-            final long primaryKey;
-            {
-                final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
-                s.setBinaryStream(1, builder.getContentStream());
-                s.setString(2, builder.getDoxID()
-                        .toString());
-                s.setString(3, builder.getCreatedBy()
-                        .getName());
-                s.setTimestamp(4, new Timestamp(builder.getCreatedOn()
-                        .getTime()));
-                s.setString(5, builder.getLastUpdatedBy()
-                        .getName());
-                s.setTimestamp(6, new Timestamp(builder.getLastUpdatedOn()
-                        .getTime()));
-                s.setInt(7, 1);
-                s.executeUpdate();
-                final ResultSet rs = s.getGeneratedKeys();
-                rs.next();
-                primaryKey = rs.getLong(1);
-            }
-
-            for (DoxOobImportDetails oobImportDetails : builder.getOobImportDetails()) {
-
-                final PreparedStatement os = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS);
-                os.setBinaryStream(1, oobImportDetails.getContentStream());
-                os.setString(2, builder.getDoxID()
-                        .toString());
-                os.setLong(3, primaryKey);
-                os.setString(4, oobImportDetails.getReference());
-                os.setString(5, oobImportDetails.getCreatedBy()
-                        .getName());
-                os.setTimestamp(6, new Timestamp(oobImportDetails.getCreatedOn()
-                        .getTime()));
-                os.setString(7, oobImportDetails.getLastUpdatedBy()
-                        .getName());
-                os.setTimestamp(8, new Timestamp(oobImportDetails.getLastUpdatedOn()
-                        .getTime()));
-                os.setInt(9, 1);
-                os.executeUpdate();
-                final ResultSet rs = os.getGeneratedKeys();
-                rs.next();
-            }
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
-        }
-
     }
 }

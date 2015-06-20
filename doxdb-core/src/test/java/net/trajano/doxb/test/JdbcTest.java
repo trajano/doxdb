@@ -1,5 +1,6 @@
 package net.trajano.doxb.test;
 
+import java.nio.ByteBuffer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Date;
@@ -76,7 +77,7 @@ public class JdbcTest {
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
         final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
 
-        DoxConfiguration config = new DoxConfiguration("sample");
+        final DoxConfiguration config = new DoxConfiguration("sample");
         config.setHasOob(true);
 
         // Connection c = DriverManager.getConnection("jdbc:derby://" +
@@ -134,9 +135,9 @@ public class JdbcTest {
 
         try {
             final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
-            DoxID d1 = new DoxID("012345678901234567890123456789AB");
+            final DoxID d1 = new DoxID("012345678901234567890123456789AB");
 
-            DoxImportBuilder b = new DoxImportBuilder().contentStream(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+            final DoxImportBuilder b = new DoxImportBuilder().contentStream(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
                     .getInput())
                     .doxID(d1)
                     .createdBy(new DoxPrincipal("FRESH"))
@@ -164,8 +165,8 @@ public class JdbcTest {
         // ":1527/sun-appserv-samples;create=true;upgrade=true");
 
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
-        DoxID d1 = new DoxID("012345678901234567890123456789AB");
-        DoxImportBuilder b = new DoxImportBuilder().contentStream(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+        final DoxID d1 = new DoxID("012345678901234567890123456789AB");
+        final DoxImportBuilder b = new DoxImportBuilder().contentStream(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
                 .getInput())
                 .doxID(d1)
                 .createdBy(new DoxPrincipal("FRESH"))
@@ -179,7 +180,7 @@ public class JdbcTest {
                 .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
 
         final byte[] buffer1 = new byte[5000];
-        ByteStreams.readFully(dao.readContent(d1), buffer1);
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = new byte[5000];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), buffer2);
@@ -202,8 +203,8 @@ public class JdbcTest {
         // ":1527/sun-appserv-samples;create=true;upgrade=true");
 
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
-        DoxID d1 = new DoxID("012345678901234567890123456789AB");
-        DoxImportBuilder b = new DoxImportBuilder().contentStream(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+        final DoxID d1 = new DoxID("012345678901234567890123456789AB");
+        final DoxImportBuilder b = new DoxImportBuilder().contentStream(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
                 .getInput())
                 .doxID(d1)
                 .createdBy(new DoxPrincipal("FRESH"))
@@ -220,7 +221,7 @@ public class JdbcTest {
                 .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
 
         final byte[] buffer1 = new byte[5000];
-        ByteStreams.readFully(dao.readContent(d1), buffer1);
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = new byte[5000];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), buffer2);
@@ -249,7 +250,7 @@ public class JdbcTest {
                 .getInput(), new DoxPrincipal("PRINCE"));
         Assert.assertFalse(d1.equals(d2));
         final byte[] buffer1 = new byte[5000];
-        ByteStreams.readFully(dao.readContent(d1), buffer1);
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = new byte[5000];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), buffer2);
@@ -282,7 +283,7 @@ public class JdbcTest {
                 .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
 
         final byte[] buffer1 = new byte[5000];
-        ByteStreams.readFully(dao.readContent(d1), buffer1);
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = new byte[5000];
         ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), buffer2);
