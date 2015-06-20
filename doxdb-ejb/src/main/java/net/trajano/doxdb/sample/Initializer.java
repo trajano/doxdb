@@ -31,11 +31,8 @@ public class Initializer {
         System.out.println(basic);
         basic.getds();
 
-        byte[] bb = new byte[bytes.length];
         try {
-            sampleBean.readContent(id)
-                    .read(bb);
-            System.out.println(new String(bb));
+            sampleBean.readContentToStream(id, System.out);
         } catch (IOException e) {
             e.printStackTrace();
         }
