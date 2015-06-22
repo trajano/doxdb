@@ -1,4 +1,4 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.json;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,19 +11,28 @@ import java.sql.SQLException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.json.JsonObject;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
+import net.trajano.doxdb.DoxConfiguration;
+import net.trajano.doxdb.DoxConfiguration;
+import net.trajano.doxdb.DoxDAO;
+import net.trajano.doxdb.DoxDAO;
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
 /**
- * This will be extended by the EJBs. This does not provide extension points for
- * the operations, those operations should be done on the application specific
+ * JSON based Dox. This wraps the main Dox operations so that it will take in
+ * JSON data. The data itself is stored in BSON to make it more efficient. This
+ * will be extended by the EJBs. This does not provide extension points for the
+ * operations, those operations should be done on the application specific
  * versions.
  *
  * @author Archimedes
  */
-public abstract class AbstractDoxDAOBean {
+public abstract class AbstractJsonDoxDAOBean {
 
     private Connection connection;
 
@@ -35,21 +44,6 @@ public abstract class AbstractDoxDAOBean {
      */
     @Resource(name = "doxdbDataSource", lookup = "java:comp/DefaultDataSource")
     private DataSource ds;
-
-    protected AbstractDoxDAOBean() {
-
-    }
-
-    /**
-     * This provides an alternate constructor that will connect using a JDBC
-     * connection rather than a data source for unit testing.
-     *
-     * @param connection
-     */
-    protected AbstractDoxDAOBean(Connection connection) {
-        this.connection = connection;
-        dao = new JdbcDoxDAO(connection, buildConfiguration());
-    }
 
     public void attach(DoxID doxId,
             String reference,
@@ -72,10 +66,10 @@ public abstract class AbstractDoxDAOBean {
         return new DoxConfiguration(getClass().getSimpleName());
     }
 
-    public DoxID create(InputStream in,
+    public DoxID create(JsonObject json,
             Principal principal) {
 
-        return dao.create(in, principal);
+        return null;
     }
 
     public void delete(DoxID id,
@@ -122,17 +116,9 @@ public abstract class AbstractDoxDAOBean {
         }
     }
 
-    public int readContent(DoxID id,
-            ByteBuffer buffer) {
+    public JsonObject readContent(DoxID id) {
 
-        return dao.readContent(id, buffer);
-    }
-
-    public void readContentToStream(DoxID id,
-            OutputStream os) throws IOException {
-
-        dao.readContentToStream(id, os);
-
+        return null;
     }
 
     public int readOobContent(DoxID doxId,
