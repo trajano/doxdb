@@ -32,7 +32,9 @@ public class Initializer {
         basic.getds();
 
         try {
+            System.out.println("----");
             sampleBean.readContentToStream(id, System.out);
+            System.out.println("----");
         } catch (IOException e) {
             e.printStackTrace();
         }

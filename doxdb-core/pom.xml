@@ -11,11 +11,14 @@
     <properties>
         <m2e.jpa.activation>false</m2e.jpa.activation>
     </properties>
-    <dependencies><dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-    <version>1.4.187</version><scope>test</scope>
-</dependency></dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.187</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
