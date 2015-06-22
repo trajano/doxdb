@@ -231,9 +231,10 @@ public class JdbcDoxDAO implements DoxDAO {
             s.setTimestamp(6, ts);
             s.setInt(7, 1);
             s.executeUpdate();
-            final ResultSet rs = s.getGeneratedKeys();
-            rs.next();
-            return doxId;
+            try (final ResultSet rs = s.getGeneratedKeys()) {
+                rs.next();
+                return doxId;
+            }
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }

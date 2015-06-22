@@ -51,6 +51,9 @@ public final class DoxID {
 
     private final char[] b = new char[LENGTH];
 
+    /**
+     * Calculated hashcode value.
+     */
     private final int hash;
 
     private DoxID() {
