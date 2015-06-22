@@ -23,7 +23,7 @@ import net.trajano.doxdb.jdbc.JdbcDoxDAO;
  *
  * @author Archimedes
  */
-public abstract class AbstractDoxDAOBean implements DoxDAO {
+public abstract class AbstractDoxDAOBean {
 
     private Connection connection;
 
@@ -36,7 +36,6 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
     @Resource(name = "doxdbDataSource", lookup = "java:comp/DefaultDataSource")
     private DataSource ds;
 
-    @Override
     public void attach(DoxID doxId,
             String reference,
             InputStream in,
@@ -58,14 +57,12 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         return new DoxConfiguration(getClass().getSimpleName());
     }
 
-    @Override
     public DoxID create(InputStream in,
             Principal principal) {
 
         return dao.create(in, principal);
     }
 
-    @Override
     public void delete(DoxID id,
             int version,
             Principal principal) {
@@ -73,7 +70,6 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         dao.delete(id, version, principal);
     }
 
-    @Override
     public void detach(DoxID doxId,
             String reference,
             int version,
@@ -82,7 +78,6 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         dao.detach(doxId, reference, version, principal);
     }
 
-    @Override
     public void exportDox(DoxID doxID,
             OutputStream os) throws IOException {
 
@@ -90,13 +85,11 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
 
     }
 
-    @Override
     public int getVersion(DoxID id) {
 
         return dao.getVersion(id);
     }
 
-    @Override
     public void importDox(InputStream is) throws IOException {
 
         dao.importDox(is);
@@ -114,14 +107,12 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         }
     }
 
-    @Override
     public int readContent(DoxID id,
             ByteBuffer buffer) {
 
         return dao.readContent(id, buffer);
     }
 
-    @Override
     public void readContentToStream(DoxID id,
             OutputStream os) throws IOException {
 
@@ -129,7 +120,6 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
 
     }
 
-    @Override
     public int readOobContent(DoxID doxId,
             String reference,
             ByteBuffer buffer) {
@@ -137,7 +127,6 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         return dao.readOobContent(doxId, reference, buffer);
     }
 
-    @Override
     public void readOobContentToStream(DoxID id,
             String reference,
             OutputStream os) throws IOException {
@@ -159,7 +148,6 @@ public abstract class AbstractDoxDAOBean implements DoxDAO {
         }
     }
 
-    @Override
     public void updateContent(DoxID doxId,
             InputStream contentStream,
             int version,
