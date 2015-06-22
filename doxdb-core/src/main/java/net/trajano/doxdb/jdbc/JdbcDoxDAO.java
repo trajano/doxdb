@@ -40,6 +40,8 @@ public class JdbcDoxDAO implements DoxDAO {
 
     private final String insertSql;
 
+    private final long lobSize;
+
     private final String oobCheckSql;
 
     final String oobCopyAllToTombstoneSql;
@@ -49,6 +51,11 @@ public class JdbcDoxDAO implements DoxDAO {
     private final String oobDeleteSql;
 
     private final String oobInsertSql;
+
+    /**
+     * Size of the lobs for OOB in bytes.
+     */
+    private final long oobLobSize;
 
     private final String oobReadContentSql;
 
@@ -77,6 +84,8 @@ public class JdbcDoxDAO implements DoxDAO {
         this.c = c;
         tableName = configuration.getTableName();
         hasOob = configuration.isHasOob();
+        lobSize = configuration.getLobSize();
+        oobLobSize = configuration.getOobLobSize();
         try {
             createTable();
             insertSql = "insert into " + tableName + " (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?, ?,?,?,?,?,?)";
@@ -238,7 +247,7 @@ public class JdbcDoxDAO implements DoxDAO {
                 throw new PersistenceException("OOB tables for " + tableName + " exist when they are not expected to exist");
             }
 
-            try (PreparedStatement s = c.prepareStatement("CREATE TABLE " + tableName + "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))")) {
+            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1sOOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(%2d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))", tableName, oobLobSize))) {
                 s.executeUpdate();
             }
             try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (DOXID, REFERENCE)")) {
@@ -250,7 +259,7 @@ public class JdbcDoxDAO implements DoxDAO {
             try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOB add foreign key (PARENTID, DOXID) references " + tableName + "(ID, DOXID)")) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement("CREATE TABLE " + tableName + "OOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")) {
+            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1sOOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", tableName, oobLobSize))) {
                 s.executeUpdate();
             }
             try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOBTOMBSTONE  add unique (DOXID, REFERENCE)")) {
@@ -266,7 +275,7 @@ public class JdbcDoxDAO implements DoxDAO {
                 .getTables(null, null, tableName.toUpperCase(), null)) {
             if (!tables.next()) {
 
-                try (PreparedStatement s = c.prepareStatement("CREATE TABLE " + tableName + "(ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))")) {
+                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))", tableName, lobSize))) {
                     s.executeUpdate();
                 }
 
@@ -277,7 +286,8 @@ public class JdbcDoxDAO implements DoxDAO {
                 try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + " add unique (ID, DOXID)")) {
                     s.executeUpdate();
                 }
-                try (PreparedStatement s = c.prepareStatement("CREATE TABLE " + tableName + "TOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(2147483647) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))")) {
+
+                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1sTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", tableName, lobSize))) {
                     s.executeUpdate();
                 }
                 try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "TOMBSTONE  add unique (DOXID)")) {

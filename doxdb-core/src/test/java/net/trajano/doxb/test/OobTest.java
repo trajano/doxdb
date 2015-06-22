@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceException;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -156,6 +157,46 @@ public class OobTest {
         c.commit();
     }
 
+    /**
+     * When updating an OOB entry it will replace it in place. It won't keep the
+     * history. Will fail because the size is too small.
+     *
+     * @throws Exception
+     */
+    @Test(expected = PersistenceException.class)
+    public void testFailUpdateOobSmallerLOB() throws Exception {
+
+        final DoxConfiguration doxConfiguration = new DoxConfiguration();
+        doxConfiguration.setTableName("sample");
+        doxConfiguration.setHasOob(true);
+        doxConfiguration.setOobLobSize(4200);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        final int version1 = dao.getVersion(d1);
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+
+        final int version2 = dao.getVersion(d1);
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), version2, new DoxPrincipal("PRINSIPEUP"));
+
+        Assert.assertTrue(version2 > version1);
+        final byte[] buffer1 = new byte[200];
+        dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
+
+        final byte[] buffer2 = new byte[200];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), buffer2);
+        Assert.assertArrayEquals(buffer1, buffer2);
+        final int d1Version = dao.getVersion(d1);
+        Assert.assertTrue(d1Version > version2);
+        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
+        c.commit();
+    }
+
     @Test
     public void testOobPersistence() throws Exception {
 
@@ -202,6 +243,44 @@ public class OobTest {
         final DoxConfiguration doxConfiguration = new DoxConfiguration();
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        final int version1 = dao.getVersion(d1);
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+
+        final int version2 = dao.getVersion(d1);
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), version2, new DoxPrincipal("PRINSIPEUP"));
+
+        Assert.assertTrue(version2 > version1);
+        final byte[] buffer1 = new byte[200];
+        dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
+
+        final byte[] buffer2 = new byte[200];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), buffer2);
+        Assert.assertArrayEquals(buffer1, buffer2);
+        final int d1Version = dao.getVersion(d1);
+        Assert.assertTrue(d1Version > version2);
+        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
+        c.commit();
+    }
+
+    /**
+     * When updating an OOB entry it will replace it in place. It won't keep the
+     * history.
+     */
+    @Test
+    public void testUpdateOobSmallerLOB() throws Exception {
+
+        final DoxConfiguration doxConfiguration = new DoxConfiguration();
+        doxConfiguration.setTableName("sample");
+        doxConfiguration.setHasOob(true);
+        doxConfiguration.setOobLobSize(420000);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
         final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));

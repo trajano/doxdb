@@ -5,6 +5,8 @@ import java.nio.ByteBuffer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import javax.persistence.PersistenceException;
+
 import org.apache.catalina.fileupload.ByteArrayOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
@@ -147,6 +149,41 @@ public class JdbcTest {
         c.close();
     }
 
+    @Test(expected = PersistenceException.class)
+    public void testFailUpdateSmallerLob() throws Exception {
+
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
+
+        // Connection c = DriverManager.getConnection("jdbc:derby://" +
+        // InetAddress.getLocalHost()
+        // .getHostName() +
+        // ":1527/sun-appserv-samples;create=true;upgrade=true");
+
+        final DoxConfiguration config = new DoxConfiguration("sample");
+        config.setLobSize(5000);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, config);
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        Assert.assertFalse(d1.equals(d2));
+
+        dao.updateContent(d1, Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
+
+        final byte[] buffer1 = new byte[5000];
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
+        final byte[] buffer2 = new byte[5000];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), buffer2);
+        Assert.assertArrayEquals(buffer1, buffer2);
+        final int d1Version = dao.getVersion(d1);
+        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
+        c.commit();
+        c.close();
+    }
+
     @Test
     public void testPersistence() throws Exception {
 
@@ -188,6 +225,41 @@ public class JdbcTest {
         // ":1527/sun-appserv-samples;create=true;upgrade=true");
 
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        Assert.assertFalse(d1.equals(d2));
+
+        dao.updateContent(d1, Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
+
+        final byte[] buffer1 = new byte[5000];
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
+        final byte[] buffer2 = new byte[5000];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), buffer2);
+        Assert.assertArrayEquals(buffer1, buffer2);
+        final int d1Version = dao.getVersion(d1);
+        dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
+        c.commit();
+        c.close();
+    }
+
+    @Test
+    public void testUpdateSmallerLob() throws Exception {
+
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
+
+        // Connection c = DriverManager.getConnection("jdbc:derby://" +
+        // InetAddress.getLocalHost()
+        // .getHostName() +
+        // ":1527/sun-appserv-samples;create=true;upgrade=true");
+
+        final DoxConfiguration config = new DoxConfiguration("sample");
+        config.setLobSize(500000);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, config);
         final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
                 .getInput(), new DoxPrincipal("PRINCE"));
         final DoxID d2 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
