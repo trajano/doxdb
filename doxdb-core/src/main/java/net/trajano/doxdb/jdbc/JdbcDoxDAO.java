@@ -42,6 +42,10 @@ public class JdbcDoxDAO implements DoxDAO {
 
     private final String oobCheckSql;
 
+    final String oobCopyAllToTombstoneSql;
+
+    final String oobDeleteAllSql;
+
     private final String oobDeleteSql;
 
     private final String oobInsertSql;
@@ -97,7 +101,9 @@ public class JdbcDoxDAO implements DoxDAO {
             oobUpdateSql = "update " + tableName + "OOB set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1 where ID=? and VERSION=?";
 
             copyToTombstoneSql = "insert into " + tableName + "TOMBSTONE (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + " where id = ? and version = ?";
+            oobCopyAllToTombstoneSql = "insert into " + tableName + "OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + "OOB where parentid = ?";
             deleteSql = "delete from " + tableName + " where ID=? and VERSION=?";
+            oobDeleteAllSql = "delete from " + tableName + "OOB where PARENTID = ?";
             oobDeleteSql = "delete from " + tableName + "OOB where ID=? and VERSION=?";
             for (final String sql : new String[] { insertSql, readSql, readContentSql, updateSql, updateVersionSql, deleteSql, readForUpdateSql }) {
                 c.prepareStatement(sql)
@@ -105,7 +111,7 @@ public class JdbcDoxDAO implements DoxDAO {
             }
 
             if (hasOob) {
-                for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql, oobCheckSql, oobTombstoneDeleteSql }) {
+                for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql, oobCheckSql, oobTombstoneDeleteSql, oobCopyAllToTombstoneSql, oobDeleteAllSql }) {
                     c.prepareStatement(sql)
                             .close();
                 }
@@ -137,61 +143,63 @@ public class JdbcDoxDAO implements DoxDAO {
             final int version,
             final Principal principal) {
 
-        try {
-            final DocumentMeta meta = readMetaAndLock(doxId, version);
+        final DocumentMeta meta = readMetaAndLock(doxId, version);
 
-            try (final PreparedStatement check = c.prepareStatement(oobCheckSql)) {
-                check.setLong(1, meta.getId());
-                check.setString(2, reference);
+        try (final PreparedStatement check = c.prepareStatement(oobCheckSql)) {
+            check.setLong(1, meta.getId());
+            check.setString(2, reference);
 
-                try (final ResultSet checkRs = check.executeQuery()) {
+            try (final ResultSet checkRs = check.executeQuery()) {
 
-                    if (checkRs.next()) {
-                        // if the reference record already exists then do an
-                        // update
-                        final long existingId = checkRs.getLong(1);
-                        final int existingVersion = checkRs.getInt(2);
+                if (checkRs.next()) {
+                    // if the reference record already exists then do an
+                    // update
+                    final long existingId = checkRs.getLong(1);
+                    final int existingVersion = checkRs.getInt(2);
 
-                        try (final PreparedStatement s = c.prepareStatement(oobUpdateSql)) {
-                            final Timestamp ts = new Timestamp(System.currentTimeMillis());
-                            s.setBinaryStream(1, in);
-                            s.setString(2, principal.getName());
-                            s.setTimestamp(3, ts);
-                            s.setLong(4, existingId);
-                            s.setInt(5, existingVersion);
-                            final int count = s.executeUpdate();
-                            if (count != 1) {
-                                throw new PersistenceException("unable to update OOB");
-                            }
-                            incrementVersionNumber(meta.getId(), version);
-                            return;
+                    try (final PreparedStatement s = c.prepareStatement(oobUpdateSql)) {
+                        final Timestamp ts = new Timestamp(System.currentTimeMillis());
+                        s.setBinaryStream(1, in);
+                        s.setString(2, principal.getName());
+                        s.setTimestamp(3, ts);
+                        s.setLong(4, existingId);
+                        s.setInt(5, existingVersion);
+                        final int count = s.executeUpdate();
+                        if (count != 1) {
+                            throw new PersistenceException("unable to update OOB");
                         }
+                        incrementVersionNumber(meta.getId(), version);
+                        return;
                     }
                 }
             }
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
 
-            // Delete any tombstone data if one exists
-            try (final PreparedStatement checkTombStone = c.prepareStatement(oobTombstoneDeleteSql)) {
-                checkTombStone.setString(1, doxId.toString());
-                checkTombStone.setString(2, reference);
-                checkTombStone.executeUpdate();
-            }
+        // Delete any tombstone data if one exists
+        try (final PreparedStatement checkTombStone = c.prepareStatement(oobTombstoneDeleteSql)) {
+            checkTombStone.setString(1, doxId.toString());
+            checkTombStone.setString(2, reference);
+            checkTombStone.executeUpdate();
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
 
-            // Insert a new OOB record
-            try (final PreparedStatement s = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS)) {
-                final Timestamp ts = new Timestamp(System.currentTimeMillis());
-                s.setBinaryStream(1, in);
-                s.setString(2, doxId.toString());
-                s.setLong(3, meta.getId());
-                s.setString(4, reference);
-                s.setString(5, principal.getName());
-                s.setTimestamp(6, ts);
-                s.setString(7, principal.getName());
-                s.setTimestamp(8, ts);
-                s.setInt(9, version);
-                s.executeUpdate();
-                incrementVersionNumber(meta.getId(), version);
-            }
+        // Insert a new OOB record
+        try (final PreparedStatement s = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS)) {
+            final Timestamp ts = new Timestamp(System.currentTimeMillis());
+            s.setBinaryStream(1, in);
+            s.setString(2, doxId.toString());
+            s.setLong(3, meta.getId());
+            s.setString(4, reference);
+            s.setString(5, principal.getName());
+            s.setTimestamp(6, ts);
+            s.setString(7, principal.getName());
+            s.setTimestamp(8, ts);
+            s.setInt(9, version);
+            s.executeUpdate();
+            incrementVersionNumber(meta.getId(), version);
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
@@ -307,26 +315,12 @@ public class JdbcDoxDAO implements DoxDAO {
             final int version,
             final Principal principal) {
 
+        final DocumentMeta meta = readMetaAndLock(id, version);
+        final Timestamp ts = new Timestamp(System.currentTimeMillis());
+
         try {
-            final DocumentMeta meta = readMetaAndLock(id, version);
-            final Timestamp ts = new Timestamp(System.currentTimeMillis());
-
             if (hasOob) {
-                final String oobCopyAllToTombstoneSql = "insert into " + tableName + "OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + "OOB where parentid = ?";
-                try (final PreparedStatement copy = c.prepareStatement(oobCopyAllToTombstoneSql)) {
-                    copy.setString(1, principal.toString());
-                    copy.setTimestamp(2, ts);
-                    copy.setLong(3, meta.getId());
-                    final int copyCount = copy.executeUpdate();
-
-                    final String oobDeleteAllSql = "delete from " + tableName + "OOB where PARENTID = ?";
-                    final PreparedStatement del = c.prepareStatement(oobDeleteAllSql);
-                    del.setLong(1, meta.getId());
-                    final int delCount = del.executeUpdate();
-                    if (copyCount != delCount) {
-                        throw new PersistenceException("Mismatch in moving OOB to tombstone");
-                    }
-                }
+                deleteOob(principal, meta, ts);
             }
 
             // c.prepareStatement("CREATE TABLE " + tableName +
@@ -353,6 +347,33 @@ public class JdbcDoxDAO implements DoxDAO {
             }
         } catch (final SQLException e) {
             throw new PersistenceException(e);
+        }
+    }
+
+    /**
+     * Removes the OOB records associated with the Dox.
+     *
+     * @param principal
+     * @param meta
+     * @param ts
+     * @throws SQLException
+     */
+    private void deleteOob(final Principal principal,
+            final DocumentMeta meta,
+            final Timestamp ts) throws SQLException {
+
+        try (final PreparedStatement copy = c.prepareStatement(oobCopyAllToTombstoneSql)) {
+            copy.setString(1, principal.toString());
+            copy.setTimestamp(2, ts);
+            copy.setLong(3, meta.getId());
+            final int copyCount = copy.executeUpdate();
+
+            final PreparedStatement del = c.prepareStatement(oobDeleteAllSql);
+            del.setLong(1, meta.getId());
+            final int delCount = del.executeUpdate();
+            if (copyCount != delCount) {
+                throw new PersistenceException("Mismatch in moving OOB to tombstone");
+            }
         }
     }
 
@@ -407,8 +428,8 @@ public class JdbcDoxDAO implements DoxDAO {
     }
 
     @Override
-    public void exportDox(DoxID doxID,
-            OutputStream os) throws IOException {
+    public void exportDox(final DoxID doxID,
+            final OutputStream os) throws IOException {
 
         try {
             final MimeMultipart mimeMultipart = new MimeMultipart();
@@ -469,7 +490,7 @@ public class JdbcDoxDAO implements DoxDAO {
     }
 
     @Override
-    public void importDox(InputStream is) throws IOException {
+    public void importDox(final InputStream is) throws IOException {
 
         try {
             final MimeMultipart mmp = new MimeMultipart(new ByteArrayDataSource(is, MediaType.MULTIPART_FORM_DATA));
@@ -562,7 +583,7 @@ public class JdbcDoxDAO implements DoxDAO {
 
     @Override
     public int readContent(final DoxID id,
-            ByteBuffer buffer) {
+            final ByteBuffer buffer) {
 
         try (final PreparedStatement s = c.prepareStatement(readContentSql)) {
             s.setLong(1, readMeta(id).getId());
@@ -581,7 +602,7 @@ public class JdbcDoxDAO implements DoxDAO {
 
     @Override
     public void readContentToStream(final DoxID id,
-            OutputStream os) throws IOException {
+            final OutputStream os) throws IOException {
 
         try (final PreparedStatement s = c.prepareStatement(readContentSql)) {
             s.setLong(1, readMeta(id).getId());
@@ -635,7 +656,7 @@ public class JdbcDoxDAO implements DoxDAO {
      * @throws SQLException
      */
     private DocumentMeta readMetaAndLock(final DoxID id,
-            final int version) throws SQLException {
+            final int version) {
 
         try (final PreparedStatement s = c.prepareStatement(readForUpdateSql)) {
             s.setString(1, id.toString());
@@ -654,13 +675,15 @@ public class JdbcDoxDAO implements DoxDAO {
                 meta.setVersion(rs.getInt(7));
                 return meta;
             }
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
         }
     }
 
     @Override
     public int readOobContent(final DoxID doxId,
             final String reference,
-            ByteBuffer buffer) {
+            final ByteBuffer buffer) {
 
         try (final PreparedStatement s = c.prepareStatement(oobReadContentSql)) {
 
@@ -682,7 +705,7 @@ public class JdbcDoxDAO implements DoxDAO {
     @Override
     public void readOobContentToStream(final DoxID doxId,
             final String reference,
-            OutputStream os) throws IOException {
+            final OutputStream os) throws IOException {
 
         try (final PreparedStatement s = c.prepareStatement(oobReadContentSql)) {
 
