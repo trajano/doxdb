@@ -46,6 +46,8 @@ public class JdbcDoxDAO implements DoxDAO {
 
     final String oobCopyAllToTombstoneSql;
 
+    private final String oobCopyToTombstoneSql;
+
     final String oobDeleteAllSql;
 
     private final String oobDeleteSql;
@@ -63,7 +65,11 @@ public class JdbcDoxDAO implements DoxDAO {
 
     private final String oobReadSql;
 
+    private final String oobTableName;
+
     private final String oobTombstoneDeleteSql;
+
+    private final String oobTombstoneTableName;
 
     private final String oobUpdateSql;
 
@@ -75,6 +81,8 @@ public class JdbcDoxDAO implements DoxDAO {
 
     private final String tableName;
 
+    private final String tombstoneTableName;
+
     private final String updateSql;
 
     private final String updateVersionSql;
@@ -82,19 +90,23 @@ public class JdbcDoxDAO implements DoxDAO {
     public JdbcDoxDAO(final Connection c, final DoxConfiguration configuration) {
 
         this.c = c;
-        tableName = configuration.getTableName();
+        tableName = configuration.getTableName()
+                .toUpperCase();
         hasOob = configuration.isHasOob();
         lobSize = configuration.getLobSize();
         oobLobSize = configuration.getOobLobSize();
+        tombstoneTableName = (tableName + "TOMBSTONE").toUpperCase();
+        oobTableName = (tableName + "OOB").toUpperCase();
+        oobTombstoneTableName = (tableName + "OOBTOMBSTONE").toUpperCase();
         try {
             createTable();
-            insertSql = "insert into " + tableName + " (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?, ?,?,?,?,?,?)";
-            oobInsertSql = "insert into " + tableName + "OOB (CONTENT, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?,?,?,?,?,?,?,?,?)";
+            insertSql = String.format("insert into %1$s (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?, ?,?,?,?,?,?)", tableName);
+            oobInsertSql = String.format("insert into %1$s (CONTENT, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?,?,?,?,?,?,?,?,?)", oobTableName);
 
             readSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + " E where E.DOXID=?";
             oobReadSql = "select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + "OOB E where E.DOXID=? and E.REFERENCE = ?";
             oobCheckSql = String.format("select id, version from %s where parentid = ? and reference = ? for update", tableName + "OOB");
-            oobTombstoneDeleteSql = String.format("delete from %s where doxid = ? and reference = ?", tableName + "OOBTOMBSTONE");
+            oobTombstoneDeleteSql = String.format("delete from %s where doxid = ? and reference = ?", oobTombstoneTableName);
             readForUpdateSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + " E where E.DOXID=? AND E.VERSION = ? FOR UPDATE";
             // when reading for update on the OOB data it will lock all the OOB
             // records not just the one referenced by the name.
@@ -109,18 +121,20 @@ public class JdbcDoxDAO implements DoxDAO {
             updateVersionSql = "update " + tableName + " set VERSION=VERSION+1 where ID=? and VERSION=?";
             oobUpdateSql = "update " + tableName + "OOB set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1 where ID=? and VERSION=?";
 
-            copyToTombstoneSql = "insert into " + tableName + "TOMBSTONE (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + " where id = ? and version = ?";
+            copyToTombstoneSql = String.format("insert into %1$s (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where id = ? and version = ?", tombstoneTableName, tableName);
             oobCopyAllToTombstoneSql = "insert into " + tableName + "OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + "OOB where parentid = ?";
             deleteSql = "delete from " + tableName + " where ID=? and VERSION=?";
             oobDeleteAllSql = "delete from " + tableName + "OOB where PARENTID = ?";
             oobDeleteSql = "delete from " + tableName + "OOB where ID=? and VERSION=?";
+            oobCopyToTombstoneSql = String.format("insert into %1$s (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where parentid = ? and reference = ?", oobTombstoneTableName, oobTableName);
+
             for (final String sql : new String[] { insertSql, readSql, readContentSql, updateSql, updateVersionSql, deleteSql, readForUpdateSql }) {
                 c.prepareStatement(sql)
                         .close();
             }
 
             if (hasOob) {
-                for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql, oobCheckSql, oobTombstoneDeleteSql, oobCopyAllToTombstoneSql, oobDeleteAllSql }) {
+                for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql, oobCheckSql, oobTombstoneDeleteSql, oobCopyAllToTombstoneSql, oobDeleteAllSql, oobCopyToTombstoneSql }) {
                     c.prepareStatement(sql)
                             .close();
                 }
@@ -243,27 +257,27 @@ public class JdbcDoxDAO implements DoxDAO {
     private void createOobTables() throws SQLException {
 
         try (final ResultSet tables = c.getMetaData()
-                .getTables(null, null, (tableName + "OOB").toUpperCase(), null)) {
+                .getTables(null, null, oobTableName, null)) {
             if (tables.next()) {
                 throw new PersistenceException("OOB tables for " + tableName + " exist when they are not expected to exist");
             }
 
-            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$sOOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))", tableName, oobLobSize))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))", oobTableName, oobLobSize))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sOOB add unique (DOXID, REFERENCE)", tableName))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add unique (DOXID, REFERENCE)", oobTableName))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sOOB add unique (PARENTID, REFERENCE)", tableName))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add unique (PARENTID, REFERENCE)", oobTableName))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sOOB add foreign key (PARENTID, DOXID) references %1$s (ID, DOXID)", tableName))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add foreign key (PARENTID, DOXID) references %2$s (ID, DOXID)", oobTableName, tableName))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$sOOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", tableName, oobLobSize))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", oobTombstoneTableName, oobLobSize))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sOOBTOMBSTONE  add unique (DOXID, REFERENCE)", tableName))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add unique (DOXID, REFERENCE)", oobTombstoneTableName))) {
                 s.executeUpdate();
             }
 
@@ -409,7 +423,6 @@ public class JdbcDoxDAO implements DoxDAO {
             final DocumentMeta meta = readMetaAndLock(doxId, version);
             final Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-            final String oobCopyToTombstoneSql = "insert into " + tableName + "OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + "OOB where parentid = ? and reference = ?";
             final int copyCount;
             try (final PreparedStatement copy = c.prepareStatement(oobCopyToTombstoneSql)) {
                 copy.setString(1, principal.toString());
