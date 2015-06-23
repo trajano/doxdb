@@ -25,10 +25,12 @@ public class SampleJsonEntityTest extends AbstractEntityTest {
 
         SampleJsonBean bean = new SampleJsonBean(connection);
 
-        JsonObject o = Json.createReader(new StringReader("{\"doc\": \"abc\"}"))
+        String inputJson = "{\"doc\":\"abc\"}";
+        JsonObject o = Json.createReader(new StringReader(inputJson))
                 .readObject();
         DoxID id = bean.create(o, new DoxPrincipal("PRINCE"));
-        bean.exportDox(id, System.out);
+        Assert.assertEquals(inputJson, bean.readContent(id)
+                .toString());
         tx.commit();
     }
 }

@@ -1,9 +1,11 @@
 package net.trajano.doxdb.json;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.nio.ByteBuffer;
 import java.security.Principal;
 import java.sql.Connection;
@@ -12,13 +14,16 @@ import java.sql.SQLException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
+import org.bson.BsonBinaryReader;
 import org.bson.BsonBinaryWriter;
 import org.bson.BsonDocument;
 import org.bson.codecs.BsonDocumentCodec;
+import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.bson.io.BasicOutputBuffer;
 
@@ -145,7 +150,17 @@ public abstract class AbstractJsonDoxDAOBean {
 
     public JsonObject readContent(DoxID id) {
 
-        return null;
+        try {
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            dao.readContentToStream(id, baos);
+            baos.close();
+            final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(baos.toByteArray())), DecoderContext.builder()
+                    .build());
+            return Json.createReader(new StringReader(decoded.toJson()))
+                    .readObject();
+        } catch (final IOException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     public int readOobContent(DoxID doxId,
