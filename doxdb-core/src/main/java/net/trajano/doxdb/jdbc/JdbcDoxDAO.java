@@ -248,22 +248,22 @@ public class JdbcDoxDAO implements DoxDAO {
                 throw new PersistenceException("OOB tables for " + tableName + " exist when they are not expected to exist");
             }
 
-            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1sOOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(%2d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))", tableName, oobLobSize))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$sOOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))", tableName, oobLobSize))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (DOXID, REFERENCE)")) {
+            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sOOB add unique (DOXID, REFERENCE)", tableName))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOB add unique (PARENTID, REFERENCE)")) {
+            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sOOB add unique (PARENTID, REFERENCE)", tableName))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOB add foreign key (PARENTID, DOXID) references " + tableName + "(ID, DOXID)")) {
+            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sOOB add foreign key (PARENTID, DOXID) references %1$s (ID, DOXID)", tableName))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1sOOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", tableName, oobLobSize))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$sOOBTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", tableName, oobLobSize))) {
                 s.executeUpdate();
             }
-            try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "OOBTOMBSTONE  add unique (DOXID, REFERENCE)")) {
+            try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sOOBTOMBSTONE  add unique (DOXID, REFERENCE)", tableName))) {
                 s.executeUpdate();
             }
 
@@ -276,22 +276,22 @@ public class JdbcDoxDAO implements DoxDAO {
                 .getTables(null, null, tableName.toUpperCase(), null)) {
             if (!tables.next()) {
 
-                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))", tableName, lobSize))) {
+                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))", tableName, lobSize))) {
                     s.executeUpdate();
                 }
 
-                try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + " add unique (DOXID)")) {
+                try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add unique (DOXID)", tableName))) {
                     s.executeUpdate();
                 }
 
-                try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + " add unique (ID, DOXID)")) {
+                try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add unique (ID, DOXID)", tableName))) {
                     s.executeUpdate();
                 }
 
-                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1sTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", tableName, lobSize))) {
+                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$sTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", tableName, lobSize))) {
                     s.executeUpdate();
                 }
-                try (PreparedStatement s = c.prepareStatement("ALTER TABLE " + tableName + "TOMBSTONE  add unique (DOXID)")) {
+                try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sTOMBSTONE  add unique (DOXID)", tableName))) {
                     s.executeUpdate();
                 }
                 // An OOB table would have a reference label for the parent
