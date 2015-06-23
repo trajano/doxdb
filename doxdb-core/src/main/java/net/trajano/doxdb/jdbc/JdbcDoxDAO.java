@@ -117,7 +117,7 @@ public class JdbcDoxDAO implements DoxDAO {
             // records not just the one referenced by the name.
             // perhaps in future versions we will optimistic lock the OOB data
             // but that would mean passing two version numbers
-            oobReadForUpdateSql = "select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + "OOB E where E.DOXID=? FOR UPDATE";
+            oobReadForUpdateSql = "select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + "OOB E where PARENTID = ? FOR UPDATE";
 
             readContentSql = "select E.CONTENT from " + tableName + " E where E.ID=?";
             oobReadContentSql = "select E.CONTENT from " + tableName + "OOB E where E.PARENTID=? and REFERENCE=?";
@@ -131,7 +131,7 @@ public class JdbcDoxDAO implements DoxDAO {
             deleteSql = "delete from " + tableName + " where ID=? and VERSION=?";
             oobReadAllSql = String.format("select CONTENT, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from %1$s E where E.PARENTID=?", oobTableName);
             oobDeleteAllSql = "delete from " + tableName + "OOB where PARENTID = ?";
-            oobDeleteSql = "delete from " + tableName + "OOB where ID=? and VERSION=?";
+            oobDeleteSql = "delete from " + tableName + "OOB where PARENTID = ? AND REFERENCE = ?";
             oobCopyToTombstoneSql = String.format("insert into %1$s (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where parentid = ? and reference = ?", oobTombstoneTableName, oobTableName);
 
             for (final String sql : new String[] { insertSql, readSql, readContentSql, updateSql, updateVersionSql, deleteSql, readForUpdateSql }) {
@@ -354,13 +354,6 @@ public class JdbcDoxDAO implements DoxDAO {
                 deleteOob(principal, meta, ts);
             }
 
-            // c.prepareStatement("CREATE TABLE " + tableName +
-            // "OOB (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID
-            // BIGINT NOT NULL, CONTENT BLOB(2147483647) NOT NULL, REFERENCE
-            // VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON
-            // TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY
-            // VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION
-            // INTEGER NOT NULL, PRIMARY KEY (ID))")
             try (final PreparedStatement s = c.prepareStatement(copyToTombstoneSql)) {
                 s.setString(1, principal.toString());
                 s.setTimestamp(2, ts);
@@ -441,7 +434,6 @@ public class JdbcDoxDAO implements DoxDAO {
                 }
             }
 
-            final String oobDeleteSql = "delete from " + tableName + "OOB where PARENTID = ? AND REFERENCE = ?";
             try (final PreparedStatement del = c.prepareStatement(oobDeleteSql)) {
                 del.setLong(1, meta.getId());
                 del.setString(2, reference);
@@ -518,27 +510,7 @@ public class JdbcDoxDAO implements DoxDAO {
                 }
             }
             mimeMultipart.writeTo(os);
-            // final MimeBodyPart mimeBodyPart = new
-            // MimeBodyPart(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-            // .getInput());
-            // mimeBodyPart.setFileName("foo");
-            // mimeMultipart.addBodyPart(mimeBodyPart);
-            // // MimeMessage mimeMessage = new MimeMessage(session);
-            // // mimeMessage.addHeader("Content", "value");
-            // final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            // mimeMultipart.writeTo(baos);
-            // baos.close();
-            //
-            // final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
-            //
-            // final MimeMultipart mimeMultipartr = new MimeMultipart(new
-            // ByteArrayDataSource(baos.toByteArray(),
-            // MediaType.MULTIPART_FORM_DATA));
-            // Assert.assertEquals(2, mimeMultipartr.getCount());
-            // mimeMultipartr.getBodyPart(0)
-            // .writeTo(baos2);
-            // Assert.assertTrue(new
-            // String(baos2.toByteArray()).startsWith("<?xml"));
+
         } catch (final MessagingException | SQLException e) {
             throw new PersistenceException(e);
         } finally {
@@ -729,6 +701,15 @@ public class JdbcDoxDAO implements DoxDAO {
                 meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
                 meta.setLastUpdatedOn(rs.getTimestamp(6));
                 meta.setVersion(rs.getInt(7));
+
+                if (hasOob) {
+                    try (final PreparedStatement os = c.prepareStatement(oobReadForUpdateSql)) {
+                        os.setLong(1, meta.getId());
+                        os.executeQuery()
+                                .close();
+                    }
+                }
+
                 return meta;
             }
         } catch (final SQLException e) {
