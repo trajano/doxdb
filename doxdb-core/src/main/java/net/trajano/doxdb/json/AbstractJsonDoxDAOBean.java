@@ -1,5 +1,6 @@
 package net.trajano.doxdb.json;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,11 +16,14 @@ import javax.json.JsonObject;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
-import net.trajano.doxdb.DoxConfiguration;
+import org.bson.BsonBinaryWriter;
+import org.bson.BsonDocument;
+import org.bson.codecs.BsonDocumentCodec;
+import org.bson.codecs.EncoderContext;
+import org.bson.io.BasicOutputBuffer;
+
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
-import net.trajano.doxdb.DoxDAO;
-import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
@@ -45,6 +49,21 @@ public abstract class AbstractJsonDoxDAOBean {
     @Resource(name = "doxdbDataSource", lookup = "java:comp/DefaultDataSource")
     private DataSource ds;
 
+    protected AbstractJsonDoxDAOBean() {
+
+    }
+
+    /**
+     * This provides an alternate constructor that will connect using a JDBC
+     * connection rather than a data source for unit testing.
+     *
+     * @param connection
+     */
+    protected AbstractJsonDoxDAOBean(Connection connection) {
+        this.connection = connection;
+        dao = new JdbcDoxDAO(connection, buildConfiguration());
+    }
+
     public void attach(DoxID doxId,
             String reference,
             InputStream in,
@@ -69,7 +88,15 @@ public abstract class AbstractJsonDoxDAOBean {
     public DoxID create(JsonObject json,
             Principal principal) {
 
-        return null;
+        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
+
+        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(json.toString()), EncoderContext.builder()
+                .build());
+        try (final ByteArrayInputStream is = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
+            return dao.create(is, principal);
+        } catch (final IOException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     public void delete(DoxID id,

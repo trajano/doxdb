@@ -1,6 +1,7 @@
 package net.trajano.doxb.test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.io.ByteStreams;
 import com.google.common.io.Resources;
 
 public class MimeMessageFormatTest {
@@ -39,6 +41,11 @@ public class MimeMessageFormatTest {
 
         final MimeMultipart mimeMultipartr = new MimeMultipart(new ByteArrayDataSource(baos.toByteArray(), MediaType.MULTIPART_FORM_DATA));
         Assert.assertEquals(2, mimeMultipartr.getCount());
+
+        final InputStream is = mimeMultipartr.getBodyPart(0)
+                .getInputStream();
+        ByteStreams.copy(is, System.out);
+
         mimeMultipartr.getBodyPart(0)
                 .writeTo(baos2);
         Assert.assertTrue(new String(baos2.toByteArray()).startsWith("<?xml"));

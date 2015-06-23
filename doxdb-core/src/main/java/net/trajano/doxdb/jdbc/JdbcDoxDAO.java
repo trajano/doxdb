@@ -1,16 +1,19 @@
 package net.trajano.doxdb.jdbc;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.Principal;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Calendar;
 
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
@@ -20,13 +23,13 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.DatatypeConverter;
 
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.internal.DoxImportBuilder;
-import net.trajano.doxdb.internal.DoxImportBuilder.DoxOobImportDetails;
 
 public class JdbcDoxDAO implements DoxDAO {
 
@@ -58,6 +61,8 @@ public class JdbcDoxDAO implements DoxDAO {
      * Size of the lobs for OOB in bytes.
      */
     private final long oobLobSize;
+
+    private final String oobReadAllSql;
 
     private final String oobReadContentSql;
 
@@ -124,6 +129,7 @@ public class JdbcDoxDAO implements DoxDAO {
             copyToTombstoneSql = String.format("insert into %1$s (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where id = ? and version = ?", tombstoneTableName, tableName);
             oobCopyAllToTombstoneSql = "insert into " + tableName + "OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + "OOB where parentid = ?";
             deleteSql = "delete from " + tableName + " where ID=? and VERSION=?";
+            oobReadAllSql = String.format("select CONTENT, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from %1$s E where E.PARENTID=?", oobTableName);
             oobDeleteAllSql = "delete from " + tableName + "OOB where PARENTID = ?";
             oobDeleteSql = "delete from " + tableName + "OOB where ID=? and VERSION=?";
             oobCopyToTombstoneSql = String.format("insert into %1$s (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where parentid = ? and reference = ?", oobTombstoneTableName, oobTableName);
@@ -134,7 +140,7 @@ public class JdbcDoxDAO implements DoxDAO {
             }
 
             if (hasOob) {
-                for (final String sql : new String[] { oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql, oobCheckSql, oobTombstoneDeleteSql, oobCopyAllToTombstoneSql, oobDeleteAllSql, oobCopyToTombstoneSql }) {
+                for (final String sql : new String[] { oobReadAllSql, oobInsertSql, oobReadSql, oobReadContentSql, oobUpdateSql, oobDeleteSql, oobReadForUpdateSql, oobCheckSql, oobTombstoneDeleteSql, oobCopyAllToTombstoneSql, oobDeleteAllSql, oobCopyToTombstoneSql }) {
                     c.prepareStatement(sql)
                             .close();
                 }
@@ -459,24 +465,57 @@ public class JdbcDoxDAO implements DoxDAO {
             final MimeMultipart mimeMultipart = new MimeMultipart();
             mimeMultipart.setSubType("mixed");
 
+            final DocumentMeta meta = readMeta(doxID);
             try (final PreparedStatement s = c.prepareStatement(readContentSql)) {
-                final DocumentMeta meta = readMeta(doxID);
                 s.setLong(1, meta.getId());
                 try (final ResultSet rs = s.executeQuery()) {
                     if (!rs.next()) {
                         throw new EntityNotFoundException();
                     }
-                    final MimeBodyPart mimeBodyPart = new MimeBodyPart(rs.getBinaryStream(1));
+                    final Blob contentBlob = rs.getBlob(1);
+                    final MimeBodyPart mimeBodyPart = new MimeBodyPart(contentBlob.getBinaryStream());
                     mimeBodyPart.setHeader("Created-By", meta.getCreatedBy()
                             .getName());
                     mimeBodyPart.setHeader("Created-On", meta.getCreatedOnString());
                     mimeBodyPart.setHeader("Last-Updated-By", meta.getLastUpdatedBy()
                             .getName());
                     mimeBodyPart.setHeader("Last-Updated-On", meta.getLastUpdatedOnString());
+                    mimeBodyPart.setHeader("Content-Length", String.valueOf(contentBlob.length()));
                     mimeBodyPart.setFileName(doxID.toString());
                     mimeMultipart.addBodyPart(mimeBodyPart);
+                    contentBlob.free();
                 }
-                // TODO handle OOB
+
+            }
+
+            if (hasOob) {
+                // "select CONTENT, REFERENCE, CREATEDBY, CREATEDON,
+                // LASTUPDATEDBY,
+                // LASTUPDATEDON, VERSION from %1$s E where E.PARENTID=?"
+                try (final PreparedStatement s = c.prepareStatement(oobReadAllSql)) {
+                    s.setLong(1, meta.getId());
+                    try (final ResultSet rs = s.executeQuery()) {
+                        while (rs.next()) {
+                            final Calendar createdOnCal = Calendar.getInstance();
+                            createdOnCal.setTimeInMillis(rs.getTimestamp(4)
+                                    .getTime());
+
+                            final Calendar lastUpdatedOnCal = Calendar.getInstance();
+                            lastUpdatedOnCal.setTimeInMillis(rs.getTimestamp(6)
+                                    .getTime());
+
+                            final Blob contentBlob = rs.getBlob(1);
+                            final MimeBodyPart mimeBodyPart = new MimeBodyPart(contentBlob.getBinaryStream());
+                            mimeBodyPart.setHeader("Created-By", rs.getString(3));
+                            mimeBodyPart.setHeader("Created-On", DatatypeConverter.printDateTime(createdOnCal));
+                            mimeBodyPart.setHeader("Last-Updated-By", rs.getString(5));
+                            mimeBodyPart.setHeader("Last-Updated-On", DatatypeConverter.printDateTime(lastUpdatedOnCal));
+                            mimeBodyPart.setHeader("Content-Length", String.valueOf(contentBlob.length()));
+                            mimeBodyPart.setFileName(rs.getString(2));
+                            mimeMultipart.addBodyPart(mimeBodyPart);
+                        }
+                    }
+                }
             }
             mimeMultipart.writeTo(os);
             // final MimeBodyPart mimeBodyPart = new
@@ -518,45 +557,33 @@ public class JdbcDoxDAO implements DoxDAO {
 
         try {
             final MimeMultipart mmp = new MimeMultipart(new ByteArrayDataSource(is, MediaType.MULTIPART_FORM_DATA));
-            final BodyPart contentBodyPart = mmp.getBodyPart(0);
 
-            final DoxImportBuilder doxImportBuilder = new DoxImportBuilder().doxID(contentBodyPart.getFileName())
-                    .createdBy(contentBodyPart.getHeader("Created-By")[0])
-                    .createdOn(contentBodyPart.getHeader("Created-On")[0])
-                    .lastUpdatedBy(contentBodyPart.getHeader("Last-Updated-By")[0])
-                    .lastUpdatedOn(contentBodyPart.getHeader("Last-Updated-On")[0])
-                    .contentStream(contentBodyPart.getInputStream());
+            if (mmp.getCount() == 0) {
+                throw new PersistenceException("No data was found for import");
+            }
 
-            importDoxUsingBuilder(doxImportBuilder);
-        } catch (MessagingException | IOException e) {
-            throw new PersistenceException(e);
-        }
+            final BodyPart mainBody = mmp.getBodyPart(0);
 
-    }
+            if (!hasOob && mmp.getCount() > 1) {
+                throw new PersistenceException("OOB data was found but the table " + tableName + " does not support OOB data");
+            }
 
-    private void importDoxUsingBuilder(final DoxImportBuilder builder) {
-
-        if (!builder.isComplete()) {
-            throw new PersistenceException("Import data " + builder + " is not complete");
-        }
-        if (builder.hasOob() && !hasOob) {
-            throw new PersistenceException("Import data " + builder + " has OOB but OOB is not enabled on " + tableName);
-        }
-        try {
             final long primaryKey;
 
             try (final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
-                s.setBinaryStream(1, builder.getContentStream());
-                s.setString(2, builder.getDoxID()
-                        .toString());
-                s.setString(3, builder.getCreatedBy()
-                        .getName());
-                s.setTimestamp(4, new Timestamp(builder.getCreatedOn()
-                        .getTime()));
-                s.setString(5, builder.getLastUpdatedBy()
-                        .getName());
-                s.setTimestamp(6, new Timestamp(builder.getLastUpdatedOn()
-                        .getTime()));
+                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                mainBody.writeTo(baos);
+                baos.close();
+                final SerialBlob contentBlob = new SerialBlob(baos.toByteArray());
+
+                s.setBlob(1, contentBlob);
+                s.setString(2, mainBody.getFileName());
+                s.setString(3, mainBody.getHeader("Created-By")[0]);
+                s.setTimestamp(4, new Timestamp(DatatypeConverter.parseDateTime(mainBody.getHeader("Created-On")[0])
+                        .getTimeInMillis()));
+                s.setString(5, mainBody.getHeader("Last-Updated-By")[0]);
+                s.setTimestamp(6, new Timestamp(DatatypeConverter.parseDateTime(mainBody.getHeader("Last-Updated-On")[0])
+                        .getTimeInMillis()));
                 s.setInt(7, 1);
                 s.executeUpdate();
                 try (final ResultSet rs = s.getGeneratedKeys()) {
@@ -565,22 +592,26 @@ public class JdbcDoxDAO implements DoxDAO {
                 }
             }
 
-            for (final DoxOobImportDetails oobImportDetails : builder.getOobImportDetails()) {
+            for (int i = 1; i < mmp.getCount(); ++i) {
+                final BodyPart oobBody = mmp.getBodyPart(i);
+
+                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                oobBody.writeTo(baos);
+                baos.close();
 
                 try (final PreparedStatement os = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS)) {
-                    os.setBinaryStream(1, oobImportDetails.getContentStream());
-                    os.setString(2, builder.getDoxID()
-                            .toString());
+                    final SerialBlob contentBlob = new SerialBlob(baos.toByteArray());
+
+                    os.setBlob(1, contentBlob);
+                    os.setString(2, mainBody.getFileName());
                     os.setLong(3, primaryKey);
-                    os.setString(4, oobImportDetails.getReference());
-                    os.setString(5, oobImportDetails.getCreatedBy()
-                            .getName());
-                    os.setTimestamp(6, new Timestamp(oobImportDetails.getCreatedOn()
-                            .getTime()));
-                    os.setString(7, oobImportDetails.getLastUpdatedBy()
-                            .getName());
-                    os.setTimestamp(8, new Timestamp(oobImportDetails.getLastUpdatedOn()
-                            .getTime()));
+                    os.setString(4, oobBody.getFileName());
+                    os.setString(5, oobBody.getHeader("Created-By")[0]);
+                    os.setTimestamp(6, new Timestamp(DatatypeConverter.parseDateTime(oobBody.getHeader("Created-On")[0])
+                            .getTimeInMillis()));
+                    os.setString(7, oobBody.getHeader("Last-Updated-By")[0]);
+                    os.setTimestamp(8, new Timestamp(DatatypeConverter.parseDateTime(oobBody.getHeader("Last-Updated-On")[0])
+                            .getTimeInMillis()));
                     os.setInt(9, 1);
                     os.executeUpdate();
                     try (final ResultSet rs = os.getGeneratedKeys()) {
@@ -588,7 +619,8 @@ public class JdbcDoxDAO implements DoxDAO {
                     }
                 }
             }
-        } catch (final SQLException e) {
+
+        } catch (MessagingException | SQLException | IOException e) {
             throw new PersistenceException(e);
         }
 

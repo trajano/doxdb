@@ -145,6 +145,12 @@ public class JdbcTest {
 
         dao.importDox(new ByteArrayInputStream(baos.toByteArray()));
 
+        final byte[] buffer1 = new byte[200];
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
+        final byte[] buffer2 = new byte[200];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), buffer2);
+
         c.commit();
         c.close();
     }

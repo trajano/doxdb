@@ -1,5 +1,6 @@
 package net.trajano.doxb.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.sql.Connection;
@@ -155,6 +156,45 @@ public class OobTest {
         dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
 
         c.commit();
+    }
+
+    @Test
+    public void testExportImport() throws Exception {
+
+        final DoxConfiguration doxConfiguration = new DoxConfiguration();
+        doxConfiguration.setTableName("sample");
+        doxConfiguration.setHasOob(true);
+        final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), new DoxPrincipal("PRINCE"));
+        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        dao.exportDox(d1, baos);
+        baos.close();
+
+        dao.delete(d1, dao.getVersion(d1), new DoxPrincipal("PRINCE"));
+
+        dao.importDox(new ByteArrayInputStream(baos.toByteArray()));
+
+        final byte[] buffer1 = new byte[200];
+        dao.readContent(d1, ByteBuffer.wrap(buffer1));
+        final byte[] buffer2 = new byte[200];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+                .getInput(), buffer2);
+
+        Assert.assertArrayEquals(buffer2, buffer1);
+
+        final byte[] oobBuffer1 = new byte[200];
+        dao.readOobContent(d1, "ref", ByteBuffer.wrap(oobBuffer1));
+        final byte[] oobBuffer2 = new byte[200];
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
+                .getInput(), oobBuffer2);
+        Assert.assertArrayEquals(oobBuffer2, oobBuffer1);
+
+        c.commit();
+        c.close();
     }
 
     /**
