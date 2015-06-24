@@ -165,7 +165,7 @@ public class OobTest {
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), new DoxPrincipal("PRINCE"));
         dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
@@ -181,7 +181,7 @@ public class OobTest {
         final byte[] buffer1 = new byte[200];
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
+        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
                 .getInput(), buffer2);
 
         Assert.assertArrayEquals(buffer2, buffer1);
