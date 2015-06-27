@@ -27,6 +27,14 @@ import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.bson.io.BasicOutputBuffer;
 
+import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonschema.SchemaVersion;
+import com.github.fge.jsonschema.cfg.ValidationConfiguration;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.load.configuration.LoadingConfiguration;
+import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import com.github.fge.jsonschema.main.JsonValidator;
+
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
@@ -93,6 +101,7 @@ public abstract class AbstractJsonDoxDAOBean {
     public DoxID create(JsonObject json,
             Principal principal) {
 
+        validate(json);
         final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
 
         new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(json.toString()), EncoderContext.builder()
@@ -192,10 +201,39 @@ public abstract class AbstractJsonDoxDAOBean {
     }
 
     public void updateContent(DoxID doxId,
-            InputStream contentStream,
+            JsonObject json,
             int version,
             Principal principal) {
 
-        dao.updateContent(doxId, contentStream, version, principal);
+        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
+
+        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(json.toString()), EncoderContext.builder()
+                .build());
+        try (final ByteArrayInputStream is = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
+            dao.updateContent(doxId, is, version, principal);
+        } catch (final IOException e) {
+            throw new PersistenceException(e);
+        }
+
+    }
+
+    private void validate(JsonObject json) {
+
+        try {
+            final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+                    .setDefaultVersion(SchemaVersion.DRAFTV4)
+                    .freeze();
+            final LoadingConfiguration loadingCfg = LoadingConfiguration.newBuilder().freeze();
+            final JsonValidator validator = JsonSchemaFactory.newBuilder()
+                    .setLoadingConfiguration(loadingCfg)
+                    .setValidationConfiguration(cfg)
+                    .freeze()
+                    .getValidator();
+
+            validator.validate(null, JsonLoader.fromString(json.toString()))
+                    .isSuccess();
+        } catch (final IOException | ProcessingException e) {
+            throw new PersistenceException(e);
+        }
     }
 }
