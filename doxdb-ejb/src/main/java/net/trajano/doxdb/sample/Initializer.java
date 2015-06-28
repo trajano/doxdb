@@ -21,6 +21,9 @@ public class Initializer {
     @EJB
     SampleBean sampleBean;
 
+    @EJB
+    SampleJsonBean sampleJsonBean;
+
     @PostConstruct
     public void init() {
 
@@ -29,6 +32,7 @@ public class Initializer {
         DoxID id = sampleBean.create(new ByteArrayInputStream(bytes), new DoxPrincipal("HELLO"));
         System.out.println(id);
         System.out.println(basic);
+        System.out.println(sampleJsonBean);
         basic.getds();
 
         try {

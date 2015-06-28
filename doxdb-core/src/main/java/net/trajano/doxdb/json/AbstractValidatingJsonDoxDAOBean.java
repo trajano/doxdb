@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.sql.Connection;
 
 import javax.json.JsonObject;
+import javax.persistence.PersistenceException;
 
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.SchemaVersion;
@@ -13,7 +14,6 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
-import com.ibm.jbatch.container.exception.PersistenceException;
 
 import net.trajano.doxdb.DoxID;
 
