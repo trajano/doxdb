@@ -24,6 +24,9 @@
 			"type":"string",
 			"format":"date"
 		},
+		"countryOfBirth": {
+			"$ref":"country.json#"
+		},
 		"gender":{
 			"enum":[
 				"mare",

@@ -9,6 +9,8 @@ import javax.json.JsonObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.ibm.jbatch.container.exception.PersistenceException;
+
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.jdbc.DoxPrincipal;
 import net.trajano.doxdb.sample.SampleJsonBean;
@@ -25,7 +27,26 @@ public class SampleJsonEntityTest extends AbstractEntityTest {
 
         SampleJsonBean bean = new SampleJsonBean(connection);
 
-        String inputJson = "{\"doc\":\"abc\"}";
+        String inputJson = "{\"name\":\"abc\"}";
+        JsonObject o = Json.createReader(new StringReader(inputJson))
+                .readObject();
+        DoxID id = bean.create(o, new DoxPrincipal("PRINCE"));
+        Assert.assertEquals(inputJson, bean.readContent(id)
+                .toString());
+        tx.commit();
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void testFailValidation() throws Exception {
+
+        tx.begin();
+
+        Connection connection = em.unwrap(Connection.class);
+        Assert.assertNotNull(connection);
+
+        SampleJsonBean bean = new SampleJsonBean(connection);
+
+        String inputJson = "{\"noname\":\"abc\"}";
         JsonObject o = Json.createReader(new StringReader(inputJson))
                 .readObject();
         DoxID id = bean.create(o, new DoxPrincipal("PRINCE"));

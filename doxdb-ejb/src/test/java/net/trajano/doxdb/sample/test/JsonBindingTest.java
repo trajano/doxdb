@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.trajano.doxdb.sample.json.Country;
 import net.trajano.doxdb.sample.json.Horse;
 import net.trajano.doxdb.sample.json.Horse.Gender;
 
@@ -18,7 +19,8 @@ public class JsonBindingTest {
         ObjectMapper mapper = new ObjectMapper();
         Horse horse = new Horse();
         horse.withName("archie")
-                .withGender(Gender.GELDING);
+                .withGender(Gender.GELDING)
+                .withCountryOfBirth(Country.PH);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         mapper.writeValue(baos, horse);
