@@ -24,7 +24,9 @@ public class SampleJsonEntityTest extends AbstractEntityTest {
         Connection connection = em.unwrap(Connection.class);
         Assert.assertNotNull(connection);
 
-        SampleJsonBean bean = new SampleJsonBean(connection);
+        SampleJsonBean bean = new SampleJsonBean();
+        bean.setConnection(connection);
+        bean.init();
 
         String inputJson = "{\"name\":\"abc\"}";
         JsonObject o = Json.createReader(new StringReader(inputJson))
@@ -43,7 +45,9 @@ public class SampleJsonEntityTest extends AbstractEntityTest {
         Connection connection = em.unwrap(Connection.class);
         Assert.assertNotNull(connection);
 
-        SampleJsonBean bean = new SampleJsonBean(connection);
+        SampleJsonBean bean = new SampleJsonBean();
+        bean.setConnection(connection);
+        bean.init();
 
         String inputJson = "{\"noname\":\"abc\"}";
         JsonObject o = Json.createReader(new StringReader(inputJson))

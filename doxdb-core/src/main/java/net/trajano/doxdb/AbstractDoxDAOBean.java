@@ -33,23 +33,8 @@ public abstract class AbstractDoxDAOBean {
      * The data source. It is required that the datasource be XA enabled so it
      * can co-exist with JPA and other operations.
      */
-    @Resource(name = "doxdbDataSource", lookup = "java:comp/DefaultDataSource")
+    @Resource
     private DataSource ds;
-
-    protected AbstractDoxDAOBean() {
-
-    }
-
-    /**
-     * This provides an alternate constructor that will connect using a JDBC
-     * connection rather than a data source for unit testing.
-     *
-     * @param connection
-     */
-    protected AbstractDoxDAOBean(Connection connection) {
-        this.connection = connection;
-        dao = new JdbcDoxDAO(connection, buildConfiguration());
-    }
 
     public void attach(DoxID doxId,
             String reference,
@@ -115,7 +100,9 @@ public abstract class AbstractDoxDAOBean {
     public void init() {
 
         try {
-            connection = ds.getConnection();
+            if (connection == null) {
+                connection = ds.getConnection();
+            }
             dao = new JdbcDoxDAO(connection, buildConfiguration());
         } catch (final SQLException e) {
             throw new PersistenceException(e);
@@ -148,6 +135,16 @@ public abstract class AbstractDoxDAOBean {
 
         dao.readOobContentToStream(id, reference, os);
 
+    }
+
+    /**
+     * Used for unit testing.
+     *
+     * @param connection
+     */
+    public void setConnection(Connection connection) {
+
+        this.connection = connection;
     }
 
     /**

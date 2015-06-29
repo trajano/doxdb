@@ -27,11 +27,10 @@ public class LuceneTest {
     @Test
     public void testLucene() throws Exception {
 
-        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        Class.forName("org.h2.Driver");
         final DoxID generate = DoxID.generate();
+        final Connection c = DriverManager.getConnection("jdbc:h2:mem:" + generate);
         {
-
-            final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + generate + ";create=true");
 
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
@@ -44,11 +43,9 @@ public class LuceneTest {
             indexWriter.commit();
             indexWriter.close();
             c.commit();
-            c.close();
         }
         {
 
-            final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + generate);
             final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
             final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
             final Analyzer analyzer = new StandardAnalyzer();
@@ -59,5 +56,7 @@ public class LuceneTest {
             final Document doc = searcher.doc(search.scoreDocs[0].doc);
             assertEquals("value", doc.get("name"));
         }
+        c.close();
     }
+
 }

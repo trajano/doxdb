@@ -2,7 +2,6 @@ package net.trajano.doxdb.json;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.sql.Connection;
 
 import javax.json.JsonObject;
 import javax.persistence.PersistenceException;
@@ -22,18 +21,18 @@ public abstract class AbstractValidatingJsonDoxDAOBean extends AbstractJsonDoxDA
     private final JsonSchema schema;
 
     protected AbstractValidatingJsonDoxDAOBean() {
-        schema = loadSchema();
-    }
+        try {
+            final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+                    .setDefaultVersion(SchemaVersion.DRAFTV4)
+                    .freeze();
 
-    /**
-     * This provides an alternate constructor that will connect using a JDBC
-     * connection rather than a data source for unit testing.
-     *
-     * @param connection
-     */
-    protected AbstractValidatingJsonDoxDAOBean(Connection connection) {
-        super(connection);
-        schema = loadSchema();
+            schema = JsonSchemaFactory.newBuilder()
+                    .setValidationConfiguration(cfg)
+                    .freeze()
+                    .getJsonSchema(JsonLoader.fromResource(getSchemaResource()));
+        } catch (ProcessingException | IOException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     @Override
@@ -51,23 +50,6 @@ public abstract class AbstractValidatingJsonDoxDAOBean extends AbstractJsonDoxDA
      * @return list of resources.
      */
     protected abstract String getSchemaResource();
-
-    private JsonSchema loadSchema() {
-
-        try {
-            final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
-                    .setDefaultVersion(SchemaVersion.DRAFTV4)
-                    .freeze();
-
-            return JsonSchemaFactory.newBuilder()
-                    .setValidationConfiguration(cfg)
-                    .freeze()
-                    .getJsonSchema(JsonLoader.fromResource(getSchemaResource()));
-        } catch (ProcessingException | IOException e) {
-            throw new PersistenceException(e);
-        }
-
-    }
 
     @Override
     public void updateContent(DoxID doxId,

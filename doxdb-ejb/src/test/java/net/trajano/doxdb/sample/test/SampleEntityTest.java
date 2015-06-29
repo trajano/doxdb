@@ -20,7 +20,9 @@ public class SampleEntityTest extends AbstractEntityTest {
         Connection connection = em.unwrap(Connection.class);
         Assert.assertNotNull(connection);
 
-        SampleBean bean = new SampleBean(connection);
+        SampleBean bean = new SampleBean();
+        bean.setConnection(connection);
+        bean.init();
         bean.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
                 .getInput(), new DoxPrincipal("PRINCE"));
         tx.commit();
