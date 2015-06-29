@@ -17,9 +17,9 @@ import javax.sql.DataSource;
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
 /**
- * This will be extended by the EJBs. This does not provide extension points for
- * the operations, those operations should be done on the application specific
- * versions.
+ * This provides the core capabilities for a Dox DAO bean. There are two direct
+ * sub classes to this one, one for stream data and another which is specific to
+ * JSON. It provides OOB streams support as well.
  *
  * @author Archimedes
  */
@@ -68,12 +68,6 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
         connection.close();
     }
 
-    public DoxID create(InputStream in,
-            Principal principal) {
-
-        return dao.create(in, principal);
-    }
-
     public void delete(DoxID id,
             int version,
             Principal principal) {
@@ -94,6 +88,11 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
 
         dao.exportDox(doxID, os);
 
+    }
+
+    protected DoxDAO getDao() {
+
+        return dao;
     }
 
     public int getVersion(DoxID id) {
@@ -120,19 +119,6 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
         }
     }
 
-    public int readContent(DoxID id,
-            ByteBuffer buffer) {
-
-        return dao.readContent(id, buffer);
-    }
-
-    public void readContentToStream(DoxID id,
-            OutputStream os) throws IOException {
-
-        dao.readContentToStream(id, os);
-
-    }
-
     public int readOobContent(DoxID doxId,
             String reference,
             ByteBuffer buffer) {
@@ -156,13 +142,5 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
     public void setConnection(Connection connection) {
 
         this.connection = connection;
-    }
-
-    public void updateContent(DoxID doxId,
-            InputStream contentStream,
-            int version,
-            Principal principal) {
-
-        dao.updateContent(doxId, contentStream, version, principal);
     }
 }
