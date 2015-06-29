@@ -1,6 +1,5 @@
 package net.trajano.doxdb.search;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -43,7 +42,13 @@ import net.trajano.doxdb.search.lucene.JdbcDirectory;
  *
  * @author Archimedes
  */
-public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, Closeable, AutoCloseable {
+public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoCloseable {
+
+    private static final String FIELD_ID = "_id";
+
+    private static final String FIELD_INDEX = "_index";
+
+    private static final String FIELD_TEXT = "_text";
 
     private Connection connection;
 
@@ -70,7 +75,7 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, Closeabl
 
         try {
             final Document doc = buildFromIndexView(indexView);
-            indexWriter.updateDocument(new Term("_id", indexView.getDoxID()
+            indexWriter.updateDocument(new Term(FIELD_ID, indexView.getDoxID()
                     .toString()), doc);
         } catch (final IOException e) {
             throw new PersistenceException(e);
@@ -81,7 +86,7 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, Closeabl
 
         final IndexView ret = new IndexView();
         for (final IndexableField field : doc.getFields()) {
-            if ("_index".equals(field.name())) {
+            if (FIELD_INDEX.equals(field.name())) {
                 ret.setIndex(field.stringValue());
             } else if (field instanceof StringField) {
                 ret.setString(field.name(), field.stringValue());
@@ -100,8 +105,8 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, Closeabl
     private Document buildFromIndexView(IndexView indexView) {
 
         final Document doc = new Document();
-        doc.add(new StringField("_index", indexView.getIndex(), Store.YES));
-        doc.add(new StringField("_id", indexView.getDoxID()
+        doc.add(new StringField(FIELD_INDEX, indexView.getIndex(), Store.YES));
+        doc.add(new StringField(FIELD_ID, indexView.getDoxID()
                 .toString(), Store.YES));
         for (final Entry<String, String> entry : indexView.getStrings()) {
             doc.add(new StringField(entry.getKey(), entry.getValue(), Store.YES));
@@ -115,7 +120,7 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, Closeabl
         for (final Entry<String, Long> entry : indexView.getLongs()) {
             doc.add(new LongField(entry.getKey(), entry.getValue(), Store.YES));
         }
-        doc.add(new TextField("_text", indexView.getText(), Store.NO));
+        doc.add(new TextField(FIELD_TEXT, indexView.getText(), Store.NO));
         return doc;
 
     }
@@ -134,14 +139,11 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, Closeabl
 
     @Override
     @PreDestroy
-    public void close() {
+    public void close() throws IOException,
+            SQLException {
 
-        try {
-            indexWriter.close();
-            connection.close();
-        } catch (SQLException | IOException e) {
-            throw new PersistenceException(e);
-        }
+        indexWriter.close();
+        connection.close();
     }
 
     protected abstract String getSearchTableName();
@@ -170,11 +172,11 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, Closeabl
         try {
             final Analyzer analyzer = new StandardAnalyzer();
 
-            final QueryParser parser = new QueryParser("_text", analyzer);
+            final QueryParser parser = new QueryParser(FIELD_TEXT, analyzer);
             final Query query = parser.parse(queryString);
             final BooleanQuery booleanQuery = new BooleanQuery();
             booleanQuery.add(query, Occur.MUST);
-            booleanQuery.add(new TermQuery(new Term("_index", index)), Occur.MUST);
+            booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
             final TopDocs search = indexSearcher.search(booleanQuery, limit);
 
             return buildSearchResults(search);
@@ -192,4 +194,5 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, Closeabl
 
         this.connection = connection;
     }
+
 }

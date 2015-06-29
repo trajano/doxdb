@@ -23,7 +23,7 @@ import net.trajano.doxdb.jdbc.JdbcDoxDAO;
  *
  * @author Archimedes
  */
-public abstract class AbstractDoxDAOBean {
+public abstract class AbstractDoxDAOBean implements AutoCloseable {
 
     private Connection connection;
 
@@ -55,6 +55,17 @@ public abstract class AbstractDoxDAOBean {
     protected DoxConfiguration buildConfiguration() {
 
         return new DoxConfiguration(getClass().getSimpleName());
+    }
+
+    /**
+     * Closes the connection that was initialized.
+     */
+
+    @Override
+    @PreDestroy
+    public void close() throws SQLException {
+
+        connection.close();
     }
 
     public DoxID create(InputStream in,
@@ -145,19 +156,6 @@ public abstract class AbstractDoxDAOBean {
     public void setConnection(Connection connection) {
 
         this.connection = connection;
-    }
-
-    /**
-     * Closes the connection that was initialized.
-     */
-    @PreDestroy
-    public void shutdown() {
-
-        try {
-            connection.close();
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
-        }
     }
 
     public void updateContent(DoxID doxId,
