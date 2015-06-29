@@ -35,7 +35,7 @@ public class LuceneTest {
 
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c);
+            final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
             final IndexWriter indexWriter = new IndexWriter(dir, iwc);
 
             final Document doc = new Document();
@@ -49,7 +49,7 @@ public class LuceneTest {
         {
 
             final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + generate);
-            final JdbcDirectory dir = new JdbcDirectory(c);
+            final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
             final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
             final Analyzer analyzer = new StandardAnalyzer();
             final QueryParser parser = new QueryParser("name", analyzer);

@@ -9,10 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.persistence.PersistenceException;
-import javax.sql.DataSource;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IOContext;
@@ -22,22 +19,16 @@ import org.apache.lucene.store.Lock;
 
 public class JdbcDirectory extends Directory {
 
-    private Connection connection;
-
-    /**
-     * The data source. It is required that the datasource be XA enabled so it
-     * can co-exist with JPA and other operations.
-     */
-    @Resource(name = "doxdbDataSource", lookup = "java:comp/DefaultDataSource")
-    private DataSource ds;
+    private final Connection connection;
 
     /**
      * May be passed in the future.
      */
-    private final String searchTableName = "DOXSEARCH";
+    private final String searchTableName;
 
-    public JdbcDirectory(Connection c) throws SQLException {
+    public JdbcDirectory(Connection c, String searchTableName) throws SQLException {
         connection = c;
+        this.searchTableName = searchTableName.toUpperCase();
         createSearchTable();
 
     }
@@ -105,17 +96,6 @@ public class JdbcDirectory extends Directory {
                 return rs.getLong(1);
             }
 
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
-        }
-    }
-
-    @PostConstruct
-    public void init() {
-
-        try {
-            connection = ds.getConnection();
-            createSearchTable();
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
