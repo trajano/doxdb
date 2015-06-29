@@ -293,7 +293,7 @@ public class JdbcDoxDAO implements DoxDAO {
     public void createTable() {
 
         try (final ResultSet tables = c.getMetaData()
-                .getTables(null, null, tableName.toUpperCase(), null)) {
+                .getTables(null, null, tableName, null)) {
             if (!tables.next()) {
 
                 try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))", tableName, lobSize))) {

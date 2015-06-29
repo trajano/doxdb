@@ -5,11 +5,10 @@ import java.sql.Connection;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.persistence.PersistenceException;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.ibm.jbatch.container.exception.PersistenceException;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.jdbc.DoxPrincipal;

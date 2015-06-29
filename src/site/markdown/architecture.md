@@ -54,5 +54,13 @@ Although everything is looked up by ID, the IDs are NOT exposed on the REST
 API, though within the EJB API tier it is still exposed to allow interop
 with other application components.
 
+Search
+------
+Lucene was chosen as the search engine over Solr or Elasticsearch primarily
+because of its low memory footprint.  The primary use case for doxdb is 
+millions of documents rather than billions.  That being said, the API
+is built so that search can be plugged into a different technology if
+needed until a Java EE standard for search comes up.
+
 [1]: http://en.wikipedia.org/wiki/Out-of-band
 
