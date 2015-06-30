@@ -15,6 +15,7 @@
     <modules>
         <module>doxdb-core</module>
         <module>doxdb-ejb</module>
+        <module>doxdb-rest</module>
         <module>doxdb-sample</module>
     </modules>
     <scm>
@@ -46,6 +47,12 @@
                 <artifactId>doxdb-ejb</artifactId>
                 <version>${project.version}</version>
                 <type>ejb</type>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>doxdb-rest</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
             </dependency>
         </dependencies>
     </dependencyManagement>

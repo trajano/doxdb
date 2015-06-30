@@ -6,39 +6,36 @@
         <artifactId>doxdb</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>doxdb-sample</artifactId>
-    <packaging>ear</packaging>
+    <artifactId>doxdb-rest</artifactId>
+    <packaging>war</packaging>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>doxdb-ejb</artifactId>
-            <type>ejb</type>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>doxdb-rest</artifactId>
-            <type>war</type>
+            <artifactId>doxdb-core</artifactId>
         </dependency>
     </dependencies>
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-ear-plugin</artifactId>
-                <version>2.9.1</version>
+                <groupId>org.jsonschema2pojo</groupId>
+                <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+                <version>0.4.13</version>
                 <executions>
                     <execution>
-                        <id>generate-application-xml</id>
-                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>generate-application-xml</goal>
+                            <goal>generate</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <version>7</version>
-                    <generateApplicationXml>true</generateApplicationXml>
-                    <defaultLibBundleDir>lib</defaultLibBundleDir>
-                    <modules/>
+                    <generateBuilders>true</generateBuilders>
+                    <usePrimitives>true</usePrimitives>
+                    <includeJsr303Annotations>true</includeJsr303Annotations>
+                    <includeToString>true</includeToString>
+                    <useCommonsLang3>true</useCommonsLang3>
+                    <annotationStyle>jackson2</annotationStyle>
+                    <targetPackage>net.trajano.doxdb.sample.json</targetPackage>
+                    <sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory>
                 </configuration>
             </plugin>
         </plugins>
