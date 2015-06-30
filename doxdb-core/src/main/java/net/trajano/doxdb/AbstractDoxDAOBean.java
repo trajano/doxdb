@@ -70,10 +70,14 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
 
     @Override
     @PreDestroy
-    public void close() throws SQLException {
+    public void close() {
 
         if (connectionFromDataSource) {
-            connection.close();
+            try {
+                connection.close();
+            } catch (final SQLException e) {
+                throw new PersistenceException(e);
+            }
         }
     }
 

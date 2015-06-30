@@ -44,13 +44,20 @@ import net.trajano.doxdb.search.lucene.JdbcDirectory;
  */
 public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoCloseable {
 
-    private static final String FIELD_ID = "_id";
+    private static final String FIELD_ID = "\t id";
 
-    private static final String FIELD_INDEX = "_index";
+    private static final String FIELD_INDEX = "\t index";
 
-    private static final String FIELD_TEXT = "_text";
+    private static final String FIELD_TEXT = "\t text";
 
     private Connection connection;
+
+    /**
+     * Flag to indicate that the {@link Connection} is from a {@link DataSource}
+     * . This is <code>false</code> when {@link #setConnection(Connection)} is
+     * used for testing.
+     */
+    private boolean connectionFromDataSource;
 
     /**
      * The data source. It is required that the datasource be XA enabled so it
@@ -139,11 +146,16 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoClos
 
     @Override
     @PreDestroy
-    public void close() throws IOException,
-            SQLException {
+    public void close() {
 
-        indexWriter.close();
-        connection.close();
+        try {
+            indexWriter.close();
+            if (connectionFromDataSource) {
+                connection.close();
+            }
+        } catch (IOException | SQLException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     protected abstract String getSearchTableName();

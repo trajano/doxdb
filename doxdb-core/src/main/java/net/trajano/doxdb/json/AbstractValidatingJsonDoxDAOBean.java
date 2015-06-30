@@ -3,6 +3,7 @@ package net.trajano.doxdb.json;
 import java.io.IOException;
 import java.security.Principal;
 
+import javax.annotation.PostConstruct;
 import javax.json.JsonObject;
 import javax.persistence.PersistenceException;
 
@@ -18,22 +19,7 @@ import net.trajano.doxdb.DoxID;
 
 public abstract class AbstractValidatingJsonDoxDAOBean extends AbstractJsonDoxDAOBean {
 
-    private final JsonSchema schema;
-
-    protected AbstractValidatingJsonDoxDAOBean() {
-        try {
-            final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
-                    .setDefaultVersion(SchemaVersion.DRAFTV4)
-                    .freeze();
-
-            schema = JsonSchemaFactory.newBuilder()
-                    .setValidationConfiguration(cfg)
-                    .freeze()
-                    .getJsonSchema(JsonLoader.fromResource(getSchemaResource()));
-        } catch (ProcessingException | IOException e) {
-            throw new PersistenceException(e);
-        }
-    }
+    private JsonSchema schema;
 
     @Override
     public DoxID create(JsonObject json,
@@ -50,6 +36,25 @@ public abstract class AbstractValidatingJsonDoxDAOBean extends AbstractJsonDoxDA
      * @return list of resources.
      */
     protected abstract String getSchemaResource();
+
+    @Override
+    @PostConstruct
+    public void init() {
+
+        super.init();
+        try {
+            final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+                    .setDefaultVersion(SchemaVersion.DRAFTV4)
+                    .freeze();
+
+            schema = JsonSchemaFactory.newBuilder()
+                    .setValidationConfiguration(cfg)
+                    .freeze()
+                    .getJsonSchema(JsonLoader.fromResource(getSchemaResource()));
+        } catch (ProcessingException | IOException e) {
+            throw new PersistenceException(e);
+        }
+    }
 
     @Override
     public void updateContent(DoxID doxId,
