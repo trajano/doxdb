@@ -27,6 +27,13 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
 
     private Connection connection;
 
+    /**
+     * Flag to indicate that the {@link Connection} is from a {@link DataSource}
+     * . This is <code>false</code> when {@link #setConnection(Connection)} is
+     * used for testing.
+     */
+    private boolean connectionFromDataSource;
+
     private DoxDAO dao;
 
     /**
@@ -65,7 +72,9 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
     @PreDestroy
     public void close() throws SQLException {
 
-        connection.close();
+        if (connectionFromDataSource) {
+            connection.close();
+        }
     }
 
     public void delete(DoxID id,
@@ -111,6 +120,7 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
 
         try {
             if (connection == null) {
+                connectionFromDataSource = true;
                 connection = ds.getConnection();
             }
             dao = new JdbcDoxDAO(connection, buildConfiguration());

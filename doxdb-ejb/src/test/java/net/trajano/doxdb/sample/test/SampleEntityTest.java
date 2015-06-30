@@ -1,5 +1,6 @@
 package net.trajano.doxdb.sample.test;
 
+import java.io.InputStream;
 import java.sql.Connection;
 
 import org.junit.Assert;
@@ -20,11 +21,14 @@ public class SampleEntityTest extends AbstractEntityTest {
         Connection connection = em.unwrap(Connection.class);
         Assert.assertNotNull(connection);
 
-        SampleBean bean = new SampleBean();
-        bean.setConnection(connection);
-        bean.init();
-        bean.create(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), new DoxPrincipal("PRINCE"));
+        try (SampleBean bean = new SampleBean()) {
+            bean.setConnection(connection);
+            bean.init();
+            try (InputStream is = Resources.getResource("sample.xml")
+                    .openStream()) {
+                bean.create(is, new DoxPrincipal("PRINCE"));
+            }
+        }
         tx.commit();
     }
 }
