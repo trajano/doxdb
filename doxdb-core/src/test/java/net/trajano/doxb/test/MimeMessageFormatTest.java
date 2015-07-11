@@ -12,7 +12,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Resources;
+
+import net.trajano.commons.testing.ResourceUtil;
 
 public class MimeMessageFormatTest {
 
@@ -25,10 +26,8 @@ public class MimeMessageFormatTest {
 
         final MimeMultipart mimeMultipart = new MimeMultipart();
         mimeMultipart.setSubType("mixed");
-        mimeMultipart.addBodyPart(new MimeBodyPart(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput()));
-        final MimeBodyPart mimeBodyPart = new MimeBodyPart(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput());
+        mimeMultipart.addBodyPart(new MimeBodyPart(ResourceUtil.getResourceAsStream("sample.xml")));
+        final MimeBodyPart mimeBodyPart = new MimeBodyPart(ResourceUtil.getResourceAsStream("sample.bin"));
         mimeBodyPart.setFileName("foo");
         mimeMultipart.addBodyPart(mimeBodyPart);
         // MimeMessage mimeMessage = new MimeMessage(session);

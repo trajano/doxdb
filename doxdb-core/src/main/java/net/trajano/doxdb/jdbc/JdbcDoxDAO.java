@@ -654,20 +654,21 @@ public class JdbcDoxDAO implements DoxDAO {
     /**
      * Reads the contents of the stream into a byte array buffer.
      *
-     * @param ret
+     * @param is
+     *            input stream
      * @param buffer
+     *            buffer
      * @return
      * @throws IOException
      */
-    private int readFully(InputStream ret,
-            byte[] buffer) throws IOException {
+    private int readFully(final InputStream is,
+            final byte[] buffer) throws IOException {
 
         int len = 0;
-        int c = ret.read();
+        int c = is.read(buffer);
         while (c != -1 && len < buffer.length) {
-            buffer[len] = (byte)c;
-            ++len;
-            c = ret.read();
+            len += c;
+            c = is.read(buffer, len, buffer.length - len);
         }
         return len;
     }

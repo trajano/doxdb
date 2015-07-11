@@ -1,5 +1,8 @@
 package net.trajano.doxb.test;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -15,8 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Resources;
 
+import net.trajano.commons.testing.ResourceUtil;
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.jdbc.DoxPrincipal;
@@ -59,10 +62,8 @@ public class OobTest {
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
 
-        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
 
         try {
             dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
@@ -72,8 +73,7 @@ public class OobTest {
         }
 
         final int version1 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), version1, new DoxPrincipal("PRINSIPE"));
 
         dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
         Assert.assertNotNull(dao.readOobContent(d1, "ref", buffer));
@@ -106,10 +106,8 @@ public class OobTest {
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
 
-        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
 
         try {
             dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
@@ -119,8 +117,7 @@ public class OobTest {
         }
 
         final int version1 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), version1, new DoxPrincipal("PRINSIPE"));
 
         Assert.assertNotNull(dao.readOobContent(d1, "ref", buffer));
 
@@ -137,8 +134,7 @@ public class OobTest {
         }
 
         final int version3 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), version3, new DoxPrincipal("PRINSIPEUP"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.xml"), version3, new DoxPrincipal("PRINSIPEUP"));
 
         Assert.assertTrue(String.format("Expected versions %d > %d", version3, version2), version3 > version2);
         dao.readContent(d1, buffer);
@@ -147,8 +143,7 @@ public class OobTest {
         dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
 
         final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), buffer2);
+        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.xml"), buffer2);
         Assert.assertArrayEquals(buffer1, buffer2);
 
         final int d1Version = dao.getVersion(d1);
@@ -165,10 +160,8 @@ public class OobTest {
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         dao.exportDox(d1, baos);
@@ -181,16 +174,14 @@ public class OobTest {
         final byte[] buffer1 = new byte[200];
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), buffer2);
+        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.bin"), buffer2);
 
         Assert.assertArrayEquals(buffer2, buffer1);
 
         final byte[] oobBuffer1 = new byte[200];
         dao.readOobContent(d1, "ref", ByteBuffer.wrap(oobBuffer1));
         final byte[] oobBuffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), oobBuffer2);
+        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.bin"), oobBuffer2);
         Assert.assertArrayEquals(oobBuffer2, oobBuffer1);
 
         c.commit();
@@ -211,25 +202,20 @@ public class OobTest {
         doxConfiguration.setHasOob(true);
         doxConfiguration.setOobLobSize(4200);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
         final int version1 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), version1, new DoxPrincipal("PRINSIPE"));
 
         final int version2 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), version2, new DoxPrincipal("PRINSIPEUP"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.xml"), version2, new DoxPrincipal("PRINSIPEUP"));
 
         Assert.assertTrue(version2 > version1);
         final byte[] buffer1 = new byte[200];
         dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
 
         final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), buffer2);
+        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.xml"), buffer2);
         Assert.assertArrayEquals(buffer1, buffer2);
         final int d1Version = dao.getVersion(d1);
         Assert.assertTrue(d1Version > version2);
@@ -244,24 +230,19 @@ public class OobTest {
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.xml"), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
 
         final byte[] buffer1 = new byte[200];
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), buffer2);
+        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.bin"), buffer2);
 
         final byte[] oobBuffer1 = new byte[200];
         dao.readOobContent(d1, "ref", ByteBuffer.wrap(oobBuffer1));
         final byte[] oobBuffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), oobBuffer2);
+        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.xml"), oobBuffer2);
 
         Assert.assertArrayEquals(buffer1, buffer2);
         Assert.assertArrayEquals(oobBuffer1, oobBuffer2);
@@ -284,28 +265,23 @@ public class OobTest {
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
         final int version1 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), version1, new DoxPrincipal("PRINSIPE"));
 
         final int version2 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), version2, new DoxPrincipal("PRINSIPEUP"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.xml"), version2, new DoxPrincipal("PRINSIPEUP"));
 
-        Assert.assertTrue(version2 > version1);
+        assertTrue(version2 > version1);
         final byte[] buffer1 = new byte[200];
         dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
 
         final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), buffer2);
-        Assert.assertArrayEquals(buffer1, buffer2);
+        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.xml"), buffer2);
+        assertArrayEquals(buffer1, buffer2);
         final int d1Version = dao.getVersion(d1);
-        Assert.assertTrue(d1Version > version2);
+        assertTrue(d1Version > version2);
         dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
         c.commit();
     }
@@ -322,25 +298,20 @@ public class OobTest {
         doxConfiguration.setHasOob(true);
         doxConfiguration.setOobLobSize(420000);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
-        dao.create(Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), new DoxPrincipal("PRINCE"));
         final int version1 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.bin"))
-                .getInput(), version1, new DoxPrincipal("PRINSIPE"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), version1, new DoxPrincipal("PRINSIPE"));
 
         final int version2 = dao.getVersion(d1);
-        dao.attach(d1, "ref", Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), version2, new DoxPrincipal("PRINSIPEUP"));
+        dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.xml"), version2, new DoxPrincipal("PRINSIPEUP"));
 
         Assert.assertTrue(version2 > version1);
         final byte[] buffer1 = new byte[200];
         dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
 
         final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(Resources.newInputStreamSupplier(Resources.getResource("sample.xml"))
-                .getInput(), buffer2);
+        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.xml"), buffer2);
         Assert.assertArrayEquals(buffer1, buffer2);
         final int d1Version = dao.getVersion(d1);
         Assert.assertTrue(d1Version > version2);

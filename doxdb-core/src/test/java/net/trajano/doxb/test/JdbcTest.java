@@ -1,5 +1,6 @@
 package net.trajano.doxb.test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -14,8 +15,6 @@ import javax.persistence.PersistenceException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.io.ByteStreams;
-
 import net.trajano.commons.testing.ResourceUtil;
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxID;
@@ -23,36 +22,6 @@ import net.trajano.doxdb.jdbc.DoxPrincipal;
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
 public class JdbcTest {
-
-    // System.out.println(ID.generate());
-    // System.out.println(ID.generate());
-    // System.out.println(ID.generate());
-    // System.out.println(ID.generate());
-    // System.out.println(ID.generate());
-    //
-    // for (char i = 0x21; i < 0x7f; ++i) {
-    // System.out.print(i);
-    // }
-    // // EntityManagerFactory emf =
-    // // PersistenceProviderResolverHolder.getPersistenceProviderResolver()
-    // // .getPersistenceProviders()
-    // // .get(0)
-    // // .createContainerEntityManagerFactory(new DoxdbPersistenceUnitInfo(),
-    // // ImmutableMap.builder()
-    // // .put("javax.persistence.jdbc.driver",
-    // // "org.apache.derby.jdbc.EmbeddedDriver")
-    // // .put("javax.persistence.schema-generation.database.action", "create")
-    // // .put("javax.persistence.jdbc.url", "jdbc:derby:memory:" +
-    // // UUID.randomUUID() + ";create=true")
-    // // .put("eclipselink.logging.logger", "JavaLogger")
-    // // .put("eclipselink.logging.level.sql", "fine")
-    // // .put("eclipselink.logging.parameters", "true")
-    // // .build());
-    // //
-    // // emf.createEntityManager();
-    // // System.out.println(emf);
-    // // emf.close();
-    // }
 
     @Test
     public void testDoubleCreateDerby() throws Exception {
@@ -162,11 +131,10 @@ public class JdbcTest {
 
         dao.importDox(new ByteArrayInputStream(baos.toByteArray()));
 
-        final byte[] buffer1 = new byte[200];
+        final byte[] buffer0 = ResourceUtil.getResourceAsBytes("sample.xml");
+        final byte[] buffer1 = new byte[buffer0.length];
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
-        final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.xml"), buffer2);
-
+        assertArrayEquals(buffer0, buffer1);
         c.commit();
         c.close();
     }
@@ -191,11 +159,10 @@ public class JdbcTest {
 
         dao.updateContent(d1, ResourceUtil.getResourceAsStream("sample.bin"), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
 
-        final byte[] buffer1 = new byte[5000];
+        final byte[] buffer0 = ResourceUtil.getResourceAsBytes("sample.bin");
+        final byte[] buffer1 = new byte[buffer0.length];
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
-        final byte[] buffer2 = new byte[5000];
-        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.bin"), buffer2);
-        Assert.assertArrayEquals(buffer1, buffer2);
+        assertArrayEquals(buffer0, buffer1);
         final int d1Version = dao.getVersion(d1);
         dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
         c.commit();
@@ -247,7 +214,7 @@ public class JdbcTest {
         final byte[] buffer1 = ResourceUtil.getResourceAsBytes("sample.bin");
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
         final byte[] buffer2 = ResourceUtil.getResourceAsBytes("sample.bin");
-        Assert.assertArrayEquals(buffer1, buffer2);
+        assertArrayEquals(buffer1, buffer2);
         final int d1Version = dao.getVersion(d1);
         dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
         c.commit();
@@ -269,11 +236,10 @@ public class JdbcTest {
 
         dao.updateContent(d1, ResourceUtil.getResourceAsStream("sample.bin"), dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
 
-        final byte[] buffer1 = new byte[5000];
+        final byte[] buffer0 = ResourceUtil.getResourceAsBytes("sample.bin");
+        final byte[] buffer1 = new byte[buffer0.length];
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
-        final byte[] buffer2 = new byte[5000];
-        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.bin"), buffer2);
-        Assert.assertArrayEquals(buffer1, buffer2);
+        assertArrayEquals(buffer0, buffer1);
         final int d1Version = dao.getVersion(d1);
         dao.delete(d1, d1Version, new DoxPrincipal("PRINCE"));
         c.commit();
