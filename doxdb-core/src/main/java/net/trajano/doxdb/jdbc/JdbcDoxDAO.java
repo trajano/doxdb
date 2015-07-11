@@ -620,7 +620,7 @@ public class JdbcDoxDAO implements DoxDAO {
                     throw new EntityNotFoundException();
                 }
                 try (final InputStream ret = rs.getBinaryStream(1)) {
-                    return ret.read(buffer.array());
+                    return readFully(ret, buffer.array());
                 }
             }
         } catch (final IOException | SQLException e) {
@@ -649,6 +649,27 @@ public class JdbcDoxDAO implements DoxDAO {
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    /**
+     * Reads the contents of the stream into a byte array buffer.
+     *
+     * @param ret
+     * @param buffer
+     * @return
+     * @throws IOException
+     */
+    private int readFully(InputStream ret,
+            byte[] buffer) throws IOException {
+
+        int len = 0;
+        int c = ret.read();
+        while (c != -1 && len < buffer.length) {
+            buffer[len] = (byte)c;
+            ++len;
+            c = ret.read();
+        }
+        return len;
     }
 
     public DocumentMeta readMeta(final DoxID id) {
@@ -731,7 +752,7 @@ public class JdbcDoxDAO implements DoxDAO {
                 throw new EntityNotFoundException();
             }
             try (final InputStream ret = rs.getBinaryStream(1)) {
-                return ret.read(buffer.array());
+                return readFully(ret, buffer.array());
             }
 
         } catch (final IOException | SQLException e) {
