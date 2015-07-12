@@ -1,4 +1,4 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.jpa;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

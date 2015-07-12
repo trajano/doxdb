@@ -1,7 +1,9 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.jpa;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+
+import net.trajano.doxdb.DoxID;
 
 @Converter(autoApply = true)
 public class DoxIDConverter implements AttributeConverter<DoxID, String> {

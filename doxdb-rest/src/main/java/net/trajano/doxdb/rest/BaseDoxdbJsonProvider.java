@@ -1,6 +1,7 @@
 package net.trajano.doxdb.rest;
 
 import javax.annotation.PostConstruct;
+import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,7 +22,7 @@ import javax.ws.rs.core.Response;
  * 
  * @author Archimedes
  */
-public abstract class BaseDoxdbProvider {
+public abstract class BaseDoxdbJsonProvider {
 
     protected abstract String[] getRegisteredSchemaResources();
 
@@ -36,7 +37,7 @@ public abstract class BaseDoxdbProvider {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(@PathParam("collection") String collection,
-        String content) {
+        JsonObject content) {
 
         System.out.println("collection=" + collection);
         System.out.println("content=" + content);

@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import net.trajano.commons.testing.EqualsTestUtil;
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.DoxIDConverter;
+import net.trajano.doxdb.jpa.DoxIDConverter;
 
 public class IDTest {
 
