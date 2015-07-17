@@ -41,6 +41,14 @@ public abstract class BaseDoxdbJsonProvider {
 
         System.out.println("collection=" + collection);
         System.out.println("content=" + content);
+
+        // what this would do is given a *single* DoxDAO to get a JsonDoxCollection and then get the appropriate record?
+        // it is expected that the requester would know what kind of collection to get?
+
+        // events are triggered on update... it could be transactional or via MDB.  Index updates are always via MDB.
+
+        // how do we handle security?
+
         return Response.ok().entity(content).build();
     }
 

@@ -6,6 +6,13 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.Principal;
 
+/**
+ * This represents a single physical DoxDB table. There is going to be another
+ * one that manages all the other tables. The table creation responsibility
+ * would likely move over there.
+ *
+ * @author Archimedes
+ */
 public interface DoxDAO {
 
     void attach(DoxID doxId,
