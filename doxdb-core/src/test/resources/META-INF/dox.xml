@@ -1,8 +1,9 @@
 <dox-provider>
 	<dox name="Sample">
 		<!-- these should be in their own schema -->
-		<!--  should this drive the REST API?  -->
-		<property name="oob" value="true" />
-		<property name="json-schema" value="classpathvalue" />
+		<!-- should this drive the REST API? -->
+		<oob name="oobname" />
+		<schema version="1" location="classpathvalue" />
+		<schema version="2" location="classpathvalue" migrator="class" />
 	</dox>
 </dox-provider>
