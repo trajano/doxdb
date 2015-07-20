@@ -1,5 +1,9 @@
 package net.trajano.doxdb.internal;
 
+import java.util.Map;
+
+import net.trajano.doxdb.DoxFactory;
+import net.trajano.doxdb.jdbc.JdbcDoxFactory;
 import net.trajano.doxdb.spi.DoxProvider;
 
 /**
@@ -9,5 +13,10 @@ import net.trajano.doxdb.spi.DoxProvider;
  * @author Archimedes
  */
 public class DoxXmlConfiguredDoxProvider implements DoxProvider {
+
+  @Override
+  public DoxFactory createDoxFactory(String name, Map<String, String> options) {
+    return new JdbcDoxFactory();
+  }
 
 }
