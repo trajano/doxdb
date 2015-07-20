@@ -1,6 +1,7 @@
 package net.trajano.doxdb;
 
 import net.trajano.doxdb.internal.DoxXmlConfiguredDoxProvider;
+import net.trajano.doxdb.spi.DoxProvider;
 
 /**
  * Bootstrap class used to create {@link DoxProvider} instances. This is

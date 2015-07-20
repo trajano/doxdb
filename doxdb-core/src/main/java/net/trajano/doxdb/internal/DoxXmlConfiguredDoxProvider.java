@@ -1,6 +1,6 @@
 package net.trajano.doxdb.internal;
 
-import net.trajano.doxdb.DoxProvider;
+import net.trajano.doxdb.spi.DoxProvider;
 
 /**
  * This will read the Dox configuration from META-INF/dox.xml of the current
