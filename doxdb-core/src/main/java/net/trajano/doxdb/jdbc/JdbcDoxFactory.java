@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.ibm.jbatch.container.exception.PersistenceException;
+import javax.persistence.PersistenceException;
 
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
