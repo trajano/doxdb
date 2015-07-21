@@ -105,14 +105,14 @@ public class JdbcDoxDAO implements DoxDAO {
         oobTombstoneTableName = (tableName + "OOBTOMBSTONE").toUpperCase();
         try {
             createTable();
-            insertSql = String.format("insert into %1$s (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?, ?,?,?,?,?,?)", tableName);
+            insertSql = String.format("insert into %1$s (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION, CONTENTVERSION) values (?, ?,?,?,?,?,?,?)", tableName);
             oobInsertSql = String.format("insert into %1$s (CONTENT, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?,?,?,?,?,?,?,?,?)", oobTableName);
 
-            readSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + " E where E.DOXID=?";
+            readSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION, CONTENTVERSION from " + tableName + " E where E.DOXID=?";
             oobReadSql = "select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + "OOB E where E.DOXID=? and E.REFERENCE = ?";
             oobCheckSql = String.format("select id, version from %s where parentid = ? and reference = ? for update", tableName + "OOB");
             oobTombstoneDeleteSql = String.format("delete from %s where doxid = ? and reference = ?", oobTombstoneTableName);
-            readForUpdateSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from " + tableName + " E where E.DOXID=? AND E.VERSION = ? FOR UPDATE";
+            readForUpdateSql = "select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION, CONTENTVERSION from " + tableName + " E where E.DOXID=? AND E.VERSION = ? FOR UPDATE";
             // when reading for update on the OOB data it will lock all the OOB
             // records not just the one referenced by the name.
             // perhaps in future versions we will optimistic lock the OOB data
@@ -122,7 +122,7 @@ public class JdbcDoxDAO implements DoxDAO {
             readContentSql = "select E.CONTENT from " + tableName + " E where E.ID=?";
             oobReadContentSql = "select E.CONTENT from " + tableName + "OOB E where E.PARENTID=? and REFERENCE=?";
 
-            updateSql = "update " + tableName + " set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1 where ID=? and VERSION=?";
+            updateSql = "update " + tableName + " set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1, CONTENTVERSION=? where ID=? and VERSION=?";
             updateVersionSql = "update " + tableName + " set VERSION=VERSION+1 where ID=? and VERSION=?";
             oobUpdateSql = "update " + tableName + "OOB set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1 where ID=? and VERSION=?";
 
@@ -237,6 +237,7 @@ public class JdbcDoxDAO implements DoxDAO {
 
     @Override
     public DoxID create(final InputStream in,
+        int contentVersion,
             final Principal principal) {
 
         final DoxID doxId = DoxID.generate();
@@ -250,6 +251,7 @@ public class JdbcDoxDAO implements DoxDAO {
             s.setString(5, principal.getName());
             s.setTimestamp(6, ts);
             s.setInt(7, 1);
+            s.setInt(8, contentVersion);
             s.executeUpdate();
             try (final ResultSet rs = s.getGeneratedKeys()) {
                 rs.next();
@@ -268,7 +270,7 @@ public class JdbcDoxDAO implements DoxDAO {
                 throw new PersistenceException("OOB tables for " + tableName + " exist when they are not expected to exist");
             }
 
-            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))", oobTableName, oobLobSize))) {
+            try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, CONTENTVERSION INTEGER NOT NULL, PRIMARY KEY (ID))", oobTableName, oobLobSize))) {
                 s.executeUpdate();
             }
             try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add unique (DOXID, REFERENCE)", oobTableName))) {
@@ -296,7 +298,7 @@ public class JdbcDoxDAO implements DoxDAO {
                 .getTables(null, null, tableName, null)) {
             if (!tables.next()) {
 
-                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER, PRIMARY KEY (ID))", tableName, lobSize))) {
+                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, CONTENTVERSION INTEGER NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))", tableName, lobSize))) {
                     s.executeUpdate();
                 }
 
@@ -525,7 +527,7 @@ public class JdbcDoxDAO implements DoxDAO {
     }
 
     @Override
-    public void importDox(final InputStream is) throws IOException {
+    public void importDox(final InputStream is, int contentVersion) throws IOException {
 
         try {
             final MimeMultipart mmp = new MimeMultipart(new ByteArrayDataSource(is, MediaType.MULTIPART_FORM_DATA));
@@ -557,6 +559,7 @@ public class JdbcDoxDAO implements DoxDAO {
                 s.setTimestamp(6, new Timestamp(DatatypeConverter.parseDateTime(mainBody.getHeader("Last-Updated-On")[0])
                         .getTimeInMillis()));
                 s.setInt(7, 1);
+                s.setInt(8, contentVersion);
                 s.executeUpdate();
                 try (final ResultSet rs = s.getGeneratedKeys()) {
                     rs.next();
@@ -689,6 +692,7 @@ public class JdbcDoxDAO implements DoxDAO {
                 meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
                 meta.setLastUpdatedOn(rs.getTimestamp(6));
                 meta.setVersion(rs.getInt(7));
+                meta.setContentVersion(rs.getInt(8));
                 return meta;
             }
         } catch (final SQLException e) {
@@ -723,7 +727,8 @@ public class JdbcDoxDAO implements DoxDAO {
                 meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
                 meta.setLastUpdatedOn(rs.getTimestamp(6));
                 meta.setVersion(rs.getInt(7));
-
+                meta.setContentVersion(rs.getInt(8));
+                
                 if (hasOob) {
                     try (final PreparedStatement os = c.prepareStatement(oobReadForUpdateSql)) {
                         os.setLong(1, meta.getId());
@@ -790,6 +795,7 @@ public class JdbcDoxDAO implements DoxDAO {
     @Override
     public void updateContent(final DoxID doxId,
             final InputStream contentStream,
+            final int contentVersion,
             final int version,
             final Principal principal) {
 
@@ -800,11 +806,17 @@ public class JdbcDoxDAO implements DoxDAO {
             u.setBinaryStream(1, contentStream);
             u.setString(2, principal.getName());
             u.setTimestamp(3, ts);
-            u.setLong(4, meta.getId());
-            u.setInt(5, version);
+            u.setInt(4, contentVersion);
+
+            u.setLong(5, meta.getId());
+            u.setInt(6, version);
             u.executeUpdate();
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+@Override
+    public int getContentVersion(DoxID id) {
+  return readMeta(id).getContentVersion();
     }
 }

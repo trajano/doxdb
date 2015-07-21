@@ -115,7 +115,7 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
 
     public void importDox(InputStream is) throws IOException {
 
-        dao.importDox(is);
+        dao.importDox(is, 1);
 
     }
 

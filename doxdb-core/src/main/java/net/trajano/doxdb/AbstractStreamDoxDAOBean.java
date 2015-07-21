@@ -18,7 +18,7 @@ public abstract class AbstractStreamDoxDAOBean extends AbstractDoxDAOBean {
     public DoxID create(InputStream in,
             Principal principal) {
 
-        return getDao().create(in, principal);
+        return getDao().create(in, 1, principal);
     }
 
     public int readContent(DoxID id,
@@ -39,6 +39,6 @@ public abstract class AbstractStreamDoxDAOBean extends AbstractDoxDAOBean {
             int version,
             Principal principal) {
 
-        getDao().updateContent(doxId, contentStream, version, principal);
+        getDao().updateContent(doxId, contentStream, 1, version, principal);
     }
 }

@@ -21,7 +21,16 @@ public interface DoxDAO {
             int version,
             Principal principal);
 
+    /**
+     * Creates a record in the database.  The contentVersion specifies the 
+     * version of the structure being used for storing. 
+     * @param in
+     * @param contentVersion 
+     * @param principal
+     * @return
+     */
     DoxID create(InputStream in,
+        int contentVersion,
             Principal principal);
 
     void delete(DoxID id,
@@ -60,9 +69,11 @@ public interface DoxDAO {
      *
      * @param is
      *            input stream containing the data for the import.
+     *            @param contentVersion
+     *            version of the content structure
      * @throws IOException
      */
-    void importDox(InputStream is) throws IOException;
+    void importDox(InputStream is, int contentVersion) throws IOException;
 
     /**
      * Reads content into a buffer. This does not return an {@link InputStream}
@@ -115,7 +126,10 @@ public interface DoxDAO {
 
     void updateContent(DoxID doxId,
             InputStream contentStream,
+            int contentVersion,
             int version,
             Principal principal);
+
+    int getContentVersion(DoxID id);
 
 }

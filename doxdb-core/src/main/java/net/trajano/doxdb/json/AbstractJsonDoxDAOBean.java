@@ -41,7 +41,7 @@ public abstract class AbstractJsonDoxDAOBean extends AbstractDoxDAOBean {
         new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(json.toString()), EncoderContext.builder()
                 .build());
         try (final ByteArrayInputStream is = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
-            return getDao().create(is, principal);
+            return getDao().create(is,1,principal);
         } catch (final IOException e) {
             throw new PersistenceException(e);
         }
@@ -72,7 +72,7 @@ public abstract class AbstractJsonDoxDAOBean extends AbstractDoxDAOBean {
         new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(json.toString()), EncoderContext.builder()
                 .build());
         try (final ByteArrayInputStream is = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
-            getDao().updateContent(doxId, is, version, principal);
+            getDao().updateContent(doxId, is,1, version, principal);
         } catch (final IOException e) {
             throw new PersistenceException(e);
         }

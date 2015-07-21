@@ -92,6 +92,14 @@ public class DocumentMeta {
         this.id = id;
     }
 
+    public int getContentVersion() {
+      return contentVersion;
+    }
+
+    public void setContentVersion(int contentVersion) {
+      this.contentVersion = contentVersion;
+    }
+
     public void setLastUpdatedBy(final DoxPrincipal lastUpdatedBy) {
 
         this.lastUpdatedBy = lastUpdatedBy;
@@ -107,4 +115,5 @@ public class DocumentMeta {
         this.version = version;
     }
 
+private int contentVersion;
 }
