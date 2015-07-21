@@ -23,7 +23,7 @@ public abstract class AbstractValidatingJsonDoxDAOBean extends AbstractJsonDoxDA
 
     @Override
     public DoxID create(JsonObject json,
-            Principal principal) {
+        Principal principal) {
 
         validate(json);
         return super.create(json, principal);
@@ -44,23 +44,24 @@ public abstract class AbstractValidatingJsonDoxDAOBean extends AbstractJsonDoxDA
         super.init();
         try {
             final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
-                    .setDefaultVersion(SchemaVersion.DRAFTV4)
-                    .freeze();
+                .setDefaultVersion(SchemaVersion.DRAFTV4)
+                .freeze();
 
             schema = JsonSchemaFactory.newBuilder()
-                    .setValidationConfiguration(cfg)
-                    .freeze()
-                    .getJsonSchema(JsonLoader.fromResource(getSchemaResource()));
-        } catch (ProcessingException | IOException e) {
+                .setValidationConfiguration(cfg)
+                .freeze()
+                .getJsonSchema(JsonLoader.fromResource(getSchemaResource()));
+        } catch (ProcessingException
+            | IOException e) {
             throw new PersistenceException(e);
         }
     }
 
     @Override
     public void updateContent(DoxID doxId,
-            JsonObject json,
-            int version,
-            Principal principal) {
+        JsonObject json,
+        int version,
+        Principal principal) {
 
         validate(json);
         super.updateContent(doxId, json, version, principal);
@@ -74,7 +75,8 @@ public abstract class AbstractValidatingJsonDoxDAOBean extends AbstractJsonDoxDA
             if (!validate.isSuccess()) {
                 throw new PersistenceException(validate.toString());
             }
-        } catch (ProcessingException | IOException e) {
+        } catch (ProcessingException
+            | IOException e) {
             throw new PersistenceException(e);
         }
     }

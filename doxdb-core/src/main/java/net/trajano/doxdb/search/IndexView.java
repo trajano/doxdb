@@ -13,7 +13,8 @@ import net.trajano.doxdb.DoxID;
  *
  * @author Archimedes
  */
-public class IndexView implements Serializable {
+public class IndexView implements
+    Serializable {
 
     /**
      *
@@ -53,7 +54,7 @@ public class IndexView implements Serializable {
     public IndexView appendText(String text) {
 
         this.text.append(text)
-                .append('\n');
+            .append('\n');
         return this;
     }
 
@@ -98,7 +99,7 @@ public class IndexView implements Serializable {
     }
 
     public IndexView setDouble(String name,
-            double value) {
+        double value) {
 
         doubles.put(name, value);
         return this;
@@ -117,7 +118,7 @@ public class IndexView implements Serializable {
     }
 
     public IndexView setLong(String name,
-            long value) {
+        long value) {
 
         longs.put(name, value);
         return this;
@@ -132,7 +133,7 @@ public class IndexView implements Serializable {
      * @return
      */
     public IndexView setString(String name,
-            String stringValue) {
+        String stringValue) {
 
         strings.put(name, stringValue);
         return this;
@@ -148,7 +149,7 @@ public class IndexView implements Serializable {
      * @return
      */
     public IndexView setText(String name,
-            String stringValue) {
+        String stringValue) {
 
         texts.put(name, stringValue);
         return this;

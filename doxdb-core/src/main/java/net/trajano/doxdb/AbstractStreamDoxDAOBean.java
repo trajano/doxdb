@@ -16,28 +16,28 @@ import java.security.Principal;
 public abstract class AbstractStreamDoxDAOBean extends AbstractDoxDAOBean {
 
     public DoxID create(InputStream in,
-            Principal principal) {
+        Principal principal) {
 
         return getDao().create(in, 1, principal);
     }
 
     public int readContent(DoxID id,
-            ByteBuffer buffer) {
+        ByteBuffer buffer) {
 
         return getDao().readContent(id, buffer);
     }
 
     public void readContentToStream(DoxID id,
-            OutputStream os) throws IOException {
+        OutputStream os) throws IOException {
 
         getDao().readContentToStream(id, os);
 
     }
 
     public void updateContent(DoxID doxId,
-            InputStream contentStream,
-            int version,
-            Principal principal) {
+        InputStream contentStream,
+        int version,
+        Principal principal) {
 
         getDao().updateContent(doxId, contentStream, 1, version, principal);
     }

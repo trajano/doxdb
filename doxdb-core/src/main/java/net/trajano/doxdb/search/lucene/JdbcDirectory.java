@@ -26,7 +26,8 @@ public class JdbcDirectory extends Directory {
      */
     private final String searchTableName;
 
-    public JdbcDirectory(Connection c, String searchTableName) throws SQLException {
+    public JdbcDirectory(Connection c,
+        String searchTableName) throws SQLException {
         connection = c;
         this.searchTableName = searchTableName.toUpperCase();
         createSearchTable();
@@ -46,7 +47,7 @@ public class JdbcDirectory extends Directory {
 
     @Override
     public IndexOutput createOutput(final String name,
-            final IOContext context) throws IOException {
+        final IOContext context) throws IOException {
 
         return new JdbcIndexOutput(name, connection, searchTableName);
     }
@@ -57,7 +58,7 @@ public class JdbcDirectory extends Directory {
     private void createSearchTable() throws SQLException {
 
         try (final ResultSet tables = connection.getMetaData()
-                .getTables(null, null, searchTableName, null)) {
+            .getTables(null, null, searchTableName, null)) {
             if (!tables.next()) {
 
                 final int lobSize = 1024 * 1024 * 1024;
@@ -131,14 +132,14 @@ public class JdbcDirectory extends Directory {
 
     @Override
     public IndexInput openInput(final String name,
-            final IOContext context) throws IOException {
+        final IOContext context) throws IOException {
 
         return new JdbcIndexInput(name, connection, searchTableName, context);
     }
 
     @Override
     public void renameFile(final String source,
-            final String dest) throws IOException {
+        final String dest) throws IOException {
 
         final String renameFileSql = String.format("update %1$s set name = ? where name = ?", searchTableName);
         try (final PreparedStatement s = connection.prepareStatement(renameFileSql)) {

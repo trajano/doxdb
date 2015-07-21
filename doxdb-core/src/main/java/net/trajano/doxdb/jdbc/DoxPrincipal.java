@@ -3,7 +3,8 @@ package net.trajano.doxdb.jdbc;
 import java.security.Principal;
 import java.util.Objects;
 
-public final class DoxPrincipal implements Principal {
+public final class DoxPrincipal implements
+    Principal {
 
     /**
      * Size of the ID in bytes.

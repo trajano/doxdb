@@ -28,7 +28,9 @@ public class JdbcIndexOutput extends IndexOutput {
 
     private final PreparedStatement statement;
 
-    protected JdbcIndexOutput(String name, Connection connection, String searchTableName) {
+    protected JdbcIndexOutput(String name,
+        Connection connection,
+        String searchTableName) {
         super(name);
 
         try (PreparedStatement lock = connection.prepareStatement(String.format("select name from %1$s where name = ? for update", searchTableName))) {
@@ -95,8 +97,8 @@ public class JdbcIndexOutput extends IndexOutput {
 
     @Override
     public void writeBytes(byte[] buffer,
-            int offset,
-            int length) throws IOException {
+        int offset,
+        int length) throws IOException {
 
         baos.write(buffer, offset, length);
         digest.update(buffer, offset, length);

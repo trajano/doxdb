@@ -62,8 +62,8 @@ public class OobTest {
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
 
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
-        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
 
         try {
             dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
@@ -106,8 +106,8 @@ public class OobTest {
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
 
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
-        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
 
         try {
             dao.readOobContentToStream(d1, "ref", new ByteArrayOutputStream());
@@ -160,7 +160,7 @@ public class OobTest {
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"),1, new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
         dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -169,7 +169,7 @@ public class OobTest {
 
         dao.delete(d1, dao.getVersion(d1), new DoxPrincipal("PRINCE"));
 
-        dao.importDox(new ByteArrayInputStream(baos.toByteArray()),1);
+        dao.importDox(new ByteArrayInputStream(baos.toByteArray()), 1);
 
         final byte[] buffer1 = new byte[200];
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
@@ -202,8 +202,8 @@ public class OobTest {
         doxConfiguration.setHasOob(true);
         doxConfiguration.setOobLobSize(4200);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
-        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
         final int version1 = dao.getVersion(d1);
         dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), version1, new DoxPrincipal("PRINSIPE"));
 
@@ -230,8 +230,8 @@ public class OobTest {
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
-        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
         dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.xml"), dao.getVersion(d1), new DoxPrincipal("PRINSIPE"));
 
         final byte[] buffer1 = new byte[200];
@@ -265,8 +265,8 @@ public class OobTest {
         doxConfiguration.setTableName("sample");
         doxConfiguration.setHasOob(true);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"),1, new DoxPrincipal("PRINCE"));
-        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
         final int version1 = dao.getVersion(d1);
         dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), version1, new DoxPrincipal("PRINSIPE"));
 
@@ -298,8 +298,8 @@ public class OobTest {
         doxConfiguration.setHasOob(true);
         doxConfiguration.setOobLobSize(420000);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, doxConfiguration);
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"),1, new DoxPrincipal("PRINCE"));
-        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
+        dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
         final int version1 = dao.getVersion(d1);
         dao.attach(d1, "ref", ResourceUtil.getResourceAsStream("sample.bin"), version1, new DoxPrincipal("PRINSIPE"));
 

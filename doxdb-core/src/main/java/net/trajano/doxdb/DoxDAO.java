@@ -16,31 +16,32 @@ import java.security.Principal;
 public interface DoxDAO {
 
     void attach(DoxID doxId,
-            String reference,
-            InputStream in,
-            int version,
-            Principal principal);
+        String reference,
+        InputStream in,
+        int version,
+        Principal principal);
 
     /**
-     * Creates a record in the database.  The contentVersion specifies the 
-     * version of the structure being used for storing. 
+     * Creates a record in the database. The contentVersion specifies the
+     * version of the structure being used for storing.
+     * 
      * @param in
-     * @param contentVersion 
+     * @param contentVersion
      * @param principal
      * @return
      */
     DoxID create(InputStream in,
         int contentVersion,
-            Principal principal);
+        Principal principal);
 
     void delete(DoxID id,
-            int version,
-            Principal principal);
+        int version,
+        Principal principal);
 
     void detach(DoxID doxId,
-            String reference,
-            int version,
-            Principal principal);
+        String reference,
+        int version,
+        Principal principal);
 
     /**
      * Writes the complete Dox record including OOB data to an output stream.
@@ -52,7 +53,7 @@ public interface DoxDAO {
      * @throws IOException
      */
     void exportDox(DoxID doxID,
-            OutputStream os) throws IOException;
+        OutputStream os) throws IOException;
 
     /**
      * Get version for optimistic locking for the Dox.
@@ -69,11 +70,12 @@ public interface DoxDAO {
      *
      * @param is
      *            input stream containing the data for the import.
-     *            @param contentVersion
+     * @param contentVersion
      *            version of the content structure
      * @throws IOException
      */
-    void importDox(InputStream is, int contentVersion) throws IOException;
+    void importDox(InputStream is,
+        int contentVersion) throws IOException;
 
     /**
      * Reads content into a buffer. This does not return an {@link InputStream}
@@ -85,7 +87,7 @@ public interface DoxDAO {
      * @return size of data that was read
      */
     int readContent(DoxID id,
-            ByteBuffer buffer);
+        ByteBuffer buffer);
 
     /**
      * Reads content into an output stream.
@@ -95,7 +97,7 @@ public interface DoxDAO {
      *            output stream
      */
     void readContentToStream(DoxID id,
-            OutputStream os) throws IOException;
+        OutputStream os) throws IOException;
 
     /**
      * Reads OOB content into a buffer.
@@ -108,8 +110,8 @@ public interface DoxDAO {
      * @return size of data that was read
      */
     int readOobContent(DoxID doxId,
-            String reference,
-            ByteBuffer buffer);
+        String reference,
+        ByteBuffer buffer);
 
     /**
      * Reads content into an output stream.
@@ -121,14 +123,14 @@ public interface DoxDAO {
      *            output stream
      */
     void readOobContentToStream(DoxID id,
-            String reference,
-            OutputStream os) throws IOException;
+        String reference,
+        OutputStream os) throws IOException;
 
     void updateContent(DoxID doxId,
-            InputStream contentStream,
-            int contentVersion,
-            int version,
-            Principal principal);
+        InputStream contentStream,
+        int contentVersion,
+        int version,
+        Principal principal);
 
     int getContentVersion(DoxID id);
 

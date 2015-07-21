@@ -34,14 +34,14 @@ import net.trajano.doxdb.DoxID;
 public abstract class AbstractJsonDoxDAOBean extends AbstractDoxDAOBean {
 
     public DoxID create(JsonObject json,
-            Principal principal) {
+        Principal principal) {
 
         final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
 
         new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(json.toString()), EncoderContext.builder()
-                .build());
+            .build());
         try (final ByteArrayInputStream is = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
-            return getDao().create(is,1,principal);
+            return getDao().create(is, 1, principal);
         } catch (final IOException e) {
             throw new PersistenceException(e);
         }
@@ -54,25 +54,25 @@ public abstract class AbstractJsonDoxDAOBean extends AbstractDoxDAOBean {
             getDao().readContentToStream(id, baos);
             baos.close();
             final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(baos.toByteArray())), DecoderContext.builder()
-                    .build());
+                .build());
             return Json.createReader(new StringReader(decoded.toJson()))
-                    .readObject();
+                .readObject();
         } catch (final IOException e) {
             throw new PersistenceException(e);
         }
     }
 
     public void updateContent(DoxID doxId,
-            JsonObject json,
-            int version,
-            Principal principal) {
+        JsonObject json,
+        int version,
+        Principal principal) {
 
         final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
 
         new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(json.toString()), EncoderContext.builder()
-                .build());
+            .build());
         try (final ByteArrayInputStream is = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
-            getDao().updateContent(doxId, is,1, version, principal);
+            getDao().updateContent(doxId, is, 1, version, principal);
         } catch (final IOException e) {
             throw new PersistenceException(e);
         }

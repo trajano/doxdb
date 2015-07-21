@@ -11,34 +11,38 @@ import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxFactory;
 
-public class JdbcDoxFactory implements DoxFactory {
+public class JdbcDoxFactory implements
+    DoxFactory {
 
-  final Map<String, JdbcDoxDAO> doxen = new ConcurrentHashMap<>();
+    final Map<String, JdbcDoxDAO> doxen = new ConcurrentHashMap<>();
 
-  private final Connection c;
+    private final Connection c;
 
-  public JdbcDoxFactory(Connection c, String... doxNames) {
-    this.c = c;
-    for (String doxName : doxNames) {
-      DoxConfiguration configuration = new DoxConfiguration();
-      configuration.setTableName(doxName);
-      configuration.setHasOob(true);
-      doxen.put(doxName, new JdbcDoxDAO(c, configuration));
+    public JdbcDoxFactory(Connection c,
+        String... doxNames) {
+        this.c = c;
+        for (String doxName : doxNames) {
+            DoxConfiguration configuration = new DoxConfiguration();
+            configuration.setTableName(doxName);
+            configuration.setHasOob(true);
+            doxen.put(doxName, new JdbcDoxDAO(c, configuration));
+        }
     }
-  }
 
-  @Override
-  public DoxDAO getDox(String name) {
-    return doxen.get(name);
-  }
+    @Override
+    public DoxDAO getDox(String name) {
 
-  @Override
-  public void close() {
-    try {
-      c.close();
-    } catch (SQLException e) {
-      throw new PersistenceException(e);
+        return doxen.get(name);
     }
-  }
+
+    @Override
+    public void close() {
+
+        try {
+            c.close();
+        } catch (SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
 
 }

@@ -42,7 +42,9 @@ import net.trajano.doxdb.search.lucene.JdbcDirectory;
  *
  * @author Archimedes
  */
-public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoCloseable {
+public abstract class AbstractLuceneDoxSearchBean implements
+    DoxSearch,
+    AutoCloseable {
 
     private static final String FIELD_ID = "\t id";
 
@@ -83,7 +85,7 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoClos
         try {
             final Document doc = buildFromIndexView(indexView);
             indexWriter.updateDocument(new Term(FIELD_ID, indexView.getDoxID()
-                    .toString()), doc);
+                .toString()), doc);
         } catch (final IOException e) {
             throw new PersistenceException(e);
         }
@@ -99,10 +101,10 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoClos
                 ret.setString(field.name(), field.stringValue());
             } else if (field instanceof DoubleField) {
                 ret.setDouble(field.name(), ((DoubleField) field).numericValue()
-                        .doubleValue());
+                    .doubleValue());
             } else if (field instanceof LongField) {
                 ret.setLong(field.name(), ((LongField) field).numericValue()
-                        .longValue());
+                    .longValue());
             }
         }
         return ret;
@@ -114,7 +116,7 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoClos
         final Document doc = new Document();
         doc.add(new StringField(FIELD_INDEX, indexView.getIndex(), Store.YES));
         doc.add(new StringField(FIELD_ID, indexView.getDoxID()
-                .toString(), Store.YES));
+            .toString(), Store.YES));
         for (final Entry<String, String> entry : indexView.getStrings()) {
             doc.add(new StringField(entry.getKey(), entry.getValue(), Store.YES));
         }
@@ -153,7 +155,8 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoClos
             if (connectionFromDataSource) {
                 connection.close();
             }
-        } catch (IOException | SQLException e) {
+        } catch (IOException
+            | SQLException e) {
             throw new PersistenceException(e);
         }
     }
@@ -171,15 +174,16 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoClos
             final JdbcDirectory dir = new JdbcDirectory(connection, getSearchTableName());
             indexWriter = new IndexWriter(dir, iwc);
             indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));
-        } catch (final IOException | SQLException e) {
+        } catch (final IOException
+            | SQLException e) {
             throw new PersistenceException(e);
         }
     }
 
     @Override
     public SearchResult search(String index,
-            String queryString,
-            int limit) {
+        String queryString,
+        int limit) {
 
         try {
             final Analyzer analyzer = new StandardAnalyzer();
@@ -192,7 +196,8 @@ public abstract class AbstractLuceneDoxSearchBean implements DoxSearch, AutoClos
             final TopDocs search = indexSearcher.search(booleanQuery, limit);
 
             return buildSearchResults(search);
-        } catch (final IOException | ParseException e) {
+        } catch (final IOException
+            | ParseException e) {
             throw new PersistenceException(e);
         }
     }

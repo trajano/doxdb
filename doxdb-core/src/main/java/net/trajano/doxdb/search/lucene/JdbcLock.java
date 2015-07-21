@@ -21,7 +21,9 @@ class JdbcLock extends Lock {
 
     private final String name;
 
-    public JdbcLock(final String name, final Connection connection, final String searchTableName) {
+    public JdbcLock(final String name,
+        final Connection connection,
+        final String searchTableName) {
         this.name = name;
         this.connection = connection;
         lockFileSql = String.format("select name from %1$s where name = ? for update", searchTableName);

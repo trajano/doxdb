@@ -36,8 +36,8 @@ public class JdbcTest {
 
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
         final JdbcDoxDAO dao2 = new JdbcDoxDAO(c, "sample");
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
-        final DoxID d2 = dao2.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao2.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
         assertFalse(d1.equals(d2));
 
         final ByteArrayOutputStream content1 = new ByteArrayOutputStream();
@@ -78,8 +78,8 @@ public class JdbcTest {
 
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, config);
         final JdbcDoxDAO dao2 = new JdbcDoxDAO(c, config);
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
-        final DoxID d2 = dao2.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao2.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
         Assert.assertFalse(d1.equals(d2));
     }
 
@@ -96,7 +96,7 @@ public class JdbcTest {
         {
             final Connection c = DriverManager.getConnection("jdbc:h2:mem:test");
             final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
-            d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
+            d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
             c.commit();
             c.close();
         }
@@ -104,7 +104,7 @@ public class JdbcTest {
         {
             final Connection c = DriverManager.getConnection("jdbc:h2:mem:test");
             final JdbcDoxDAO dao2 = new JdbcDoxDAO(c, "sample");
-            final DoxID d2 = dao2.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
+            final DoxID d2 = dao2.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
             Assert.assertFalse(d1.equals(d2));
         }
     }
@@ -121,7 +121,7 @@ public class JdbcTest {
         // ":1527/sun-appserv-samples;create=true;upgrade=true");
 
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         dao.exportDox(d1, baos);
@@ -129,8 +129,8 @@ public class JdbcTest {
 
         assertEquals(1, dao.getContentVersion(d1));
         dao.delete(d1, dao.getVersion(d1), new DoxPrincipal("PRINCE"));
-        
-        dao.importDox(new ByteArrayInputStream(baos.toByteArray()),1);
+
+        dao.importDox(new ByteArrayInputStream(baos.toByteArray()), 1);
 
         final byte[] buffer0 = ResourceUtil.getResourceAsBytes("sample.xml");
         final byte[] buffer1 = new byte[buffer0.length];
@@ -155,11 +155,11 @@ public class JdbcTest {
         final DoxConfiguration config = new DoxConfiguration("sample");
         config.setLobSize(5000);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, config);
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
-        final DoxID d2 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
         Assert.assertFalse(d1.equals(d2));
 
-        dao.updateContent(d1, ResourceUtil.getResourceAsStream("sample.bin"), 1,dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
+        dao.updateContent(d1, ResourceUtil.getResourceAsStream("sample.bin"), 1, dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
 
         final byte[] buffer0 = ResourceUtil.getResourceAsBytes("sample.bin");
         final byte[] buffer1 = new byte[buffer0.length];
@@ -183,8 +183,8 @@ public class JdbcTest {
         // ":1527/sun-appserv-samples;create=true;upgrade=true");
 
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
-        final DoxID d2 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao.create(ResourceUtil.getResourceAsStream("sample.bin"), 1, new DoxPrincipal("PRINCE"));
         Assert.assertFalse(d1.equals(d2));
         final byte[] buffer2 = ResourceUtil.getResourceAsBytes("sample.bin");
 
@@ -207,11 +207,11 @@ public class JdbcTest {
         final Connection c = DriverManager.getConnection("jdbc:derby:memory:" + DoxID.generate() + ";create=true");
 
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, "sample");
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
-        final DoxID d2 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
         Assert.assertFalse(d1.equals(d2));
 
-        dao.updateContent(d1, ResourceUtil.getResourceAsStream("sample.bin"),1, dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
+        dao.updateContent(d1, ResourceUtil.getResourceAsStream("sample.bin"), 1, dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
 
         final byte[] buffer1 = ResourceUtil.getResourceAsBytes("sample.bin");
         dao.readContent(d1, ByteBuffer.wrap(buffer1));
@@ -232,11 +232,11 @@ public class JdbcTest {
         final DoxConfiguration config = new DoxConfiguration("sample");
         config.setLobSize(500000);
         final JdbcDoxDAO dao = new JdbcDoxDAO(c, config);
-        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
-        final DoxID d2 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1,new DoxPrincipal("PRINCE"));
+        final DoxID d1 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
+        final DoxID d2 = dao.create(ResourceUtil.getResourceAsStream("sample.xml"), 1, new DoxPrincipal("PRINCE"));
         Assert.assertFalse(d1.equals(d2));
 
-        dao.updateContent(d1, ResourceUtil.getResourceAsStream("sample.bin"), 1,dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
+        dao.updateContent(d1, ResourceUtil.getResourceAsStream("sample.bin"), 1, dao.getVersion(d1), new DoxPrincipal("PRINCEUP"));
 
         final byte[] buffer0 = ResourceUtil.getResourceAsBytes("sample.bin");
         final byte[] buffer1 = new byte[buffer0.length];

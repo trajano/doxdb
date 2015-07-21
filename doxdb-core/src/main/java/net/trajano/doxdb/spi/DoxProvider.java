@@ -5,5 +5,7 @@ import java.util.Map;
 import net.trajano.doxdb.DoxFactory;
 
 public interface DoxProvider {
-  DoxFactory createDoxFactory(String name, Map<String, String> options);
+
+    DoxFactory createDoxFactory(String name,
+        Map<String, String> options);
 }

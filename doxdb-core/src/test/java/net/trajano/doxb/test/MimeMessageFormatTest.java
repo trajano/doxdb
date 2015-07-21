@@ -42,11 +42,11 @@ public class MimeMessageFormatTest {
         Assert.assertEquals(2, mimeMultipartr.getCount());
 
         final InputStream is = mimeMultipartr.getBodyPart(0)
-                .getInputStream();
+            .getInputStream();
         ByteStreams.copy(is, System.out);
 
         mimeMultipartr.getBodyPart(0)
-                .writeTo(baos2);
+            .writeTo(baos2);
         Assert.assertTrue(new String(baos2.toByteArray()).startsWith("<?xml"));
     }
 }

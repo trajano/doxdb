@@ -6,7 +6,8 @@ import javax.persistence.Converter;
 import net.trajano.doxdb.jdbc.DoxPrincipal;
 
 @Converter(autoApply = true)
-public class DoxPrincipalConverter implements AttributeConverter<DoxPrincipal, String> {
+public class DoxPrincipalConverter implements
+    AttributeConverter<DoxPrincipal, String> {
 
     @Override
     public String convertToDatabaseColumn(final DoxPrincipal doxPrincipal) {

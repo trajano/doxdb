@@ -20,18 +20,24 @@ import net.trajano.doxdb.spi.DoxProvider;
  *
  * @author Archimedes
  */
-public class DoxXmlConfiguredDoxProvider implements DoxProvider {
+public class DoxXmlConfiguredDoxProvider implements
+    DoxProvider {
 
-  @Override
-  public DoxFactory createDoxFactory(String name, Map<String, String> options) {
-    try {
-      Context ctx = new InitialContext();
-      DataSource dataSource = (DataSource) ctx.lookup("java:comp/DefaultDataSource");
-      String[] doxNames = { "Sample" };
-      return new JdbcDoxFactory(dataSource.getConnection(), doxNames);
-    } catch (SQLException | NamingException e) {
-      throw new PersistenceException(e);
+    @Override
+    public DoxFactory createDoxFactory(String name,
+        Map<String, String> options) {
+
+        try {
+            Context ctx = new InitialContext();
+            DataSource dataSource = (DataSource) ctx.lookup("java:comp/DefaultDataSource");
+            String[] doxNames = {
+                "Sample"
+            };
+            return new JdbcDoxFactory(dataSource.getConnection(), doxNames);
+        } catch (SQLException
+            | NamingException e) {
+            throw new PersistenceException(e);
+        }
     }
-  }
 
 }

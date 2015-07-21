@@ -23,7 +23,8 @@ import net.trajano.doxdb.jdbc.JdbcDoxDAO;
  *
  * @author Archimedes
  */
-public abstract class AbstractDoxDAOBean implements AutoCloseable {
+public abstract class AbstractDoxDAOBean implements
+    AutoCloseable {
 
     private Connection connection;
 
@@ -44,10 +45,10 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
     private DataSource ds;
 
     public void attach(DoxID doxId,
-            String reference,
-            InputStream in,
-            int version,
-            Principal principal) {
+        String reference,
+        InputStream in,
+        int version,
+        Principal principal) {
 
         dao.attach(doxId, reference, in, version, principal);
     }
@@ -82,22 +83,22 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
     }
 
     public void delete(DoxID id,
-            int version,
-            Principal principal) {
+        int version,
+        Principal principal) {
 
         dao.delete(id, version, principal);
     }
 
     public void detach(DoxID doxId,
-            String reference,
-            int version,
-            Principal principal) {
+        String reference,
+        int version,
+        Principal principal) {
 
         dao.detach(doxId, reference, version, principal);
     }
 
     public void exportDox(DoxID doxID,
-            OutputStream os) throws IOException {
+        OutputStream os) throws IOException {
 
         dao.exportDox(doxID, os);
 
@@ -134,15 +135,15 @@ public abstract class AbstractDoxDAOBean implements AutoCloseable {
     }
 
     public int readOobContent(DoxID doxId,
-            String reference,
-            ByteBuffer buffer) {
+        String reference,
+        ByteBuffer buffer) {
 
         return dao.readOobContent(doxId, reference, buffer);
     }
 
     public void readOobContentToStream(DoxID id,
-            String reference,
-            OutputStream os) throws IOException {
+        String reference,
+        OutputStream os) throws IOException {
 
         dao.readOobContentToStream(id, reference, os);
 

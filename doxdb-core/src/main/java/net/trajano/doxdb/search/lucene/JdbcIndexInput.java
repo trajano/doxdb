@@ -22,7 +22,10 @@ public class JdbcIndexInput extends BufferedIndexInput {
 
     private final PreparedStatement statement;
 
-    protected JdbcIndexInput(String name, Connection connection, String searchTableName, IOContext context) {
+    protected JdbcIndexInput(String name,
+        Connection connection,
+        String searchTableName,
+        IOContext context) {
         super(name, context);
         try {
             final String readSql = String.format("select content, contentlength from %1$s where name = ?", searchTableName);
@@ -57,8 +60,8 @@ public class JdbcIndexInput extends BufferedIndexInput {
 
     @Override
     protected void readInternal(byte[] b,
-            int offset,
-            int length) throws IOException {
+        int offset,
+        int length) throws IOException {
 
         System.arraycopy(buffer.array(), pos, b, offset, length);
     }
