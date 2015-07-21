@@ -126,7 +126,7 @@ public class JdbcDoxDAO implements DoxDAO {
             updateVersionSql = "update " + tableName + " set VERSION=VERSION+1 where ID=? and VERSION=?";
             oobUpdateSql = "update " + tableName + "OOB set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1 where ID=? and VERSION=?";
 
-            copyToTombstoneSql = String.format("insert into %1$s (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where id = ? and version = ?", tombstoneTableName, tableName);
+            copyToTombstoneSql = String.format("insert into %1$s (CONTENT, CONTENTVERSION, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, CONTENTVERSION, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where id = ? and version = ?", tombstoneTableName, tableName);
             oobCopyAllToTombstoneSql = "insert into " + tableName + "OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from " + tableName + "OOB where parentid = ?";
             deleteSql = "delete from " + tableName + " where ID=? and VERSION=?";
             oobReadAllSql = String.format("select CONTENT, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from %1$s E where E.PARENTID=?", oobTableName);
@@ -307,15 +307,25 @@ public class JdbcDoxDAO implements DoxDAO {
                 }
 
                 try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add unique (ID, DOXID)", tableName))) {
-                    s.executeUpdate();
-                }
+                  s.executeUpdate();
+              }
 
-                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$sTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))", tableName, lobSize))) {
+                try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add check (VERSION > 0)", tableName))) {
+                  s.executeUpdate();
+              }
+                try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$s add check (CONTENTVERSION > 0)", tableName))) {
+                  s.executeUpdate();
+              }
+
+                try (PreparedStatement s = c.prepareStatement(String.format("CREATE TABLE %1$sTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL,  CONTENTVERSION INTEGER NOT NULL, PRIMARY KEY (ID))", tableName, lobSize))) {
                     s.executeUpdate();
                 }
                 try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sTOMBSTONE  add unique (DOXID)", tableName))) {
-                    s.executeUpdate();
-                }
+                  s.executeUpdate();
+              }
+                try (PreparedStatement s = c.prepareStatement(String.format("ALTER TABLE %1$sTOMBSTONE  add CHECK (CONTENTVERSION > 0)", tableName))) {
+                  s.executeUpdate();
+              }
                 // An OOB table would have a reference label for the parent
                 // record
                 // but it needs to be unique. However in the tombstone it does
