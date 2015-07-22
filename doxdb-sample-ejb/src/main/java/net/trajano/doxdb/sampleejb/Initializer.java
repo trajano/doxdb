@@ -1,4 +1,4 @@
-package net.trajano.doxdb.sample;
+package net.trajano.doxdb.sampleejb;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

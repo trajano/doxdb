@@ -10,7 +10,7 @@ import javax.naming.Context;
 import org.junit.Test;
 
 import net.trajano.doxdb.jdbc.DoxPrincipal;
-import net.trajano.doxdb.sample.SampleJsonBean;
+import net.trajano.doxdb.sampleejb.SampleJsonBean;
 
 public class ContainerTest {
 

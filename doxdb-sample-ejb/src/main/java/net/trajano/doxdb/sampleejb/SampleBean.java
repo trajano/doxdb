@@ -1,4 +1,4 @@
-package net.trajano.doxdb.sample;
+package net.trajano.doxdb.sampleejb;
 
 import javax.ejb.Stateless;
 
@@ -14,9 +14,9 @@ public class SampleBean extends AbstractStreamDoxDAOBean {
     @Override
     protected DoxConfiguration buildConfiguration() {
 
-        DoxConfiguration doxConfiguration = new DoxConfiguration();
+        final DoxConfiguration doxConfiguration = new DoxConfiguration();
         doxConfiguration.setHasOob(true);
-        doxConfiguration.setTableName("DoxdbSample");
+        doxConfiguration.setTableName("XXDoxdbSample");
         return doxConfiguration;
     }
 
