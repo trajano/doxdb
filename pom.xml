@@ -17,6 +17,7 @@
         <module>doxdb-ejb</module>
         <module>doxdb-rest</module>
         <module>doxdb-sample</module>
+        <module>doxdb-sample-ejb</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/trajano/${project.artifactId}</connection>
@@ -45,6 +46,12 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>doxdb-ejb</artifactId>
+                <version>${project.version}</version>
+                <type>ejb</type>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>doxdb-sample-ejb</artifactId>
                 <version>${project.version}</version>
                 <type>ejb</type>
             </dependency>

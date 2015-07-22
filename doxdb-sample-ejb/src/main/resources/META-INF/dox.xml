@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dox-persistence xmlns="http://doxdb.trajano.net/schema/"
+	xsi:schemaLocation="http://doxdb.trajano.net/schema/ ../../../../../doxdb-core/src/main/resources/META-INF/xsd/dox.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<dox>
+		<name>Sample</name>
+		<schema>
+			<version>1</version>
+			<uri>1</uri>
+		</schema>
+	</dox>
+</dox-persistence>
