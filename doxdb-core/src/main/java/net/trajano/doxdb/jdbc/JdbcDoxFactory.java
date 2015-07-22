@@ -1,12 +1,19 @@
 package net.trajano.doxdb.jdbc;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.SchemaFactory;
+
+import org.xml.sax.SAXException;
 
 import net.trajano.doxdb.DoxFactory;
+import net.trajano.doxdb.schema.DoxPersistence;
 
 /**
  * Like an Entity Manager Factory, this is a singleton in relation to an
@@ -17,6 +24,8 @@ import net.trajano.doxdb.DoxFactory;
  */
 public class JdbcDoxFactory implements
     DoxFactory {
+
+    private DoxPersistence persistenceConfig;
 
     public JdbcDoxFactory() {
 
@@ -31,13 +40,14 @@ public class JdbcDoxFactory implements
     public void init() {
 
         System.out.println("init from factory");
-        try (BufferedReader is = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/dox.xml")))) {
-            String line = is.readLine();
-            while (line != null) {
-                System.out.println(line);
-                line = is.readLine();
-            }
-        } catch (final IOException e) {
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/dox.xml")) {
+            final JAXBContext jaxb = JAXBContext.newInstance(DoxPersistence.class);
+            final Unmarshaller unmarshaller = jaxb.createUnmarshaller();
+            unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(getClass().getResource("/META-INF/xsd/dox.xsd")));
+            persistenceConfig = (DoxPersistence) unmarshaller.unmarshal(is);
+        } catch (final IOException
+            | SAXException
+            | JAXBException e) {
             throw new ExceptionInInitializerError(e);
         }
     }
