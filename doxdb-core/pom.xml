@@ -51,6 +51,23 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
             </plugin>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.11.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <addCompileSourceRoot>true</addCompileSourceRoot>
+                    <schemaDirectory>${project.basedir}/src/main/resources/META-INF/xsd</schemaDirectory>
+                    <extension>true</extension>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

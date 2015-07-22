@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schema.trajano.net/doxdb/"
+	targetNamespace="http://schema.trajano.net/doxdb/">
+	<element name="dox-persistence">
+		<complexType>
+			<sequence>
+				<element type="tns:DoxType" name="dox" minOccurs="1"
+					maxOccurs="unbounded">
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+	<complexType name="DoxType">
+		<sequence>
+			<element name="name" type="NMTOKEN"></element>
+			<element name="schema" type="tns:SchemaType"></element>
+		</sequence>
+	</complexType>
+	<complexType name="SchemaType">
+		<sequence>
+			<element name="version" type="positiveInteger"></element>
+			<element name="uri" type="anyURI"></element>
+			<element name="migrator-class" type="NMTOKEN" minOccurs="0"></element>
+			<element name="indexer-class" type="NMTOKEN" minOccurs="0"></element>
+			<element name="eventhandler-class" type="NMTOKEN" minOccurs="0"></element>
+			<element name="oob" type="token" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+</schema>
