@@ -1,6 +1,5 @@
 package net.trajano.doxdb.internal;
 
-import java.sql.SQLException;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -10,7 +9,6 @@ import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
 import net.trajano.doxdb.DoxFactory;
-import net.trajano.doxdb.jdbc.JdbcDoxFactory;
 import net.trajano.doxdb.spi.DoxProvider;
 
 /**
@@ -33,9 +31,9 @@ public class DoxXmlConfiguredDoxProvider implements
             final String[] doxNames = {
                 "Sample"
             };
-            return new JdbcDoxFactory(dataSource.getConnection(), doxNames);
-        } catch (SQLException
-            | NamingException e) {
+            return null;
+            //            return new JdbcDoxFactory(dataSource.getConnection(), doxNames);
+        } catch (final NamingException e) {
             throw new PersistenceException(e);
         }
     }

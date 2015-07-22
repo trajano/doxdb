@@ -10,6 +10,9 @@ import java.security.Principal;
  * This represents a single physical DoxDB table. There is going to be another
  * one that manages all the other tables. The table creation responsibility
  * would likely move over there.
+ * <p>
+ * Applications are not meant to use this directly.
+ * </p>
  *
  * @author Archimedes
  */
@@ -24,7 +27,7 @@ public interface DoxDAO {
     /**
      * Creates a record in the database. The contentVersion specifies the
      * version of the structure being used for storing.
-     * 
+     *
      * @param in
      * @param contentVersion
      * @param principal
@@ -54,6 +57,8 @@ public interface DoxDAO {
      */
     void exportDox(DoxID doxID,
         OutputStream os) throws IOException;
+
+    int getContentVersion(DoxID id);
 
     /**
      * Get version for optimistic locking for the Dox.
@@ -131,7 +136,5 @@ public interface DoxDAO {
         int contentVersion,
         int version,
         Principal principal);
-
-    int getContentVersion(DoxID id);
 
 }

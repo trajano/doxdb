@@ -1,14 +1,11 @@
 package net.trajano.doxdb.jdbc;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import javax.persistence.PersistenceException;
+import javax.annotation.PostConstruct;
 
-import net.trajano.doxdb.DoxConfiguration;
-import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxFactory;
 
 /**
@@ -21,36 +18,28 @@ import net.trajano.doxdb.DoxFactory;
 public class JdbcDoxFactory implements
     DoxFactory {
 
-    private final Connection c;
+    public JdbcDoxFactory() {
 
-    final Map<String, JdbcDoxDAO> doxen = new ConcurrentHashMap<>();
-
-    public JdbcDoxFactory(final Connection c,
-        final String... doxNames) {
-        this.c = c;
-        for (final String doxName : doxNames) {
-            final DoxConfiguration configuration = new DoxConfiguration();
-            configuration.setTableName(doxName);
-            configuration.setHasOob(true);
-            doxen.put(doxName, new JdbcDoxDAO(c, configuration));
-        }
     }
 
     @Override
     public void close() {
 
-        try {
-            // close all the doxens
-            c.close();
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
-        }
     }
 
-    @Override
-    public DoxDAO getDox(final String name) {
+    @PostConstruct
+    public void init() {
 
-        return doxen.get(name);
+        System.out.println("init from factory");
+        try (BufferedReader is = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/dox.xml")))) {
+            String line = is.readLine();
+            while (line != null) {
+                System.out.println(line);
+                line = is.readLine();
+            }
+        } catch (final IOException e) {
+            throw new ExceptionInInitializerError(e);
+        }
     }
 
 }

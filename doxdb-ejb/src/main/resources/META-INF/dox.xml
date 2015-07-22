@@ -1,0 +1,9 @@
+<dox-provider>
+	<dox name="Sample2">
+		<!-- these should be in their own schema -->
+		<!-- should this drive the REST API? -->
+		<oob name="oobname" />
+		<schema version="1" location="classpathvalue" />
+		<schema version="2" location="classpathvalue" migrator="class" />
+	</dox>
+</dox-provider>
