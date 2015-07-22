@@ -49,6 +49,8 @@ class JdbcLock extends Lock {
     @Override
     public boolean obtain() throws IOException {
 
+        System.out.println(lockFileSql);
+        System.out.println(name);
         try (final PreparedStatement s = connection.prepareStatement(lockFileSql)) {
             s.setString(1, name);
             s.setQueryTimeout(TIMEOUT_SECONDS);

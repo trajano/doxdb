@@ -26,6 +26,12 @@ import net.trajano.doxdb.schema.DoxType;
  * Like an Entity Manager Factory, this is a singleton in relation to an
  * application. It is expected that an EJB jar will load this through the
  * ejb-jar.xml file. The DoxFactory will create the necessary tables.
+ * <p>
+ * This won't scale properly because everything goes to this one instance. What
+ * we need is a way of doing all the operations through an EJB, in theory only
+ * one SLSB EJB is needed.
+ * <p>
+ * However, an Singleton bean is still needed to initialize the SLSB.
  *
  * @author Archimedes
  */

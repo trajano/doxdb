@@ -2,8 +2,7 @@ package net.trajano.doxb.test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.io.PrintWriter;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -17,6 +16,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
+import org.h2.jdbcx.JdbcDataSource;
 import org.junit.Test;
 
 import net.trajano.doxdb.DoxID;
@@ -27,14 +27,18 @@ public class LuceneTest {
     @Test
     public void testLucene() throws Exception {
 
-        Class.forName("org.h2.Driver");
         final DoxID generate = DoxID.generate();
-        final Connection c = DriverManager.getConnection("jdbc:h2:mem:" + generate);
+        final JdbcDataSource ds = new JdbcDataSource();
+        ds.setURL("jdbc:h2:mem:" + generate);
+        ds.setUser("sa");
+        ds.setPassword("sa");
+        ds.setLogWriter(new PrintWriter(System.out));
+
         {
 
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
+            final JdbcDirectory dir = new JdbcDirectory(ds, "searchtable");
             final IndexWriter indexWriter = new IndexWriter(dir, iwc);
 
             final Document doc = new Document();
@@ -42,11 +46,11 @@ public class LuceneTest {
             indexWriter.addDocument(doc);
             indexWriter.commit();
             indexWriter.close();
-            c.commit();
         }
+        ds.getConnection().commit();
         {
 
-            final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
+            final JdbcDirectory dir = new JdbcDirectory(ds, "searchtable");
             final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
             final Analyzer analyzer = new StandardAnalyzer();
             final QueryParser parser = new QueryParser("name", analyzer);
@@ -56,7 +60,7 @@ public class LuceneTest {
             final Document doc = searcher.doc(search.scoreDocs[0].doc);
             assertEquals("value", doc.get("name"));
         }
-        c.close();
+        ds.getConnection().commit();
     }
 
 }

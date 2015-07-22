@@ -7,6 +7,12 @@ import javax.sql.DataSource;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
 
+/**
+ * This will be an SLSB. There should be many instances of this and should be
+ * able to spread through the EJB pool.
+ *
+ * @author trajanar
+ */
 public class JsonDox implements
     Dox {
 

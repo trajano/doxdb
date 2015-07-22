@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://doxdb.trajano.net/schema/"
-	targetNamespace="http://doxdb.trajano.net/schema/"
-	attributeFormDefault="unqualified" elementFormDefault="qualified">
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" targetNamespace="http://doxdb.trajano.net/schema/"
+	jxb:version="1.0" attributeFormDefault="unqualified"
+	elementFormDefault="qualified">
 	<element name="dox-persistence">
 		<complexType>
 			<sequence>
@@ -16,12 +17,42 @@
 			<element name="name" type="NMTOKEN"></element>
 			<element name="schema" type="tns:SchemaType" minOccurs="0"
 				maxOccurs="unbounded"></element>
+			<element name="collection-access-control-class" type="NMTOKEN"
+				minOccurs="0">
+				<annotation>
+					<appinfo>
+						<jxb:property>
+							<jxb:javadoc>Class name that deals with access controls for the
+								collection.
+							</jxb:javadoc>
+						</jxb:property>
+					</appinfo>
+				</annotation>
+			</element>
 		</sequence>
 	</complexType>
 	<complexType name="SchemaType">
+		<annotation>
+			<appinfo>
+				<jxb:class>
+					<jxb:javadoc>A schema definition.
+					</jxb:javadoc>
+				</jxb:class>
+			</appinfo>
+		</annotation>
 		<sequence>
 			<element name="version" type="positiveInteger"></element>
 			<element name="uri" type="anyURI"></element>
+			<element name="access-control-class" type="NMTOKEN"
+				minOccurs="0">
+				<annotation>
+					<appinfo>
+						<jxb:property>
+							<jxb:javadoc>Class name that deals with access controls for a specific record.</jxb:javadoc>
+						</jxb:property>
+					</appinfo>
+				</annotation>
+			</element>
 			<element name="migrator-class" type="NMTOKEN" minOccurs="0"></element>
 			<element name="indexer-class" type="NMTOKEN" minOccurs="0"></element>
 			<element name="eventhandler-class" type="NMTOKEN" minOccurs="0"></element>

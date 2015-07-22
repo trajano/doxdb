@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
+import javax.sql.DataSource;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IOContext;
@@ -19,16 +20,16 @@ import org.apache.lucene.store.Lock;
 
 public class JdbcDirectory extends Directory {
 
-    private final Connection connection;
+    private final DataSource ds;
 
     /**
      * May be passed in the future.
      */
     private final String searchTableName;
 
-    public JdbcDirectory(Connection c,
-        String searchTableName) throws SQLException {
-        connection = c;
+    public JdbcDirectory(final DataSource ds,
+        final String searchTableName) throws SQLException {
+        this.ds = ds;
         this.searchTableName = searchTableName.toUpperCase();
         createSearchTable();
 
@@ -37,19 +38,17 @@ public class JdbcDirectory extends Directory {
     @Override
     public void close() throws IOException {
 
-        try {
-            connection.close();
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
-        }
-
     }
 
     @Override
     public IndexOutput createOutput(final String name,
         final IOContext context) throws IOException {
 
-        return new JdbcIndexOutput(name, connection, searchTableName);
+        try (Connection connection = ds.getConnection()) {
+            return new JdbcIndexOutput(name, connection, searchTableName);
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     /**
@@ -57,46 +56,49 @@ public class JdbcDirectory extends Directory {
      */
     private void createSearchTable() throws SQLException {
 
-        try (final ResultSet tables = connection.getMetaData()
-            .getTables(null, null, searchTableName, null)) {
-            if (!tables.next()) {
+        try (Connection connection = ds.getConnection()) {
+            try (final ResultSet tables = connection.getMetaData()
+                .getTables(null, null, searchTableName, null)) {
+                if (!tables.next()) {
 
-                final int lobSize = 1024 * 1024 * 1024;
-                try (final PreparedStatement s = connection.prepareStatement(String.format("CREATE TABLE %1$s (NAME VARCHAR(256), CONTENT BLOB(%2$d) NOT NULL, CONTENTLENGTH BIGINT, PRIMARY KEY (NAME))", searchTableName, lobSize))) {
-                    s.executeUpdate();
+                    final int lobSize = 1024 * 1024 * 1024;
+                    try (final PreparedStatement s = connection.prepareStatement(String.format("CREATE TABLE %1$s (NAME VARCHAR(256), CONTENT BLOB(%2$d) NOT NULL, CONTENTLENGTH BIGINT, PRIMARY KEY (NAME))", searchTableName, lobSize))) {
+                        s.executeUpdate();
+                    }
                 }
             }
         }
-
     }
 
     @Override
     public void deleteFile(final String name) throws IOException {
 
-        final String deleteFileSql = String.format("delete from %1$s where name = ?", searchTableName);
-        try (final PreparedStatement s = connection.prepareStatement(deleteFileSql)) {
-            s.setString(1, name);
-            final int count = s.executeUpdate();
-            if (count != 1) {
-                throw new PersistenceException("expected a modification but didn't get any.");
+        try (Connection connection = ds.getConnection()) {
+            final String deleteFileSql = String.format("delete from %1$s where name = ?", searchTableName);
+            try (final PreparedStatement s = connection.prepareStatement(deleteFileSql)) {
+                s.setString(1, name);
+                final int count = s.executeUpdate();
+                if (count != 1) {
+                    throw new PersistenceException("expected a modification but didn't get any.");
+                }
             }
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
-
     }
 
     @Override
     public long fileLength(final String name) throws IOException {
 
-        final String fileLengthSql = String.format("select contentlength from %1$s where name = ?", searchTableName);
-        try (PreparedStatement s = connection.prepareStatement(fileLengthSql)) {
-            s.setString(1, name);
-            try (ResultSet rs = s.executeQuery()) {
-                rs.next();
-                return rs.getLong(1);
+        try (Connection connection = ds.getConnection()) {
+            final String fileLengthSql = String.format("select contentlength from %1$s where name = ?", searchTableName);
+            try (PreparedStatement s = connection.prepareStatement(fileLengthSql)) {
+                s.setString(1, name);
+                try (ResultSet rs = s.executeQuery()) {
+                    rs.next();
+                    return rs.getLong(1);
+                }
             }
-
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
@@ -105,16 +107,18 @@ public class JdbcDirectory extends Directory {
     @Override
     public String[] listAll() throws IOException {
 
-        final List<String> all = new LinkedList<>();
-        final String selectFileSql = String.format("select name from %1$s", searchTableName);
-        try (PreparedStatement s = connection.prepareStatement(selectFileSql)) {
-            try (ResultSet rs = s.executeQuery()) {
-                while (rs.next()) {
-                    all.add(rs.getString(1));
-                }
-                return all.toArray(new String[0]);
-            }
+        try (Connection connection = ds.getConnection()) {
 
+            final List<String> all = new LinkedList<>();
+            final String selectFileSql = String.format("select name from %1$s", searchTableName);
+            try (PreparedStatement s = connection.prepareStatement(selectFileSql)) {
+                try (ResultSet rs = s.executeQuery()) {
+                    while (rs.next()) {
+                        all.add(rs.getString(1));
+                    }
+                    return all.toArray(new String[0]);
+                }
+            }
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
@@ -127,27 +131,38 @@ public class JdbcDirectory extends Directory {
     @Override
     public Lock makeLock(final String name) {
 
-        return new JdbcLock(name, connection, searchTableName);
+        System.out.println("locking ... " + name);
+        try (Connection connection = ds.getConnection()) {
+            return new JdbcLock(name, connection, searchTableName);
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     @Override
     public IndexInput openInput(final String name,
         final IOContext context) throws IOException {
 
-        return new JdbcIndexInput(name, connection, searchTableName, context);
+        try (Connection connection = ds.getConnection()) {
+            return new JdbcIndexInput(name, connection, searchTableName, context);
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     @Override
     public void renameFile(final String source,
         final String dest) throws IOException {
 
-        final String renameFileSql = String.format("update %1$s set name = ? where name = ?", searchTableName);
-        try (final PreparedStatement s = connection.prepareStatement(renameFileSql)) {
-            s.setString(1, dest);
-            s.setString(2, source);
-            final int count = s.executeUpdate();
-            if (count != 1) {
-                throw new PersistenceException("expected a modification but didn't get any.");
+        try (Connection connection = ds.getConnection()) {
+            final String renameFileSql = String.format("update %1$s set name = ? where name = ?", searchTableName);
+            try (final PreparedStatement s = connection.prepareStatement(renameFileSql)) {
+                s.setString(1, dest);
+                s.setString(2, source);
+                final int count = s.executeUpdate();
+                if (count != 1) {
+                    throw new PersistenceException("expected a modification but didn't get any.");
+                }
             }
         } catch (final SQLException e) {
             throw new PersistenceException(e);

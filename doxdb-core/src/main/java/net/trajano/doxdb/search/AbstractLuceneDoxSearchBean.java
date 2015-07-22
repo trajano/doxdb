@@ -52,8 +52,6 @@ public abstract class AbstractLuceneDoxSearchBean implements
 
     private static final String FIELD_TEXT = "\t text";
 
-    private Connection connection;
-
     /**
      * Flag to indicate that the {@link Connection} is from a {@link DataSource}
      * . This is <code>false</code> when {@link #setConnection(Connection)} is
@@ -80,7 +78,7 @@ public abstract class AbstractLuceneDoxSearchBean implements
     }
 
     @Override
-    public void addToIndex(IndexView indexView) {
+    public void addToIndex(final IndexView indexView) {
 
         try {
             final Document doc = buildFromIndexView(indexView);
@@ -91,7 +89,7 @@ public abstract class AbstractLuceneDoxSearchBean implements
         }
     }
 
-    private IndexView buildFromDoc(Document doc) {
+    private IndexView buildFromDoc(final Document doc) {
 
         final IndexView ret = new IndexView();
         for (final IndexableField field : doc.getFields()) {
@@ -111,7 +109,7 @@ public abstract class AbstractLuceneDoxSearchBean implements
 
     }
 
-    private Document buildFromIndexView(IndexView indexView) {
+    private Document buildFromIndexView(final IndexView indexView) {
 
         final Document doc = new Document();
         doc.add(new StringField(FIELD_INDEX, indexView.getIndex(), Store.YES));
@@ -134,7 +132,7 @@ public abstract class AbstractLuceneDoxSearchBean implements
 
     }
 
-    private SearchResult buildSearchResults(TopDocs search) throws IOException {
+    private SearchResult buildSearchResults(final TopDocs search) throws IOException {
 
         final SearchResult result = new SearchResult();
         result.setTotalHits(search.totalHits);
@@ -152,11 +150,7 @@ public abstract class AbstractLuceneDoxSearchBean implements
 
         try {
             indexWriter.close();
-            if (connectionFromDataSource) {
-                connection.close();
-            }
-        } catch (IOException
-            | SQLException e) {
+        } catch (final IOException e) {
             throw new PersistenceException(e);
         }
     }
@@ -167,11 +161,10 @@ public abstract class AbstractLuceneDoxSearchBean implements
     public void init() {
 
         try {
-            connection = ds.getConnection();
 
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(connection, getSearchTableName());
+            final JdbcDirectory dir = new JdbcDirectory(ds, getSearchTableName());
             indexWriter = new IndexWriter(dir, iwc);
             indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));
         } catch (final IOException
@@ -181,9 +174,9 @@ public abstract class AbstractLuceneDoxSearchBean implements
     }
 
     @Override
-    public SearchResult search(String index,
-        String queryString,
-        int limit) {
+    public SearchResult search(final String index,
+        final String queryString,
+        final int limit) {
 
         try {
             final Analyzer analyzer = new StandardAnalyzer();
@@ -200,16 +193,6 @@ public abstract class AbstractLuceneDoxSearchBean implements
             | ParseException e) {
             throw new PersistenceException(e);
         }
-    }
-
-    /**
-     * Used for unit testing.
-     *
-     * @param connection
-     */
-    public void setConnection(Connection connection) {
-
-        this.connection = connection;
     }
 
 }

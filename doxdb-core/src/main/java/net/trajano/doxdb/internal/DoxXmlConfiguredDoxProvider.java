@@ -15,6 +15,9 @@ import net.trajano.doxdb.spi.DoxProvider;
  * The provider is implemented as an EJB. This will read the Dox configuration
  * from META-INF/dox.xml of the current class loader. It is also responsible for
  * getting the JDBC connection from the default data source.
+ * <p>
+ * Can we have two EJB JARs? one with the customization and one with the
+ * infrastructure?
  *
  * @author Archimedes
  */
