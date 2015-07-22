@@ -3,13 +3,4 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
       	  http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd"
 	version="3.2" metadata-complete="false">
-	<enterprise-beans>
-		<session>
-			<ejb-name>DoxProvider</ejb-name>
-			<business-local>net.trajano.doxdb.DoxFactory</business-local>
-			<ejb-class>net.trajano.doxdb.jdbc.JdbcDoxFactory</ejb-class>
-			<session-type>Singleton</session-type>
-			<init-on-startup>true</init-on-startup>
-		</session>
-	</enterprise-beans>
 </ejb-jar>
