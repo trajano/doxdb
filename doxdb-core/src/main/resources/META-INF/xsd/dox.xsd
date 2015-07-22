@@ -14,7 +14,8 @@
 	<complexType name="DoxType">
 		<sequence>
 			<element name="name" type="NMTOKEN"></element>
-			<element name="schema" type="tns:SchemaType"></element>
+			<element name="schema" type="tns:SchemaType" minOccurs="0"
+				maxOccurs="unbounded"></element>
 		</sequence>
 	</complexType>
 	<complexType name="SchemaType">
