@@ -8,6 +8,7 @@
     </parent>
     <artifactId>doxdb-sample-ejb</artifactId>
     <packaging>ejb</packaging>
+    <description>This project will contain the customizations.  Along with the EAR and the WAR, although the WAR can be used as an overlay.</description>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

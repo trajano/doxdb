@@ -8,7 +8,7 @@ import javax.naming.NamingException;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
-import net.trajano.doxdb.DoxFactory;
+import net.trajano.doxdb.ConfigurationProvider;
 import net.trajano.doxdb.spi.DoxProvider;
 
 /**
@@ -25,7 +25,7 @@ public class DoxXmlConfiguredDoxProvider implements
     DoxProvider {
 
     @Override
-    public DoxFactory createDoxFactory(final String name,
+    public ConfigurationProvider createDoxFactory(final String name,
         final Map<String, String> options) {
 
         try {

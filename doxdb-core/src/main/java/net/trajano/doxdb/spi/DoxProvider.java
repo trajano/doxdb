@@ -2,10 +2,10 @@ package net.trajano.doxdb.spi;
 
 import java.util.Map;
 
-import net.trajano.doxdb.DoxFactory;
+import net.trajano.doxdb.ConfigurationProvider;
 
 public interface DoxProvider {
 
-    DoxFactory createDoxFactory(String name,
+    ConfigurationProvider createDoxFactory(String name,
         Map<String, String> options);
 }

@@ -8,6 +8,7 @@
     </parent>
     <artifactId>doxdb-ejb</artifactId>
     <packaging>ejb</packaging>
+    <description>This contains data infrastructure related modules.</description>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
