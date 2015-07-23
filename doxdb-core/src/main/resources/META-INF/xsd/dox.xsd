@@ -14,22 +14,44 @@
 	</element>
 	<complexType name="DoxType">
 		<sequence>
-			<element name="name" type="NMTOKEN"></element>
 			<element name="schema" type="tns:SchemaType" minOccurs="0"
 				maxOccurs="unbounded"></element>
-			<element name="collection-access-control-class" type="NMTOKEN"
-				minOccurs="0">
-				<annotation>
-					<appinfo>
-						<jxb:property>
-							<jxb:javadoc>Class name that deals with access controls for the
-								collection.
-							</jxb:javadoc>
-						</jxb:property>
-					</appinfo>
-				</annotation>
-			</element>
+
 		</sequence>
+		<attribute name="name" type="NMTOKEN" use="required"></attribute>
+		<attribute name="size" type="positiveInteger" default="1073741824"></attribute>
+		<attribute name="oob" type="boolean" default="false">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Indicates whther OOB tables should be created.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+		<attribute name="oobSize" type="positiveInteger" default="2147483647">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Size of an OOB in bytes. Defaults to 2GB. Ignored if
+							oob is false.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+		<attribute name="collection-access-control-class" type="NMTOKEN">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Class name that deals with access controls for the
+							collection.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
 	</complexType>
 	<complexType name="SchemaType">
 		<annotation>
@@ -41,22 +63,23 @@
 			</appinfo>
 		</annotation>
 		<sequence>
-			<element name="version" type="positiveInteger"></element>
-			<element name="uri" type="anyURI"></element>
-			<element name="access-control-class" type="NMTOKEN"
-				minOccurs="0">
-				<annotation>
-					<appinfo>
-						<jxb:property>
-							<jxb:javadoc>Class name that deals with access controls for a specific record.</jxb:javadoc>
-						</jxb:property>
-					</appinfo>
-				</annotation>
-			</element>
-			<element name="migrator-class" type="NMTOKEN" minOccurs="0"></element>
-			<element name="indexer-class" type="NMTOKEN" minOccurs="0"></element>
-			<element name="eventhandler-class" type="NMTOKEN" minOccurs="0"></element>
 			<element name="oob" type="token" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
+		<attribute name="version" type="positiveInteger" use="required"></attribute>
+		<attribute name="uri" type="anyURI" use="required"></attribute>
+		<attribute name="access-control-class" type="NMTOKEN">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Class name that deals with access controls for a
+							specific record.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+		<attribute name="migrator-class" type="NMTOKEN"></attribute>
+		<attribute name="indexer-class" type="NMTOKEN"></attribute>
+		<attribute name="eventhandler-class" type="NMTOKEN"></attribute>
 	</complexType>
 </schema>

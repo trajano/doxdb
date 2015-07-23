@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.trajano.doxdb.sample.json.Country;
-import net.trajano.doxdb.sample.json.Horse;
-import net.trajano.doxdb.sample.json.Horse.Gender;
+import net.trajano.doxdb.ejb.json.Country;
+import net.trajano.doxdb.ejb.json.Horse;
+import net.trajano.doxdb.ejb.json.Horse.Gender;
 
 public class JsonBindingTest {
 

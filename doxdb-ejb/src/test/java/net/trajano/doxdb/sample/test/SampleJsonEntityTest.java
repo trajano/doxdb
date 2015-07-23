@@ -11,8 +11,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.ejb.SampleJsonBean;
 import net.trajano.doxdb.jdbc.DoxPrincipal;
-import net.trajano.doxdb.sample.SampleJsonBean;
 
 public class SampleJsonEntityTest extends AbstractEntityTest {
 
