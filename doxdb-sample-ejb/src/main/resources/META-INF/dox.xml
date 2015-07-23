@@ -2,6 +2,9 @@
 <dox-persistence xmlns="http://doxdb.trajano.net/schema/"
 	xsi:schemaLocation="http://doxdb.trajano.net/schema/ ../../../../../doxdb-core/src/main/resources/META-INF/xsd/dox.xsd"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<dox name="Sample2" oob="true" collection-access-control="java:bar">
+		<schema version="1" uri="1" />
+	</dox>
 	<dox name="Sample2" oob="true">
 		<schema version="1" uri="1" />
 	</dox>

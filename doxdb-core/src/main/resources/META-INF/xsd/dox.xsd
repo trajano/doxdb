@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://doxdb.trajano.net/schema/"
 	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" targetNamespace="http://doxdb.trajano.net/schema/"
-	jxb:version="1.0" attributeFormDefault="unqualified"
+	jxb:version="2.0" attributeFormDefault="unqualified"
 	elementFormDefault="qualified">
 	<element name="dox-persistence">
 		<complexType>
 			<sequence>
 				<element type="tns:DoxType" name="dox" minOccurs="1"
-					maxOccurs="unbounded">
-				</element>
+					maxOccurs="unbounded" />
 			</sequence>
 		</complexType>
+		<unique name="uniqueAuthor">
+			<selector xpath="dox" />
+			<field xpath="@name" />
+		</unique>
 	</element>
+	<simpleType name="JndiNameType">
+		<restriction base="token">
+			<minLength value="1" />
+			<pattern value="(java:)?([\w][\w\./]+\w|\w)" />
+		</restriction>
+	</simpleType>
 	<complexType name="DoxType">
 		<sequence>
 			<element name="schema" type="tns:SchemaType" minOccurs="0"
-				maxOccurs="unbounded"></element>
-
+				maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="name" type="NMTOKEN" use="required"></attribute>
-		<attribute name="size" type="positiveInteger" default="1073741824"></attribute>
+		<attribute name="name" type="NMTOKEN" use="required" />
+		<attribute name="size" type="positiveInteger" default="1073741824">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Size of the content in bytes. Defaults to 1GB.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
 		<attribute name="oob" type="boolean" default="false">
 			<annotation>
 				<appinfo>
@@ -41,12 +58,13 @@
 				</appinfo>
 			</annotation>
 		</attribute>
-		<attribute name="collection-access-control-class" type="NMTOKEN">
+		<attribute name="collection-access-control" type="tns:JndiNameType">
 			<annotation>
 				<appinfo>
 					<jxb:property>
-						<jxb:javadoc>Class name that deals with access controls for the
-							collection.
+						<jxb:javadoc>JNDI name that points to the access control provider
+							EJB for the collection. It should implement
+							net.trajano.doxdb.CollectionAccessControl.
 						</jxb:javadoc>
 					</jxb:property>
 				</appinfo>
@@ -63,10 +81,10 @@
 			</appinfo>
 		</annotation>
 		<sequence>
-			<element name="oob" type="token" minOccurs="0" maxOccurs="unbounded"></element>
+			<element name="oob" type="token" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="version" type="positiveInteger" use="required">
-					<annotation>
+			<annotation>
 				<appinfo>
 					<jxb:property>
 						<jxb:javadoc>Specifies the version identifier for the schema.
@@ -75,20 +93,21 @@
 				</appinfo>
 			</annotation>
 		</attribute>
-		<attribute name="uri" type="anyURI" use="required"></attribute>
-		<attribute name="access-control-class" type="NMTOKEN">
+		<attribute name="uri" type="anyURI" use="required" />
+		<attribute name="access-control" type="tns:JndiNameType">
 			<annotation>
 				<appinfo>
 					<jxb:property>
-						<jxb:javadoc>Class name that deals with access controls for a
-							specific record.
+						<jxb:javadoc>JNDI name that points to the access control provider
+							EJB for the Dox. It should implement
+							net.trajano.doxdb.DoxAccessControl.
 						</jxb:javadoc>
 					</jxb:property>
 				</appinfo>
 			</annotation>
 		</attribute>
-		<attribute name="migrator-class" type="NMTOKEN"></attribute>
-		<attribute name="indexer-class" type="NMTOKEN"></attribute>
-		<attribute name="eventhandler-class" type="NMTOKEN"></attribute>
+		<attribute name="migrator" type="tns:JndiNameType" />
+		<attribute name="indexer" type="tns:JndiNameType" />
+		<attribute name="eventhandler" type="tns:JndiNameType" />
 	</complexType>
 </schema>
