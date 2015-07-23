@@ -65,7 +65,16 @@
 		<sequence>
 			<element name="oob" type="token" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
-		<attribute name="version" type="positiveInteger" use="required"></attribute>
+		<attribute name="version" type="positiveInteger" use="required">
+					<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Specifies the version identifier for the schema.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
 		<attribute name="uri" type="anyURI" use="required"></attribute>
 		<attribute name="access-control-class" type="NMTOKEN">
 			<annotation>
