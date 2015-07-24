@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.Singleton;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
@@ -36,15 +36,17 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxSearch;
 import net.trajano.doxdb.search.IndexView;
 import net.trajano.doxdb.search.SearchResult;
 
 /**
- * Implementers of this class do not require the {@link Singleton} annotation.
+ * Handles lucene searches.
  *
  * @author Archimedes
  */
 @Stateless
+@Remote(DoxSearch.class)
 public class LuceneDoxSearchBean implements
     DoxSearch {
 
@@ -102,6 +104,8 @@ public class LuceneDoxSearchBean implements
                     .longValue());
             }
         }
+        ret.setDoxID(new DoxID(doc.get(FIELD_ID)));
+        ret.setIndex(doc.get(FIELD_INDEX));
         return ret;
 
     }
@@ -160,6 +164,8 @@ public class LuceneDoxSearchBean implements
     public SearchResult search(final String index,
         final String queryString,
         final int limit) {
+
+        // TODO verify access to index for user
 
         try (final Connection c = ds.getConnection()) {
             final Analyzer analyzer = new StandardAnalyzer();

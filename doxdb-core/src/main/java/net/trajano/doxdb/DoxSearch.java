@@ -1,8 +1,7 @@
-package net.trajano.doxdb.search.lucene;
+package net.trajano.doxdb;
 
 import javax.ejb.Asynchronous;
 
-import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.search.IndexView;
 import net.trajano.doxdb.search.SearchResult;
 

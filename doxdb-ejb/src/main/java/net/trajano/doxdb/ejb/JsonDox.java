@@ -49,6 +49,7 @@ import net.trajano.doxdb.CollectionAccessControl;
 import net.trajano.doxdb.ConfigurationProvider;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxSearch;
 import net.trajano.doxdb.Indexer;
 import net.trajano.doxdb.ejb.internal.SqlConstants;
 import net.trajano.doxdb.jdbc.DocumentMeta;
@@ -57,7 +58,6 @@ import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
 import net.trajano.doxdb.search.IndexView;
-import net.trajano.doxdb.search.lucene.DoxSearch;
 
 /**
  * This will be an SLSB. There should be many instances of this and should be

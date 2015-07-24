@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import net.trajano.doxdb.DoxID;
+
 /**
  * This represents a view of the data that will be stored in the index.
  *
@@ -20,6 +22,11 @@ public class IndexView implements
     private static final long serialVersionUID = -378816417510576056L;
 
     private final ConcurrentMap<String, Double> doubles = new ConcurrentHashMap<>();
+
+    /**
+     * Associated DoxID that was used to populate the view.
+     */
+    private DoxID doxID;
 
     /**
      * Defines the index that will store this data view. The purpose is to allow
@@ -54,6 +61,11 @@ public class IndexView implements
     public Set<Entry<String, Double>> getDoubles() {
 
         return doubles.entrySet();
+    }
+
+    public DoxID getDoxID() {
+
+        return doxID;
     }
 
     public String getIndex() {
@@ -91,6 +103,12 @@ public class IndexView implements
 
         doubles.put(name, value);
         return this;
+    }
+
+    public void setDoxID(final DoxID doxId) {
+
+        doxID = doxId;
+
     }
 
     public IndexView setIndex(final String index) {

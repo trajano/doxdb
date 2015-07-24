@@ -1,22 +1,30 @@
 package net.trajano.doxdb.search;
 
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SearchResult {
+public class SearchResult implements
+    Serializable {
+
+    /**
+     * bare_field_name.
+     */
+    private static final long serialVersionUID = 4059685393021065762L;
 
     private final List<IndexView> hits = new LinkedList<>();
 
     private int totalHits;
 
-    public void addHit(IndexView hit) {
+    public void addHit(final IndexView hit) {
 
         hits.add(hit);
     }
 
-    public IndexView[] getHits() {
+    public List<IndexView> getHits() {
 
-        return hits.toArray(new IndexView[0]);
+        return Collections.unmodifiableList(hits);
     }
 
     public int getTotalHits() {
@@ -24,7 +32,7 @@ public class SearchResult {
         return totalHits;
     }
 
-    public void setTotalHits(int totalHits) {
+    public void setTotalHits(final int totalHits) {
 
         this.totalHits = totalHits;
     }

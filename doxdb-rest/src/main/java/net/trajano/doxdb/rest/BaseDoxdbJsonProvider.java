@@ -1,8 +1,13 @@
 package net.trajano.doxdb.rest;
 
+import java.util.Map.Entry;
+
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,11 +15,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxSearch;
+import net.trajano.doxdb.search.IndexView;
+import net.trajano.doxdb.search.SearchResult;
 
 /**
  * This class is extended by clients to provide a list of objects that are
@@ -32,6 +41,7 @@ import net.trajano.doxdb.DoxID;
  * module? Let's try separate web module first.
  *
  * <pre>
+ * GET search/{index}?q={query}
  * GET {collection}/{id : [A-Za-z0-9]{32} }
  * GET {collection}/{id : [A-Za-z0-9]{32} }/{oobname}
  * POST {collection}
@@ -49,6 +59,9 @@ public class BaseDoxdbJsonProvider {
 
     @EJB(beanInterface = Dox.class)
     private Dox dox;
+
+    @EJB(beanInterface = DoxSearch.class)
+    private DoxSearch doxSearch;
 
     @Path("{collection}")
     @POST
@@ -115,6 +128,35 @@ public class BaseDoxdbJsonProvider {
         } else {
             return save(collection, idOrOp, content);
         }
+    }
+
+    @GET
+    @Path("search/{index}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response simpleSearch(@PathParam("index") final String index,
+        @QueryParam("q") final String queryString) {
+
+        final SearchResult results = doxSearch.search(index, queryString, 50);
+        //results.get
+        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
+        for (final IndexView hit : results.getHits()) {
+            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
+            hitBuilder.add("_id", hit.getDoxID().toString());
+            hitBuilder.add("_index", hit.getIndex());
+            for (final Entry<String, Double> entry : hit.getDoubles()) {
+                hitBuilder.add(entry.getKey(), entry.getValue());
+            }
+            for (final Entry<String, Long> entry : hit.getLongs()) {
+                hitBuilder.add(entry.getKey(), entry.getValue());
+            }
+            for (final Entry<String, String> entry : hit.getStrings()) {
+                hitBuilder.add(entry.getKey(), entry.getValue());
+            }
+            hitBuilder.add("_index", hit.getIndex());
+            hitsBuilder.add(hitBuilder);
+        }
+        final JsonObject resultJson = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder).build();
+        return Response.ok().entity(resultJson).build();
     }
 
 }
