@@ -55,6 +55,11 @@ public class LuceneDoxSearchBean implements
     private static final String FIELD_TEXT = "\t text";
 
     /**
+     * Table name for the search index.
+     */
+    private static final String SEARCHINDEX = "SEARCHINDEX";
+
+    /**
      * The data source. It is required that the datasource be XA enabled so it
      * can co-exist with JPA and other operations.
      */
@@ -69,7 +74,7 @@ public class LuceneDoxSearchBean implements
         final IndexView indexView) {
 
         try (final Connection c = ds.getConnection()) {
-            final JdbcDirectory dir = new JdbcDirectory(c, "SEARCHINDEX");
+            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 final Document doc = buildFromIndexView(index, doxid, indexView);
                 indexWriter.updateDocument(new Term(FIELD_ID, doxid
@@ -164,7 +169,7 @@ public class LuceneDoxSearchBean implements
             final BooleanQuery booleanQuery = new BooleanQuery();
             booleanQuery.add(query, Occur.MUST);
             booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
-            final JdbcDirectory dir = new JdbcDirectory(c, "SEARCHINDEX");
+            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
 
                 final IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));
