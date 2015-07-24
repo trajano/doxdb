@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://doxdb.trajano.net/schema/"
-	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" targetNamespace="http://doxdb.trajano.net/schema/"
-	jxb:version="2.0" attributeFormDefault="unqualified"
-	elementFormDefault="qualified">
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jxb:extensionBindingPrefixes="xjc" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	targetNamespace="http://doxdb.trajano.net/schema/" jxb:version="2.0"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+	<annotation>
+		<appinfo>
+			<jxb:globalBindings generateIsSetMethod="true">
+				<xjc:serializable uid="20150101" />
+			</jxb:globalBindings>
+		</appinfo>
+	</annotation>
+
 	<element name="dox-persistence">
+
 		<complexType>
 			<sequence>
 				<element type="tns:DoxType" name="dox" minOccurs="1"

@@ -1,7 +1,10 @@
 package net.trajano.doxdb.rest;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.ManagedBean;
+import javax.ejb.EJB;
+import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,6 +14,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import net.trajano.doxdb.Dox;
+import net.trajano.doxdb.DoxID;
 
 /**
  * This class is extended by clients to provide a list of objects that are
@@ -39,7 +45,12 @@ import javax.ws.rs.core.Response;
  *
  * @author Archimedes
  */
-public abstract class BaseDoxdbJsonProvider {
+@Path("")
+@ManagedBean
+public class BaseDoxdbJsonProvider {
+
+    @EJB(beanInterface = Dox.class)
+    private Dox dox;
 
     @Path("{collection}")
     @POST
@@ -50,6 +61,13 @@ public abstract class BaseDoxdbJsonProvider {
 
         System.out.println("collection=" + collection);
         System.out.println("content=" + content);
+        System.out.println("dox=" + dox);
+        content.remove("_id");
+        final DoxID doxID = dox.create(collection, content.toString());
+
+        final JsonObjectBuilder idObjectBuilder = Json.createObjectBuilder();
+        final JsonObject idObject = idObjectBuilder.add("_id", doxID.toString()).build();
+        content.put("_id", idObject.getJsonString("_id"));
 
         // what this would do is given a *single* DoxDAO to get a JsonDoxCollection and then get the appropriate record?
         // it is expected that the requester would know what kind of collection to get?
@@ -79,14 +97,6 @@ public abstract class BaseDoxdbJsonProvider {
         return Response.ok().entity(collection + " " + id).build();
     }
 
-    protected abstract String[] getRegisteredSchemaResources();
-
-    @PostConstruct
-    public void init() {
-
-        System.out.println("schemas=" + getRegisteredSchemaResources());
-    }
-
     @POST
     @Path("{collection}/{operation : _[A-Za-z0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -96,6 +106,15 @@ public abstract class BaseDoxdbJsonProvider {
         final JsonObject content) {
 
         return Response.ok().entity(collection + " " + op).build();
+    }
+
+    @GET
+    @Path("hello")
+    public Response ping() {
+
+        System.out.println("dox=" + dox);
+        dox.noop();
+        return Response.ok().entity("dox= " + dox).build();
     }
 
     @POST

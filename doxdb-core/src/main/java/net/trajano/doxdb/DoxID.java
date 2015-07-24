@@ -1,5 +1,6 @@
 package net.trajano.doxdb;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -11,7 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Archimedes
  */
-public final class DoxID {
+public final class DoxID implements
+    Serializable {
 
     /**
      * Set of allowed characters in the ID. Letters or numbers only. This
@@ -29,6 +31,11 @@ public final class DoxID {
      * Size of the ID in bytes.
      */
     public static final int LENGTH = 32;
+
+    /**
+     * bare_field_name.
+     */
+    private static final long serialVersionUID = -1726922680838907757L;
 
     static {
         ALLOWED = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
