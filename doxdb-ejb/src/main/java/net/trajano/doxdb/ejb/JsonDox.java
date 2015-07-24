@@ -3,6 +3,8 @@ package net.trajano.doxdb.ejb;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,14 +26,17 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
+import org.bson.BsonBinaryReader;
 import org.bson.BsonBinaryWriter;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
 import org.bson.codecs.BsonDocumentCodec;
+import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.bson.io.BasicOutputBuffer;
 
@@ -47,10 +52,14 @@ import net.trajano.doxdb.CollectionAccessControl;
 import net.trajano.doxdb.ConfigurationProvider;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.Indexer;
 import net.trajano.doxdb.ejb.internal.SqlConstants;
+import net.trajano.doxdb.jdbc.DocumentMeta;
+import net.trajano.doxdb.jdbc.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
+import net.trajano.doxdb.search.lucene.DoxSearch;
 
 /**
  * This will be an SLSB. There should be many instances of this and should be
@@ -72,6 +81,9 @@ public class JsonDox implements
     private transient Map<String, SchemaType> currentSchemaMap = new HashMap<>();
 
     private transient Map<String, DoxType> doxen = new HashMap<>();
+
+    @EJB
+    private DoxSearch doxSearchBean;
 
     @Resource
     private DataSource ds;
@@ -139,6 +151,8 @@ public class JsonDox implements
             document.put("_id", new BsonString(doxId.toString()));
             new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), document, EncoderContext.builder()
                 .build());
+
+            final String storedJson = document.toJson();
             try (final InputStream in = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
 
                 try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.INSERT, config.getName().toUpperCase()), Statement.RETURN_GENERATED_KEYS)) {
@@ -155,7 +169,12 @@ public class JsonDox implements
 
                     if (config.getCollectionAccessControl() != null) {
                         final CollectionAccessControl accessControl = getObjectFromContext(config.getCollectionAccessControl(), CollectionAccessControl.class);
-                        s.setBytes(9, null);
+
+                        if (!accessControl.allowedCreate(storedJson, ctx.getCallerPrincipal())) {
+                            throw new PersistenceException("not allowed");
+                        }
+
+                        s.setBytes(9, getObjectFromContext(schema.getIndexer(), CollectionAccessControl.class).buildAccessKey(storedJson, ctx.getCallerPrincipal()));
                     } else {
                         s.setBytes(9, null);
                     }
@@ -163,7 +182,12 @@ public class JsonDox implements
                     s.executeUpdate();
                     try (final ResultSet rs = s.getGeneratedKeys()) {
                         rs.next();
-                        return document.toJson();
+
+                        if (schema.getIndexer() != null) {
+                            doxSearchBean.addToIndex(getObjectFromContext(schema.getIndexer(), Indexer.class).buildIndexView(storedJson));
+                        }
+
+                        return storedJson;
                     }
                 }
             }
@@ -228,6 +252,80 @@ public class JsonDox implements
     @Override
     public void noop() {
 
+    }
+
+    @Override
+    public String read(final String collectionName,
+        final DoxID id) {
+
+        final DoxType config = doxen.get(collectionName);
+        final SchemaType schema = currentSchemaMap.get(collectionName);
+
+        try (Connection c = ds.getConnection()) {
+
+            final DocumentMeta meta = readMeta(c, config.getName(), id);
+
+            // TODO migrate data if needed.
+
+            // TODO check the security.
+            final BsonDocument document = readContent(c, config.getName(), meta.getId());
+
+            return document.toJson();
+
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    private BsonDocument readContent(final Connection c,
+        final String collectionName,
+        final long id) {
+
+        try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.READCONTENT, collectionName.toUpperCase()))) {
+            s.setLong(1, id);
+            try (final ResultSet rs = s.executeQuery()) {
+                if (!rs.next()) {
+                    throw new EntityNotFoundException();
+                }
+
+                final Blob blob = rs.getBlob(1);
+
+                final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(blob.getBytes(1, (int) blob.length()))), DecoderContext.builder()
+                    .build());
+                blob.free();
+                return decoded;
+            }
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+
+    }
+
+    private DocumentMeta readMeta(final Connection c,
+        final String collectionName,
+        final DoxID id) {
+
+        try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.READ, collectionName.toUpperCase()))) {
+            s.setString(1, id.toString());
+            try (final ResultSet rs = s.executeQuery()) {
+                if (!rs.next()) {
+                    throw new EntityNotFoundException();
+                }
+                final DocumentMeta meta = new DocumentMeta();
+                meta.setId(rs.getLong(1));
+                meta.setDoxId(new DoxID(rs.getString(2)));
+                meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
+                meta.setCreatedOn(rs.getTimestamp(4));
+                meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
+                meta.setLastUpdatedOn(rs.getTimestamp(6));
+                meta.setVersion(rs.getInt(7));
+                meta.setContentVersion(rs.getInt(8));
+                meta.setAccessKey(rs.getBytes(9));
+                return meta;
+            }
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     private void validate(final JsonSchema schema,

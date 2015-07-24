@@ -1,4 +1,7 @@
-package net.trajano.doxdb.search;
+package net.trajano.doxdb.search.lucene;
+
+import net.trajano.doxdb.search.IndexView;
+import net.trajano.doxdb.search.SearchResult;
 
 public interface DoxSearch {
 

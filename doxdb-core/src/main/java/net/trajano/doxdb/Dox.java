@@ -20,4 +20,7 @@ public interface Dox {
      */
     void noop();
 
+    String read(String collectionName,
+        DoxID id);
+
 }

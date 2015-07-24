@@ -9,6 +9,10 @@ import net.trajano.doxdb.DoxID;
 
 public class DocumentMeta {
 
+    private byte[] accessKey;
+
+    private int contentVersion;
+
     private DoxPrincipal createdBy;
 
     private Date createdOn;
@@ -22,6 +26,16 @@ public class DocumentMeta {
     private Date lastUpdatedOn;
 
     private int version;
+
+    public byte[] getAccessKey() {
+
+        return accessKey;
+    }
+
+    public int getContentVersion() {
+
+        return contentVersion;
+    }
 
     public DoxPrincipal getCreatedBy() {
 
@@ -72,6 +86,16 @@ public class DocumentMeta {
         return version;
     }
 
+    public void setAccessKey(final byte[] accessKey) {
+
+        this.accessKey = accessKey;
+    }
+
+    public void setContentVersion(final int contentVersion) {
+
+        this.contentVersion = contentVersion;
+    }
+
     public void setCreatedBy(final DoxPrincipal createdBy) {
 
         this.createdBy = createdBy;
@@ -92,16 +116,6 @@ public class DocumentMeta {
         this.id = id;
     }
 
-    public int getContentVersion() {
-
-        return contentVersion;
-    }
-
-    public void setContentVersion(int contentVersion) {
-
-        this.contentVersion = contentVersion;
-    }
-
     public void setLastUpdatedBy(final DoxPrincipal lastUpdatedBy) {
 
         this.lastUpdatedBy = lastUpdatedBy;
@@ -116,6 +130,4 @@ public class DocumentMeta {
 
         this.version = version;
     }
-
-    private int contentVersion;
 }

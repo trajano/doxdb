@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import net.trajano.doxdb.Dox;
+import net.trajano.doxdb.DoxID;
 
 /**
  * This class is extended by clients to provide a list of objects that are
@@ -70,23 +71,20 @@ public class BaseDoxdbJsonProvider {
     }
 
     @GET
-    @Path("{collection}/{id : [A-Za-z0-9]{32} }")
+    @Path("{collection}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("collection") final String collection,
         @PathParam("id") final String id) {
 
-        return Response.ok().entity(collection + " " + id).build();
+        return Response.ok().entity(dox.read(collection, new DoxID(id))).build();
     }
 
-    @POST
-    @Path("{collection}/{operation : _[A-Za-z0-9]+}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response op(@PathParam("collection") final String collection,
-        @PathParam("operation") final String op,
+    private Response op(final String collection,
+        final String opName,
         final JsonObject content) {
 
-        return Response.ok().entity(collection + " " + op).build();
+        System.out.println(collection + " " + opName + " SAVE");
+        return Response.ok().entity(content).build();
     }
 
     @GET
@@ -98,12 +96,25 @@ public class BaseDoxdbJsonProvider {
         return Response.ok().entity("dox= " + dox).build();
     }
 
-    @POST
-    @Path("{collection}/{id : [A-Za-z0-9]{32} }")
-    public Response save(@PathParam("collection") final String collection,
-        @PathParam("id") final String id) {
+    private Response save(final String collection,
+        final String id,
+        final JsonObject content) {
 
-        return Response.ok().entity(collection + " " + id).build();
+        System.out.println(collection + " " + id + " SAVE");
+        return Response.ok().entity(content).build();
+    }
+
+    @POST
+    @Path("{collection}/{idOrOp}")
+    public Response saveOrOp(@PathParam("collection") final String collection,
+        @PathParam("idOrOp") final String idOrOp,
+        final JsonObject content) {
+
+        if (idOrOp.startsWith("_")) {
+            return op(collection, idOrOp.substring(1), content);
+        } else {
+            return save(collection, idOrOp, content);
+        }
     }
 
 }

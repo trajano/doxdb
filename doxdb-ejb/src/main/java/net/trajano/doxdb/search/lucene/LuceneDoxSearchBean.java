@@ -1,7 +1,6 @@
-package net.trajano.doxdb.search;
+package net.trajano.doxdb.search.lucene;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
@@ -9,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
@@ -35,29 +35,23 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
-import net.trajano.doxdb.search.lucene.JdbcDirectory;
+import net.trajano.doxdb.search.IndexView;
+import net.trajano.doxdb.search.SearchResult;
 
 /**
  * Implementers of this class do not require the {@link Singleton} annotation.
  *
  * @author Archimedes
  */
-public abstract class AbstractLuceneDoxSearchBean implements
-    DoxSearch,
-    AutoCloseable {
+@Stateless
+public class LuceneDoxSearchBean implements
+    DoxSearch {
 
     private static final String FIELD_ID = "\t id";
 
     private static final String FIELD_INDEX = "\t index";
 
     private static final String FIELD_TEXT = "\t text";
-
-    /**
-     * Flag to indicate that the {@link Connection} is from a {@link DataSource}
-     * . This is <code>false</code> when {@link #setConnection(Connection)} is
-     * used for testing.
-     */
-    private boolean connectionFromDataSource;
 
     /**
      * The data source. It is required that the datasource be XA enabled so it
@@ -72,10 +66,6 @@ public abstract class AbstractLuceneDoxSearchBean implements
      * Maps directories to
      */
     private transient IndexWriter indexWriter;
-
-    protected AbstractLuceneDoxSearchBean() {
-
-    }
 
     @Override
     public void addToIndex(final IndexView indexView) {
@@ -144,7 +134,6 @@ public abstract class AbstractLuceneDoxSearchBean implements
         return result;
     }
 
-    @Override
     @PreDestroy
     public void close() {
 
@@ -155,8 +144,6 @@ public abstract class AbstractLuceneDoxSearchBean implements
         }
     }
 
-    protected abstract String getSearchTableName();
-
     @PostConstruct
     public void init() {
 
@@ -164,7 +151,7 @@ public abstract class AbstractLuceneDoxSearchBean implements
 
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(ds, getSearchTableName());
+            final JdbcDirectory dir = new JdbcDirectory(ds, "SEARCHINDEX");
             indexWriter = new IndexWriter(dir, iwc);
             indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));
         } catch (final IOException

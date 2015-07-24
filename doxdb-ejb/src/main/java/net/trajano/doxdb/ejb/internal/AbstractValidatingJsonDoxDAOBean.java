@@ -1,4 +1,4 @@
-package net.trajano.doxdb.json;
+package net.trajano.doxdb.ejb.internal;
 
 import java.io.IOException;
 import java.security.Principal;
