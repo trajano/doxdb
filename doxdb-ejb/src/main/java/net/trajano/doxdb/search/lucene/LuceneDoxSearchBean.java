@@ -50,6 +50,8 @@ import net.trajano.doxdb.search.SearchResult;
 public class LuceneDoxSearchBean implements
     DoxSearch {
 
+    private static final String FIELD_COLLECTION = "\t collection";
+
     private static final String FIELD_ID = "\t id";
 
     private static final String FIELD_INDEX = "\t index";
@@ -72,13 +74,14 @@ public class LuceneDoxSearchBean implements
 
     @Override
     public void addToIndex(final String index,
+        final String collection,
         final DoxID doxid,
         final IndexView indexView) {
 
         try (final Connection c = ds.getConnection()) {
             final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
-                final Document doc = buildFromIndexView(index, doxid, indexView);
+                final Document doc = buildFromIndexView(index, collection, doxid, indexView);
                 indexWriter.updateDocument(new Term(FIELD_ID, doxid
                     .toString()), doc);
             }
@@ -105,17 +108,19 @@ public class LuceneDoxSearchBean implements
             }
         }
         ret.setDoxID(new DoxID(doc.get(FIELD_ID)));
-        ret.setIndex(doc.get(FIELD_INDEX));
+        ret.setCollection(doc.get(FIELD_COLLECTION));
         return ret;
 
     }
 
     private Document buildFromIndexView(final String index,
+        final String collection,
         final DoxID doxid,
         final IndexView indexView) {
 
         final Document doc = new Document();
-        doc.add(new StringField(FIELD_INDEX, index, Store.YES));
+        doc.add(new StringField(FIELD_INDEX, index, Store.NO));
+        doc.add(new StringField(FIELD_COLLECTION, collection, Store.YES));
         doc.add(new StringField(FIELD_ID, doxid.toString(), Store.YES));
         for (final Entry<String, String> entry : indexView.getStrings()) {
             doc.add(new StringField(entry.getKey(), entry.getValue(), Store.YES));

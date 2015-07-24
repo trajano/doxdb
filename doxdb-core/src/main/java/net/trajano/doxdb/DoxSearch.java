@@ -9,6 +9,7 @@ public interface DoxSearch {
 
     @Asynchronous
     void addToIndex(String index,
+        String collection,
         DoxID doxID,
         IndexView indexView);
 

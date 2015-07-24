@@ -176,7 +176,7 @@ public class JsonDox implements
                         rs.next();
 
                         final IndexView indexView = indexer.buildIndexView(config.getName(), storedJson);
-                        doxSearchBean.addToIndex(indexView.getIndex(), doxId, indexView);
+                        doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), doxId, indexView);
 
                         return storedJson;
                     }

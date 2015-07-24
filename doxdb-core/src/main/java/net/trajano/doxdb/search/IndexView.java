@@ -21,6 +21,8 @@ public class IndexView implements
      */
     private static final long serialVersionUID = -378816417510576056L;
 
+    private String collection;
+
     private final ConcurrentMap<String, Double> doubles = new ConcurrentHashMap<>();
 
     /**
@@ -56,6 +58,11 @@ public class IndexView implements
         this.text.append(text)
             .append('\n');
         return this;
+    }
+
+    public String getCollection() {
+
+        return collection;
     }
 
     public Set<Entry<String, Double>> getDoubles() {
@@ -96,6 +103,11 @@ public class IndexView implements
     public Set<Entry<String, String>> getTexts() {
 
         return texts.entrySet();
+    }
+
+    public void setCollection(final String collection) {
+
+        this.collection = collection;
     }
 
     public IndexView setDouble(final String name,

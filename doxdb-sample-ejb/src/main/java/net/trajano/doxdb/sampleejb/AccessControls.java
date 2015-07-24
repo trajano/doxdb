@@ -32,6 +32,7 @@ public class AccessControls implements
 
         final IndexView indexView = new IndexView();
         indexView.setText("json", json);
+        indexView.appendText(json);
         indexView.setString("collection", collection);
         indexView.setIndex("MYINDEX");
         return indexView;

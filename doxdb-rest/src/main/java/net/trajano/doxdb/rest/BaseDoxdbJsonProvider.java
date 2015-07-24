@@ -152,7 +152,7 @@ public class BaseDoxdbJsonProvider {
             for (final Entry<String, String> entry : hit.getStrings()) {
                 hitBuilder.add(entry.getKey(), entry.getValue());
             }
-            hitBuilder.add("_index", hit.getIndex());
+            hitBuilder.add("_collection", hit.getCollection());
             hitsBuilder.add(hitBuilder);
         }
         final JsonObject resultJson = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder).build();
