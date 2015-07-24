@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import net.trajano.doxdb.DoxID;
-
 /**
  * This represents a view of the data that will be stored in the index.
  *
@@ -22,11 +20,6 @@ public class IndexView implements
     private static final long serialVersionUID = -378816417510576056L;
 
     private final ConcurrentMap<String, Double> doubles = new ConcurrentHashMap<>();
-
-    /**
-     * Associated DoxID that was used to populate the view.
-     */
-    private DoxID doxID;
 
     /**
      * Defines the index that will store this data view. The purpose is to allow
@@ -51,7 +44,7 @@ public class IndexView implements
      * @param text
      * @return
      */
-    public IndexView appendText(String text) {
+    public IndexView appendText(final String text) {
 
         this.text.append(text)
             .append('\n');
@@ -61,11 +54,6 @@ public class IndexView implements
     public Set<Entry<String, Double>> getDoubles() {
 
         return doubles.entrySet();
-    }
-
-    public DoxID getDoxID() {
-
-        return doxID;
     }
 
     public String getIndex() {
@@ -98,27 +86,21 @@ public class IndexView implements
         return texts.entrySet();
     }
 
-    public IndexView setDouble(String name,
-        double value) {
+    public IndexView setDouble(final String name,
+        final double value) {
 
         doubles.put(name, value);
         return this;
     }
 
-    public void setDoxID(DoxID doxId) {
-
-        doxID = doxId;
-
-    }
-
-    public IndexView setIndex(String index) {
+    public IndexView setIndex(final String index) {
 
         this.index = index;
         return this;
     }
 
-    public IndexView setLong(String name,
-        long value) {
+    public IndexView setLong(final String name,
+        final long value) {
 
         longs.put(name, value);
         return this;
@@ -132,8 +114,8 @@ public class IndexView implements
      * @param stringValue
      * @return
      */
-    public IndexView setString(String name,
-        String stringValue) {
+    public IndexView setString(final String name,
+        final String stringValue) {
 
         strings.put(name, stringValue);
         return this;
@@ -148,8 +130,8 @@ public class IndexView implements
      * @param stringValue
      * @return
      */
-    public IndexView setText(String name,
-        String stringValue) {
+    public IndexView setText(final String name,
+        final String stringValue) {
 
         texts.put(name, stringValue);
         return this;

@@ -25,12 +25,7 @@
 			<field xpath="@name" />
 		</unique>
 	</element>
-	<simpleType name="JndiNameType">
-		<restriction base="token">
-			<minLength value="1" />
-			<pattern value="(java:)?([\w][\w\./]+\w|\w)" />
-		</restriction>
-	</simpleType>
+
 	<complexType name="DoxType">
 		<sequence>
 			<element name="schema" type="tns:SchemaType" minOccurs="0"
@@ -68,18 +63,6 @@
 				</appinfo>
 			</annotation>
 		</attribute>
-		<attribute name="collection-access-control" type="tns:JndiNameType">
-			<annotation>
-				<appinfo>
-					<jxb:property>
-						<jxb:javadoc>JNDI name that points to the access control provider
-							EJB for the collection. It should implement
-							net.trajano.doxdb.CollectionAccessControl.
-						</jxb:javadoc>
-					</jxb:property>
-				</appinfo>
-			</annotation>
-		</attribute>
 	</complexType>
 	<complexType name="SchemaType">
 		<annotation>
@@ -99,25 +82,11 @@
 					<jxb:property>
 						<jxb:javadoc>Specifies the version identifier for the schema.
 						</jxb:javadoc>
+						<jxb:baseType name="java.lang.Integer" />
 					</jxb:property>
 				</appinfo>
 			</annotation>
 		</attribute>
 		<attribute name="uri" type="anyURI" use="required" />
-		<attribute name="access-control" type="tns:JndiNameType">
-			<annotation>
-				<appinfo>
-					<jxb:property>
-						<jxb:javadoc>JNDI name that points to the access control provider
-							EJB for the Dox. It should implement
-							net.trajano.doxdb.DoxAccessControl.
-						</jxb:javadoc>
-					</jxb:property>
-				</appinfo>
-			</annotation>
-		</attribute>
-		<attribute name="migrator" type="tns:JndiNameType" />
-		<attribute name="indexer" type="tns:JndiNameType" />
-		<attribute name="eventhandler" type="tns:JndiNameType" />
 	</complexType>
 </schema>

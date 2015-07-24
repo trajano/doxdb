@@ -24,11 +24,8 @@ import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
-import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
 import org.bson.BsonBinaryReader;
@@ -59,6 +56,7 @@ import net.trajano.doxdb.jdbc.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
+import net.trajano.doxdb.search.IndexView;
 import net.trajano.doxdb.search.lucene.DoxSearch;
 
 /**
@@ -71,6 +69,9 @@ import net.trajano.doxdb.search.lucene.DoxSearch;
 @Remote(Dox.class)
 public class JsonDox implements
     Dox {
+
+    @EJB
+    private CollectionAccessControl collectionAccessControl;
 
     @EJB
     private ConfigurationProvider configurationProvider;
@@ -87,6 +88,9 @@ public class JsonDox implements
 
     @Resource
     private DataSource ds;
+
+    @EJB
+    private Indexer indexer;
 
     /**
      * Time the initialization happened.
@@ -166,26 +170,13 @@ public class JsonDox implements
                     s.setTimestamp(6, ts);
                     s.setInt(7, 1);
                     s.setInt(8, schema.getVersion().intValue());
-
-                    if (config.getCollectionAccessControl() != null) {
-                        final CollectionAccessControl accessControl = getObjectFromContext(config.getCollectionAccessControl(), CollectionAccessControl.class);
-
-                        if (!accessControl.allowedCreate(storedJson, ctx.getCallerPrincipal())) {
-                            throw new PersistenceException("not allowed");
-                        }
-
-                        s.setBytes(9, getObjectFromContext(schema.getIndexer(), CollectionAccessControl.class).buildAccessKey(storedJson, ctx.getCallerPrincipal()));
-                    } else {
-                        s.setBytes(9, null);
-                    }
-
+                    s.setBytes(9, collectionAccessControl.buildAccessKeyForCreate(config.getName(), storedJson, ctx.getCallerPrincipal()));
                     s.executeUpdate();
                     try (final ResultSet rs = s.getGeneratedKeys()) {
                         rs.next();
 
-                        if (schema.getIndexer() != null) {
-                            doxSearchBean.addToIndex(getObjectFromContext(schema.getIndexer(), Indexer.class).buildIndexView(storedJson));
-                        }
+                        final IndexView indexView = indexer.buildIndexView(config.getName(), storedJson);
+                        doxSearchBean.addToIndex(indexView.getIndex(), doxId, indexView);
 
                         return storedJson;
                     }
@@ -193,17 +184,6 @@ public class JsonDox implements
             }
         } catch (final IOException
             | SQLException e) {
-            throw new PersistenceException(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T getObjectFromContext(final String name,
-        final Class<T> type) {
-
-        try {
-            return (T) PortableRemoteObject.narrow(InitialContext.doLookup(name), type);
-        } catch (final NamingException e) {
             throw new PersistenceException(e);
         }
     }
@@ -265,8 +245,11 @@ public class JsonDox implements
 
             final DocumentMeta meta = readMeta(c, config.getName(), id);
 
-            // TODO migrate data if needed.
+            if (meta.getContentVersion() != schema.getVersion()) {
+                // TODO migrate data .
+            }
 
+            meta.getAccessKey();
             // TODO check the security.
             final BsonDocument document = readContent(c, config.getName(), meta.getId());
 
