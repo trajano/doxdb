@@ -36,4 +36,12 @@ public class AccessControls implements
         indexView.setIndex("MYINDEX");
         return indexView;
     }
+
+    public String migrate(final String collection,
+        final int oldContentVersion,
+        final int newContentVersion,
+        final String json) {
+
+        return json;
+    }
 }
