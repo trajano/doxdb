@@ -30,6 +30,7 @@ import javax.sql.DataSource;
 
 import org.bson.BsonBinaryWriter;
 import org.bson.BsonDocument;
+import org.bson.BsonString;
 import org.bson.codecs.BsonDocumentCodec;
 import org.bson.codecs.EncoderContext;
 import org.bson.io.BasicOutputBuffer;
@@ -104,7 +105,7 @@ public class JsonDox implements
     }
 
     @Override
-    public DoxID create(final String collectionName,
+    public String create(final String collectionName,
         final String json) {
 
         final DoxType config = doxen.get(collectionName);
@@ -134,7 +135,9 @@ public class JsonDox implements
 
             final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
 
-            new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(json), EncoderContext.builder()
+            final BsonDocument document = BsonDocument.parse(json);
+            document.put("_id", new BsonString(doxId.toString()));
+            new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), document, EncoderContext.builder()
                 .build());
             try (final InputStream in = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
 
@@ -160,7 +163,7 @@ public class JsonDox implements
                     s.executeUpdate();
                     try (final ResultSet rs = s.getGeneratedKeys()) {
                         rs.next();
-                        return doxId;
+                        return document.toJson();
                     }
                 }
             }

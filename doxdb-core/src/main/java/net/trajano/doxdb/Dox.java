@@ -2,7 +2,17 @@ package net.trajano.doxdb;
 
 public interface Dox {
 
-    DoxID create(String collectionName,
+    /**
+     * Creates a dox record into the database. This will allocate a "_id" value
+     * for the record.
+     *
+     * @param collectionName
+     *            collection name
+     * @param json
+     *            dox contents
+     * @return dox contents with "_id" set.
+     */
+    String create(String collectionName,
         String json);
 
     /**

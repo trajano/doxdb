@@ -2,9 +2,7 @@ package net.trajano.doxdb.rest;
 
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
-import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import net.trajano.doxdb.Dox;
-import net.trajano.doxdb.DoxID;
 
 /**
  * This class is extended by clients to provide a list of objects that are
@@ -59,24 +56,8 @@ public class BaseDoxdbJsonProvider {
     public Response create(@PathParam("collection") final String collection,
         final JsonObject content) {
 
-        System.out.println("collection=" + collection);
-        System.out.println("content=" + content);
-        System.out.println("dox=" + dox);
-        content.remove("_id");
-        final DoxID doxID = dox.create(collection, content.toString());
-
-        final JsonObjectBuilder idObjectBuilder = Json.createObjectBuilder();
-        final JsonObject idObject = idObjectBuilder.add("_id", doxID.toString()).build();
-        content.put("_id", idObject.getJsonString("_id"));
-
-        // what this would do is given a *single* DoxDAO to get a JsonDoxCollection and then get the appropriate record?
-        // it is expected that the requester would know what kind of collection to get?
-
-        // events are triggered on update... it could be transactional or via MDB.  Index updates are always via MDB.
-
-        // how do we handle security?
-
-        return Response.ok().entity(content).build();
+        final String savedJson = dox.create(collection, content.toString());
+        return Response.ok().entity(savedJson).build();
     }
 
     @DELETE
