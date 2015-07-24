@@ -43,6 +43,8 @@ public class SqlConstants {
 
     public static final String READ;
 
+    public static final String READALLCONTENT;
+
     public static final String READCONTENT;
 
     public static final String READFORUPDATE;
@@ -60,6 +62,7 @@ public class SqlConstants {
             READ = sqls.getProperty("read");
             READFORUPDATE = sqls.getProperty("readForUpdate");
             READCONTENT = sqls.getProperty("readContent");
+            READALLCONTENT = sqls.getProperty("readAllContent");
             UPDATE = sqls.getProperty("update");
             UPDATEVERSION = sqls.getProperty("updateVersion");
             DELETE = sqls.getProperty("delete");

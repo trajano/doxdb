@@ -311,6 +311,29 @@ public class JsonDox implements
         }
     }
 
+    @Override
+    public void reindex() {
+
+        try (Connection c = ds.getConnection()) {
+
+            for (final DoxType doxConfig : doxen.values()) {
+
+                try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.READALLCONTENT, doxConfig.getName().toUpperCase()))) {
+                    try (final ResultSet rs = s.executeQuery()) {
+                        while (rs.next()) {
+                            //                            final IndexView indexView = indexer.buildIndexView(config.getName(), storedJson);
+                            //                            doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), doxId, indexView);
+                        }
+                    }
+                }
+
+            }
+
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
     private void validate(final JsonSchema schema,
         final String json) {
 

@@ -23,4 +23,6 @@ public interface Dox {
     String read(String collectionName,
         DoxID id);
 
+    void reindex();
+
 }
