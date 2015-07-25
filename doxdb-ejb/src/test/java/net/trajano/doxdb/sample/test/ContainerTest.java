@@ -16,9 +16,9 @@ public class ContainerTest {
         System.out.println(container);
         final Context context = container.getContext();
         System.out.println(context);
-        final Dox b = (Dox) context.lookup("java:global/classes/JsonDox");
+        final Dox b = (Dox) context.lookup("java:global/ejb-app/classes/DoxBean");
         final String inputJson = "{\"name\":\"abc\"}";
-        System.out.println(b.create("collection", inputJson));
+        System.out.println(b.create("horse", inputJson));
 
     }
 }
