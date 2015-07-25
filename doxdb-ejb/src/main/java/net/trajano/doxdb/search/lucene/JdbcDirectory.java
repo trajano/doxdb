@@ -160,8 +160,6 @@ public class JdbcDirectory extends Directory {
             return;
         }
         final String renameFileSql = String.format("update %1$s set name = ? where name = ?", searchTableName);
-        System.out.println("src=" + source);
-        System.out.println("dest=" + dest);
         try (final PreparedStatement s = connection.prepareStatement(renameFileSql)) {
             s.setString(1, dest);
             s.setString(2, source);
