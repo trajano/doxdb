@@ -87,7 +87,7 @@ public class LuceneDoxSearchBean implements
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 for (final IndexView indexView : indexViews) {
                     final Document doc = buildFromIndexView(collection, doxid, indexView);
-                    indexWriter.updateDocument(uid(indexView.getIndex(), collection, doxid), doc);
+                    indexWriter.updateDocument(new Term(FIELD_UNIQUE_ID, uid(indexView.getIndex(), collection, doxid)), doc);
                 }
                 indexWriter.commit();
             }
@@ -132,6 +132,7 @@ public class LuceneDoxSearchBean implements
         final IndexView indexView) {
 
         final Document doc = new Document();
+        doc.add(new StringField(FIELD_UNIQUE_ID, uid(indexView.getIndex(), collection, doxid), Store.NO));
         doc.add(new StringField(FIELD_INDEX, indexView.getIndex(), Store.NO));
         doc.add(new StringField(FIELD_COLLECTION, collection, Store.YES));
         if (!indexView.isMasked()) {
@@ -243,13 +244,11 @@ public class LuceneDoxSearchBean implements
         }
     }
 
-    private Term uid(final String index,
+    private String uid(final String index,
         final String collection,
         final DoxID doxid) {
 
-        final String idString = index + "/" + collection + "/" + doxid;
-        System.out.println(idString);
-        return new Term(FIELD_UNIQUE_ID, idString);
+        return index + "/" + collection + "/" + doxid;
     }
 
 }

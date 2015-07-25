@@ -28,7 +28,7 @@ public class AccessControls implements
     Indexer {
 
     @Override
-    public byte[] buildAccessKeyForCreate(final String collection,
+    public byte[] buildAccessKey(final String collection,
         final String json,
         final Principal principal) {
 

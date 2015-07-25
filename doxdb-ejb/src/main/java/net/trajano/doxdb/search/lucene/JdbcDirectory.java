@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.persistence.PersistenceException;
 
+import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.IndexInput;
@@ -18,6 +19,8 @@ import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.store.Lock;
 
 public class JdbcDirectory extends Directory {
+
+    private boolean closed = false;
 
     private final Connection connection;
 
@@ -36,6 +39,8 @@ public class JdbcDirectory extends Directory {
 
     @Override
     public void close() throws IOException {
+
+        closed = true;
 
     }
 
@@ -78,6 +83,18 @@ public class JdbcDirectory extends Directory {
             throw new IOException(e);
         }
 
+    }
+
+    /**
+     * @throws AlreadyClosedException
+     *             if this Directory is closed
+     */
+    @Override
+    protected void ensureOpen() throws AlreadyClosedException {
+
+        if (closed) {
+            throw new AlreadyClosedException("closed");
+        }
     }
 
     @Override

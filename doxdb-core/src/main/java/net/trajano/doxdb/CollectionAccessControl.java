@@ -17,7 +17,7 @@ public interface CollectionAccessControl {
      *            principal
      * @return
      */
-    byte[] buildAccessKeyForCreate(String collection,
+    byte[] buildAccessKey(String collection,
         String json,
         Principal principal);
 

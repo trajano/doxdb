@@ -8,6 +8,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,6 +23,10 @@ import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import org.bson.BsonDocument;
+import org.bson.BsonNumber;
+import org.bson.BsonValue;
 
 import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.Dox;
@@ -73,9 +78,13 @@ public class DoxResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(@PathParam("collection") final String collection,
-        final JsonObject content) {
+        final String json) {
 
-        final DocumentMeta meta = dox.create(collection, content.toString());
+        final BsonDocument bson = BsonDocument.parse(json);
+        bson.remove("_id");
+        bson.remove("_version");
+
+        final DocumentMeta meta = dox.create(collection, bson);
         return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
@@ -102,7 +111,7 @@ public class DoxResource {
 
     private Response op(final String collection,
         final String opName,
-        final JsonObject content) {
+        final String content) {
 
         System.out.println(collection + " " + opName + " SAVE");
         return Response.ok().entity(content).build();
@@ -128,17 +137,26 @@ public class DoxResource {
 
     private Response save(final String collection,
         final String id,
-        final JsonObject content) {
+        final String json) {
 
-        final DocumentMeta meta = dox.update(collection, new DoxID(id), content.toString(), content.getInt("_version"));
+        final BsonDocument bson = BsonDocument.parse(json);
+        bson.remove("_id");
+        final BsonValue removed = bson.remove("_version");
+        if (removed == null) {
+            throw new OptimisticLockException();
+        }
+        final int version = ((BsonNumber) removed).intValue();
+
+        final DocumentMeta meta = dox.update(collection, new DoxID(id), bson, version);
         return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     @POST
     @Path("{collection}/{idOrOp}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response saveOrOp(@PathParam("collection") final String collection,
         @PathParam("idOrOp") final String idOrOp,
-        final JsonObject content) {
+        final String content) {
 
         if (idOrOp.startsWith("_")) {
             return op(collection, idOrOp.substring(1), content);

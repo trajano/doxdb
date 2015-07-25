@@ -1,5 +1,7 @@
 package net.trajano.doxdb;
 
+import org.bson.BsonDocument;
+
 public interface Dox {
 
     /**
@@ -8,12 +10,13 @@ public interface Dox {
      *
      * @param collectionName
      *            collection name
-     * @param json
-     *            dox contents
-     * @return dox contents with "_id" set.
+     * @param contents
+     *            dox contents as a BSON. The contents MUST be valid for the
+     *            schema.
+     * @return dox meta with contents with "_id" and "_version" set.
      */
     DocumentMeta create(String collectionName,
-        String json);
+        BsonDocument contents);
 
     void delete(String collection,
         DoxID doxID,
@@ -29,9 +32,20 @@ public interface Dox {
 
     void reindex();
 
+    /**
+     * Creates a dox record into the database. This will allocate a "_id" value
+     * for the record.
+     *
+     * @param collectionName
+     *            collection name
+     * @param contents
+     *            dox contents as a BSON. The contents MUST be valid for the
+     *            schema.
+     * @return dox meta with contents with "_id" and "_version" set.
+     */
     DocumentMeta update(String collection,
         DoxID id,
-        String json,
+        BsonDocument contents,
         int version);
 
 }

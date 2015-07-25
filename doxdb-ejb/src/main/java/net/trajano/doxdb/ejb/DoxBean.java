@@ -129,24 +129,23 @@ public class DoxBean implements
 
     @Override
     public DocumentMeta create(final String collectionName,
-        final String json) {
+        final BsonDocument bson) {
 
         final DoxType config = doxen.get(collectionName);
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        validate(schema, json);
+        validate(schema, bson.toJson());
         try (Connection c = ds.getConnection()) {
             final DoxID doxId = DoxID.generate();
 
             final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
 
-            final BsonDocument document = BsonDocument.parse(json);
-            document.put("_id", new BsonString(doxId.toString()));
-            document.put("_version", new BsonInt32(1));
-            new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), document, EncoderContext.builder()
+            bson.put("_id", new BsonString(doxId.toString()));
+            bson.put("_version", new BsonInt32(1));
+            new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), bson, EncoderContext.builder()
                 .build());
 
-            final String storedJson = document.toJson();
+            final String storedJson = bson.toJson();
             try (final InputStream in = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
 
                 try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.INSERT, config.getName().toUpperCase()), Statement.RETURN_GENERATED_KEYS)) {
@@ -160,7 +159,7 @@ public class DoxBean implements
                     s.setTimestamp(6, ts);
                     s.setInt(7, 1);
                     s.setInt(8, schema.getVersion());
-                    final byte[] accessKey = collectionAccessControl.buildAccessKeyForCreate(config.getName(), storedJson, ctx.getCallerPrincipal());
+                    final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), storedJson, ctx.getCallerPrincipal());
                     s.setBytes(9, accessKey);
                     s.executeUpdate();
                     try (final ResultSet rs = s.getGeneratedKeys()) {
@@ -173,7 +172,7 @@ public class DoxBean implements
                         meta.setAccessKey(accessKey);
                         meta.setLastUpdatedOn(ts);
                         meta.setVersion(1);
-                        meta.setContentJson(json);
+                        meta.setContentJson(storedJson);
                         return meta;
                     }
                 }
@@ -408,7 +407,7 @@ public class DoxBean implements
                                 .build());
                             blob.free();
                             final String json = decoded.toJson();
-                            rs.updateBytes(3, collectionAccessControl.buildAccessKeyForCreate(config.getName(), json, new DoxPrincipal(rs.getString(4))));
+                            rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
                             final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), json);
                             doxSearchBean.addToIndex(config.getName(), new DoxID(rs.getString(1)), indexViews);
                         }
@@ -425,14 +424,14 @@ public class DoxBean implements
     @Override
     public DocumentMeta update(final String collectionName,
         final DoxID doxid,
-        final String json,
+        final BsonDocument bson,
         final int version) {
 
         final Timestamp ts = new Timestamp(System.currentTimeMillis());
         final DoxType config = doxen.get(collectionName);
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        validate(schema, json);
+        validate(schema, bson.toJson());
         try (Connection c = ds.getConnection()) {
             final DocumentMeta meta = readMetaAndLock(c, config.getName(), config.isOob(), doxid, version);
 
@@ -441,14 +440,13 @@ public class DoxBean implements
 
             final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
 
-            final BsonDocument document = BsonDocument.parse(json);
-            document.put("_id", new BsonString(doxid.toString()));
-            document.put("_version", new BsonInt32(version + 1));
-            new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), document, EncoderContext.builder()
+            bson.put("_id", new BsonString(doxid.toString()));
+            bson.put("_version", new BsonInt32(version + 1));
+            new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), bson, EncoderContext.builder()
                 .build());
 
-            final String storedJson = document.toJson();
-            final byte[] accessKey = collectionAccessControl.buildAccessKeyForCreate(config.getName(), storedJson, ctx.getCallerPrincipal());
+            final String storedJson = bson.toJson();
+            final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), storedJson, ctx.getCallerPrincipal());
 
             try (final InputStream in = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
 
@@ -474,6 +472,7 @@ public class DoxBean implements
             }
             meta.setAccessKey(accessKey);
             meta.setVersion(version + 1);
+            meta.setContentJson(storedJson);
             return meta;
         } catch (final IOException
             | SQLException e) {
