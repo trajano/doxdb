@@ -3,7 +3,7 @@ package net.trajano.doxdb.jpa;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.internal.DoxPrincipal;
 
 @Converter(autoApply = true)
 public class DoxPrincipalConverter implements

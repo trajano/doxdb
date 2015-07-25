@@ -22,7 +22,7 @@ import com.google.common.io.ByteStreams;
 import net.trajano.commons.testing.ResourceUtil;
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
 public class OobTest {

@@ -6,7 +6,7 @@ import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 
-import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.internal.DoxPrincipal;
 
 public class DocumentMeta implements
     Serializable {

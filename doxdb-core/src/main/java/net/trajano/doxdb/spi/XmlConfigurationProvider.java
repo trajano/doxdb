@@ -1,4 +1,4 @@
-package net.trajano.doxdb.jdbc;
+package net.trajano.doxdb.spi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,6 @@ import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
-import net.trajano.doxdb.ConfigurationProvider;
 import net.trajano.doxdb.schema.DoxPersistence;
 
 /**
@@ -27,8 +26,8 @@ import net.trajano.doxdb.schema.DoxPersistence;
  * &lt;enterprise-beans>
  *   &lt;session>
  *     &lt;ejb-name>XmlConfigurationProvider&lt;/ejb-name>
- *     &lt;business-local>net.trajano.doxdb.ConfigurationProvider&lt;/business-local>
- *     &lt;ejb-class>net.trajano.doxdb.jdbc.XmlConfigurationProvider&lt;/ejb-class>
+ *     &lt;business-local>net.trajano.doxdb.spi.ConfigurationProvider&lt;/business-local>
+ *     &lt;ejb-class>net.trajano.doxdb.spi.XmlConfigurationProvider&lt;/ejb-class>
  *     &lt;session-type>Stateless&lt;/session-type>
  *   &lt;/session>
  * &lt;/enterprise-beans>

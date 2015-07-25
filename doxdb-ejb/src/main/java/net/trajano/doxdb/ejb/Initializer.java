@@ -16,9 +16,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
-import net.trajano.doxdb.ConfigurationProvider;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.schema.DoxType;
+import net.trajano.doxdb.spi.ConfigurationProvider;
 
 /**
  * This will initialize the Dox bean using an EJB that provides the Dox

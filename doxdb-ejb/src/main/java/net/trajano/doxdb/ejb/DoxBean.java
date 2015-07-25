@@ -49,7 +49,6 @@ import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
 import net.trajano.doxdb.CollectionAccessControl;
-import net.trajano.doxdb.ConfigurationProvider;
 import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
@@ -57,11 +56,12 @@ import net.trajano.doxdb.DoxSearch;
 import net.trajano.doxdb.Indexer;
 import net.trajano.doxdb.Migrator;
 import net.trajano.doxdb.ejb.internal.SqlConstants;
-import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
 import net.trajano.doxdb.search.IndexView;
+import net.trajano.doxdb.spi.ConfigurationProvider;
 
 /**
  * This will be an SLSB. There should be many instances of this and should be
@@ -166,8 +166,8 @@ public class DoxBean implements
                     try (final ResultSet rs = s.getGeneratedKeys()) {
                         rs.next();
 
-                        final IndexView indexView = indexer.buildIndexView(config.getName(), storedJson);
-                        doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), doxId, indexView);
+                        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
+                        doxSearchBean.addToIndex(config.getName(), doxId, indexViews);
 
                         final DocumentMeta meta = new DocumentMeta();
                         meta.setAccessKey(accessKey);
@@ -201,9 +201,6 @@ public class DoxBean implements
             meta.getAccessKey();
             // TODO check the security.
 
-            final IndexView indexView = indexer.buildIndexView(config.getName(), readContent(c, collection, meta.getId())
-                .toJson());
-
             try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.COPYTOTOMBSTONESQL, config.getName().toUpperCase()))) {
                 s.setString(1, ctx.getCallerPrincipal().getName());
                 s.setTimestamp(2, ts);
@@ -219,7 +216,7 @@ public class DoxBean implements
                     throw new PersistenceException("problem with the delete");
                 }
             }
-            doxSearchBean.removeFromIndex(indexView.getIndex(), doxid);
+            doxSearchBean.removeFromIndex(collection, doxid);
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
@@ -412,8 +409,8 @@ public class DoxBean implements
                             blob.free();
                             final String json = decoded.toJson();
                             rs.updateBytes(3, collectionAccessControl.buildAccessKeyForCreate(config.getName(), json, new DoxPrincipal(rs.getString(4))));
-                            final IndexView indexView = indexer.buildIndexView(config.getName(), json);
-                            doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), new DoxID(rs.getString(1)), indexView);
+                            final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), json);
+                            doxSearchBean.addToIndex(config.getName(), new DoxID(rs.getString(1)), indexViews);
                         }
                     }
                 }
@@ -470,8 +467,8 @@ public class DoxBean implements
                         throw new PersistenceException("Update failed");
                     }
 
-                    final IndexView indexView = indexer.buildIndexView(config.getName(), storedJson);
-                    doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), doxid, indexView);
+                    final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
+                    doxSearchBean.addToIndex(config.getName(), doxid, indexViews);
 
                 }
             }

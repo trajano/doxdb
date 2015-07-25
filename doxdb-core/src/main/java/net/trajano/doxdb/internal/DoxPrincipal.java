@@ -1,4 +1,4 @@
-package net.trajano.doxdb.jdbc;
+package net.trajano.doxdb.internal;
 
 import java.io.Serializable;
 import java.security.Principal;

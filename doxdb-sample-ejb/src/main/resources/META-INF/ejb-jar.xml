@@ -6,8 +6,8 @@
 	<enterprise-beans>
 		<session>
 			<ejb-name>XmlConfigurationProvider</ejb-name>
-			<business-local>net.trajano.doxdb.ConfigurationProvider</business-local>
-			<ejb-class>net.trajano.doxdb.jdbc.XmlConfigurationProvider</ejb-class>
+			<business-local>net.trajano.doxdb.spi.ConfigurationProvider</business-local>
+			<ejb-class>net.trajano.doxdb.spi.XmlConfigurationProvider</ejb-class>
 			<session-type>Stateless</session-type>
 		</session>
 	</enterprise-beans>

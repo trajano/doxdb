@@ -160,7 +160,6 @@ public class DoxResource {
         for (final IndexView hit : results.getHits()) {
             final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
             final String id = hit.getDoxID().toString();
-            hitBuilder.add("_id", id);
             for (final Entry<String, Double> entry : hit.getDoubles()) {
                 hitBuilder.add(entry.getKey(), entry.getValue());
             }
@@ -171,7 +170,10 @@ public class DoxResource {
                 hitBuilder.add(entry.getKey(), entry.getValue());
             }
             hitBuilder.add("_collection", hit.getCollection());
-            hitBuilder.add("_url", uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
+            if (!hit.isMasked()) {
+                hitBuilder.add("_id", id);
+                hitBuilder.add("_url", uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
+            }
             hitsBuilder.add(hitBuilder);
         }
         final JsonObject resultJson = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder).build();

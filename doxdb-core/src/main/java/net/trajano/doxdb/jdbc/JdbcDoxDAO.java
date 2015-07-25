@@ -31,6 +31,7 @@ import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.internal.DoxPrincipal;
 
 public class JdbcDoxDAO implements
     DoxDAO {

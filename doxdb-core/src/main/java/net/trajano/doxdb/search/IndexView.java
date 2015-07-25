@@ -40,6 +40,12 @@ public class IndexView implements
 
     private final ConcurrentMap<String, Long> longs = new ConcurrentHashMap<>();
 
+    /**
+     * Flag to indicate that the data should be masked. If the data is masked,
+     * the ID and URLs should not appear in the search results.
+     */
+    private boolean masked = false;
+
     private final ConcurrentMap<String, String> strings = new ConcurrentHashMap<>();
 
     private final StringBuilder text = new StringBuilder();
@@ -105,6 +111,11 @@ public class IndexView implements
         return texts.entrySet();
     }
 
+    public boolean isMasked() {
+
+        return masked;
+    }
+
     public void setCollection(final String collection) {
 
         this.collection = collection;
@@ -134,6 +145,11 @@ public class IndexView implements
 
         longs.put(name, value);
         return this;
+    }
+
+    public void setMasked(final boolean masked) {
+
+        this.masked = masked;
     }
 
     /**

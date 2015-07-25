@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.ejb.SampleJsonBean;
-import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.internal.DoxPrincipal;
 
 public class SampleJsonEntityTest extends AbstractEntityTest {
 

@@ -5,12 +5,12 @@ import net.trajano.doxdb.search.SearchResult;
 
 public interface DoxSearch {
 
-    void addToIndex(String index,
+    void addToIndex(
         String collection,
         DoxID doxID,
-        IndexView indexView);
+        IndexView[] indexViews);
 
-    void removeFromIndex(String index,
+    void removeFromIndex(String collection,
         DoxID doxID);
 
     /**

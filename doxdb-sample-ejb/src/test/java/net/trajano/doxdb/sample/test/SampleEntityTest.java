@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.google.common.io.Resources;
 
-import net.trajano.doxdb.jdbc.DoxPrincipal;
+import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.sampleejb.SampleBean;
 
 public class SampleEntityTest extends AbstractEntityTest {

@@ -30,7 +30,7 @@ public class AccessControls implements
     }
 
     @Override
-    public IndexView buildIndexView(final String collection,
+    public IndexView[] buildIndexViews(final String collection,
         final String json) {
 
         final IndexView indexView = new IndexView();
@@ -38,7 +38,9 @@ public class AccessControls implements
         indexView.appendText(json);
         indexView.setString("collection", collection);
         indexView.setIndex("MYINDEX");
-        return indexView;
+        return new IndexView[] {
+            indexView
+        };
     }
 
     @Override

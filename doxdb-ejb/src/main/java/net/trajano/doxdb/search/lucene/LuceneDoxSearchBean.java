@@ -58,6 +58,8 @@ public class LuceneDoxSearchBean implements
 
     private static final String FIELD_TEXT = "\t text";
 
+    private static final String FIELD_UNIQUE_ID = "\t uid";
+
     /**
      * Table name for the search index.
      */
@@ -72,10 +74,10 @@ public class LuceneDoxSearchBean implements
 
     @Override
     @Asynchronous
-    public void addToIndex(final String index,
+    public void addToIndex(
         final String collection,
         final DoxID doxid,
-        final IndexView indexView) {
+        final IndexView[] indexViews) {
 
         try (final Connection c = ds.getConnection()) {
             final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
@@ -83,9 +85,10 @@ public class LuceneDoxSearchBean implements
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
-                final Document doc = buildFromIndexView(index, collection, doxid, indexView);
-                indexWriter.updateDocument(new Term(FIELD_ID, doxid
-                    .toString()), doc);
+                for (final IndexView indexView : indexViews) {
+                    final Document doc = buildFromIndexView(collection, doxid, indexView);
+                    indexWriter.updateDocument(uid(indexView.getIndex(), collection, doxid), doc);
+                }
                 indexWriter.commit();
             }
         } catch (final IOException
@@ -98,7 +101,7 @@ public class LuceneDoxSearchBean implements
 
         final IndexView ret = new IndexView();
         for (final IndexableField field : doc.getFields()) {
-            if (FIELD_ID.equals(field.name()) || FIELD_COLLECTION.equals(field.name())) {
+            if (FIELD_ID.equals(field.name()) || FIELD_UNIQUE_ID.equals(field.name()) || FIELD_COLLECTION.equals(field.name())) {
                 continue;
             }
             final Number numericValue = field.numericValue();
@@ -112,21 +115,30 @@ public class LuceneDoxSearchBean implements
                     .longValue());
             }
         }
-        ret.setDoxID(new DoxID(doc.get(FIELD_ID)));
+        final String idValue = doc.get(FIELD_ID);
+        if (idValue != null) {
+            ret.setDoxID(new DoxID(idValue));
+        } else {
+            ret.setMasked(true);
+        }
         ret.setCollection(doc.get(FIELD_COLLECTION));
         return ret;
 
     }
 
-    private Document buildFromIndexView(final String index,
+    private Document buildFromIndexView(
         final String collection,
         final DoxID doxid,
         final IndexView indexView) {
 
         final Document doc = new Document();
-        doc.add(new StringField(FIELD_INDEX, index, Store.NO));
+        doc.add(new StringField(FIELD_INDEX, indexView.getIndex(), Store.NO));
         doc.add(new StringField(FIELD_COLLECTION, collection, Store.YES));
-        doc.add(new StringField(FIELD_ID, doxid.toString(), Store.YES));
+        if (!indexView.isMasked()) {
+            doc.add(new StringField(FIELD_ID, doxid.toString(), Store.YES));
+        } else {
+            doc.add(new StringField(FIELD_ID, doxid.toString(), Store.NO));
+        }
         for (final Entry<String, String> entry : indexView.getStrings()) {
             doc.add(new StringField(entry.getKey(), entry.getValue(), Store.YES));
         }
@@ -159,7 +171,7 @@ public class LuceneDoxSearchBean implements
 
     @Override
     @Asynchronous
-    public void removeFromIndex(final String index,
+    public void removeFromIndex(final String collection,
         final DoxID doxID) {
 
         try (final Connection c = ds.getConnection()) {
@@ -169,7 +181,7 @@ public class LuceneDoxSearchBean implements
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 final BooleanQuery booleanQuery = new BooleanQuery();
                 booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
-                booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
+                booleanQuery.add(new TermQuery(new Term(FIELD_COLLECTION, collection)), Occur.MUST);
                 indexWriter.deleteDocuments(booleanQuery);
                 indexWriter.commit();
             }
@@ -229,6 +241,15 @@ public class LuceneDoxSearchBean implements
             | SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    private Term uid(final String index,
+        final String collection,
+        final DoxID doxid) {
+
+        final String idString = index + "/" + collection + "/" + doxid;
+        System.out.println(idString);
+        return new Term(FIELD_UNIQUE_ID, idString);
     }
 
 }

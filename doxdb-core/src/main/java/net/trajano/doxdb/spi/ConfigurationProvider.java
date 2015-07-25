@@ -1,4 +1,4 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.spi;
 
 import net.trajano.doxdb.schema.DoxPersistence;
 

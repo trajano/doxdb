@@ -13,6 +13,7 @@ import net.trajano.doxdb.CollectionAccessControl;
 import net.trajano.doxdb.Indexer;
 import net.trajano.doxdb.Migrator;
 import net.trajano.doxdb.sample.json.Horse;
+import net.trajano.doxdb.sample.json.Horse.Gender;
 import net.trajano.doxdb.search.IndexView;
 
 @Stateless
@@ -35,18 +36,34 @@ public class AccessControls implements
     }
 
     @Override
-    public IndexView buildIndexView(final String collection,
+    public IndexView[] buildIndexViews(final String collection,
         final String json) {
 
         try {
-            final IndexView indexView = new IndexView();
             final Horse horse = new ObjectMapper().readValue(json, Horse.class);
+
+            final IndexView indexView = new IndexView();
             indexView.setText("json", json);
             indexView.appendText(json);
             indexView.setString("collection", collection);
             indexView.setString("name", horse.getName());
             indexView.setIndex("MYINDEX");
-            return indexView;
+
+            final IndexView indexView2 = new IndexView();
+            indexView2.appendText(json);
+            indexView2.setString("collection", collection);
+            if (horse.getGender() == Gender.GELDING) {
+                indexView2.setString("name", "*********************");
+                indexView2.setText("name", horse.getName());
+            } else {
+                indexView2.setString("name", horse.getName());
+            }
+            indexView2.setIndex("MASKINDEX");
+
+            return new IndexView[] {
+                indexView,
+                indexView2
+            };
 
         } catch (final IOException e) {
             throw new PersistenceException(e);
