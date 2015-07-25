@@ -178,6 +178,7 @@ public class DoxBean implements
                         meta.setAccessKey(accessKey);
                         meta.setLastUpdatedOn(ts);
                         meta.setVersion(1);
+                        meta.setDoxId(doxId);
                         meta.setContentJson(storedJson);
                         return meta;
                     }

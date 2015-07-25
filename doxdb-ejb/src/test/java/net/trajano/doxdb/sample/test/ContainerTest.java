@@ -1,10 +1,15 @@
 package net.trajano.doxdb.sample.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import javax.ejb.embeddable.EJBContainer;
 import javax.naming.Context;
 
+import org.bson.BsonDocument;
 import org.junit.Test;
 
+import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.Dox;
 
 public class ContainerTest {
@@ -13,12 +18,16 @@ public class ContainerTest {
     public void testCrud() throws Exception {
 
         final EJBContainer container = EJBContainer.createEJBContainer();
-        System.out.println(container);
+        assertNotNull(container);
         final Context context = container.getContext();
-        System.out.println(context);
+        assertNotNull(context);
         final Dox b = (Dox) context.lookup("java:global/ejb-app/classes/DoxBean");
         final String inputJson = "{\"name\":\"abc\"}";
-        System.out.println(b.create("horse", inputJson));
+        final DocumentMeta created = b.create("horse", BsonDocument.parse(inputJson));
+        final BsonDocument createdBson = BsonDocument.parse(created.getContentJson());
+        assertNotNull(created.getDoxId());
+        assertEquals(1, created.getVersion());
+        assertEquals("abc", createdBson.getString("name").getValue());
 
     }
 }

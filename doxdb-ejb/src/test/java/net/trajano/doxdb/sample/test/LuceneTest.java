@@ -17,17 +17,20 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.LockFactory;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.Test;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.search.lucene.JdbcDirectory;
+import net.trajano.doxdb.search.lucene.SingletonLockFactory;
 
 public class LuceneTest {
 
     @Test
     public void testLucene() throws Exception {
 
+        final LockFactory lockFactory = new SingletonLockFactory();
         final DoxID generate = DoxID.generate();
         final JdbcDataSource ds = new JdbcDataSource();
         ds.setURL("jdbc:h2:mem:" + generate);
@@ -40,7 +43,7 @@ public class LuceneTest {
 
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
+            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, "searchtable");
             final IndexWriter indexWriter = new IndexWriter(dir, iwc);
 
             final Document doc = new Document();
@@ -51,7 +54,7 @@ public class LuceneTest {
         }
         {
 
-            final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
+            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, "searchtable");
             final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
             final Analyzer analyzer = new StandardAnalyzer();
             final QueryParser parser = new QueryParser("name", analyzer);
