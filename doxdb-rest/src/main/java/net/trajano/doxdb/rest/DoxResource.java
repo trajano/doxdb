@@ -91,10 +91,10 @@ public class DoxResource {
     @DELETE
     @Path("{collection}/{id}")
     public Response delete(@PathParam("collection") final String collection,
-        @PathParam("id") final String id,
+        @PathParam("id") final DoxID doxid,
         @QueryParam("v") final int version) {
 
-        dox.delete(collection, new DoxID(id), version);
+        dox.delete(collection, doxid, version);
         return Response.noContent().build();
     }
 
@@ -102,9 +102,9 @@ public class DoxResource {
     @Path("{collection}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("collection") final String collection,
-        @PathParam("id") final String id) {
+        @PathParam("id") final DoxID doxid) {
 
-        final DocumentMeta meta = dox.read(collection, new DoxID(id));
+        final DocumentMeta meta = dox.read(collection, doxid);
         final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
         return Response.ok().tag(entityTag).entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
@@ -149,6 +149,16 @@ public class DoxResource {
 
         final DocumentMeta meta = dox.update(collection, new DoxID(id), bson, version);
         return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
+    }
+
+    @POST
+    @Path("{collection}/{id}/{oobname}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response saveOob(@PathParam("collection") final String collection,
+        @PathParam("id") final DoxID id,
+        @PathParam("oobname") final String oobname) {
+
+        return Response.ok().entity("OOB").build();
     }
 
     @POST
