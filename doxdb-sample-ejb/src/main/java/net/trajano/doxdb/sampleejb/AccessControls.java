@@ -1,13 +1,18 @@
 package net.trajano.doxdb.sampleejb;
 
+import java.io.IOException;
 import java.security.Principal;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.persistence.PersistenceException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.trajano.doxdb.CollectionAccessControl;
 import net.trajano.doxdb.Indexer;
 import net.trajano.doxdb.Migrator;
+import net.trajano.doxdb.sample.json.Horse;
 import net.trajano.doxdb.search.IndexView;
 
 @Stateless
@@ -33,12 +38,19 @@ public class AccessControls implements
     public IndexView buildIndexView(final String collection,
         final String json) {
 
-        final IndexView indexView = new IndexView();
-        indexView.setText("json", json);
-        indexView.appendText(json);
-        indexView.setString("collection", collection);
-        indexView.setIndex("MYINDEX");
-        return indexView;
+        try {
+            final IndexView indexView = new IndexView();
+            final Horse horse = new ObjectMapper().readValue(json, Horse.class);
+            indexView.setText("json", json);
+            indexView.appendText(json);
+            indexView.setString("collection", collection);
+            indexView.setString("name", horse.getName());
+            indexView.setIndex("MYINDEX");
+            return indexView;
+
+        } catch (final IOException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     @Override

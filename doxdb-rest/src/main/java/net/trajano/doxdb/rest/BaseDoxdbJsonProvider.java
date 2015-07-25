@@ -17,8 +17,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
@@ -144,14 +147,16 @@ public class BaseDoxdbJsonProvider {
     @Path("search/{index}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response simpleSearch(@PathParam("index") final String index,
-        @QueryParam("q") final String queryString) {
+        @QueryParam("q") final String queryString,
+        @Context final UriInfo uriInfo) {
 
         final SearchResult results = doxSearch.search(index, queryString, 50);
         //results.get
         final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
         for (final IndexView hit : results.getHits()) {
             final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
-            hitBuilder.add("_id", hit.getDoxID().toString());
+            final String id = hit.getDoxID().toString();
+            hitBuilder.add("_id", id);
             for (final Entry<String, Double> entry : hit.getDoubles()) {
                 hitBuilder.add(entry.getKey(), entry.getValue());
             }
@@ -162,10 +167,10 @@ public class BaseDoxdbJsonProvider {
                 hitBuilder.add(entry.getKey(), entry.getValue());
             }
             hitBuilder.add("_collection", hit.getCollection());
+            hitBuilder.add("_url", uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
             hitsBuilder.add(hitBuilder);
         }
         final JsonObject resultJson = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder).build();
         return Response.ok().entity(resultJson).build();
     }
-
 }

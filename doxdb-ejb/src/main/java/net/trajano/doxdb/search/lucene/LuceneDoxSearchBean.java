@@ -97,15 +97,17 @@ public class LuceneDoxSearchBean implements
 
         final IndexView ret = new IndexView();
         for (final IndexableField field : doc.getFields()) {
-            if (FIELD_INDEX.equals(field.name())) {
-                ret.setIndex(field.stringValue());
-            } else if (field instanceof StringField) {
+            if (FIELD_ID.equals(field.name()) || FIELD_COLLECTION.equals(field.name())) {
+                continue;
+            }
+            final Number numericValue = field.numericValue();
+            if (numericValue == null) {
                 ret.setString(field.name(), field.stringValue());
-            } else if (field instanceof DoubleField) {
-                ret.setDouble(field.name(), ((DoubleField) field).numericValue()
+            } else if (numericValue instanceof Double) {
+                ret.setDouble(field.name(), numericValue
                     .doubleValue());
-            } else if (field instanceof LongField) {
-                ret.setLong(field.name(), ((LongField) field).numericValue()
+            } else if (numericValue instanceof Long) {
+                ret.setLong(field.name(), numericValue
                     .longValue());
             }
         }
