@@ -5,11 +5,16 @@ import net.trajano.doxdb.search.SearchResult;
 
 public interface DoxSearch {
 
-    void addToIndex(
-        String collection,
-        DoxID doxID,
-        IndexView[] indexViews);
+    /**
+     * This must only be one thread at a time.
+     *
+     * @param indexViews
+     */
+    void addToIndex(IndexView... indexViews);
 
+    /**
+     * This must only be one thread at a time.
+     */
     void removeFromIndex(String collection,
         DoxID doxID);
 

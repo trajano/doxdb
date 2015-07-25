@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;
@@ -72,24 +73,25 @@ public class LuceneDoxSearchBean implements
     @Resource
     private DataSource ds;
 
+    @EJB
+    private SingletonLockFactory lockFactory;
+
     @Override
     @Asynchronous
     public void addToIndex(
-        final String collection,
-        final DoxID doxid,
-        final IndexView[] indexViews) {
+        final IndexView... indexViews) {
 
         try (final Connection c = ds.getConnection()) {
-            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
+            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, SEARCHINDEX);
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+            iwc.setWriteLockTimeout(5000);
 
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 for (final IndexView indexView : indexViews) {
-                    final Document doc = buildFromIndexView(collection, doxid, indexView);
-                    indexWriter.updateDocument(new Term(FIELD_UNIQUE_ID, uid(indexView.getIndex(), collection, doxid)), doc);
+                    final Document doc = buildFromIndexView(indexView);
+                    indexWriter.updateDocument(new Term(FIELD_UNIQUE_ID, uid(indexView)), doc);
                 }
-                indexWriter.commit();
             }
         } catch (final IOException
             | SQLException e) {
@@ -127,18 +129,16 @@ public class LuceneDoxSearchBean implements
     }
 
     private Document buildFromIndexView(
-        final String collection,
-        final DoxID doxid,
         final IndexView indexView) {
 
         final Document doc = new Document();
-        doc.add(new StringField(FIELD_UNIQUE_ID, uid(indexView.getIndex(), collection, doxid), Store.NO));
+        doc.add(new StringField(FIELD_UNIQUE_ID, uid(indexView), Store.NO));
         doc.add(new StringField(FIELD_INDEX, indexView.getIndex(), Store.NO));
-        doc.add(new StringField(FIELD_COLLECTION, collection, Store.YES));
+        doc.add(new StringField(FIELD_COLLECTION, indexView.getCollection(), Store.YES));
         if (!indexView.isMasked()) {
-            doc.add(new StringField(FIELD_ID, doxid.toString(), Store.YES));
+            doc.add(new StringField(FIELD_ID, indexView.getDoxID().toString(), Store.YES));
         } else {
-            doc.add(new StringField(FIELD_ID, doxid.toString(), Store.NO));
+            doc.add(new StringField(FIELD_ID, indexView.getDoxID().toString(), Store.NO));
         }
         for (final Entry<String, String> entry : indexView.getStrings()) {
             doc.add(new StringField(entry.getKey(), entry.getValue(), Store.YES));
@@ -178,13 +178,12 @@ public class LuceneDoxSearchBean implements
         try (final Connection c = ds.getConnection()) {
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
+            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 final BooleanQuery booleanQuery = new BooleanQuery();
                 booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
                 booleanQuery.add(new TermQuery(new Term(FIELD_COLLECTION, collection)), Occur.MUST);
                 indexWriter.deleteDocuments(booleanQuery);
-                indexWriter.commit();
             }
         } catch (final IOException
             | SQLException e) {
@@ -201,10 +200,9 @@ public class LuceneDoxSearchBean implements
         try (final Connection c = ds.getConnection()) {
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
+            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 indexWriter.deleteAll();
-                indexWriter.commit();
             }
         } catch (final IOException
             | SQLException e) {
@@ -229,7 +227,7 @@ public class LuceneDoxSearchBean implements
             final BooleanQuery booleanQuery = new BooleanQuery();
             booleanQuery.add(query, Occur.MUST);
             booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
-            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
+            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
 
                 final IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));
@@ -244,11 +242,9 @@ public class LuceneDoxSearchBean implements
         }
     }
 
-    private String uid(final String index,
-        final String collection,
-        final DoxID doxid) {
+    private String uid(final IndexView view) {
 
-        return index + "/" + collection + "/" + doxid;
+        return view.getIndex() + "/" + view.getCollection() + "/" + view.getDoxID();
     }
 
 }

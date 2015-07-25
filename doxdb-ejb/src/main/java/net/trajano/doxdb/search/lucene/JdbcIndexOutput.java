@@ -28,9 +28,9 @@ public class JdbcIndexOutput extends IndexOutput {
 
     private final PreparedStatement statement;
 
-    protected JdbcIndexOutput(String name,
-        Connection connection,
-        String searchTableName) {
+    protected JdbcIndexOutput(final String name,
+        final Connection connection,
+        final String searchTableName) {
         super(name);
 
         try (PreparedStatement lock = connection.prepareStatement(String.format("select name from %1$s where name = ? for update", searchTableName))) {
@@ -69,7 +69,7 @@ public class JdbcIndexOutput extends IndexOutput {
                 throw new PersistenceException("update expected but did not occur");
             }
         } catch (final SQLException e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
 
     }
@@ -87,7 +87,7 @@ public class JdbcIndexOutput extends IndexOutput {
     }
 
     @Override
-    public void writeByte(byte b) throws IOException {
+    public void writeByte(final byte b) throws IOException {
 
         baos.write(b);
         ++pos;
@@ -96,9 +96,9 @@ public class JdbcIndexOutput extends IndexOutput {
     }
 
     @Override
-    public void writeBytes(byte[] buffer,
-        int offset,
-        int length) throws IOException {
+    public void writeBytes(final byte[] buffer,
+        final int offset,
+        final int length) throws IOException {
 
         baos.write(buffer, offset, length);
         digest.update(buffer, offset, length);

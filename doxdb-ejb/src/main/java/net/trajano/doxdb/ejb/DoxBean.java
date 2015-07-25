@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -166,7 +168,11 @@ public class DoxBean implements
                         rs.next();
 
                         final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
-                        doxSearchBean.addToIndex(config.getName(), doxId, indexViews);
+                        for (final IndexView indexView : indexViews) {
+                            indexView.setCollection(config.getName());
+                            indexView.setDoxID(doxId);
+                        }
+                        doxSearchBean.addToIndex(indexViews);
 
                         final DocumentMeta meta = new DocumentMeta();
                         meta.setAccessKey(accessKey);
@@ -392,15 +398,18 @@ public class DoxBean implements
     public void reindex() {
 
         doxSearchBean.reset();
+
         try (final Connection c = ds.getConnection()) {
 
             for (final DoxType config : doxen.values()) {
 
                 final String sql = String.format(SqlConstants.READALLCONTENT, config.getName().toUpperCase());
                 try (final Statement s = c.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE)) {
+                    final List<IndexView> indexViews = new LinkedList<>();
                     try (final ResultSet rs = s.executeQuery(sql)) {
                         while (rs.next()) {
 
+                            final DoxID doxid = new DoxID(rs.getString(1));
                             final Blob blob = rs.getBlob(2);
 
                             final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(blob.getBytes(1, (int) blob.length()))), DecoderContext.builder()
@@ -408,10 +417,16 @@ public class DoxBean implements
                             blob.free();
                             final String json = decoded.toJson();
                             rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
-                            final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), json);
-                            doxSearchBean.addToIndex(config.getName(), new DoxID(rs.getString(1)), indexViews);
+                            final IndexView[] indexViewBuilt = indexer.buildIndexViews(config.getName(), json);
+                            for (final IndexView indexView : indexViewBuilt) {
+                                indexView.setCollection(config.getName());
+                                indexView.setDoxID(doxid);
+                                indexViews.add(indexView);
+                            }
+
                         }
                     }
+                    doxSearchBean.addToIndex(indexViews.toArray(new IndexView[0]));
                 }
 
             }
@@ -466,7 +481,11 @@ public class DoxBean implements
                     }
 
                     final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
-                    doxSearchBean.addToIndex(config.getName(), doxid, indexViews);
+                    for (final IndexView indexView : indexViews) {
+                        indexView.setCollection(config.getName());
+                        indexView.setDoxID(doxid);
+                    }
+                    doxSearchBean.addToIndex(indexViews);
 
                 }
             }

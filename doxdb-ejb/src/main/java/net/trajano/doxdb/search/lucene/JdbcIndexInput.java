@@ -22,19 +22,21 @@ public class JdbcIndexInput extends BufferedIndexInput {
 
     private final PreparedStatement statement;
 
-    protected JdbcIndexInput(String name,
-        Connection connection,
-        String searchTableName,
-        IOContext context) {
+    protected JdbcIndexInput(final String name,
+        final Connection connection,
+        final String searchTableName,
+        final IOContext context) {
         super(name, context);
         try {
             final String readSql = String.format("select content, contentlength from %1$s where name = ?", searchTableName);
             statement = connection.prepareStatement(readSql);
             statement.setString(1, name);
             rs = statement.executeQuery();
-            rs.next();
-            buffer = ByteBuffer.wrap(rs.getBytes(1));
-
+            if (rs.next() && rs.getInt(2) > 0) {
+                buffer = ByteBuffer.wrap(rs.getBytes(1));
+            } else {
+                buffer = ByteBuffer.allocate(0);
+            }
             pos = 0;
         } catch (final SQLException e) {
             throw new PersistenceException(e);
@@ -59,15 +61,15 @@ public class JdbcIndexInput extends BufferedIndexInput {
     }
 
     @Override
-    protected void readInternal(byte[] b,
-        int offset,
-        int length) throws IOException {
+    protected void readInternal(final byte[] b,
+        final int offset,
+        final int length) throws IOException {
 
         System.arraycopy(buffer.array(), pos, b, offset, length);
     }
 
     @Override
-    protected void seekInternal(long pos) throws IOException {
+    protected void seekInternal(final long pos) throws IOException {
 
         this.pos = (int) pos;
 

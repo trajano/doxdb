@@ -17,6 +17,7 @@ import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.store.Lock;
+import org.apache.lucene.store.LockFactory;
 
 public class JdbcDirectory extends Directory {
 
@@ -24,13 +25,17 @@ public class JdbcDirectory extends Directory {
 
     private final Connection connection;
 
+    private final LockFactory lockFactory;
+
     /**
      * May be passed in the future.
      */
     private final String searchTableName;
 
     public JdbcDirectory(final Connection connection,
+        final LockFactory lockFactory,
         final String searchTableName) throws SQLException {
+        this.lockFactory = lockFactory;
         this.connection = connection;
         this.searchTableName = searchTableName.toUpperCase();
         createSearchTable();
@@ -136,7 +141,8 @@ public class JdbcDirectory extends Directory {
     @Override
     public Lock makeLock(final String name) {
 
-        return new JdbcLock(name, connection, searchTableName);
+        return lockFactory.makeLock(this, name);
+
     }
 
     @Override
@@ -150,7 +156,12 @@ public class JdbcDirectory extends Directory {
     public void renameFile(final String source,
         final String dest) throws IOException {
 
+        if (source.equals(dest)) {
+            return;
+        }
         final String renameFileSql = String.format("update %1$s set name = ? where name = ?", searchTableName);
+        System.out.println("src=" + source);
+        System.out.println("dest=" + dest);
         try (final PreparedStatement s = connection.prepareStatement(renameFileSql)) {
             s.setString(1, dest);
             s.setString(2, source);
