@@ -1,15 +1,27 @@
-package net.trajano.doxdb.jdbc;
+package net.trajano.doxdb;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 
-import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.jdbc.DoxPrincipal;
 
-public class DocumentMeta {
+public class DocumentMeta implements
+    Serializable {
+
+    /**
+     * bare_field_name.
+     */
+    private static final long serialVersionUID = -910687815159740508L;
 
     private byte[] accessKey;
+
+    /**
+     * Content in JSON format.
+     */
+    private String contentJson;
 
     private int contentVersion;
 
@@ -30,6 +42,11 @@ public class DocumentMeta {
     public byte[] getAccessKey() {
 
         return accessKey;
+    }
+
+    public String getContentJson() {
+
+        return contentJson;
     }
 
     public int getContentVersion() {
@@ -89,6 +106,11 @@ public class DocumentMeta {
     public void setAccessKey(final byte[] accessKey) {
 
         this.accessKey = accessKey;
+    }
+
+    public void setContentJson(final String contentJson) {
+
+        this.contentJson = contentJson;
     }
 
     public void setContentVersion(final int contentVersion) {

@@ -12,7 +12,7 @@ public interface Dox {
      *            dox contents
      * @return dox contents with "_id" set.
      */
-    String create(String collectionName,
+    DocumentMeta create(String collectionName,
         String json);
 
     void delete(String collection,
@@ -24,12 +24,12 @@ public interface Dox {
      */
     void noop();
 
-    String read(String collectionName,
+    DocumentMeta read(String collectionName,
         DoxID id);
 
     void reindex();
 
-    String update(String collection,
+    DocumentMeta update(String collection,
         DoxID id,
         String json,
         int version);

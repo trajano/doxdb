@@ -18,11 +18,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxSearch;
@@ -74,8 +75,8 @@ public class BaseDoxdbJsonProvider {
     public Response create(@PathParam("collection") final String collection,
         final JsonObject content) {
 
-        final String savedJson = dox.create(collection, content.toString());
-        return Response.ok().entity(savedJson).build();
+        final DocumentMeta meta = dox.create(collection, content.toString());
+        return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     @DELETE
@@ -94,7 +95,9 @@ public class BaseDoxdbJsonProvider {
     public Response get(@PathParam("collection") final String collection,
         @PathParam("id") final String id) {
 
-        return Response.ok().entity(dox.read(collection, new DoxID(id))).build();
+        final DocumentMeta meta = dox.read(collection, new DoxID(id));
+        final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
+        return Response.ok().tag(entityTag).entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     private Response op(final String collection,
@@ -127,8 +130,8 @@ public class BaseDoxdbJsonProvider {
         final String id,
         final JsonObject content) {
 
-        final String updatedJson = dox.update(collection, new DoxID(id), content.toString(), content.getInt("_version"));
-        return Response.ok().entity(updatedJson).build();
+        final DocumentMeta meta = dox.update(collection, new DoxID(id), content.toString(), content.getInt("_version"));
+        return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     @POST

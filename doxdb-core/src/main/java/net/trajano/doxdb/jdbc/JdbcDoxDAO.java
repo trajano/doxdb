@@ -27,6 +27,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.DatatypeConverter;
 
+import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
