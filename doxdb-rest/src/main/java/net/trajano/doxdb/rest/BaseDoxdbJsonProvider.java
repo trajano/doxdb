@@ -79,12 +79,13 @@ public class BaseDoxdbJsonProvider {
     }
 
     @DELETE
-    @Path("{collection}/{id : [A-Za-z0-9]{32} }")
+    @Path("{collection}/{id}")
     public Response delete(@PathParam("collection") final String collection,
-        @PathParam("id") final String id) {
+        @PathParam("id") final String id,
+        @QueryParam("v") final int version) {
 
-        // DAO.
-        return Response.ok().entity(collection + " " + id).build();
+        dox.delete(collection, new DoxID(id), version);
+        return Response.noContent().build();
     }
 
     @GET

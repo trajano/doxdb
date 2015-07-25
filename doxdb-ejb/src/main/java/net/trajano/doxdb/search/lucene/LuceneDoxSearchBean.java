@@ -86,6 +86,7 @@ public class LuceneDoxSearchBean implements
                 final Document doc = buildFromIndexView(index, collection, doxid, indexView);
                 indexWriter.updateDocument(new Term(FIELD_ID, doxid
                     .toString()), doc);
+                indexWriter.commit();
             }
         } catch (final IOException
             | SQLException e) {
@@ -170,11 +171,33 @@ public class LuceneDoxSearchBean implements
                 booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
                 booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
                 indexWriter.deleteDocuments(booleanQuery);
+                indexWriter.commit();
             }
         } catch (final IOException
             | SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    /**
+     * This will clear all the indexing data from the system.
+     */
+    @Override
+    public void reset() {
+
+        try (final Connection c = ds.getConnection()) {
+            final Analyzer analyzer = new StandardAnalyzer();
+            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
+            try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
+                indexWriter.deleteAll();
+                indexWriter.commit();
+            }
+        } catch (final IOException
+            | SQLException e) {
+            throw new PersistenceException(e);
+        }
+
     }
 
     @Override

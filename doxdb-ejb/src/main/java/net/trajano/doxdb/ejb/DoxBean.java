@@ -178,6 +178,44 @@ public class DoxBean implements
         }
     }
 
+    @Override
+    public void delete(final String collection,
+        final DoxID doxid,
+        final int version) {
+
+        final Timestamp ts = new Timestamp(System.currentTimeMillis());
+        final DoxType config = doxen.get(collection);
+
+        try (Connection c = ds.getConnection()) {
+            final DocumentMeta meta = readMetaAndLock(c, config.getName(), config.isOob(), doxid, version);
+            if (config.isOob()) {
+                //                deleteOob(ctx.getCallerPrincipal(), meta, ts);
+            }
+
+            meta.getAccessKey();
+            // TODO check the security.
+
+            try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.COPYTOTOMBSTONESQL, config.getName().toUpperCase()))) {
+                s.setString(1, ctx.getCallerPrincipal().getName());
+                s.setTimestamp(2, ts);
+                s.setLong(3, meta.getId());
+                s.setInt(4, meta.getVersion());
+                s.executeUpdate();
+            }
+            try (final PreparedStatement t = c.prepareStatement(String.format(SqlConstants.DELETE, config.getName().toUpperCase()))) {
+                t.setLong(1, meta.getId());
+                t.setInt(2, meta.getVersion());
+                final int deletedRows = t.executeUpdate();
+                if (deletedRows != 1) {
+                    throw new PersistenceException("problem with the delete");
+                }
+            }
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+
+    }
+
     /**
      * This will initialize the EJB and prepare the statements used by the
      * framework. It will create the tables as needed.
@@ -346,12 +384,14 @@ public class DoxBean implements
     @Asynchronous
     public void reindex() {
 
-        try (Connection c = ds.getConnection()) {
+        doxSearchBean.reset();
+        try (final Connection c = ds.getConnection()) {
 
             for (final DoxType config : doxen.values()) {
 
-                try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.READALLCONTENT, config.getName().toUpperCase()))) {
-                    try (final ResultSet rs = s.executeQuery()) {
+                final String sql = String.format(SqlConstants.READALLCONTENT, config.getName().toUpperCase());
+                try (final Statement s = c.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE)) {
+                    try (final ResultSet rs = s.executeQuery(sql)) {
                         while (rs.next()) {
 
                             final Blob blob = rs.getBlob(2);
@@ -359,7 +399,9 @@ public class DoxBean implements
                             final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(blob.getBytes(1, (int) blob.length()))), DecoderContext.builder()
                                 .build());
                             blob.free();
-                            final IndexView indexView = indexer.buildIndexView(config.getName(), decoded.toJson());
+                            final String json = decoded.toJson();
+                            rs.updateBytes(3, collectionAccessControl.buildAccessKeyForCreate(config.getName(), json, new DoxPrincipal(rs.getString(4))));
+                            final IndexView indexView = indexer.buildIndexView(config.getName(), json);
                             doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), new DoxID(rs.getString(1)), indexView);
                         }
                     }

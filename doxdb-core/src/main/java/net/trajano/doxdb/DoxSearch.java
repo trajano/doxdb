@@ -13,6 +13,11 @@ public interface DoxSearch {
     void removeFromIndex(String index,
         DoxID doxID);
 
+    /**
+     * This will clear all the indexing data from the system.
+     */
+    void reset();
+
     SearchResult search(String index,
         String queryString,
         int limit);

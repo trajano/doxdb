@@ -15,6 +15,10 @@ public interface Dox {
     String create(String collectionName,
         String json);
 
+    void delete(String collection,
+        DoxID doxID,
+        int version);
+
     /**
      * Does nothing, but calling it ensures that the EJB gets initialized.
      */

@@ -1,15 +1,22 @@
 package net.trajano.doxdb.jdbc;
 
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.Objects;
 
 public final class DoxPrincipal implements
-    Principal {
+    Principal,
+    Serializable {
 
     /**
      * Size of the ID in bytes.
      */
     public static final int LENGTH = 128;
+
+    /**
+     * bare_field_name.
+     */
+    private static final long serialVersionUID = 5204441416021635252L;
 
     private final String principalName;
 
