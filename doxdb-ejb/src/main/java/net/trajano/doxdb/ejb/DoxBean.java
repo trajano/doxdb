@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentMap;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.SessionContext;
@@ -67,7 +68,7 @@ import net.trajano.doxdb.search.IndexView;
  */
 @Stateless
 @Remote(Dox.class)
-public class JsonDox implements
+public class DoxBean implements
     Dox {
 
     @EJB
@@ -312,17 +313,24 @@ public class JsonDox implements
     }
 
     @Override
+    @Asynchronous
     public void reindex() {
 
         try (Connection c = ds.getConnection()) {
 
-            for (final DoxType doxConfig : doxen.values()) {
+            for (final DoxType config : doxen.values()) {
 
-                try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.READALLCONTENT, doxConfig.getName().toUpperCase()))) {
+                try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.READALLCONTENT, config.getName().toUpperCase()))) {
                     try (final ResultSet rs = s.executeQuery()) {
                         while (rs.next()) {
-                            //                            final IndexView indexView = indexer.buildIndexView(config.getName(), storedJson);
-                            //                            doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), doxId, indexView);
+
+                            final Blob blob = rs.getBlob(1);
+
+                            final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(blob.getBytes(1, (int) blob.length()))), DecoderContext.builder()
+                                .build());
+                            blob.free();
+                            final IndexView indexView = indexer.buildIndexView(config.getName(), decoded.toJson());
+                            doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), new DoxID(rs.getString(1)), indexView);
                         }
                     }
                 }

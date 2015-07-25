@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.Asynchronous;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;
@@ -73,6 +74,7 @@ public class LuceneDoxSearchBean implements
     private transient IndexWriterConfig iwc;
 
     @Override
+    @Asynchronous
     public void addToIndex(final String index,
         final String collection,
         final DoxID doxid,
@@ -160,9 +162,22 @@ public class LuceneDoxSearchBean implements
     }
 
     @Override
+    @Asynchronous
     public void removeFromIndex(final String index,
         final DoxID doxID) {
 
+        try (final Connection c = ds.getConnection()) {
+            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
+            try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
+                final BooleanQuery booleanQuery = new BooleanQuery();
+                booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
+                booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
+                indexWriter.deleteDocuments(booleanQuery);
+            }
+        } catch (final IOException
+            | SQLException e) {
+            throw new PersistenceException(e);
+        }
     }
 
     @Override
