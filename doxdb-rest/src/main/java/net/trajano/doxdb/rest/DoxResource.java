@@ -60,7 +60,7 @@ import net.trajano.doxdb.search.SearchResult;
  */
 @Path("")
 @ManagedBean
-public class BaseDoxdbJsonProvider {
+public class DoxResource {
 
     @EJB(beanInterface = Dox.class)
     private Dox dox;

@@ -1,9 +1,9 @@
-package net.trajano.doxdb.rest.sample;
+package net.trajano.doxdb.rest.internal;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 @ApplicationPath("/V1")
-public class Hello extends Application {
+public class DoxV1 extends Application {
 
 }
