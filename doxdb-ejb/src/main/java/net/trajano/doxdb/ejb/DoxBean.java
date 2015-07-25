@@ -26,12 +26,14 @@ import javax.ejb.Remote;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
 import org.bson.BsonBinaryReader;
 import org.bson.BsonBinaryWriter;
 import org.bson.BsonDocument;
+import org.bson.BsonInt32;
 import org.bson.BsonString;
 import org.bson.codecs.BsonDocumentCodec;
 import org.bson.codecs.DecoderContext;
@@ -132,25 +134,7 @@ public class DoxBean implements
         final DoxType config = doxen.get(collectionName);
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        JsonSchema jsonSchema;
-        try {
-            jsonSchema = jsonSchemaMap.get(schema.getUri());
-            if (jsonSchema == null) {
-                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
-                    .setDefaultVersion(SchemaVersion.DRAFTV4)
-                    .freeze();
-
-                jsonSchema = JsonSchemaFactory.newBuilder()
-                    .setValidationConfiguration(cfg)
-                    .freeze()
-                    .getJsonSchema(JsonLoader.fromResource(schema.getUri()));
-                jsonSchemaMap.putIfAbsent(schema.getUri(), jsonSchema);
-            }
-        } catch (ProcessingException
-            | IOException e) {
-            throw new PersistenceException(e);
-        }
-        validate(jsonSchema, json);
+        validate(schema, json);
         try (Connection c = ds.getConnection()) {
             final DoxID doxId = DoxID.generate();
 
@@ -158,6 +142,7 @@ public class DoxBean implements
 
             final BsonDocument document = BsonDocument.parse(json);
             document.put("_id", new BsonString(doxId.toString()));
+            document.put("_version", new BsonInt32(1));
             new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), document, EncoderContext.builder()
                 .build());
 
@@ -174,7 +159,7 @@ public class DoxBean implements
                     s.setString(5, ctx.getCallerPrincipal().getName());
                     s.setTimestamp(6, ts);
                     s.setInt(7, 1);
-                    s.setInt(8, schema.getVersion().intValue());
+                    s.setInt(8, schema.getVersion());
                     s.setBytes(9, collectionAccessControl.buildAccessKeyForCreate(config.getName(), storedJson, ctx.getCallerPrincipal()));
                     s.executeUpdate();
                     try (final ResultSet rs = s.getGeneratedKeys()) {
@@ -318,6 +303,45 @@ public class DoxBean implements
         }
     }
 
+    private DocumentMeta readMetaAndLock(final Connection c,
+        final String collectionName,
+        final boolean hasOob,
+        final DoxID id,
+        final int version) {
+
+        try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.READFORUPDATE, collectionName.toUpperCase()))) {
+            s.setString(1, id.toString());
+            s.setInt(2, version);
+            try (final ResultSet rs = s.executeQuery()) {
+                if (!rs.next()) {
+                    throw new OptimisticLockException();
+                }
+                final DocumentMeta meta = new DocumentMeta();
+                meta.setId(rs.getLong(1));
+                meta.setDoxId(new DoxID(rs.getString(2)));
+                meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
+                meta.setCreatedOn(rs.getTimestamp(4));
+                meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
+                meta.setLastUpdatedOn(rs.getTimestamp(6));
+                meta.setVersion(rs.getInt(7));
+                meta.setContentVersion(rs.getInt(8));
+                meta.setAccessKey(rs.getBytes(9));
+
+                if (hasOob) {
+                    try (final PreparedStatement os = c.prepareStatement(String.format(SqlConstants.OOBREADFORUPDATE, collectionName.toUpperCase()))) {
+                        os.setLong(1, meta.getId());
+                        os.executeQuery()
+                            .close();
+                    }
+                }
+
+                return meta;
+            }
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
     @Override
     @Asynchronous
     public void reindex() {
@@ -348,11 +372,81 @@ public class DoxBean implements
         }
     }
 
-    private void validate(final JsonSchema schema,
+    @Override
+    public String update(final String collectionName,
+        final DoxID doxid,
+        final String json,
+        final int version) {
+
+        final Timestamp ts = new Timestamp(System.currentTimeMillis());
+        final DoxType config = doxen.get(collectionName);
+        final SchemaType schema = currentSchemaMap.get(collectionName);
+
+        validate(schema, json);
+        try (Connection c = ds.getConnection()) {
+            final DocumentMeta meta = readMetaAndLock(c, config.getName(), config.isOob(), doxid, version);
+
+            meta.getAccessKey();
+            // TODO check the security.
+
+            final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
+
+            final BsonDocument document = BsonDocument.parse(json);
+            document.put("_id", new BsonString(doxid.toString()));
+            document.put("_version", new BsonInt32(version + 1));
+            new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), document, EncoderContext.builder()
+                .build());
+
+            final String storedJson = document.toJson();
+            try (final InputStream in = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
+
+                try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.UPDATE, config.getName().toUpperCase()), Statement.RETURN_GENERATED_KEYS)) {
+
+                    s.setBinaryStream(1, in);
+                    s.setString(2, ctx.getCallerPrincipal().getName());
+                    s.setTimestamp(3, ts);
+                    s.setInt(4, schema.getVersion());
+                    s.setBytes(5, collectionAccessControl.buildAccessKeyForCreate(config.getName(), storedJson, ctx.getCallerPrincipal()));
+
+                    s.setLong(6, meta.getId());
+                    s.setInt(7, version);
+                    final int count = s.executeUpdate();
+                    if (count != 1) {
+                        throw new PersistenceException("Update failed");
+                    }
+
+                    final IndexView indexView = indexer.buildIndexView(config.getName(), storedJson);
+                    doxSearchBean.addToIndex(indexView.getIndex(), config.getName(), doxid, indexView);
+
+                    return storedJson;
+                }
+            }
+        } catch (final IOException
+            | SQLException e) {
+            throw new PersistenceException(e);
+        }
+
+    }
+
+    private void validate(final SchemaType schema,
         final String json) {
 
         try {
-            final ProcessingReport validate = schema.validate(JsonLoader.fromString(json));
+
+            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getUri());
+            if (jsonSchema == null) {
+                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+                    .setDefaultVersion(SchemaVersion.DRAFTV4)
+                    .freeze();
+
+                jsonSchema = JsonSchemaFactory.newBuilder()
+                    .setValidationConfiguration(cfg)
+                    .freeze()
+                    .getJsonSchema(JsonLoader.fromResource(schema.getUri()));
+                jsonSchemaMap.putIfAbsent(schema.getUri(), jsonSchema);
+            }
+
+            final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));
             if (!validate.isSuccess()) {
                 throw new PersistenceException(validate.toString());
             }

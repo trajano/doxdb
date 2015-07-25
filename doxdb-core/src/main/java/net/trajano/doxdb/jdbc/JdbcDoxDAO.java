@@ -261,7 +261,7 @@ public class JdbcDoxDAO implements
 
     @Override
     public DoxID create(final InputStream in,
-        int contentVersion,
+        final int contentVersion,
         final Principal principal) {
 
         final DoxID doxId = DoxID.generate();
@@ -556,6 +556,12 @@ public class JdbcDoxDAO implements
     }
 
     @Override
+    public int getContentVersion(final DoxID id) {
+
+        return readMeta(id).getContentVersion();
+    }
+
+    @Override
     public int getVersion(final DoxID id) {
 
         return readMeta(id).getVersion();
@@ -563,7 +569,7 @@ public class JdbcDoxDAO implements
 
     @Override
     public void importDox(final InputStream is,
-        int contentVersion) throws IOException {
+        final int contentVersion) throws IOException {
 
         try {
             final MimeMultipart mmp = new MimeMultipart(new ByteArrayDataSource(is, MediaType.MULTIPART_FORM_DATA));
@@ -849,16 +855,10 @@ public class JdbcDoxDAO implements
             u.setInt(4, contentVersion);
 
             u.setLong(5, meta.getId());
-            u.setInt(6, version);
+            u.setInt(6, version + 1);
             u.executeUpdate();
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
-    }
-
-    @Override
-    public int getContentVersion(DoxID id) {
-
-        return readMeta(id).getContentVersion();
     }
 }

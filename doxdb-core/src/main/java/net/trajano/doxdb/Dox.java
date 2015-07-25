@@ -25,4 +25,9 @@ public interface Dox {
 
     void reindex();
 
+    String update(String collection,
+        DoxID id,
+        String json,
+        int version);
+
 }

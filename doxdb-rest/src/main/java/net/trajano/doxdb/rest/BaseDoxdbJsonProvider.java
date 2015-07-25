@@ -126,8 +126,8 @@ public class BaseDoxdbJsonProvider {
         final String id,
         final JsonObject content) {
 
-        System.out.println(collection + " " + id + " SAVE");
-        return Response.ok().entity(content).build();
+        final String updatedJson = dox.update(collection, new DoxID(id), content.toString(), content.getInt("_version"));
+        return Response.ok().entity(updatedJson).build();
     }
 
     @POST
