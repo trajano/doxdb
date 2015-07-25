@@ -64,10 +64,6 @@ public class Initializer {
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
-
-        System.out.println("dox = " + dox);
-        dox.noop();
-
     }
 
     private boolean isTableExist(final Connection c,
@@ -87,13 +83,17 @@ public class Initializer {
         try (final Scanner scanner = new Scanner(getClass().getResourceAsStream(sqlResource))) {
             scanner.useDelimiter(";");
 
-            try (Statement stmt = c.createStatement()) {
+            try (final Statement stmt = c.createStatement()) {
 
                 while (scanner.hasNext()) {
-                    stmt.addBatch(String.format(scanner.next(), tableName, lobSize));
+                    final String trim = String.format(scanner.next(), tableName, lobSize).trim();
+                    if (!trim.isEmpty()) {
+                        stmt.addBatch(trim);
+                    }
                 }
                 stmt.executeBatch();
             }
+
         }
 
     }

@@ -1,8 +1,9 @@
-package net.trajano.doxb.test;
+package net.trajano.doxdb.sample.test;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.PrintWriter;
+import java.sql.Connection;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -34,11 +35,12 @@ public class LuceneTest {
         ds.setPassword("sa");
         ds.setLogWriter(new PrintWriter(System.out));
 
+        final Connection c = ds.getConnection();
         {
 
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(ds, "searchtable");
+            final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
             final IndexWriter indexWriter = new IndexWriter(dir, iwc);
 
             final Document doc = new Document();
@@ -47,10 +49,9 @@ public class LuceneTest {
             indexWriter.commit();
             indexWriter.close();
         }
-        ds.getConnection().commit();
         {
 
-            final JdbcDirectory dir = new JdbcDirectory(ds, "searchtable");
+            final JdbcDirectory dir = new JdbcDirectory(c, "searchtable");
             final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
             final Analyzer analyzer = new StandardAnalyzer();
             final QueryParser parser = new QueryParser("name", analyzer);
@@ -60,7 +61,6 @@ public class LuceneTest {
             final Document doc = searcher.doc(search.scoreDocs[0].doc);
             assertEquals("value", doc.get("name"));
         }
-        ds.getConnection().commit();
     }
 
 }
