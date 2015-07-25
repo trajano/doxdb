@@ -52,6 +52,7 @@ import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxSearch;
 import net.trajano.doxdb.Indexer;
+import net.trajano.doxdb.Migrator;
 import net.trajano.doxdb.ejb.internal.SqlConstants;
 import net.trajano.doxdb.jdbc.DocumentMeta;
 import net.trajano.doxdb.jdbc.DoxPrincipal;
@@ -99,6 +100,9 @@ public class DoxBean implements
     private transient long initTimeInMillis;
 
     private transient ConcurrentMap<String, JsonSchema> jsonSchemaMap = new ConcurrentHashMap<>();
+
+    @EJB
+    private Migrator migrator;
 
     private transient Properties oobSqls = new Properties();
 
@@ -246,15 +250,17 @@ public class DoxBean implements
 
             final DocumentMeta meta = readMeta(c, config.getName(), id);
 
-            if (meta.getContentVersion() != schema.getVersion()) {
-                // TODO migrate data .
-            }
-
             meta.getAccessKey();
             // TODO check the security.
+
             final BsonDocument document = readContent(c, config.getName(), meta.getId());
 
-            return document.toJson();
+            final String json = document.toJson();
+            if (meta.getContentVersion() != schema.getVersion()) {
+                migrator.migrate(collectionName, meta.getContentVersion(), schema.getVersion(), json);
+            }
+
+            return json;
 
         } catch (final SQLException e) {
             throw new PersistenceException(e);
@@ -324,7 +330,7 @@ public class DoxBean implements
                     try (final ResultSet rs = s.executeQuery()) {
                         while (rs.next()) {
 
-                            final Blob blob = rs.getBlob(1);
+                            final Blob blob = rs.getBlob(2);
 
                             final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(blob.getBytes(1, (int) blob.length()))), DecoderContext.builder()
                                 .build());

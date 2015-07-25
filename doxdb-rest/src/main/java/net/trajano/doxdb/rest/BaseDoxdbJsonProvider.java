@@ -11,6 +11,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -107,6 +108,15 @@ public class BaseDoxdbJsonProvider {
         System.out.println("dox=" + dox);
         dox.noop();
         return Response.ok().entity("dox= " + dox).build();
+    }
+
+    @OPTIONS
+    @Path("reindex")
+    public Response reindex() {
+
+        // TODO remove this later.
+        dox.reindex();
+        return Response.noContent().build();
     }
 
     private Response save(final String collection,

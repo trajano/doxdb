@@ -7,15 +7,18 @@ import javax.ejb.Stateless;
 
 import net.trajano.doxdb.CollectionAccessControl;
 import net.trajano.doxdb.Indexer;
+import net.trajano.doxdb.Migrator;
 import net.trajano.doxdb.search.IndexView;
 
 @Stateless
 @Remote({
     CollectionAccessControl.class,
-    Indexer.class
+    Indexer.class,
+    Migrator.class
 })
 public class AccessControls implements
     CollectionAccessControl,
+    Migrator,
     Indexer {
 
     @Override
@@ -38,6 +41,7 @@ public class AccessControls implements
         return indexView;
     }
 
+    @Override
     public String migrate(final String collection,
         final int oldContentVersion,
         final int newContentVersion,

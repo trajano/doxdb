@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.ejb.Remote;
@@ -71,8 +70,6 @@ public class LuceneDoxSearchBean implements
     @Resource
     private DataSource ds;
 
-    private transient IndexWriterConfig iwc;
-
     @Override
     @Asynchronous
     public void addToIndex(final String index,
@@ -82,6 +79,9 @@ public class LuceneDoxSearchBean implements
 
         try (final Connection c = ds.getConnection()) {
             final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
+            final Analyzer analyzer = new StandardAnalyzer();
+            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 final Document doc = buildFromIndexView(index, collection, doxid, indexView);
                 indexWriter.updateDocument(new Term(FIELD_ID, doxid
@@ -154,19 +154,14 @@ public class LuceneDoxSearchBean implements
         return result;
     }
 
-    @PostConstruct
-    public void init() {
-
-        final Analyzer analyzer = new StandardAnalyzer();
-        iwc = new IndexWriterConfig(analyzer);
-    }
-
     @Override
     @Asynchronous
     public void removeFromIndex(final String index,
         final DoxID doxID) {
 
         try (final Connection c = ds.getConnection()) {
+            final Analyzer analyzer = new StandardAnalyzer();
+            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
             final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 final BooleanQuery booleanQuery = new BooleanQuery();
@@ -189,6 +184,7 @@ public class LuceneDoxSearchBean implements
 
         try (final Connection c = ds.getConnection()) {
             final Analyzer analyzer = new StandardAnalyzer();
+            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
             final QueryParser parser = new QueryParser(FIELD_TEXT, analyzer);
             final Query query = parser.parse(queryString);
