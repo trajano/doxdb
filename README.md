@@ -20,6 +20,7 @@ Remaining:
 
    * Access control
    * OOB
+   * Automatic Schema migration
    * Import/Export
    * Temporal data
    * Alternate search

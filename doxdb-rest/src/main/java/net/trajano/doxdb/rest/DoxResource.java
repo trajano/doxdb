@@ -28,11 +28,11 @@ import org.bson.BsonDocument;
 import org.bson.BsonNumber;
 import org.bson.BsonValue;
 
+import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
-import net.trajano.doxdb.internal.Dox;
 import net.trajano.doxdb.internal.DoxSearch;
 
 /**
@@ -127,6 +127,15 @@ public class DoxResource {
         System.out.println("dox=" + dox);
         dox.noop();
         return Response.ok().entity("dox= " + dox).build();
+    }
+
+    @GET
+    @Path("{collection}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response readAll(@PathParam("collection") final String collection) {
+
+        final BsonDocument all = dox.readAll(collection);
+        return Response.ok(all.toJson()).build();
     }
 
     @OPTIONS

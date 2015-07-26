@@ -30,6 +30,8 @@ public interface Dox {
     DoxMeta read(String collectionName,
         DoxID id);
 
+    BsonDocument readAll(String collection);
+
     void reindex();
 
     /**

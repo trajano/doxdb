@@ -13,15 +13,5 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>doxdb-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angularjs</artifactId>
-            <version>1.4.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>material-design-lite</artifactId>
-            <version>1.0.0</version>
-        </dependency>
     </dependencies>
 </project>

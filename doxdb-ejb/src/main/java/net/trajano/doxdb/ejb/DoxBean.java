@@ -301,6 +301,42 @@ public class DoxBean implements
         }
     }
 
+    @Override
+    public BsonDocument readAll(final String collectionName) {
+
+        final DoxType config = doxen.get(collectionName);
+        final SchemaType schema = currentSchemaMap.get(collectionName);
+
+        final BsonDocument all = new BsonDocument();
+        try (Connection c = ds.getConnection()) {
+            final String sql = String.format(SqlConstants.READALLCONTENT, config.getName().toUpperCase());
+            try (final PreparedStatement s = c.prepareStatement(sql)) {
+                try (final ResultSet rs = s.executeQuery(sql)) {
+                    while (rs.next()) {
+
+                        final Blob blob = rs.getBlob(2);
+                        // final byte[] accessKey = rs.getBytes(3);
+                        final int contentVersion = rs.getInt(5);
+                        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(blob.getBytes(1, (int) blob.length()))), DecoderContext.builder()
+                            .build());
+                        blob.free();
+
+                        if (contentVersion != schema.getVersion()) {
+                            migrator.migrate(config.getName(), contentVersion, schema.getVersion(), decoded.toJson());
+                            // queue migrate later?
+                        }
+
+                        all.asArray().add(decoded);
+
+                    }
+                }
+            }
+            return all;
+        } catch (final SQLException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
     private BsonDocument readContent(final Connection c,
         final String collectionName,
         final long id) {
