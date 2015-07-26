@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.ejb.SampleJsonBean;
+import net.trajano.doxdb.ejb.DoxBean;
 import net.trajano.doxdb.internal.DoxPrincipal;
 
 public class SampleJsonEntityTest extends AbstractEntityTest {
@@ -21,19 +21,19 @@ public class SampleJsonEntityTest extends AbstractEntityTest {
 
         tx.begin();
 
-        Connection connection = em.unwrap(Connection.class);
+        final Connection connection = em.unwrap(Connection.class);
         Assert.assertNotNull(connection);
 
-        SampleJsonBean bean = new SampleJsonBean();
+        final DoxBean bean = new DoxBean();
         bean.setConnection(connection);
         bean.init();
 
-        String inputJson = "{\"name\":\"abc\"}";
-        JsonObject o = Json.createReader(new StringReader(inputJson))
-                .readObject();
-        DoxID id = bean.create(o, new DoxPrincipal("PRINCE"));
+        final String inputJson = "{\"name\":\"abc\"}";
+        final JsonObject o = Json.createReader(new StringReader(inputJson))
+            .readObject();
+        final DoxID id = bean.create(o, new DoxPrincipal("PRINCE"));
         Assert.assertEquals(inputJson, bean.readContent(id)
-                .toString());
+            .toString());
         tx.commit();
     }
 
@@ -42,19 +42,19 @@ public class SampleJsonEntityTest extends AbstractEntityTest {
 
         tx.begin();
 
-        Connection connection = em.unwrap(Connection.class);
+        final Connection connection = em.unwrap(Connection.class);
         Assert.assertNotNull(connection);
 
-        SampleJsonBean bean = new SampleJsonBean();
+        final DoxBean bean = new DoxBean();
         bean.setConnection(connection);
         bean.init();
 
-        String inputJson = "{\"noname\":\"abc\"}";
-        JsonObject o = Json.createReader(new StringReader(inputJson))
-                .readObject();
-        DoxID id = bean.create(o, new DoxPrincipal("PRINCE"));
+        final String inputJson = "{\"noname\":\"abc\"}";
+        final JsonObject o = Json.createReader(new StringReader(inputJson))
+            .readObject();
+        final DoxID id = bean.create(o, new DoxPrincipal("PRINCE"));
         Assert.assertEquals(inputJson, bean.readContent(id)
-                .toString());
+            .toString());
         tx.commit();
     }
 }

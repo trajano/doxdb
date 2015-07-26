@@ -69,36 +69,29 @@ import net.trajano.doxdb.spi.Migrator;
  * This will be an SLSB. There should be many instances of this and should be
  * able to spread through the EJB pool.
  *
- * @author trajanar
+ * @author Archimedes Trajano
  */
 @Stateless
 @Remote(Dox.class)
 public class DoxBean implements
     Dox {
 
-    @EJB
     private CollectionAccessControl collectionAccessControl;
 
-    @EJB
     private ConfigurationProvider configurationProvider;
 
-    @Resource
     private SessionContext ctx;
 
     private transient Map<String, SchemaType> currentSchemaMap = new HashMap<>();
 
     private transient Map<String, DoxType> doxen = new HashMap<>();
 
-    @EJB
     private DoxSearch doxSearchBean;
 
-    @Resource
     private DataSource ds;
 
-    @EJB
     private EventHandler eventHandler;
 
-    @EJB
     private Indexer indexer;
 
     /**
@@ -108,7 +101,6 @@ public class DoxBean implements
 
     private transient ConcurrentMap<String, JsonSchema> jsonSchemaMap = new ConcurrentHashMap<>();
 
-    @EJB
     private Migrator migrator;
 
     private transient Properties oobSqls = new Properties();
@@ -439,6 +431,54 @@ public class DoxBean implements
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    @EJB
+    public void setCollectionAccessControl(final CollectionAccessControl collectionAccessControl) {
+
+        this.collectionAccessControl = collectionAccessControl;
+    }
+
+    @EJB
+    public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
+
+        this.configurationProvider = configurationProvider;
+    }
+
+    @Resource
+    public void setDataSource(final DataSource ds) {
+
+        this.ds = ds;
+    }
+
+    @EJB
+    public void setDoxSearchBean(final DoxSearch doxSearchBean) {
+
+        this.doxSearchBean = doxSearchBean;
+    }
+
+    @EJB
+    public void setEventHandler(final EventHandler eventHandler) {
+
+        this.eventHandler = eventHandler;
+    }
+
+    @EJB
+    public void setIndexer(final Indexer indexer) {
+
+        this.indexer = indexer;
+    }
+
+    @EJB
+    public void setMigrator(final Migrator migrator) {
+
+        this.migrator = migrator;
+    }
+
+    @Resource
+    public void setSessionContext(final SessionContext ctx) {
+
+        this.ctx = ctx;
     }
 
     @Override
