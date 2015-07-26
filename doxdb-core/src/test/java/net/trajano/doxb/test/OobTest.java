@@ -15,6 +15,7 @@ import javax.persistence.PersistenceException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.io.ByteStreams;
@@ -25,6 +26,8 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.jdbc.DoxConfiguration;
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
+@Ignore
+@Deprecated
 public class OobTest {
 
     static byte[] sample1;

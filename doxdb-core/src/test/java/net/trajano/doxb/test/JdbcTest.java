@@ -22,6 +22,8 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.jdbc.DoxConfiguration;
 import net.trajano.doxdb.jdbc.JdbcDoxDAO;
 
+@Deprecated
+@Ignore
 public class JdbcTest {
 
     @Test

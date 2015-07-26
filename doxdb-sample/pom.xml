@@ -48,7 +48,6 @@
                     <version>7</version>
                     <generateApplicationXml>true</generateApplicationXml>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
-                    <packagingExcludes/>
                     <modules>
                         <webModule>
                             <groupId>${project.groupId}</groupId>
