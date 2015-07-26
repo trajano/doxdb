@@ -9,6 +9,9 @@
     <artifactId>doxdb-ejb</artifactId>
     <packaging>ejb</packaging>
     <description>This contains data infrastructure related modules.</description>
+    <properties>
+        <m2e.jpa.activation>false</m2e.jpa.activation>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
