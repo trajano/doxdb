@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import javax.persistence.PersistenceException;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.trajano.commons.testing.ResourceUtil;
@@ -110,6 +111,7 @@ public class JdbcTest {
     }
 
     @Test
+    @Ignore
     public void testExportImport() throws Exception {
 
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
