@@ -16,7 +16,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>doxdb-rest</artifactId>
+            <artifactId>doxdb-sample-web</artifactId>
             <type>war</type>
         </dependency>
         <dependency>

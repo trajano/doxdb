@@ -18,6 +18,7 @@
         <module>doxdb-rest</module>
         <module>doxdb-sample</module>
         <module>doxdb-sample-ejb</module>
+        <module>doxdb-sample-web</module>
     </modules>
     <scm>
         <connection>scm:git:https://github.com/trajano/${project.artifactId}</connection>
