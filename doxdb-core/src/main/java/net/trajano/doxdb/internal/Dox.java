@@ -1,6 +1,9 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.internal;
 
 import org.bson.BsonDocument;
+
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
 
 public interface Dox {
 

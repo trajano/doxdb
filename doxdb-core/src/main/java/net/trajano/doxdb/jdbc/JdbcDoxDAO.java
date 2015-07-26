@@ -27,10 +27,8 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.DatatypeConverter;
 
-import net.trajano.doxdb.DoxMeta;
-import net.trajano.doxdb.DoxConfiguration;
-import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.internal.DoxPrincipal;
 
 public class JdbcDoxDAO implements
@@ -840,6 +838,9 @@ public class JdbcDoxDAO implements
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateContent(final DoxID doxId,
         final InputStream contentStream,

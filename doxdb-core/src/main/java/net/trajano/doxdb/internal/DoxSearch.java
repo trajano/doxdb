@@ -1,8 +1,8 @@
 package net.trajano.doxdb.internal;
 
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.search.IndexView;
-import net.trajano.doxdb.search.SearchResult;
+import net.trajano.doxdb.IndexView;
+import net.trajano.doxdb.SearchResult;
 
 public interface DoxSearch {
 

@@ -1,4 +1,4 @@
-package net.trajano.doxdb.search;
+package net.trajano.doxdb;
 
 import java.io.Serializable;
 import java.util.Collections;

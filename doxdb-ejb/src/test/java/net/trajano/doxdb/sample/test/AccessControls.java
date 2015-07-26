@@ -6,11 +6,11 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.search.IndexView;
-import net.trajano.doxdb.spi.CollectionAccessControl;
-import net.trajano.doxdb.spi.EventHandler;
-import net.trajano.doxdb.spi.Indexer;
-import net.trajano.doxdb.spi.Migrator;
+import net.trajano.doxdb.IndexView;
+import net.trajano.doxdb.ext.CollectionAccessControl;
+import net.trajano.doxdb.ext.EventHandler;
+import net.trajano.doxdb.ext.Indexer;
+import net.trajano.doxdb.ext.Migrator;
 
 @Stateless
 @Remote({

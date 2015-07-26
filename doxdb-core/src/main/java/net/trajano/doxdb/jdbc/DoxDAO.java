@@ -1,10 +1,12 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.jdbc;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.Principal;
+
+import net.trajano.doxdb.DoxID;
 
 /**
  * This represents a single physical DoxDB table. There is going to be another

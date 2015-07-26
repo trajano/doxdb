@@ -1,6 +1,6 @@
-package net.trajano.doxdb.spi;
+package net.trajano.doxdb.ext;
 
-import net.trajano.doxdb.search.IndexView;
+import net.trajano.doxdb.IndexView;
 
 public interface Indexer {
 

@@ -1,12 +1,10 @@
-package net.trajano.doxdb.search;
+package net.trajano.doxdb;
 
 import java.io.Serializable;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import net.trajano.doxdb.DoxID;
 
 /**
  * This represents a view of the data that will be stored in the index.

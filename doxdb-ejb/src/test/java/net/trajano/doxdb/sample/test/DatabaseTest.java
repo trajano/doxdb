@@ -19,17 +19,17 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import net.trajano.doxdb.DoxMeta;
+import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.ejb.DoxBean;
 import net.trajano.doxdb.ejb.Initializer;
+import net.trajano.doxdb.ext.CollectionAccessControl;
+import net.trajano.doxdb.ext.ConfigurationProvider;
+import net.trajano.doxdb.ext.DefaultEventHandler;
+import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
-import net.trajano.doxdb.search.IndexView;
-import net.trajano.doxdb.spi.CollectionAccessControl;
-import net.trajano.doxdb.spi.ConfigurationProvider;
-import net.trajano.doxdb.spi.DefaultEventHandler;
-import net.trajano.doxdb.spi.Indexer;
 
 public class DatabaseTest {
 

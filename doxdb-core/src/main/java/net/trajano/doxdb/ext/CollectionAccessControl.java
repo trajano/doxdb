@@ -1,4 +1,4 @@
-package net.trajano.doxdb.spi;
+package net.trajano.doxdb.ext;
 
 import java.security.Principal;
 

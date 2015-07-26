@@ -28,12 +28,12 @@ import org.bson.BsonDocument;
 import org.bson.BsonNumber;
 import org.bson.BsonValue;
 
-import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
+import net.trajano.doxdb.IndexView;
+import net.trajano.doxdb.SearchResult;
+import net.trajano.doxdb.internal.Dox;
 import net.trajano.doxdb.internal.DoxSearch;
-import net.trajano.doxdb.search.IndexView;
-import net.trajano.doxdb.search.SearchResult;
 
 /**
  * This class is extended by clients to provide a list of objects that are
