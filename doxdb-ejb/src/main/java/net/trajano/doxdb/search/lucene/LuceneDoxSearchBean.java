@@ -37,7 +37,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.DoxSearch;
+import net.trajano.doxdb.internal.DoxSearch;
 import net.trajano.doxdb.search.IndexView;
 import net.trajano.doxdb.search.SearchResult;
 

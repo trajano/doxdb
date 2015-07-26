@@ -1,4 +1,4 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.spi;
 
 public interface Migrator {
 

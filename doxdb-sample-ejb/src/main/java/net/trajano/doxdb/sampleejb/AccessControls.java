@@ -9,12 +9,12 @@ import javax.persistence.PersistenceException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.trajano.doxdb.CollectionAccessControl;
-import net.trajano.doxdb.Indexer;
-import net.trajano.doxdb.Migrator;
 import net.trajano.doxdb.sample.json.Horse;
 import net.trajano.doxdb.sample.json.Horse.Gender;
 import net.trajano.doxdb.search.IndexView;
+import net.trajano.doxdb.spi.CollectionAccessControl;
+import net.trajano.doxdb.spi.Indexer;
+import net.trajano.doxdb.spi.Migrator;
 
 @Stateless
 @Remote({

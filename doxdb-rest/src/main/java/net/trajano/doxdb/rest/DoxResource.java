@@ -31,7 +31,7 @@ import org.bson.BsonValue;
 import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.DoxSearch;
+import net.trajano.doxdb.internal.DoxSearch;
 import net.trajano.doxdb.search.IndexView;
 import net.trajano.doxdb.search.SearchResult;
 

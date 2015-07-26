@@ -10,5 +10,11 @@
 			<ejb-class>net.trajano.doxdb.spi.XmlConfigurationProvider</ejb-class>
 			<session-type>Stateless</session-type>
 		</session>
+		<session>
+			<ejb-name>DefaultEventHandler</ejb-name>
+			<business-local>net.trajano.doxdb.spi.EventHandler</business-local>
+			<ejb-class>net.trajano.doxdb.spi.DefaultEventHandler</ejb-class>
+			<session-type>Stateless</session-type>
+		</session>
 	</enterprise-beans>
 </ejb-jar>

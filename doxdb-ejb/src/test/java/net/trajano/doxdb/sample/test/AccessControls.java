@@ -5,19 +5,23 @@ import java.security.Principal;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
-import net.trajano.doxdb.CollectionAccessControl;
-import net.trajano.doxdb.Indexer;
-import net.trajano.doxdb.Migrator;
+import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.search.IndexView;
+import net.trajano.doxdb.spi.CollectionAccessControl;
+import net.trajano.doxdb.spi.EventHandler;
+import net.trajano.doxdb.spi.Indexer;
+import net.trajano.doxdb.spi.Migrator;
 
 @Stateless
 @Remote({
     CollectionAccessControl.class,
     Indexer.class,
+    EventHandler.class,
     Migrator.class
 })
 public class AccessControls implements
     CollectionAccessControl,
+    EventHandler,
     Migrator,
     Indexer {
 
@@ -50,5 +54,39 @@ public class AccessControls implements
         final String json) {
 
         return json;
+    }
+
+    @Override
+    public void onRecordCreate(final String collection,
+        final DoxID doxid,
+        final String json) {
+
+        System.out.println("created " + collection + " " + doxid + " " + json);
+    }
+
+    @Override
+    public void onRecordDelete(final String collection,
+        final DoxID doxid) {
+
+        System.out.println("deleted " + collection + " " + doxid);
+
+    }
+
+    @Override
+    public void onRecordRead(final String collection,
+        final DoxID doxid,
+        final String json) {
+
+        System.out.println("read " + collection + " " + doxid + " " + json);
+
+    }
+
+    @Override
+    public void onRecordUpdate(final String collection,
+        final DoxID doxid,
+        final String json) {
+
+        System.out.println("updated " + collection + " " + doxid + " " + json);
+
     }
 }

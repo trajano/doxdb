@@ -1,6 +1,5 @@
 package net.trajano.doxdb.ejb;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -50,20 +49,21 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
-import net.trajano.doxdb.CollectionAccessControl;
 import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
-import net.trajano.doxdb.DoxSearch;
-import net.trajano.doxdb.Indexer;
-import net.trajano.doxdb.Migrator;
 import net.trajano.doxdb.ejb.internal.SqlConstants;
 import net.trajano.doxdb.internal.DoxPrincipal;
+import net.trajano.doxdb.internal.DoxSearch;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
 import net.trajano.doxdb.search.IndexView;
+import net.trajano.doxdb.spi.CollectionAccessControl;
 import net.trajano.doxdb.spi.ConfigurationProvider;
+import net.trajano.doxdb.spi.EventHandler;
+import net.trajano.doxdb.spi.Indexer;
+import net.trajano.doxdb.spi.Migrator;
 
 /**
  * This will be an SLSB. There should be many instances of this and should be
@@ -94,6 +94,9 @@ public class DoxBean implements
 
     @Resource
     private DataSource ds;
+
+    @EJB
+    private EventHandler eventHandler;
 
     @EJB
     private Indexer indexer;
@@ -148,44 +151,43 @@ public class DoxBean implements
                 .build());
 
             final String storedJson = bson.toJson();
-            try (final InputStream in = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
+            final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), storedJson, ctx.getCallerPrincipal());
 
-                try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.INSERT, config.getName().toUpperCase()), Statement.RETURN_GENERATED_KEYS)) {
+            try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.INSERT, config.getName().toUpperCase()), Statement.RETURN_GENERATED_KEYS)) {
 
-                    final Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    s.setBinaryStream(1, in);
-                    s.setString(2, doxId.toString());
-                    s.setString(3, ctx.getCallerPrincipal().getName());
-                    s.setTimestamp(4, ts);
-                    s.setString(5, ctx.getCallerPrincipal().getName());
-                    s.setTimestamp(6, ts);
-                    s.setInt(7, 1);
-                    s.setInt(8, schema.getVersion());
-                    final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), storedJson, ctx.getCallerPrincipal());
-                    s.setBytes(9, accessKey);
-                    s.executeUpdate();
-                    try (final ResultSet rs = s.getGeneratedKeys()) {
-                        rs.next();
+                final Timestamp ts = new Timestamp(System.currentTimeMillis());
+                s.setBytes(1, basicOutputBuffer.toByteArray());
+                s.setString(2, doxId.toString());
+                s.setString(3, ctx.getCallerPrincipal().getName());
+                s.setTimestamp(4, ts);
+                s.setString(5, ctx.getCallerPrincipal().getName());
+                s.setTimestamp(6, ts);
+                s.setInt(7, 1);
+                s.setInt(8, schema.getVersion());
+                s.setBytes(9, accessKey);
+                s.executeUpdate();
+                try (final ResultSet rs = s.getGeneratedKeys()) {
+                    rs.next();
 
-                        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
-                        for (final IndexView indexView : indexViews) {
-                            indexView.setCollection(config.getName());
-                            indexView.setDoxID(doxId);
-                        }
-                        doxSearchBean.addToIndex(indexViews);
-
-                        final DocumentMeta meta = new DocumentMeta();
-                        meta.setAccessKey(accessKey);
-                        meta.setLastUpdatedOn(ts);
-                        meta.setVersion(1);
-                        meta.setDoxId(doxId);
-                        meta.setContentJson(storedJson);
-                        return meta;
+                    final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
+                    for (final IndexView indexView : indexViews) {
+                        indexView.setCollection(config.getName());
+                        indexView.setDoxID(doxId);
                     }
+                    doxSearchBean.addToIndex(indexViews);
+
+                    final DocumentMeta meta = new DocumentMeta();
+                    meta.setAccessKey(accessKey);
+                    meta.setLastUpdatedOn(ts);
+                    meta.setVersion(1);
+                    meta.setDoxId(doxId);
+                    meta.setContentJson(storedJson);
+
+                    eventHandler.onRecordCreate(config.getName(), doxId, storedJson);
+                    return meta;
                 }
             }
-        } catch (final IOException
-            | SQLException e) {
+        } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
     }
@@ -223,6 +225,7 @@ public class DoxBean implements
                 }
             }
             doxSearchBean.removeFromIndex(collection, doxid);
+            eventHandler.onRecordDelete(config.getName(), doxid);
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
@@ -277,14 +280,14 @@ public class DoxBean implements
 
     @Override
     public DocumentMeta read(final String collectionName,
-        final DoxID id) {
+        final DoxID doxid) {
 
         final DoxType config = doxen.get(collectionName);
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
         try (Connection c = ds.getConnection()) {
 
-            final DocumentMeta meta = readMeta(c, config.getName(), id);
+            final DocumentMeta meta = readMeta(c, config.getName(), doxid);
 
             meta.getAccessKey();
             // TODO check the security.
@@ -297,6 +300,7 @@ public class DoxBean implements
             }
 
             meta.setContentJson(json);
+            eventHandler.onRecordCreate(config.getName(), doxid, json);
             return meta;
 
         } catch (final SQLException e) {
@@ -464,38 +468,35 @@ public class DoxBean implements
             final String storedJson = bson.toJson();
             final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), storedJson, ctx.getCallerPrincipal());
 
-            try (final InputStream in = new ByteArrayInputStream(basicOutputBuffer.toByteArray())) {
+            try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.UPDATE, config.getName().toUpperCase()), Statement.RETURN_GENERATED_KEYS)) {
 
-                try (final PreparedStatement s = c.prepareStatement(String.format(SqlConstants.UPDATE, config.getName().toUpperCase()), Statement.RETURN_GENERATED_KEYS)) {
+                s.setBytes(1, basicOutputBuffer.toByteArray());
+                s.setString(2, ctx.getCallerPrincipal().getName());
+                s.setTimestamp(3, ts);
+                s.setInt(4, schema.getVersion());
+                s.setBytes(5, accessKey);
 
-                    s.setBinaryStream(1, in);
-                    s.setString(2, ctx.getCallerPrincipal().getName());
-                    s.setTimestamp(3, ts);
-                    s.setInt(4, schema.getVersion());
-                    s.setBytes(5, accessKey);
-
-                    s.setLong(6, meta.getId());
-                    s.setInt(7, version);
-                    final int count = s.executeUpdate();
-                    if (count != 1) {
-                        throw new PersistenceException("Update failed");
-                    }
-
-                    final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
-                    for (final IndexView indexView : indexViews) {
-                        indexView.setCollection(config.getName());
-                        indexView.setDoxID(doxid);
-                    }
-                    doxSearchBean.addToIndex(indexViews);
-
+                s.setLong(6, meta.getId());
+                s.setInt(7, version);
+                final int count = s.executeUpdate();
+                if (count != 1) {
+                    throw new PersistenceException("Update failed");
                 }
+
+                final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
+                for (final IndexView indexView : indexViews) {
+                    indexView.setCollection(config.getName());
+                    indexView.setDoxID(doxid);
+                }
+                doxSearchBean.addToIndex(indexViews);
+
             }
             meta.setAccessKey(accessKey);
             meta.setVersion(version + 1);
             meta.setContentJson(storedJson);
+            eventHandler.onRecordUpdate(config.getName(), doxid, storedJson);
             return meta;
-        } catch (final IOException
-            | SQLException e) {
+        } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
 

@@ -1,5 +1,6 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.internal;
 
+import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.search.IndexView;
 import net.trajano.doxdb.search.SearchResult;
 
