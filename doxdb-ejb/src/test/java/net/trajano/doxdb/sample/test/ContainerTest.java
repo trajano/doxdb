@@ -9,8 +9,8 @@ import javax.naming.Context;
 import org.bson.BsonDocument;
 import org.junit.Test;
 
+import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxMeta;
-import net.trajano.doxdb.internal.Dox;
 
 public class ContainerTest {
 

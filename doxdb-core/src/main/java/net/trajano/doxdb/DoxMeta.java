@@ -1,12 +1,11 @@
 package net.trajano.doxdb;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
-
-import net.trajano.doxdb.internal.DoxPrincipal;
 
 public class DoxMeta implements
     Serializable {
@@ -25,7 +24,7 @@ public class DoxMeta implements
 
     private int contentVersion;
 
-    private DoxPrincipal createdBy;
+    private Principal createdBy;
 
     private Date createdOn;
 
@@ -33,7 +32,7 @@ public class DoxMeta implements
 
     private long id;
 
-    private DoxPrincipal lastUpdatedBy;
+    private Principal lastUpdatedBy;
 
     private Date lastUpdatedOn;
 
@@ -54,7 +53,7 @@ public class DoxMeta implements
         return contentVersion;
     }
 
-    public DoxPrincipal getCreatedBy() {
+    public Principal getCreatedBy() {
 
         return createdBy;
     }
@@ -81,7 +80,7 @@ public class DoxMeta implements
         return id;
     }
 
-    public DoxPrincipal getLastUpdatedBy() {
+    public Principal getLastUpdatedBy() {
 
         return lastUpdatedBy;
     }
@@ -118,7 +117,7 @@ public class DoxMeta implements
         this.contentVersion = contentVersion;
     }
 
-    public void setCreatedBy(final DoxPrincipal createdBy) {
+    public void setCreatedBy(final Principal createdBy) {
 
         this.createdBy = createdBy;
     }
@@ -138,7 +137,7 @@ public class DoxMeta implements
         this.id = id;
     }
 
-    public void setLastUpdatedBy(final DoxPrincipal lastUpdatedBy) {
+    public void setLastUpdatedBy(final Principal lastUpdatedBy) {
 
         this.lastUpdatedBy = lastUpdatedBy;
     }

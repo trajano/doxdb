@@ -49,6 +49,7 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
+import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
@@ -58,7 +59,6 @@ import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.EventHandler;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.ext.Migrator;
-import net.trajano.doxdb.internal.Dox;
 import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.internal.DoxSearch;
 import net.trajano.doxdb.schema.DoxPersistence;
