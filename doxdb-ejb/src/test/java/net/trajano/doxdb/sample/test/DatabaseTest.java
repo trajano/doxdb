@@ -1,24 +1,19 @@
 package net.trajano.doxdb.sample.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.security.Principal;
 
 import javax.ejb.SessionContext;
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.persistence.PersistenceException;
-import javax.sql.DataSource;
 
 import org.bson.BsonDocument;
 import org.h2.jdbcx.JdbcDataSource;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -36,11 +31,9 @@ import net.trajano.doxdb.spi.ConfigurationProvider;
 import net.trajano.doxdb.spi.DefaultEventHandler;
 import net.trajano.doxdb.spi.Indexer;
 
-public class SampleJsonEntityTest {
+public class DatabaseTest {
 
     private DoxBean bean;
-
-    private DataSource datasource;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -53,7 +46,6 @@ public class SampleJsonEntityTest {
         ds.setUser("sa");
         ds.setPassword("sa");
         ds.setLogWriter(new PrintWriter(System.out));
-        datasource = ds;
 
         final ConfigurationProvider configurationProvider = new ConfigurationProvider() {
 
@@ -78,7 +70,7 @@ public class SampleJsonEntityTest {
         initializer.init();
 
         bean = new DoxBean();
-        bean.setDataSource(datasource);
+        bean.setDataSource(ds);
         final SessionContext sessionContextMock = mock(SessionContext.class);
         when(sessionContextMock.getCallerPrincipal()).thenReturn(new DoxPrincipal("ANONYMOUS"));
         bean.setSessionContext(sessionContextMock);
@@ -110,23 +102,21 @@ public class SampleJsonEntityTest {
     public void testCrud() throws Exception {
 
         final String inputJson = "{\"name\":\"abc\"}";
-        final JsonObject o = Json.createReader(new StringReader(inputJson))
-            .readObject();
-        final DoxMeta meta = bean.create("horse", BsonDocument.parse(inputJson));
-        Assert.assertEquals(inputJson, bean.read("horse", meta.getDoxId())
+        final BsonDocument bson = BsonDocument.parse(inputJson);
+        final DoxMeta meta = bean.create("horse", bson);
+
+        final BsonDocument readBson = BsonDocument.parse(bean.read("horse", meta.getDoxId())
             .getContentJson());
+
+        assertEquals(bson.getString("name"), readBson.getString("name"));
     }
 
-    @Ignore
     @Test(expected = PersistenceException.class)
     public void testFailValidation() throws Exception {
 
         final String inputJson = "{\"noname\":\"abc\"}";
-        final JsonObject o = Json.createReader(new StringReader(inputJson))
-            .readObject();
-        //        final DoxID id = bean.create(o, new DoxPrincipal("PRINCE"));
-        //        Assert.assertEquals(inputJson, bean.readContent(id)
-        //            .toString());
+        final BsonDocument bson = BsonDocument.parse(inputJson);
+        bean.create("horse", bson);
 
     }
 }
