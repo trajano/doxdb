@@ -15,6 +15,9 @@ import org.apache.lucene.store.LockFactory;
 @Startup
 public class SingletonLockFactory extends LockFactory {
 
+    /**
+     * Lock.
+     */
     private class SingleLock extends Lock {
 
         private final String lockName;
