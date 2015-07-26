@@ -15,7 +15,7 @@ public interface Dox {
      *            schema.
      * @return dox meta with contents with "_id" and "_version" set.
      */
-    DocumentMeta create(String collectionName,
+    DoxMeta create(String collectionName,
         BsonDocument contents);
 
     void delete(String collection,
@@ -27,7 +27,7 @@ public interface Dox {
      */
     void noop();
 
-    DocumentMeta read(String collectionName,
+    DoxMeta read(String collectionName,
         DoxID id);
 
     void reindex();
@@ -43,7 +43,7 @@ public interface Dox {
      *            schema.
      * @return dox meta with contents with "_id" and "_version" set.
      */
-    DocumentMeta update(String collection,
+    DoxMeta update(String collection,
         DoxID id,
         BsonDocument contents,
         int version);

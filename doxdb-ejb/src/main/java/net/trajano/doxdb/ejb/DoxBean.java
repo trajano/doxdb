@@ -49,9 +49,9 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
-import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.ejb.internal.SqlConstants;
 import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.internal.DoxSearch;
@@ -125,7 +125,7 @@ public class DoxBean implements
     }
 
     @Override
-    public DocumentMeta create(final String collectionName,
+    public DoxMeta create(final String collectionName,
         final BsonDocument bson) {
 
         final DoxType config = doxen.get(collectionName);
@@ -166,9 +166,10 @@ public class DoxBean implements
                         indexView.setCollection(config.getName());
                         indexView.setDoxID(doxId);
                     }
-                    doxSearchBean.addToIndex(indexViews);
-
-                    final DocumentMeta meta = new DocumentMeta();
+                    if (indexViews.length > 0) {
+                        doxSearchBean.addToIndex(indexViews);
+                    }
+                    final DoxMeta meta = new DoxMeta();
                     meta.setAccessKey(accessKey);
                     meta.setLastUpdatedOn(ts);
                     meta.setVersion(1);
@@ -193,7 +194,7 @@ public class DoxBean implements
         final DoxType config = doxen.get(collection);
 
         try (Connection c = ds.getConnection()) {
-            final DocumentMeta meta = readMetaAndLock(c, config.getName(), config.isOob(), doxid, version);
+            final DoxMeta meta = readMetaAndLock(c, config.getName(), config.isOob(), doxid, version);
             if (config.isOob()) {
                 //                deleteOob(ctx.getCallerPrincipal(), meta, ts);
             }
@@ -271,7 +272,7 @@ public class DoxBean implements
     }
 
     @Override
-    public DocumentMeta read(final String collectionName,
+    public DoxMeta read(final String collectionName,
         final DoxID doxid) {
 
         final DoxType config = doxen.get(collectionName);
@@ -279,7 +280,7 @@ public class DoxBean implements
 
         try (Connection c = ds.getConnection()) {
 
-            final DocumentMeta meta = readMeta(c, config.getName(), doxid);
+            final DoxMeta meta = readMeta(c, config.getName(), doxid);
 
             meta.getAccessKey();
             // TODO check the security.
@@ -324,7 +325,7 @@ public class DoxBean implements
 
     }
 
-    private DocumentMeta readMeta(final Connection c,
+    private DoxMeta readMeta(final Connection c,
         final String collectionName,
         final DoxID id) {
 
@@ -334,7 +335,7 @@ public class DoxBean implements
                 if (!rs.next()) {
                     throw new EntityNotFoundException();
                 }
-                final DocumentMeta meta = new DocumentMeta();
+                final DoxMeta meta = new DoxMeta();
                 meta.setId(rs.getLong(1));
                 meta.setDoxId(new DoxID(rs.getString(2)));
                 meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
@@ -351,7 +352,7 @@ public class DoxBean implements
         }
     }
 
-    private DocumentMeta readMetaAndLock(final Connection c,
+    private DoxMeta readMetaAndLock(final Connection c,
         final String collectionName,
         final boolean hasOob,
         final DoxID id,
@@ -364,7 +365,7 @@ public class DoxBean implements
                 if (!rs.next()) {
                     throw new OptimisticLockException();
                 }
-                final DocumentMeta meta = new DocumentMeta();
+                final DoxMeta meta = new DoxMeta();
                 meta.setId(rs.getLong(1));
                 meta.setDoxId(new DoxID(rs.getString(2)));
                 meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
@@ -482,7 +483,7 @@ public class DoxBean implements
     }
 
     @Override
-    public DocumentMeta update(final String collectionName,
+    public DoxMeta update(final String collectionName,
         final DoxID doxid,
         final BsonDocument bson,
         final int version) {
@@ -493,7 +494,7 @@ public class DoxBean implements
 
         validate(schema, bson.toJson());
         try (Connection c = ds.getConnection()) {
-            final DocumentMeta meta = readMetaAndLock(c, config.getName(), config.isOob(), doxid, version);
+            final DoxMeta meta = readMetaAndLock(c, config.getName(), config.isOob(), doxid, version);
 
             meta.getAccessKey();
             // TODO check the security.

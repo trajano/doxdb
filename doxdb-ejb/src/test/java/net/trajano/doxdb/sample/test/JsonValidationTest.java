@@ -16,16 +16,50 @@ public class JsonValidationTest {
     public void testJson() throws Exception {
 
         final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
-                .setDefaultVersion(SchemaVersion.DRAFTV4)
-                .freeze();
+            .setDefaultVersion(SchemaVersion.DRAFTV4)
+            .freeze();
 
-        JsonSchema schema = JsonSchemaFactory.newBuilder()
-                .setValidationConfiguration(cfg)
-                .freeze()
-                .getJsonSchema(JsonLoader.fromResource("/schema/horse.json"));
+        final JsonSchema schema = JsonSchemaFactory.newBuilder()
+            .setValidationConfiguration(cfg)
+            .freeze()
+            .getJsonSchema(JsonLoader.fromResource("/schema/horse.json"));
 
-        ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\"}"));
+        final ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\"}"));
         Assert.assertTrue(validate.toString(), validate.isSuccess());
+
+    }
+
+    @Test
+    public void testJsonWithBadExtra() throws Exception {
+
+        final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+            .setDefaultVersion(SchemaVersion.DRAFTV4)
+            .freeze();
+
+        final JsonSchema schema = JsonSchemaFactory.newBuilder()
+            .setValidationConfiguration(cfg)
+            .freeze()
+            .getJsonSchema(JsonLoader.fromResource("/schema/horse.json"));
+
+        final ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\", \"_id\":\"mazui\" }"));
+        Assert.assertTrue(validate.toString(), validate.isSuccess());
+
+    }
+
+    @Test
+    public void testJsonWithExtra() throws Exception {
+
+        final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+            .setDefaultVersion(SchemaVersion.DRAFTV4)
+            .freeze();
+
+        final JsonSchema schema = JsonSchemaFactory.newBuilder()
+            .setValidationConfiguration(cfg)
+            .freeze()
+            .getJsonSchema(JsonLoader.fromResource("/schema/horse.json"));
+
+        final ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\", \"_XX\":\"mazui\" }"));
+        Assert.assertFalse(validate.toString(), validate.isSuccess());
 
     }
 }

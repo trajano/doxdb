@@ -28,9 +28,9 @@ import org.bson.BsonDocument;
 import org.bson.BsonNumber;
 import org.bson.BsonValue;
 
-import net.trajano.doxdb.DocumentMeta;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.internal.DoxSearch;
 import net.trajano.doxdb.search.IndexView;
 import net.trajano.doxdb.search.SearchResult;
@@ -81,10 +81,13 @@ public class DoxResource {
         final String json) {
 
         final BsonDocument bson = BsonDocument.parse(json);
-        bson.remove("_id");
-        bson.remove("_version");
+        for (final String key : bson.keySet()) {
+            if (key.startsWith("_")) {
+                bson.remove(key);
+            }
+        }
 
-        final DocumentMeta meta = dox.create(collection, bson);
+        final DoxMeta meta = dox.create(collection, bson);
         return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
@@ -104,7 +107,7 @@ public class DoxResource {
     public Response get(@PathParam("collection") final String collection,
         @PathParam("id") final DoxID doxid) {
 
-        final DocumentMeta meta = dox.read(collection, doxid);
+        final DoxMeta meta = dox.read(collection, doxid);
         final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
         return Response.ok().tag(entityTag).entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
@@ -140,14 +143,19 @@ public class DoxResource {
         final String json) {
 
         final BsonDocument bson = BsonDocument.parse(json);
-        bson.remove("_id");
+
         final BsonValue removed = bson.remove("_version");
         if (removed == null) {
-            throw new OptimisticLockException();
+            throw new OptimisticLockException("Missing version");
+        }
+        for (final String key : bson.keySet()) {
+            if (key.startsWith("_")) {
+                bson.remove(key);
+            }
         }
         final int version = ((BsonNumber) removed).intValue();
 
-        final DocumentMeta meta = dox.update(collection, new DoxID(id), bson, version);
+        final DoxMeta meta = dox.update(collection, new DoxID(id), bson, version);
         return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 

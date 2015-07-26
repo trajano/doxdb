@@ -49,5 +49,10 @@
 	"required":[
 		"name"
 	],
+	"patternProperties" : {
+		"_[a-z]+" : {
+			"type":"string"
+		}
+	},
 	"additionalProperties": false
 }

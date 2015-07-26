@@ -27,7 +27,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.DatatypeConverter;
 
-import net.trajano.doxdb.DocumentMeta;
+import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.DoxConfiguration;
 import net.trajano.doxdb.DoxDAO;
 import net.trajano.doxdb.DoxID;
@@ -198,7 +198,7 @@ public class JdbcDoxDAO implements
         final int version,
         final Principal principal) {
 
-        final DocumentMeta meta = readMetaAndLock(doxId, version);
+        final DoxMeta meta = readMetaAndLock(doxId, version);
 
         try (final PreparedStatement check = c.prepareStatement(oobCheckSql)) {
             check.setLong(1, meta.getId());
@@ -384,7 +384,7 @@ public class JdbcDoxDAO implements
         final int version,
         final Principal principal) {
 
-        final DocumentMeta meta = readMetaAndLock(id, version);
+        final DoxMeta meta = readMetaAndLock(id, version);
         final Timestamp ts = new Timestamp(System.currentTimeMillis());
 
         try {
@@ -421,7 +421,7 @@ public class JdbcDoxDAO implements
      * @throws SQLException
      */
     private void deleteOob(final Principal principal,
-        final DocumentMeta meta,
+        final DoxMeta meta,
         final Timestamp ts) throws SQLException {
 
         try (final PreparedStatement copy = c.prepareStatement(oobCopyAllToTombstoneSql)) {
@@ -457,7 +457,7 @@ public class JdbcDoxDAO implements
             throw new UnsupportedOperationException("OOB support is not present in " + tableName);
         }
         try {
-            final DocumentMeta meta = readMetaAndLock(doxId, version);
+            final DoxMeta meta = readMetaAndLock(doxId, version);
             final Timestamp ts = new Timestamp(System.currentTimeMillis());
 
             final int copyCount;
@@ -495,7 +495,7 @@ public class JdbcDoxDAO implements
             final MimeMultipart mimeMultipart = new MimeMultipart();
             mimeMultipart.setSubType("mixed");
 
-            final DocumentMeta meta = readMeta(doxID);
+            final DoxMeta meta = readMeta(doxID);
             try (final PreparedStatement s = c.prepareStatement(readContentSql)) {
                 s.setLong(1, meta.getId());
                 try (final ResultSet rs = s.executeQuery()) {
@@ -723,7 +723,7 @@ public class JdbcDoxDAO implements
         return len;
     }
 
-    public DocumentMeta readMeta(final DoxID id) {
+    public DoxMeta readMeta(final DoxID id) {
 
         try (final PreparedStatement s = c.prepareStatement(readSql)) {
             s.setString(1, id.toString());
@@ -731,7 +731,7 @@ public class JdbcDoxDAO implements
                 if (!rs.next()) {
                     throw new EntityNotFoundException();
                 }
-                final DocumentMeta meta = new DocumentMeta();
+                final DoxMeta meta = new DoxMeta();
                 meta.setId(rs.getLong(1));
                 meta.setDoxId(new DoxID(rs.getString(2)));
                 meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
@@ -756,7 +756,7 @@ public class JdbcDoxDAO implements
      * @return
      * @throws SQLException
      */
-    private DocumentMeta readMetaAndLock(final DoxID id,
+    private DoxMeta readMetaAndLock(final DoxID id,
         final int version) {
 
         try (final PreparedStatement s = c.prepareStatement(readForUpdateSql)) {
@@ -766,7 +766,7 @@ public class JdbcDoxDAO implements
                 if (!rs.next()) {
                     throw new OptimisticLockException();
                 }
-                final DocumentMeta meta = new DocumentMeta();
+                final DoxMeta meta = new DoxMeta();
                 meta.setId(rs.getLong(1));
                 meta.setDoxId(new DoxID(rs.getString(2)));
                 meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
@@ -849,7 +849,7 @@ public class JdbcDoxDAO implements
 
         try {
             final Timestamp ts = new Timestamp(System.currentTimeMillis());
-            final DocumentMeta meta = readMetaAndLock(doxId, version);
+            final DoxMeta meta = readMetaAndLock(doxId, version);
             final PreparedStatement u = c.prepareStatement(updateSql);
             u.setBinaryStream(1, contentStream);
             u.setString(2, principal.getName());

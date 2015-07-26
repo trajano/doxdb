@@ -8,7 +8,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import net.trajano.doxdb.internal.DoxPrincipal;
 
-public class DocumentMeta implements
+public class DoxMeta implements
     Serializable {
 
     /**

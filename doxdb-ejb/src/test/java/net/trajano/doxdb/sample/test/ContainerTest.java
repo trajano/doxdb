@@ -9,7 +9,7 @@ import javax.naming.Context;
 import org.bson.BsonDocument;
 import org.junit.Test;
 
-import net.trajano.doxdb.DocumentMeta;
+import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.Dox;
 
 public class ContainerTest {
@@ -23,7 +23,7 @@ public class ContainerTest {
         assertNotNull(context);
         final Dox b = (Dox) context.lookup("java:global/ejb-app/classes/DoxBean");
         final String inputJson = "{\"name\":\"abc\"}";
-        final DocumentMeta created = b.create("horse", BsonDocument.parse(inputJson));
+        final DoxMeta created = b.create("horse", BsonDocument.parse(inputJson));
         final BsonDocument createdBson = BsonDocument.parse(created.getContentJson());
         assertNotNull(created.getDoxId());
         assertEquals(1, created.getVersion());

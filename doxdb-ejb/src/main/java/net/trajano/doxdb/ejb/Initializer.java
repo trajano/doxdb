@@ -16,7 +16,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
-import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.spi.ConfigurationProvider;
 
@@ -32,13 +31,8 @@ import net.trajano.doxdb.spi.ConfigurationProvider;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class Initializer {
 
-    @EJB
     private ConfigurationProvider configurationProvider;
 
-    @EJB
-    private Dox dox;
-
-    @Resource
     private DataSource ds;
 
     private void createTablesIfNeeded(final Connection c,
@@ -97,4 +91,17 @@ public class Initializer {
         }
 
     }
+
+    @EJB
+    public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
+
+        this.configurationProvider = configurationProvider;
+    }
+
+    @Resource
+    public void setDataSource(final DataSource ds) {
+
+        this.ds = ds;
+    }
+
 }
