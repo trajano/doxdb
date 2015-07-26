@@ -121,15 +121,6 @@ public class DoxResource {
     }
 
     @GET
-    @Path("hello")
-    public Response ping() {
-
-        System.out.println("dox=" + dox);
-        dox.noop();
-        return Response.ok().entity("dox= " + dox).build();
-    }
-
-    @GET
     @Path("{collection}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response readAll(@PathParam("collection") final String collection) {

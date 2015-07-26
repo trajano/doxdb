@@ -31,6 +31,7 @@ import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
+import org.bson.BsonArray;
 import org.bson.BsonBinaryReader;
 import org.bson.BsonBinaryWriter;
 import org.bson.BsonDocument;
@@ -305,12 +306,15 @@ public class DoxBean implements
     public BsonDocument readAll(final String collectionName) {
 
         final DoxType config = doxen.get(collectionName);
+        if (!config.isReadAll()) {
+            throw new PersistenceException("Not supported");
+        }
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        final BsonDocument all = new BsonDocument();
+        final BsonArray all = new BsonArray();
         try (Connection c = ds.getConnection()) {
             final String sql = String.format(SqlConstants.READALLCONTENT, config.getName().toUpperCase());
-            try (final PreparedStatement s = c.prepareStatement(sql)) {
+            try (final Statement s = c.createStatement()) {
                 try (final ResultSet rs = s.executeQuery(sql)) {
                     while (rs.next()) {
 
@@ -326,12 +330,13 @@ public class DoxBean implements
                             // queue migrate later?
                         }
 
-                        all.asArray().add(decoded);
+                        all.add(decoded);
 
                     }
                 }
             }
-            return all;
+            final BsonDocument doc = new BsonDocument(config.getName(), all);
+            return doc;
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
