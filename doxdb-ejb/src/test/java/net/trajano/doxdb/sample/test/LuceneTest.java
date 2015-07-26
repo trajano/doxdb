@@ -25,6 +25,11 @@ import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.search.lucene.JdbcDirectory;
 import net.trajano.doxdb.search.lucene.SingletonLockFactory;
 
+/**
+ * Tests Lucene bean.
+ *
+ * @author Archimedes
+ */
 public class LuceneTest {
 
     @Test
