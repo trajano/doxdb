@@ -8,6 +8,9 @@
     </parent>
     <artifactId>doxdb-rest</artifactId>
     <packaging>war</packaging>
+    <properties>
+        <m2eclipse.wtp.contextRoot>/doxdb</m2eclipse.wtp.contextRoot>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
