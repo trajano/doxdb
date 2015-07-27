@@ -1,15 +1,19 @@
 package net.trajano.doxdb.ejb;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
@@ -20,6 +24,7 @@ import javax.sql.DataSource;
 import org.apache.lucene.store.Lock;
 
 import net.trajano.doxdb.ext.ConfigurationProvider;
+import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.search.lucene.JdbcLockFactory;
 
@@ -32,6 +37,7 @@ import net.trajano.doxdb.search.lucene.JdbcLockFactory;
  */
 @Singleton
 @Startup
+@LocalBean
 public class Initializer {
 
     private ConfigurationProvider configurationProvider;
@@ -60,9 +66,31 @@ public class Initializer {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void init() {
 
+        final DoxPersistence persistenceConfig = configurationProvider.getPersistenceConfig();
         try (final Connection c = ds.getConnection()) {
-            for (final DoxType doxConfig : configurationProvider.getPersistenceConfig().getDox()) {
+            final Properties sqls = new Properties();
+            try (InputStream is = getClass().getResourceAsStream("/META-INF/sqls.properties")) {
+                sqls.load(is);
+            }
+
+            final Properties oobSqls = new Properties();
+            try (InputStream is = getClass().getResourceAsStream("/META-INF/oob-sqls.properties")) {
+                oobSqls.load(is);
+            }
+
+            for (final DoxType doxConfig : persistenceConfig.getDox()) {
                 createTablesIfNeeded(c, doxConfig);
+
+                for (final Object sql : sqls.values()) {
+                    final PreparedStatement stmt = c.prepareStatement(String.format(sql.toString(), doxConfig.getName().toUpperCase()));
+                    stmt.close();
+                }
+                if (doxConfig.isOob()) {
+                    for (final Object sql : oobSqls.values()) {
+                        final PreparedStatement stmt = c.prepareStatement(String.format(sql.toString(), doxConfig.getName().toUpperCase()));
+                        stmt.close();
+                    }
+                }
             }
 
             final JdbcLockFactory jdbcLockFactory = new JdbcLockFactory(c, "SEARCHINDEX");
@@ -71,6 +99,7 @@ public class Initializer {
                 System.out.println("Index was locked on startup, possible data corruption so re-indexing");
                 // TODO
             }
+
         } catch (final IOException
             | SQLException e) {
             throw new PersistenceException(e);

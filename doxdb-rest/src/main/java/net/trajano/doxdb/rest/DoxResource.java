@@ -22,6 +22,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.bson.BsonDocument;
@@ -104,6 +105,9 @@ public class DoxResource {
         @PathParam("id") final DoxID doxid) {
 
         final DoxMeta meta = dox.read(collection, doxid);
+        if (meta == null) {
+            return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Dox not found").build();
+        }
         final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
         return Response.ok().tag(entityTag).entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }

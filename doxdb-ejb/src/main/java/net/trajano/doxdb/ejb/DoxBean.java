@@ -247,24 +247,9 @@ public class DoxBean implements
         }
         persistenceConfig = configurationProvider.getPersistenceConfig();
 
-        try (final Connection c = ds.getConnection()) {
-
-            for (final DoxType doxConfig : persistenceConfig.getDox()) {
-                for (final Object sql : sqls.values()) {
-                    final PreparedStatement stmt = c.prepareStatement(String.format(sql.toString(), doxConfig.getName().toUpperCase()));
-                    stmt.close();
-                }
-                if (doxConfig.isOob()) {
-                    for (final Object sql : oobSqls.values()) {
-                        final PreparedStatement stmt = c.prepareStatement(String.format(sql.toString(), doxConfig.getName().toUpperCase()));
-                        stmt.close();
-                    }
-                }
-                doxen.put(doxConfig.getName(), doxConfig);
-                currentSchemaMap.put(doxConfig.getName(), doxConfig.getSchema().get(doxConfig.getSchema().size() - 1));
-            }
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
+        for (final DoxType doxConfig : persistenceConfig.getDox()) {
+            doxen.put(doxConfig.getName(), doxConfig);
+            currentSchemaMap.put(doxConfig.getName(), doxConfig.getSchema().get(doxConfig.getSchema().size() - 1));
         }
         initTimeInMillis = System.currentTimeMillis();
     }
@@ -282,7 +267,6 @@ public class DoxBean implements
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
         try (Connection c = ds.getConnection()) {
-
             final DoxMeta meta = readMeta(c, config.getName(), doxid);
 
             meta.getAccessKey();
@@ -299,6 +283,8 @@ public class DoxBean implements
             eventHandler.onRecordCreate(config.getName(), doxid, json);
             return meta;
 
+        } catch (final EntityNotFoundException e) {
+            return null;
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
