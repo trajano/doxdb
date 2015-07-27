@@ -1,5 +1,6 @@
 package net.trajano.doxdb.ejb;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,8 +17,11 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
+import org.apache.lucene.store.Lock;
+
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.schema.DoxType;
+import net.trajano.doxdb.search.lucene.JdbcLockFactory;
 
 /**
  * This will initialize the Dox bean using an EJB that provides the Dox
@@ -60,7 +64,15 @@ public class Initializer {
             for (final DoxType doxConfig : configurationProvider.getPersistenceConfig().getDox()) {
                 createTablesIfNeeded(c, doxConfig);
             }
-        } catch (final SQLException e) {
+
+            final JdbcLockFactory jdbcLockFactory = new JdbcLockFactory(c, "SEARCHINDEX");
+            final Lock lock = jdbcLockFactory.makeLock(null, "write.lock");
+            if (lock.isLocked()) {
+                System.out.println("Index was locked on startup, possible data corruption so re-indexing");
+                // TODO
+            }
+        } catch (final IOException
+            | SQLException e) {
             throw new PersistenceException(e);
         }
     }

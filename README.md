@@ -15,6 +15,7 @@ Completed:
    * Search
    * CRUD
    * Event handling
+   * Corrupted index check
 
 Remaining:
 
@@ -25,4 +26,5 @@ Remaining:
    * Temporal data
    * Alternate search
    * Extra operations
+   * Corrupted index repair
 
