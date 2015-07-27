@@ -28,7 +28,6 @@ import net.trajano.doxdb.schema.DoxType;
  */
 @Singleton
 @Startup
-@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class Initializer {
 
     private ConfigurationProvider configurationProvider;
@@ -48,7 +47,13 @@ public class Initializer {
         }
     }
 
+    /**
+     * This will create the tables if needed on initialization. It forces a new
+     * transaction to be created in order to prevent issues running in a cluster
+     * where two instances of this bean will exist.
+     */
     @PostConstruct
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void init() {
 
         try (final Connection c = ds.getConnection()) {

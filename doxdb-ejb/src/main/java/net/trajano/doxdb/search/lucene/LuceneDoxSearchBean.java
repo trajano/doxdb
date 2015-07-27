@@ -212,6 +212,7 @@ public class LuceneDoxSearchBean implements
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public SearchResult search(final String index,
         final String queryString,
         final int limit) {
