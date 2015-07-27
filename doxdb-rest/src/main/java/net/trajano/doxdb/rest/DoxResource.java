@@ -33,7 +33,6 @@ import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
-import net.trajano.doxdb.internal.DoxSearch;
 
 /**
  * This class is extended by clients to provide a list of objects that are
@@ -69,9 +68,6 @@ public class DoxResource {
 
     @EJB(beanInterface = Dox.class)
     private Dox dox;
-
-    @EJB(beanInterface = DoxSearch.class)
-    private DoxSearch doxSearch;
 
     @Path("{collection}")
     @POST
@@ -190,7 +186,7 @@ public class DoxResource {
         @QueryParam("q") final String queryString,
         @Context final UriInfo uriInfo) {
 
-        final SearchResult results = doxSearch.search(index, queryString, 50);
+        final SearchResult results = dox.search(index, queryString, 50);
         //results.get
         final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
         for (final IndexView hit : results.getHits()) {

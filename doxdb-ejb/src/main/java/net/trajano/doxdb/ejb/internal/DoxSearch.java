@@ -1,9 +1,12 @@
-package net.trajano.doxdb.internal;
+package net.trajano.doxdb.ejb.internal;
+
+import javax.ejb.Local;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 
+@Local
 public interface DoxSearch {
 
     /**

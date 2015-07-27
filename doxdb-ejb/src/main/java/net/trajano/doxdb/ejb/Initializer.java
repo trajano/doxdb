@@ -85,8 +85,9 @@ public class Initializer {
             try (final Statement stmt = c.createStatement()) {
 
                 while (scanner.hasNext()) {
-                    final String trim = String.format(scanner.next(), tableName, lobSize).trim();
+                    final String trim = String.format(scanner.next(), tableName, lobSize).replaceAll("\\s+", " ").trim();
                     if (!trim.isEmpty()) {
+                        System.out.println(trim);
                         stmt.addBatch(trim);
                     }
                 }

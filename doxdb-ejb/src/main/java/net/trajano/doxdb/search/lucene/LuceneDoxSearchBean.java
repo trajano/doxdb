@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
-import javax.ejb.Remote;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -40,7 +40,7 @@ import org.apache.lucene.search.TopDocs;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
-import net.trajano.doxdb.internal.DoxSearch;
+import net.trajano.doxdb.ejb.internal.DoxSearch;
 
 /**
  * Handles lucene searches.
@@ -48,7 +48,7 @@ import net.trajano.doxdb.internal.DoxSearch;
  * @author Archimedes
  */
 @Stateless
-@Remote(DoxSearch.class)
+@LocalBean
 public class LuceneDoxSearchBean implements
     DoxSearch {
 

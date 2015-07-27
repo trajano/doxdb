@@ -54,6 +54,8 @@ import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
+import net.trajano.doxdb.SearchResult;
+import net.trajano.doxdb.ejb.internal.DoxSearch;
 import net.trajano.doxdb.ejb.internal.SqlConstants;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.ConfigurationProvider;
@@ -61,7 +63,6 @@ import net.trajano.doxdb.ext.EventHandler;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.ext.Migrator;
 import net.trajano.doxdb.internal.DoxPrincipal;
-import net.trajano.doxdb.internal.DoxSearch;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
@@ -476,6 +477,14 @@ public class DoxBean implements
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    @Override
+    public SearchResult search(final String index,
+        final String queryString,
+        final int limit) {
+
+        return doxSearchBean.search(index, queryString, limit);
     }
 
     @EJB
