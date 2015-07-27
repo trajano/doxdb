@@ -7,9 +7,10 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
-import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.PersistenceException;
 import javax.sql.DataSource;
 
@@ -73,16 +74,14 @@ public class LuceneDoxSearchBean implements
     @Resource
     private DataSource ds;
 
-    @EJB
-    private SingletonLockFactory lockFactory;
-
     @Override
     @Asynchronous
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void addToIndex(
         final IndexView... indexViews) {
 
         try (final Connection c = ds.getConnection()) {
-            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, SEARCHINDEX);
+            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
             iwc.setWriteLockTimeout(5000);
@@ -172,13 +171,14 @@ public class LuceneDoxSearchBean implements
 
     @Override
     @Asynchronous
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void removeFromIndex(final String collection,
         final DoxID doxID) {
 
         try (final Connection c = ds.getConnection()) {
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, SEARCHINDEX);
+            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 final BooleanQuery booleanQuery = new BooleanQuery();
                 booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
@@ -200,7 +200,7 @@ public class LuceneDoxSearchBean implements
         try (final Connection c = ds.getConnection()) {
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, SEARCHINDEX);
+            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
                 indexWriter.deleteAll();
             }
@@ -227,7 +227,7 @@ public class LuceneDoxSearchBean implements
             final BooleanQuery booleanQuery = new BooleanQuery();
             booleanQuery.add(query, Occur.MUST);
             booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
-            final JdbcDirectory dir = new JdbcDirectory(c, lockFactory, SEARCHINDEX);
+            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
 
                 final IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));

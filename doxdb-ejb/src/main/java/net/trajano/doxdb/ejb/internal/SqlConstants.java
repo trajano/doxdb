@@ -49,6 +49,12 @@ public class SqlConstants {
 
     public static final String READFORUPDATE;
 
+    public static final String SEARCHCHECKLOCK;
+
+    public static final String SEARCHCREATELOCK;
+
+    public static final String SEARCHUPDATELOCK;
+
     public static final String UPDATE;
 
     public static final String UPDATEVERSION;
@@ -86,6 +92,16 @@ public class SqlConstants {
             OOBDELETEALL = sqls.getProperty("oobDeleteAll");
             OOBDELETE = sqls.getProperty("oobDelete");
             OOBCOPYTOTOMBSTONE = sqls.getProperty("oobCopyToTombstone");
+        } catch (final IOException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+
+        try (InputStream is = SqlConstants.class.getResourceAsStream("/META-INF/search-sqls.properties")) {
+            sqls.load(is);
+
+            SEARCHCREATELOCK = sqls.getProperty("searchCreateLock");
+            SEARCHUPDATELOCK = sqls.getProperty("searchUpdateLock");
+            SEARCHCHECKLOCK = sqls.getProperty("searchCheckLock");
         } catch (final IOException e) {
             throw new ExceptionInInitializerError(e);
         }

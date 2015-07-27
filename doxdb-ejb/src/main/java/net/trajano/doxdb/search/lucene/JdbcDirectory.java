@@ -33,11 +33,10 @@ public class JdbcDirectory extends Directory {
     private final String searchTableName;
 
     public JdbcDirectory(final Connection connection,
-        final LockFactory lockFactory,
         final String searchTableName) throws SQLException {
-        this.lockFactory = lockFactory;
         this.connection = connection;
         this.searchTableName = searchTableName.toUpperCase();
+        lockFactory = new JdbcLockFactory(connection, this.searchTableName);
         createSearchTable();
 
     }
@@ -68,6 +67,9 @@ public class JdbcDirectory extends Directory {
 
                 final int lobSize = 1024 * 1024 * 1024;
                 try (final PreparedStatement s = connection.prepareStatement(String.format("CREATE TABLE %1$s (NAME VARCHAR(256), CONTENT BLOB(%2$d) NOT NULL, CONTENTLENGTH BIGINT, PRIMARY KEY (NAME))", searchTableName, lobSize))) {
+                    s.executeUpdate();
+                }
+                try (final PreparedStatement s = connection.prepareStatement(String.format("CREATE TABLE %1$sLOCK (NAME VARCHAR(256), LOCKED BIT NOT NULL, PRIMARY KEY (NAME))", searchTableName))) {
                     s.executeUpdate();
                 }
             }

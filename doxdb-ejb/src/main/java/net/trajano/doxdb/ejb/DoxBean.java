@@ -132,7 +132,8 @@ public class DoxBean implements
         final DoxType config = doxen.get(collectionName);
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        validate(schema, bson.toJson());
+        final String inputJson = bson.toJson();
+        validate(schema, inputJson);
         try (Connection c = ds.getConnection()) {
             final DoxID doxId = DoxID.generate();
 
@@ -162,7 +163,7 @@ public class DoxBean implements
                 try (final ResultSet rs = s.getGeneratedKeys()) {
                     rs.next();
 
-                    final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
+                    final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
                     for (final IndexView indexView : indexViews) {
                         indexView.setCollection(config.getName());
                         indexView.setDoxID(doxId);
