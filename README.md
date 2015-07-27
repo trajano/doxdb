@@ -24,3 +24,5 @@ Remaining:
    * Import/Export
    * Temporal data
    * Alternate search
+   * Extra operations
+
