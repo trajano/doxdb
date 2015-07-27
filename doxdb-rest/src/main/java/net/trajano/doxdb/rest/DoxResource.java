@@ -63,7 +63,7 @@ import net.trajano.doxdb.internal.DoxSearch;
  *
  * @author Archimedes
  */
-@Path("")
+@Path("/")
 @ManagedBean
 public class DoxResource {
 

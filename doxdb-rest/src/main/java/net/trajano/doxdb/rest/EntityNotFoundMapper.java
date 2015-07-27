@@ -13,7 +13,7 @@ public class EntityNotFoundMapper implements
     @Override
     public Response toResponse(final EntityNotFoundException e) {
 
-        return Response.status(Status.NOT_FOUND).entity("Not found").build();
+        return Response.status(Status.NOT_FOUND).entity("Dox not found").build();
     }
 
 }
