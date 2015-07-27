@@ -531,6 +531,8 @@ public class DoxBean implements
         final DoxType config = doxen.get(collectionName);
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
+        bson.remove("_id");
+        bson.remove("_version");
         validate(schema, bson.toJson());
         try (Connection c = ds.getConnection()) {
             final DoxMeta meta = readMetaAndLock(c, config.getName(), config.isOob(), doxid, version);
@@ -539,6 +541,8 @@ public class DoxBean implements
             // TODO check the security.
 
             final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
+
+            final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), bson.toJson());
 
             bson.put("_id", new BsonString(doxid.toString()));
             bson.put("_version", new BsonInt32(version + 1));
@@ -563,7 +567,6 @@ public class DoxBean implements
                     throw new PersistenceException("Update failed");
                 }
 
-                final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), storedJson);
                 for (final IndexView indexView : indexViews) {
                     indexView.setCollection(config.getName());
                     indexView.setDoxID(doxid);
