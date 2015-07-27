@@ -1,6 +1,7 @@
 package net.trajano.doxdb.rest;
 
 import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -13,7 +14,7 @@ public class EntityNotFoundMapper implements
     @Override
     public Response toResponse(final EntityNotFoundException e) {
 
-        return Response.status(Status.NOT_FOUND).entity("Dox not found").build();
+        return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Dox not found").build();
     }
 
 }

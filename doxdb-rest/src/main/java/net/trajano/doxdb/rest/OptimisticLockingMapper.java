@@ -1,6 +1,7 @@
 package net.trajano.doxdb.rest;
 
 import javax.persistence.OptimisticLockException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -13,7 +14,7 @@ public class OptimisticLockingMapper implements
     @Override
     public Response toResponse(final OptimisticLockException e) {
 
-        return Response.status(Status.CONFLICT).entity("Optimistic lock conflict").build();
+        return Response.status(Status.CONFLICT).type(MediaType.TEXT_PLAIN).entity("Optimistic lock conflict").build();
     }
 
 }
