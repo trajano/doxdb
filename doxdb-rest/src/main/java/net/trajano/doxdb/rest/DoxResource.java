@@ -1,5 +1,9 @@
 package net.trajano.doxdb.rest;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Map.Entry;
 
 import javax.annotation.ManagedBean;
@@ -18,13 +22,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
+import org.bson.BsonArray;
 import org.bson.BsonDocument;
 import org.bson.BsonNumber;
 import org.bson.BsonValue;
@@ -125,8 +132,31 @@ public class DoxResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response readAll(@PathParam("collection") final String collection) {
 
-        final BsonDocument all = dox.readAll(collection);
-        return Response.ok(all.toJson()).build();
+        // FIXME this is so yucky.
+        final BsonArray all = dox.readAll(collection);
+        if (all.isEmpty()) {
+            return Response.ok("[]").build();
+        }
+        final StreamingOutput stream = new StreamingOutput() {
+
+            @Override
+            public void write(final OutputStream os) throws IOException,
+                WebApplicationException {
+
+                final Writer writer = new OutputStreamWriter(os);
+                writer.write('[');
+                for (int i = 0; i < all.size() - 1; ++i) {
+                    writer.write(all.get(i).asDocument().toJson());
+                    writer.write(',');
+
+                }
+                writer.write(all.get(all.size() - 1).asDocument().toJson());
+                writer.write(']');
+                writer.flush();
+            }
+        };
+
+        return Response.ok(stream).build();
     }
 
     @OPTIONS

@@ -1,5 +1,6 @@
 package net.trajano.doxdb;
 
+import org.bson.BsonArray;
 import org.bson.BsonDocument;
 
 public interface Dox {
@@ -30,7 +31,7 @@ public interface Dox {
     DoxMeta read(String collectionName,
         DoxID id);
 
-    BsonDocument readAll(String collection);
+    BsonArray readAll(String collection);
 
     void reindex();
 

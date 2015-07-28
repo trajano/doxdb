@@ -7,18 +7,11 @@ angular.module('todoApp', [
     });
 
     var todoList = this;
-    //    Restangular.oneUrl('/doxdb/V1/venue', 'wtKEgZb1TuvVfibLwJwt4q0Gpzqre3KP').getList().then(function(venues) {
-    //
-    //        todoList.venue = venues[0];
-    //    });
+    Venue.query({}, function(venues) {
 
-    Venue.get({
-        id : 'wtKEgZb1TuvVfibLwJwt4q0Gpzqre3KP'
-    }, function(venue) {
-
-        todoList.venue = venue;
+        todoList.venue = venues[0];
     });
-    //
+
     todoList.addTodo = function() {
 
         todoList.venue.$save().then(function(venue) {

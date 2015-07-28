@@ -291,7 +291,7 @@ public class DoxBean implements
     }
 
     @Override
-    public BsonDocument readAll(final String collectionName) {
+    public BsonArray readAll(final String collectionName) {
 
         final DoxType config = doxen.get(collectionName);
         if (!config.isReadAll()) {
@@ -323,8 +323,8 @@ public class DoxBean implements
                     }
                 }
             }
-            final BsonDocument doc = new BsonDocument(config.getName(), all);
-            return doc;
+
+            return all;
         } catch (final SQLException e) {
             throw new PersistenceException(e);
         }
