@@ -26,7 +26,7 @@ import org.apache.lucene.store.Lock;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
-import net.trajano.doxdb.search.lucene.JdbcLockFactory;
+import net.trajano.doxdb.search.lucene.JdbcDirectory;
 
 /**
  * This will initialize the Dox bean using an EJB that provides the Dox
@@ -93,11 +93,14 @@ public class Initializer {
                 }
             }
 
-            final JdbcLockFactory jdbcLockFactory = new JdbcLockFactory(c, "SEARCHINDEX");
-            final Lock lock = jdbcLockFactory.makeLock(null, "write.lock");
-            if (lock.isLocked()) {
-                System.out.println("Index was locked on startup, possible data corruption so re-indexing");
-                // TODO
+            try (final JdbcDirectory directory = new JdbcDirectory(c, "SEARCHINDEX")) {
+                final Lock lock = directory.makeLock("write.lock");
+                if (lock.isLocked()) {
+                    directory.forceUnlock("write.lock");
+                    System.out.println("Index was locked on startup, possible data corruption so re-indexing");
+                    // TODO
+                }
+                lock.close();
             }
 
         } catch (final IOException

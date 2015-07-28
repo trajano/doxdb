@@ -19,6 +19,8 @@ import org.apache.lucene.store.IndexOutput;
 import org.apache.lucene.store.Lock;
 import org.apache.lucene.store.LockFactory;
 
+import net.trajano.doxdb.ejb.internal.SqlConstants;
+
 public class JdbcDirectory extends Directory {
 
     private boolean closed = false;
@@ -116,6 +118,15 @@ public class JdbcDirectory extends Directory {
             }
         } catch (final SQLException e) {
             throw new IOException(e);
+        }
+    }
+
+    public void forceUnlock(final String name) throws SQLException {
+
+        try (final PreparedStatement s = connection.prepareStatement(SqlConstants.SEARCHUPDATELOCK)) {
+            s.setBoolean(1, false);
+            s.setString(2, name);
+            s.setBoolean(3, true);
         }
     }
 
