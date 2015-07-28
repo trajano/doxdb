@@ -1,7 +1,6 @@
 package net.trajano.doxdb.ejb;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -14,12 +13,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
@@ -96,35 +93,11 @@ public class DoxBean implements
 
     private Indexer indexer;
 
-    /**
-     * Time the initialization happened.
-     */
-    private transient long initTimeInMillis;
-
     private transient ConcurrentMap<String, JsonSchema> jsonSchemaMap = new ConcurrentHashMap<>();
 
     private Migrator migrator;
 
-    private transient Properties oobSqls = new Properties();
-
     private transient DoxPersistence persistenceConfig;
-
-    private transient Properties sqls = new Properties();
-
-    /**
-     * Logs the destruction of the EJB. This is used to determine if the pool
-     * size may need to be increased or not. In Wildfly, session bean pooling is
-     * disabled by default and will incur significant performance loss.
-     */
-    @PreDestroy
-    public void cleanup() {
-
-        System.out.println("Uninitializing dox " + this);
-        if (System.currentTimeMillis() - initTimeInMillis < 10 * 1000) {
-            System.out.println("EJB " + this + " was deallocated in less than 10 seconds, check the stateless session pool size value.");
-        }
-
-    }
 
     @Override
     public DoxMeta create(final String collectionName,
@@ -235,23 +208,12 @@ public class DoxBean implements
     @PostConstruct
     public void init() {
 
-        try (InputStream is = getClass().getResourceAsStream("/META-INF/sqls.properties")) {
-            sqls.load(is);
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
-        }
-        try (InputStream is = getClass().getResourceAsStream("/META-INF/oob-sqls.properties")) {
-            oobSqls.load(is);
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
-        }
         persistenceConfig = configurationProvider.getPersistenceConfig();
 
         for (final DoxType doxConfig : persistenceConfig.getDox()) {
             doxen.put(doxConfig.getName(), doxConfig);
             currentSchemaMap.put(doxConfig.getName(), doxConfig.getSchema().get(doxConfig.getSchema().size() - 1));
         }
-        initTimeInMillis = System.currentTimeMillis();
     }
 
     @Override

@@ -132,10 +132,11 @@ public class Initializer {
                     final String trim = String.format(scanner.next(), tableName, lobSize).replaceAll("\\s+", " ").trim();
                     if (!trim.isEmpty()) {
                         System.out.println(trim);
-                        stmt.addBatch(trim);
+                        stmt.executeUpdate(trim);
+                        //                        stmt.addBatch(trim);
                     }
                 }
-                stmt.executeBatch();
+                //                stmt.executeBatch();
             }
 
         }
