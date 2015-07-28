@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 
+import net.trajano.doxdb.internal.DoxPrincipal;
+
 public class DoxMeta implements
     Serializable {
 
@@ -22,8 +24,6 @@ public class DoxMeta implements
      */
     private String contentJson;
 
-    private int contentVersion;
-
     private Principal createdBy;
 
     private Date createdOn;
@@ -36,7 +36,33 @@ public class DoxMeta implements
 
     private Date lastUpdatedOn;
 
+    private int schemaVersion;
+
     private int version;
+
+    public DoxMeta() {
+
+    }
+
+    public DoxMeta(final long id,
+        final String doxid,
+        final int version,
+        final int schemaVersion,
+        final byte[] accessKey,
+        final String createdBy,
+        final Date createdOn,
+        final String lastUpdatedBy,
+        final Date lastUpdatedOn) {
+        this.id = id;
+        doxId = new DoxID(doxid);
+        this.version = version;
+        this.schemaVersion = schemaVersion;
+        this.accessKey = accessKey;
+        this.createdBy = new DoxPrincipal(createdBy);
+        this.createdOn = createdOn;
+        this.lastUpdatedBy = new DoxPrincipal(lastUpdatedBy);
+        this.lastUpdatedOn = lastUpdatedOn;
+    }
 
     public byte[] getAccessKey() {
 
@@ -46,11 +72,6 @@ public class DoxMeta implements
     public String getContentJson() {
 
         return contentJson;
-    }
-
-    public int getContentVersion() {
-
-        return contentVersion;
     }
 
     public Principal getCreatedBy() {
@@ -97,9 +118,19 @@ public class DoxMeta implements
         return DatatypeConverter.printDateTime(cal);
     }
 
+    public int getSchemaVersion() {
+
+        return schemaVersion;
+    }
+
     public int getVersion() {
 
         return version;
+    }
+
+    public void incrementVersion() {
+
+        ++version;
     }
 
     public void setAccessKey(final byte[] accessKey) {
@@ -110,11 +141,6 @@ public class DoxMeta implements
     public void setContentJson(final String contentJson) {
 
         this.contentJson = contentJson;
-    }
-
-    public void setContentVersion(final int contentVersion) {
-
-        this.contentVersion = contentVersion;
     }
 
     public void setCreatedBy(final Principal createdBy) {
@@ -145,6 +171,11 @@ public class DoxMeta implements
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
         this.lastUpdatedOn = lastUpdatedOn;
+    }
+
+    public void setSchemaVersion(final int contentVersion) {
+
+        schemaVersion = contentVersion;
     }
 
     public void setVersion(final int version) {
