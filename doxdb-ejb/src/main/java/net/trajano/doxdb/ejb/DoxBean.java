@@ -36,7 +36,6 @@ import org.bson.BsonBinaryReader;
 import org.bson.BsonDocument;
 import org.bson.BsonInt32;
 import org.bson.BsonString;
-import org.bson.BsonValue;
 import org.bson.codecs.BsonDocumentCodec;
 import org.bson.codecs.DecoderContext;
 
@@ -103,6 +102,24 @@ public class DoxBean implements
 
     private transient DoxPersistence persistenceConfig;
 
+    /**
+     * Adds the meta fields to the BSON document that is being returned.
+     *
+     * @param document
+     *            document to update (will be modified).
+     * @param doxId
+     * @param version
+     * @return updated document
+     */
+    private BsonDocument addMeta(final BsonDocument document,
+        final DoxID doxId,
+        final int version) {
+
+        document.put("_id", new BsonString(doxId.toString()));
+        document.put("_version", new BsonInt32(version));
+        return document;
+    }
+
     @Override
     public DoxMeta create(final String schemaName,
         final BsonDocument bson) {
@@ -116,11 +133,7 @@ public class DoxBean implements
 
         final DoxID doxId = DoxID.generate();
 
-        bson.put("_id", new BsonString(doxId.toString()));
-        bson.put("_version", new BsonInt32(1));
-
-        final String storedJson = bson.toJson();
-        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), storedJson, ctx.getCallerPrincipal());
+        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal());
 
         final DoxEntity entity = new DoxEntity();
         entity.setDoxId(doxId);
@@ -149,9 +162,11 @@ public class DoxBean implements
         meta.setLastUpdatedOn(ts);
         meta.setVersion(1);
         meta.setDoxId(doxId);
-        meta.setContentJson(storedJson);
 
-        eventHandler.onRecordCreate(config.getName(), doxId, storedJson);
+        addMeta(bson, doxId, 1);
+        meta.setContentJson(bson.toJson());
+
+        eventHandler.onRecordCreate(config.getName(), doxId, inputJson);
         return meta;
     }
 
@@ -210,13 +225,8 @@ public class DoxBean implements
 
         if (meta.getSchemaVersion() != schema.getVersion()) {
             final DoxEntity e = em.find(DoxEntity.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            BsonDocument document = e.getContent();
-            final BsonValue id = document.remove("_id");
-            final BsonValue version = document.remove("_version");
-            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), document.toJson());
-            document = BsonDocument.parse(contentJson);
-            document.put("_id", id);
-            document.put("_version", version);
+            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());
+            final BsonDocument document = BsonDocument.parse(contentJson);
             meta.setSchemaVersion(schema.getVersion());
             e.setSchemaVersion(schema.getVersion());
             contentJson = document.toJson();
@@ -224,8 +234,7 @@ public class DoxBean implements
         } else {
             final DoxEntity e = em.find(DoxEntity.class, meta.getId(), LockModeType.OPTIMISTIC);
             final BsonDocument document = e.getContent();
-            document.put("_id", new BsonString(e.getDoxId().toString()));
-            document.put("_version", new BsonInt32(e.getVersion()));
+            addMeta(document, e.getDoxId(), e.getVersion());
             contentJson = document.toJson();
         }
 
@@ -255,7 +264,7 @@ public class DoxBean implements
                 migrator.migrate(config.getName(), result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());
                 // queue migrate later?
             } else {
-                all.add(result.getContent());
+                all.add(addMeta(result.getContent(), result.getDoxId(), result.getVersion()));
             }
 
         }
@@ -386,9 +395,8 @@ public class DoxBean implements
         final DoxType config = doxen.get(collectionName);
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        bson.remove("_id");
-        bson.remove("_version");
-        validate(schema, bson.toJson());
+        final String inputJson = bson.toJson();
+        validate(schema, inputJson);
 
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
         meta.incrementVersion();
@@ -396,14 +404,9 @@ public class DoxBean implements
         meta.getAccessKey();
         // TODO check the security.
 
-        final String cleanJson = bson.toJson();
-        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), cleanJson);
+        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
 
-        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), cleanJson, ctx.getCallerPrincipal());
-
-        // FIXME we really shouldn't store it.
-        bson.put("_id", new BsonString(doxid.toString()));
-        bson.put("_version", new BsonInt32(meta.getVersion()));
+        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal());
 
         final DoxEntity e = em.find(DoxEntity.class, meta.getId());
         e.setLastUpdatedBy(ctx.getCallerPrincipal());
@@ -414,8 +417,6 @@ public class DoxBean implements
         em.flush();
         em.refresh(e);
 
-        System.out.println("stored=" + e.getContent().toJson());
-
         for (final IndexView indexView : indexViews) {
             indexView.setCollection(config.getName());
             indexView.setDoxID(doxid);
@@ -423,6 +424,7 @@ public class DoxBean implements
         doxSearchBean.addToIndex(indexViews);
 
         eventHandler.onRecordUpdate(config.getName(), doxid, e.getJsonContent());
+        addMeta(bson, doxid, e.getVersion());
         meta.setContentJson(bson.toJson());
         return meta;
 
