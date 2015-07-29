@@ -63,7 +63,6 @@ public class LuceneDoxSearchBean implements
 
     private static final String FIELD_UNIQUE_ID = "\t uid";
 
-    @PersistenceContext
     private EntityManager em;
 
     @Override
@@ -222,6 +221,18 @@ public class LuceneDoxSearchBean implements
             | ParseException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    /**
+     * Injects the {@link EntityManager}.
+     *
+     * @param em
+     *            entity manager
+     */
+    @PersistenceContext
+    public void setEntityManager(final EntityManager em) {
+
+        this.em = em;
     }
 
     /**

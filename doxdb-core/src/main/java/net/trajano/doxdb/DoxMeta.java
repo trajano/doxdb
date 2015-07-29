@@ -5,10 +5,14 @@ import java.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.DatatypeConverter;
 
 import net.trajano.doxdb.internal.DoxPrincipal;
 
+@Embeddable
 public class DoxMeta implements
     Serializable {
 
@@ -26,6 +30,7 @@ public class DoxMeta implements
 
     private Principal createdBy;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 
     private DoxID doxId;
@@ -34,6 +39,7 @@ public class DoxMeta implements
 
     private Principal lastUpdatedBy;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
 
     private int schemaVersion;

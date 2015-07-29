@@ -23,6 +23,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.validation.ValidationException;
 
 import org.bson.BsonArray;
 import org.bson.BsonDocument;
@@ -75,7 +76,6 @@ public class DoxBean implements
 
     private DoxSearch doxSearchBean;
 
-    @PersistenceContext
     private EntityManager em;
 
     private EventHandler eventHandler;
@@ -325,6 +325,18 @@ public class DoxBean implements
         this.doxSearchBean = doxSearchBean;
     }
 
+    /**
+     * Injects the {@link EntityManager}.
+     *
+     * @param em
+     *            entity manager
+     */
+    @PersistenceContext
+    public void setEntityManager(final EntityManager em) {
+
+        this.em = em;
+    }
+
     @EJB
     public void setEventHandler(final EventHandler eventHandler) {
 
@@ -414,7 +426,7 @@ public class DoxBean implements
 
             final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));
             if (!validate.isSuccess()) {
-                throw new PersistenceException(validate.toString());
+                throw new ValidationException(validate.toString());
             }
         } catch (ProcessingException
             | IOException e) {

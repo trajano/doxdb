@@ -28,7 +28,6 @@ public class Initializer {
 
     private ConfigurationProvider configurationProvider;
 
-    @PersistenceContext
     private EntityManager em;
 
     /**
@@ -46,22 +45,24 @@ public class Initializer {
             // TODO TBD
         }
 
-        //        try (final JpaDirectory jpaDirectory = new JpaDirectory(em, LuceneDoxSearchBean.DIRECTORY_NAME)) {
-        //            final int releaseCount = jpaDirectory.releaseLocks();
-        //            if (releaseCount > 0) {
-        //                System.out.println("Index was locked on startup, possible data corruption so re-indexing");
-        //                // TODO
-        //            }
-        //        } catch (final IOException e) {
-        //            throw new ExceptionInInitializerError(e);
-        //        }
-
     }
 
     @EJB
     public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
 
         this.configurationProvider = configurationProvider;
+    }
+
+    /**
+     * Injects the {@link EntityManager}.
+     *
+     * @param em
+     *            entity manager
+     */
+    @PersistenceContext
+    public void setEntityManager(final EntityManager em) {
+
+        this.em = em;
     }
 
 }
