@@ -53,9 +53,7 @@ public class JpaDirectory extends Directory {
     @Override
     public void deleteFile(final String name) throws IOException {
 
-        em.createNamedQuery("searchDeleteOne")
-            .setParameter("directoryName", directoryName).setParameter("fileName", name).executeUpdate();
-        em.flush();
+        em.remove(em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name)));
     }
 
     /**
@@ -73,7 +71,7 @@ public class JpaDirectory extends Directory {
     @Override
     public long fileLength(final String name) throws IOException {
 
-        return em.createNamedQuery("searchReadSize", Integer.class).setParameter("directoryName", directoryName).setParameter("fileName", name).getSingleResult();
+        return em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name)).getContentLength();
     }
 
     @Override
@@ -97,7 +95,7 @@ public class JpaDirectory extends Directory {
     public IndexInput openInput(final String name,
         final IOContext context) throws IOException {
 
-        final DoxSearchIndex entry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", name).getSingleResult();
+        final DoxSearchIndex entry = em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name));
         if (entry == null) {
             return null;
         }
@@ -113,7 +111,17 @@ public class JpaDirectory extends Directory {
             return;
         }
 
-        em.createNamedQuery("searchRename").setParameter("directoryName", directoryName).setParameter("source", source).setParameter("dest", dest).executeUpdate();
+        final DoxSearchIndex src = em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, source));
+
+        final DoxSearchIndex entry = new DoxSearchIndex();
+        entry.setContent(src.getContent());
+        entry.setContentLength(src.getContentLength());
+        final DirectoryFile directoryFile = new DirectoryFile();
+        directoryFile.setDirectoryName(directoryName);
+        directoryFile.setFileName(dest);
+        entry.setDirectoryFile(directoryFile);
+        em.remove(src);
+        em.persist(entry);
 
     }
 

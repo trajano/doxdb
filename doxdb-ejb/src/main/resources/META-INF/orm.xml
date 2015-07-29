@@ -17,21 +17,7 @@
 		<lock-mode>OPTIMISTIC</lock-mode>
 	</named-query>
 	<named-query name="searchListAll">
-		<query>select e.fileName from DoxSearchIndex e where e.directoryName = :directoryName</query>
+		<query>select e.directoryFile.fileName from DoxSearchIndex e where e.directoryFile.directoryName = :directoryName</query>
 		<lock-mode>PESSIMISTIC_READ</lock-mode>
-	</named-query>
-	<named-query name="searchReadOne">
-		<query>from DoxSearchIndex e where e.directoryName = :directoryName and e.fileName = :fileName</query>
-		<lock-mode>PESSIMISTIC_READ</lock-mode>
-	</named-query>
-	<named-query name="searchReadSize">
-		<query>select e.contentLength from DoxSearchIndex e where e.directoryName = :directoryName and e.fileName = :fileName</query>
-		<lock-mode>PESSIMISTIC_READ</lock-mode>
-	</named-query>
-	<named-query name="searchRename">
-		<query>update DoxSearchIndex e set e.fileName = :dest where e.directoryName = :directoryName and e.fileName = :source</query>
-	</named-query>
-	<named-query name="searchDeleteOne">
-		<query>delete from DoxSearchIndex e where e.directoryName = :directoryName and e.fileName = :fileName</query>
 	</named-query>
 </entity-mappings>

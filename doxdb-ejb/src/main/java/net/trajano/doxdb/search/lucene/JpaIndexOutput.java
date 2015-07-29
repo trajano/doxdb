@@ -23,8 +23,11 @@ public class JpaIndexOutput extends OutputStreamIndexOutput {
         this.baos = baos;
         this.em = em;
         entry = new DoxSearchIndex();
-        entry.setDirectoryName(directoryName);
-        entry.setFileName(name);
+        final DirectoryFile directoryFile = new DirectoryFile();
+        directoryFile
+            .setDirectoryName(directoryName);
+        directoryFile.setFileName(name);
+        entry.setDirectoryFile(directoryFile);
 
     }
 
