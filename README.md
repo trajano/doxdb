@@ -16,6 +16,8 @@ Completed:
    * CRUD
    * Event handling
    * Corrupted index check
+   * REST API
+   * Angular JS sample
 
 Remaining:
 
@@ -27,4 +29,6 @@ Remaining:
    * Alternate search
    * Extra operations
    * Corrupted index repair
-
+   * Separate Lucene Jpa Directory implementation to it's own artifact.
+   * More robust Angular JS sample
+   * Off-line sync

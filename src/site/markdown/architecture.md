@@ -1,5 +1,5 @@
 Architecture
-------------
+============
 The document is a first class citizen and the underlying database is secondary
 and can be rebuilt using the documents.  This is how applications such as
 Mail.app and WinAMP function, where an internal database is created out of
@@ -13,10 +13,20 @@ Storage files are kept in MIME multipart message format.  This allows adding
 additional meta data without changing the structure and allows for the document
 content to be stored as is.
 
-Since JDBC is used and byte arrays are avoided in the implementation, the
-[Out of band data][1] such as embedded images or file attachments are stored
-in the database rather than being managed outside the database for extra
-performance.  This simplifies the architecture implementations.
+JPA vs JDBC
+-----------
+The implementation of this has jumped from JPA to JDBC back to JPA.  Although
+JDBC provides a lot of low level functionality and provides us with more
+performant functions, it does not work when working with different database
+vendors.
+
+In addition, although JPA can still function with JDBC, by leveraging the JPA
+entity caches we can get some performance gain without additional code.
+
+From searching the web for information on whether several small tables are
+better vs. one large table with a discriminator field, it appears that 
+the larger majority of articles I see indicate one large table that is properly
+indexed would yield a better job. 
 
 Comparison with other data stores
 ---------------------------------
