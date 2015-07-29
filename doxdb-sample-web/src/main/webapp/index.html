@@ -12,10 +12,17 @@
 </head>
 <body>
 	<div x-ng-controller="TodoListController as todoList">
+
+		<select x-ng-options="item.name for item in todoList.venues"
+			x-ng-model="todoList.venue">
+			<option value="">--new--</option>
+		</select>
+
 		<form x-ng-submit="todoList.addTodo()">
 			<input type="text" x-ng-model="todoList.venue.name" size="30"
-				placeholder="add new todo here"> <input class="btn-primary"
-				type="submit" value="add">
+				placeholder="Name">
+			<button x-ng-click="todoList.saveVenue()">save</button>
+			<button x-ng-click="todoList.deleteVenue()">delete</button>
 		</form>
 		<pre>{{todoList.venue | json}}</pre>
 	</div>

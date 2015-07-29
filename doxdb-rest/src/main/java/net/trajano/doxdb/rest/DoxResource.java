@@ -99,9 +99,9 @@ public class DoxResource {
     @Path("{collection}/{id}")
     public Response delete(@PathParam("collection") final String collection,
         @PathParam("id") final DoxID doxid,
-        final JsonObject json) {
+        @QueryParam("v") final int version) {
 
-        dox.delete(collection, doxid, json.getInt("_version"));
+        dox.delete(collection, doxid, version);
         return Response.noContent().build();
     }
 
@@ -201,6 +201,7 @@ public class DoxResource {
 
     @POST
     @Path("{collection}/{idOrOp}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveOrOp(@PathParam("collection") final String collection,
         @PathParam("idOrOp") final String idOrOp,
