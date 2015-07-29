@@ -15,5 +15,16 @@
 	<named-query name="readAllBySchemaName">
 		<query>from Dox e where e.schemaName = :schemaName</query>
 		<lock-mode>OPTIMISTIC</lock-mode>
+	</named-query><!-- 
+	<named-query name="searchReleaseLocks">
+		<query>update DoxSearchIndexLock set locked = false where locked = true and directoryFile.directoryName = :directoryName</query>
+	</named-query> -->
+	<named-query name="searchListAll">
+		<query>select fileName from DoxSearchIndex where directoryName = :directoryName</query>
+		<lock-mode>OPTIMISTIC</lock-mode>
+	</named-query>
+	<named-query name="searchReadOne">
+		<query>from DoxSearchIndex where directoryName = :directoryName and fileName = :fileName</query>
+		<lock-mode>OPTIMISTIC</lock-mode>
 	</named-query>
 </entity-mappings>

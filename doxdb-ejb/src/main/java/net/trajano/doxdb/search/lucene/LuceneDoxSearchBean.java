@@ -1,18 +1,16 @@
 package net.trajano.doxdb.search.lucene;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Map.Entry;
 
-import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.sql.DataSource;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -49,8 +47,11 @@ import net.trajano.doxdb.ejb.internal.DoxSearch;
  */
 @Stateless
 @LocalBean
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class LuceneDoxSearchBean implements
     DoxSearch {
+
+    public static final String DIRECTORY_NAME = "DOX";
 
     private static final String FIELD_COLLECTION = "\t collection";
 
@@ -62,38 +63,25 @@ public class LuceneDoxSearchBean implements
 
     private static final String FIELD_UNIQUE_ID = "\t uid";
 
-    /**
-     * Table name for the search index.
-     */
-    private static final String SEARCHINDEX = "SEARCHINDEX";
-
-    /**
-     * The data source. It is required that the datasource be XA enabled so it
-     * can co-exist with JPA and other operations.
-     */
-    @Resource
-    private DataSource ds;
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     @Asynchronous
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void addToIndex(
         final IndexView... indexViews) {
 
-        try (final Connection c = ds.getConnection()) {
-            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
-            final Analyzer analyzer = new StandardAnalyzer();
-            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            iwc.setWriteLockTimeout(5000);
+        final JpaDirectory dir = new JpaDirectory(em, DIRECTORY_NAME);
+        final Analyzer analyzer = new StandardAnalyzer();
+        final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+        iwc.setWriteLockTimeout(5000);
 
-            try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
-                for (final IndexView indexView : indexViews) {
-                    final Document doc = buildFromIndexView(indexView);
-                    indexWriter.updateDocument(new Term(FIELD_UNIQUE_ID, uid(indexView)), doc);
-                }
+        try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
+            for (final IndexView indexView : indexViews) {
+                final Document doc = buildFromIndexView(indexView);
+                indexWriter.updateDocument(new Term(FIELD_UNIQUE_ID, uid(indexView)), doc);
             }
-        } catch (final IOException
-            | SQLException e) {
+        } catch (final IOException e) {
             throw new PersistenceException(e);
         }
     }
@@ -171,22 +159,19 @@ public class LuceneDoxSearchBean implements
 
     @Override
     @Asynchronous
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void removeFromIndex(final String collection,
         final DoxID doxID) {
 
-        try (final Connection c = ds.getConnection()) {
-            final Analyzer analyzer = new StandardAnalyzer();
-            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
-            try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
-                final BooleanQuery booleanQuery = new BooleanQuery();
-                booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
-                booleanQuery.add(new TermQuery(new Term(FIELD_COLLECTION, collection)), Occur.MUST);
-                indexWriter.deleteDocuments(booleanQuery);
-            }
-        } catch (final IOException
-            | SQLException e) {
+        final Analyzer analyzer = new StandardAnalyzer();
+        final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+        final JpaDirectory dir = new JpaDirectory(em, DIRECTORY_NAME);
+        try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
+            final BooleanQuery booleanQuery = new BooleanQuery();
+            booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
+            booleanQuery.add(new TermQuery(new Term(FIELD_COLLECTION, collection)), Occur.MUST);
+            indexWriter.deleteDocuments(booleanQuery);
+
+        } catch (final IOException e) {
             throw new PersistenceException(e);
         }
     }
@@ -197,29 +182,25 @@ public class LuceneDoxSearchBean implements
     @Override
     public void reset() {
 
-        try (final Connection c = ds.getConnection()) {
-            final Analyzer analyzer = new StandardAnalyzer();
-            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
-            try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
-                indexWriter.deleteAll();
-            }
-        } catch (final IOException
-            | SQLException e) {
+        final Analyzer analyzer = new StandardAnalyzer();
+        final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+        final JpaDirectory dir = new JpaDirectory(em, DIRECTORY_NAME);
+        try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
+            indexWriter.deleteAll();
+
+        } catch (final IOException e) {
             throw new PersistenceException(e);
         }
 
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public SearchResult search(final String index,
         final String queryString,
         final int limit) {
 
         // TODO verify access to index for user
-
-        try (final Connection c = ds.getConnection()) {
+        try {
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
@@ -228,7 +209,8 @@ public class LuceneDoxSearchBean implements
             final BooleanQuery booleanQuery = new BooleanQuery();
             booleanQuery.add(query, Occur.MUST);
             booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
-            final JdbcDirectory dir = new JdbcDirectory(c, SEARCHINDEX);
+
+            final JpaDirectory dir = new JpaDirectory(em, DIRECTORY_NAME);
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
 
                 final IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));
@@ -237,15 +219,20 @@ public class LuceneDoxSearchBean implements
                 return buildSearchResults(indexSearcher, search);
             }
         } catch (final IOException
-            | ParseException
-            | SQLException e) {
+            | ParseException e) {
             throw new PersistenceException(e);
         }
     }
 
+    /**
+     * Create a unique ID for the search index record.
+     *
+     * @param view
+     * @return
+     */
     private String uid(final IndexView view) {
 
-        return view.getIndex() + "/" + view.getCollection() + "/" + view.getDoxID();
+        return view.getIndex() + "\t" + view.getCollection() + "\t" + view.getDoxID();
     }
 
 }

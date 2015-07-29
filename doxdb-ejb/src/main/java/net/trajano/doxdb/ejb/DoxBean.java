@@ -1,12 +1,6 @@
 package net.trajano.doxdb.ejb;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,15 +23,11 @@ import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.sql.DataSource;
 
 import org.bson.BsonArray;
-import org.bson.BsonBinaryReader;
 import org.bson.BsonDocument;
 import org.bson.BsonInt32;
 import org.bson.BsonString;
-import org.bson.codecs.BsonDocumentCodec;
-import org.bson.codecs.DecoderContext;
 
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.SchemaVersion;
@@ -53,13 +43,11 @@ import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ejb.internal.DoxSearch;
-import net.trajano.doxdb.ejb.internal.SqlConstants;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.EventHandler;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.ext.Migrator;
-import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
@@ -86,8 +74,6 @@ public class DoxBean implements
     private transient Map<String, DoxType> doxen = new HashMap<>();
 
     private DoxSearch doxSearchBean;
-
-    private DataSource ds;
 
     @PersistenceContext
     private EntityManager em;
@@ -290,43 +276,27 @@ public class DoxBean implements
 
         doxSearchBean.reset();
 
-        try (final Connection c = ds.getConnection()) {
+        // TODO this will do everything in one transaction which can kill the database.  What could be done is the
+        // reindexing can be done in chunks and let an MDB do the process
+        for (final DoxType config : doxen.values()) {
 
-            for (final DoxType config : doxen.values()) {
+            final List<IndexView> indexViews = new LinkedList<>();
+            for (final DoxEntity e : em.createNamedQuery("readAllBySchemaName", DoxEntity.class).setParameter("schemaName", config.getName()).getResultList()) {
 
-                final String sql = String.format(SqlConstants.READALLCONTENT, config.getName().toUpperCase());
-                try (final Statement s = c.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE)) {
-                    final List<IndexView> indexViews = new LinkedList<>();
-                    try (final ResultSet rs = s.executeQuery(sql)) {
-                        while (rs.next()) {
-
-                            final DoxID doxid = new DoxID(rs.getString(1));
-                            final Blob blob = rs.getBlob(2);
-
-                            final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(blob.getBytes(1, (int) blob.length()))), DecoderContext.builder()
-                                .build());
-                            blob.free();
-                            decoded.remove("_id");
-                            decoded.remove("_version");
-                            final String json = decoded.toJson();
-                            rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
-                            final IndexView[] indexViewBuilt = indexer.buildIndexViews(config.getName(), json);
-                            for (final IndexView indexView : indexViewBuilt) {
-                                indexView.setCollection(config.getName());
-                                indexView.setDoxID(doxid);
-                                indexViews.add(indexView);
-                            }
-
-                        }
-                    }
-                    doxSearchBean.addToIndex(indexViews.toArray(new IndexView[0]));
+                // TODO later
+                //                rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
+                final IndexView[] indexViewBuilt = indexer.buildIndexViews(config.getName(), e.getJsonContent());
+                for (final IndexView indexView : indexViewBuilt) {
+                    indexView.setCollection(e.getSchemaName());
+                    indexView.setDoxID(e.getDoxId());
+                    indexViews.add(indexView);
                 }
 
             }
+            doxSearchBean.addToIndex(indexViews.toArray(new IndexView[0]));
 
-        } catch (final SQLException e) {
-            throw new PersistenceException(e);
         }
+
     }
 
     @Override
@@ -347,12 +317,6 @@ public class DoxBean implements
     public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
 
         this.configurationProvider = configurationProvider;
-    }
-
-    @Resource
-    public void setDataSource(final DataSource ds) {
-
-        this.ds = ds;
     }
 
     @EJB
