@@ -24,7 +24,6 @@ import com.google.common.io.Resources;
 
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.ejb.DoxBean;
-import net.trajano.doxdb.ejb.Initializer;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.DefaultEventHandler;
@@ -88,11 +87,6 @@ public class AbstractBeanTest {
                 return doxPersistence;
             }
         };
-
-        final Initializer initializer = new Initializer();
-        initializer.setEntityManager(em);
-        initializer.setConfigurationProvider(configurationProvider);
-        initializer.init();
 
         final SessionContext sessionContextMock = mock(SessionContext.class);
         when(sessionContextMock.getCallerPrincipal()).thenReturn(new DoxPrincipal("ANONYMOUS"));
