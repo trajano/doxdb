@@ -2,7 +2,7 @@ angular.module('todoApp', [
     'ngResource'
 ]).controller('TodoListController', function($resource) {
 
-    var Venue = $resource('/doxdb/V1/venue/:id', {
+    var Venue = $resource('V1/venue/:id', {
         id : '@_id'
     });
 

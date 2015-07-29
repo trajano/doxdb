@@ -16,11 +16,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>doxdb-rest</artifactId>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>doxdb-sample-ejb</artifactId>
             <type>ejb</type>
         </dependency>
@@ -57,11 +52,6 @@
                             <groupId>${project.groupId}</groupId>
                             <artifactId>doxdb-ejb</artifactId>
                         </ejbModule>
-                        <webModule>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>doxdb-rest</artifactId>
-                            <contextRoot>/doxdb</contextRoot>
-                        </webModule>
                         <webModule>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>doxdb-sample-web</artifactId>
