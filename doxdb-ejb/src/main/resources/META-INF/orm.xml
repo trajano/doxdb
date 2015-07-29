@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+        http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+	version="2.1">
+	<named-query name="readMetaBySchemaNameDoxID">
+		<query>select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId </query>
+		<lock-mode>OPTIMISTIC</lock-mode>
+	</named-query>
+	<named-query name="readForUpdateMetaBySchemaNameDoxIDVersion">
+		<query>select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId and e.version = :version</query>
+		<lock-mode>OPTIMISTIC_FORCE_INCREMENT</lock-mode>
+	</named-query>
+	<named-query name="readAllBySchemaName">
+		<query>from Dox e where e.schemaName = :schemaName</query>
+		<lock-mode>OPTIMISTIC</lock-mode>
+	</named-query>
+	<named-query name="searchListAll">
+		<query>select e.fileName from DoxSearchIndex e where e.directoryName = :directoryName</query>
+		<lock-mode>PESSIMISTIC_READ</lock-mode>
+	</named-query>
+	<named-query name="searchReadOne">
+		<query>from DoxSearchIndex e where e.directoryName = :directoryName and e.fileName = :fileName</query>
+		<lock-mode>PESSIMISTIC_READ</lock-mode>
+	</named-query>
+</entity-mappings>

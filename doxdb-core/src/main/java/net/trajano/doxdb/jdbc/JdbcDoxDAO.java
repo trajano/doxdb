@@ -558,7 +558,7 @@ public class JdbcDoxDAO implements
     @Override
     public int getContentVersion(final DoxID id) {
 
-        return readMeta(id).getContentVersion();
+        return readMeta(id).getSchemaVersion();
     }
 
     @Override
@@ -737,7 +737,7 @@ public class JdbcDoxDAO implements
                 meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
                 meta.setLastUpdatedOn(rs.getTimestamp(6));
                 meta.setVersion(rs.getInt(7));
-                meta.setContentVersion(rs.getInt(8));
+                meta.setSchemaVersion(rs.getInt(8));
                 return meta;
             }
         } catch (final SQLException e) {
@@ -772,7 +772,7 @@ public class JdbcDoxDAO implements
                 meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
                 meta.setLastUpdatedOn(rs.getTimestamp(6));
                 meta.setVersion(rs.getInt(7));
-                meta.setContentVersion(rs.getInt(8));
+                meta.setSchemaVersion(rs.getInt(8));
 
                 if (hasOob) {
                     try (final PreparedStatement os = c.prepareStatement(oobReadForUpdateSql)) {

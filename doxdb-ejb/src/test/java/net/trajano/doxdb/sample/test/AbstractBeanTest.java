@@ -1,27 +1,29 @@
 package net.trajano.doxdb.sample.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.Principal;
+import java.util.logging.LogManager;
 
 import javax.ejb.SessionContext;
-import javax.persistence.PersistenceException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
-import org.bson.BsonDocument;
-import org.h2.jdbcx.JdbcDataSource;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import net.trajano.doxdb.DoxMeta;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.io.Resources;
+
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.ejb.DoxBean;
-import net.trajano.doxdb.ejb.Initializer;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.DefaultEventHandler;
@@ -30,22 +32,44 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
+import net.trajano.doxdb.search.lucene.LuceneDoxSearchBean;
 
-public class DatabaseTest {
+public class AbstractBeanTest {
 
-    private DoxBean bean;
+    @BeforeClass
+    public static void setupLogger() throws Exception {
+
+        LogManager.getLogManager()
+            .readConfiguration(Resources.getResource("logging.properties")
+                .openStream());
+    }
+
+    protected DoxBean bean;
+
+    protected LuceneDoxSearchBean doxSearchBean;
+
+    protected EntityManager em;
+
+    protected EntityManagerFactory emf;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
+    protected EntityTransaction tx;
+
     @Before
     public void setUp() throws IOException {
 
-        final JdbcDataSource ds = new JdbcDataSource();
-        ds.setURL("jdbc:h2:file:" + testFolder.newFile().getAbsolutePath());
-        ds.setUser("sa");
-        ds.setPassword("sa");
-        ds.setLogWriter(new PrintWriter(System.out));
+        emf = Persistence.createEntityManagerFactory("default", ImmutableMap.builder()
+            .put("javax.persistence.jdbc.driver", "org.apache.derby.jdbc.EmbeddedDriver")
+            .put("javax.persistence.schema-generation.database.action", "create")
+            .put("javax.persistence.jdbc.url", "jdbc:h2:file:" + testFolder.newFile().getAbsolutePath())
+            .put("eclipselink.logging.logger", "JavaLogger")
+            .put("eclipselink.logging.level.sql", "fine")
+            .put("eclipselink.logging.parameters", "true")
+            .build());
+        em = emf.createEntityManager();
+        tx = em.getTransaction();
 
         final ConfigurationProvider configurationProvider = new ConfigurationProvider() {
 
@@ -64,15 +88,13 @@ public class DatabaseTest {
             }
         };
 
-        final Initializer initializer = new Initializer();
-        initializer.setDataSource(ds);
-        initializer.setConfigurationProvider(configurationProvider);
-        initializer.init();
-
-        bean = new DoxBean();
-        bean.setDataSource(ds);
         final SessionContext sessionContextMock = mock(SessionContext.class);
         when(sessionContextMock.getCallerPrincipal()).thenReturn(new DoxPrincipal("ANONYMOUS"));
+
+        bean = new DoxBean();
+        doxSearchBean = new LuceneDoxSearchBean();
+
+        bean.setEntityManager(em);
         bean.setSessionContext(sessionContextMock);
         bean.setIndexer(new Indexer() {
 
@@ -95,28 +117,19 @@ public class DatabaseTest {
         });
         bean.setEventHandler(new DefaultEventHandler());
         bean.setConfigurationProvider(configurationProvider);
+        bean.setDoxSearchBean(doxSearchBean);
+
+        doxSearchBean.setEntityManager(em);
+
         bean.init();
-    }
-
-    @Test
-    public void testCrud() throws Exception {
-
-        final String inputJson = "{\"name\":\"abc\"}";
-        final BsonDocument bson = BsonDocument.parse(inputJson);
-        final DoxMeta meta = bean.create("horse", bson);
-
-        final BsonDocument readBson = BsonDocument.parse(bean.read("horse", meta.getDoxId())
-            .getContentJson());
-
-        assertEquals(bson.getString("name"), readBson.getString("name"));
-    }
-
-    @Test(expected = PersistenceException.class)
-    public void testFailValidation() throws Exception {
-
-        final String inputJson = "{\"noname\":\"abc\"}";
-        final BsonDocument bson = BsonDocument.parse(inputJson);
-        bean.create("horse", bson);
 
     }
+
+    @After
+    public void tearDownEntityManager() {
+
+        em.close();
+        emf.close();
+    }
+
 }

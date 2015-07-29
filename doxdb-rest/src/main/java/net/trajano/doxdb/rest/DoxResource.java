@@ -99,9 +99,9 @@ public class DoxResource {
     @Path("{collection}/{id}")
     public Response delete(@PathParam("collection") final String collection,
         @PathParam("id") final DoxID doxid,
-        @QueryParam("v") final int version) {
+        final JsonObject json) {
 
-        dox.delete(collection, doxid, version);
+        dox.delete(collection, doxid, json.getInt("_version"));
         return Response.noContent().build();
     }
 
