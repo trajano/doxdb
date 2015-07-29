@@ -10,17 +10,23 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import net.trajano.doxdb.ejb.internal.DoxLength;
 
+/**
+ * Search directory data. In order to support Oracle, what would normally have
+ * been a unique constraint against directory + filename was made non-unique.
+ *
+ * @author Archimedes Trajano
+ */
 @Entity
-@Table(indexes = @Index(columnList = "directoryName",
-    unique = false) ,
-    uniqueConstraints = @UniqueConstraint(columnNames = {
-        "directoryName",
-        "fileName"
-}) )
+@Table(indexes = {
+    @Index(columnList = "directoryName",
+        unique = false),
+    @Index(columnList = "directoryName,fileName",
+        unique = false)
+
+})
 public class DoxSearchIndex {
 
     /**
@@ -29,11 +35,11 @@ public class DoxSearchIndex {
     @Basic(fetch = FetchType.LAZY)
     @Lob
     @Column(length = DoxLength.INDEX_FILE_LENGTH,
-        nullable = true)
+        nullable = false)
     private byte[] content;
 
     @Column(nullable = false)
-    private int contentlength;
+    private int contentLength;
 
     @Column(nullable = false,
         length = DoxLength.INDEX_NAME_LENGTH)
@@ -52,9 +58,9 @@ public class DoxSearchIndex {
         return content;
     }
 
-    public int getContentlength() {
+    public int getContentLength() {
 
-        return contentlength;
+        return contentLength;
     }
 
     /**
@@ -92,9 +98,9 @@ public class DoxSearchIndex {
         this.content = content;
     }
 
-    public void setContentlength(final int contentlength) {
+    public void setContentLength(final int contentlength) {
 
-        this.contentlength = contentlength;
+        contentLength = contentlength;
     }
 
     /**

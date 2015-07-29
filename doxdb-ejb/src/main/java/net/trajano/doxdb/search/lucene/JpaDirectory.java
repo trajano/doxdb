@@ -1,10 +1,10 @@
 package net.trajano.doxdb.search.lucene;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
@@ -46,16 +46,16 @@ public class JpaDirectory extends Directory {
     public IndexOutput createOutput(final String name,
         final IOContext context) throws IOException {
 
-        return new JpaIndexOutput(name, em, directoryName);
+        return new JpaIndexOutput(name, em, new ByteArrayOutputStream(), directoryName);
 
     }
 
     @Override
     public void deleteFile(final String name) throws IOException {
 
-        final DoxSearchIndex indexEntry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", name).setLockMode(LockModeType.PESSIMISTIC_WRITE).getSingleResult();
-        em.remove(indexEntry);
-
+        em.createNamedQuery("searchDeleteOne")
+            .setParameter("directoryName", directoryName).setParameter("fileName", name).executeUpdate();
+        em.flush();
     }
 
     /**
@@ -73,8 +73,7 @@ public class JpaDirectory extends Directory {
     @Override
     public long fileLength(final String name) throws IOException {
 
-        final DoxSearchIndex indexEntry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", name).getSingleResult();
-        return indexEntry.getContentlength();
+        return em.createNamedQuery("searchReadSize", Integer.class).setParameter("directoryName", directoryName).setParameter("fileName", name).getSingleResult();
     }
 
     @Override
@@ -98,7 +97,12 @@ public class JpaDirectory extends Directory {
     public IndexInput openInput(final String name,
         final IOContext context) throws IOException {
 
-        return new JpaIndexInput(name, em, directoryName, context);
+        final DoxSearchIndex entry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", name).getSingleResult();
+        if (entry == null) {
+            return null;
+        }
+
+        return new ByteArrayIndexInput(name, context, entry.getContent());
     }
 
     @Override
@@ -109,9 +113,8 @@ public class JpaDirectory extends Directory {
             return;
         }
 
-        final DoxSearchIndex indexEntry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", source).setLockMode(LockModeType.PESSIMISTIC_WRITE).getSingleResult();
-        indexEntry.setFileName(dest);
-        em.persist(indexEntry);
+        em.createNamedQuery("searchRename").setParameter("directoryName", directoryName).setParameter("source", source).setParameter("dest", dest).executeUpdate();
+
     }
 
     /**

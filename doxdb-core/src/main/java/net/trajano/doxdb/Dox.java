@@ -39,6 +39,11 @@ public interface Dox {
         String queryString,
         int i);
 
+    SearchResult search(String index,
+        String queryString,
+        int limit,
+        Integer fromDoc);
+
     /**
      * Creates a dox record into the database. This will allocate a "_id" value
      * for the record.

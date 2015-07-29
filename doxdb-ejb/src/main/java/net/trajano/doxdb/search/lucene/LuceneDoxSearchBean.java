@@ -153,6 +153,9 @@ public class LuceneDoxSearchBean implements
 
             result.addHit(buildFromDoc(doc));
         }
+        if (search.scoreDocs.length > 0) {
+            result.setBottomDoc(search.scoreDocs[search.scoreDocs.length - 1].doc);
+        }
         return result;
     }
 
@@ -196,7 +199,8 @@ public class LuceneDoxSearchBean implements
     @Override
     public SearchResult search(final String index,
         final String queryString,
-        final int limit) {
+        final int limit,
+        final Integer fromDoc) {
 
         // TODO verify access to index for user
         try {
@@ -213,8 +217,12 @@ public class LuceneDoxSearchBean implements
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
 
                 final IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));
-                final TopDocs search = indexSearcher.search(booleanQuery, limit);
-
+                final TopDocs search;
+                if (fromDoc == null) {
+                    search = indexSearcher.search(booleanQuery, limit);
+                } else {
+                    search = indexSearcher.searchAfter(new ScoreDoc(fromDoc, 0), query, limit);
+                }
                 return buildSearchResults(indexSearcher, search);
             }
         } catch (final IOException

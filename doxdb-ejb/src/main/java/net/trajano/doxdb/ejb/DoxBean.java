@@ -304,7 +304,16 @@ public class DoxBean implements
         final String queryString,
         final int limit) {
 
-        return doxSearchBean.search(index, queryString, limit);
+        return doxSearchBean.search(index, queryString, limit, null);
+    }
+
+    @Override
+    public SearchResult search(final String index,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+        return doxSearchBean.search(index, queryString, limit, fromDoc);
     }
 
     @EJB

@@ -13,6 +13,12 @@ public class SearchResult implements
      */
     private static final long serialVersionUID = 4059685393021065762L;
 
+    /**
+     * Bottom document number. This can be passed as the "from" value for the
+     * query to get to the next page.
+     */
+    private Integer bottomDoc;
+
     private final List<IndexView> hits = new LinkedList<>();
 
     private int totalHits;
@@ -20,6 +26,11 @@ public class SearchResult implements
     public void addHit(final IndexView hit) {
 
         hits.add(hit);
+    }
+
+    public Integer getBottomDoc() {
+
+        return bottomDoc;
     }
 
     public List<IndexView> getHits() {
@@ -30,6 +41,11 @@ public class SearchResult implements
     public int getTotalHits() {
 
         return totalHits;
+    }
+
+    public void setBottomDoc(final int bottomDoc) {
+
+        this.bottomDoc = bottomDoc;
     }
 
     public void setTotalHits(final int totalHits) {
