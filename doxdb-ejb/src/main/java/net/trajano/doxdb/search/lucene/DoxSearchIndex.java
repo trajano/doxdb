@@ -23,10 +23,13 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
 }) )
 public class DoxSearchIndex {
 
+    /**
+     * Content. This is nullable in order to support Oracle.
+     */
     @Basic(fetch = FetchType.LAZY)
     @Lob
     @Column(length = DoxLength.INDEX_FILE_LENGTH,
-        nullable = false)
+        nullable = true)
     private byte[] content;
 
     @Column(nullable = false)
