@@ -6,8 +6,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Map.Entry;
 
-import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -71,10 +71,10 @@ import net.trajano.doxdb.SearchResult;
  * @author Archimedes
  */
 @Path("")
-@ManagedBean
+@Stateless
 public class DoxResource {
 
-    @EJB(beanInterface = Dox.class)
+    @EJB
     private Dox dox;
 
     @Path("{collection}")
