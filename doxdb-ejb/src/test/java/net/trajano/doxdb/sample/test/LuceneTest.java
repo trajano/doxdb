@@ -67,6 +67,7 @@ public class LuceneTest extends AbstractBeanTest {
             indexWriter.close();
         }
         tx.commit();
+        System.err.println("========= HERE ============");
         tx.begin();
         {
 
@@ -123,6 +124,51 @@ public class LuceneTest extends AbstractBeanTest {
             final Query query = parser.parse("Trajano");
             final TopDocs search = searcher.search(query, 10);
             assertEquals(1, search.totalHits);
+            final Document doc = searcher.doc(search.scoreDocs[0].doc);
+            assertEquals("Archimedes", doc.get("first_name"));
+        }
+    }
+
+    @Test
+    public void testLargeLuceneFS2() throws Exception {
+
+        final Path path = testFolder.getRoot().toPath();
+
+        for (int i = 0; i < 100; ++i) {
+            final Analyzer analyzer = new StandardAnalyzer();
+            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+            final Directory dir = new NIOFSDirectory(path);
+            final IndexWriter indexWriter = new IndexWriter(dir, iwc);
+
+            final InputStream resourceAsStream = ResourceUtil.getResourceAsStream("MOCK_DATA.json");
+            final JsonArray collection = Json.createReader(resourceAsStream).readArray();
+
+            for (final JsonValue item : collection) {
+                final JsonObject record = (JsonObject) item;
+
+                final Document doc = new Document();
+                for (final Entry<String, JsonValue> field : record.entrySet()) {
+
+                    if (field.getValue() instanceof JsonString) {
+                        doc.add(new TextField(field.getKey(), ((JsonString) field.getValue()).getString(), Store.YES));
+                    }
+                }
+                indexWriter.addDocument(doc);
+            }
+
+            indexWriter.close();
+            dir.close();
+        }
+
+        {
+
+            final Directory dir = new NIOFSDirectory(path);
+            final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
+            final Analyzer analyzer = new StandardAnalyzer();
+            final QueryParser parser = new QueryParser("last_name", analyzer);
+            final Query query = parser.parse("Trajano");
+            final TopDocs search = searcher.search(query, 10);
+            assertEquals(100, search.totalHits);
             final Document doc = searcher.doc(search.scoreDocs[0].doc);
             assertEquals("Archimedes", doc.get("first_name"));
         }
