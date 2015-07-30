@@ -12,7 +12,7 @@ standard RDBMS transactions.
 Completed:
 
    * JSON validation
-   * Search
+   * Non-Distributed Search
    * CRUD
    * Event handling
    * Corrupted index check
@@ -22,6 +22,7 @@ Completed:
 Remaining:
 
    * Access control
+   * Distributed Search
    * OOB
    * Automatic Schema migration
    * Import/Export
