@@ -46,6 +46,7 @@ public class JpaDirectory extends BaseDirectory {
     @Override
     public void deleteFile(final String name) throws IOException {
 
+        System.out.println("DELETE " + name);
         em.remove(em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name)));
     }
 
@@ -65,6 +66,7 @@ public class JpaDirectory extends BaseDirectory {
     public IndexInput openInput(final String name,
         final IOContext context) throws IOException {
 
+        System.out.println("READ " + name);
         final DoxSearchIndex entry = em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name));
         if (entry == null) {
             return null;
@@ -81,6 +83,7 @@ public class JpaDirectory extends BaseDirectory {
             return;
         }
 
+        System.out.println("RENAME " + source + " TO " + dest);
         final DoxSearchIndex src = em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, source));
 
         final DoxSearchIndex entry = new DoxSearchIndex();

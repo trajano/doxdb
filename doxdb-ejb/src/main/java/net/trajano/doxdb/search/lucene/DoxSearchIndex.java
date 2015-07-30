@@ -1,10 +1,8 @@
 package net.trajano.doxdb.search.lucene;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.Table;
@@ -25,10 +23,6 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
 })
 public class DoxSearchIndex {
 
-    /**
-     * Content. This is nullable in order to support Oracle.
-     */
-    @Basic(fetch = FetchType.LAZY)
     @Lob
     @Column(length = DoxLength.INDEX_FILE_LENGTH,
         nullable = false)

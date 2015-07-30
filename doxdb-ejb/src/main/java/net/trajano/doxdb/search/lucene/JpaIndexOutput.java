@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 
 import org.apache.lucene.store.OutputStreamIndexOutput;
 
+import net.trajano.doxdb.ejb.internal.DoxLength;
+
 public class JpaIndexOutput extends OutputStreamIndexOutput {
 
     private final ByteArrayOutputStream baos;
@@ -20,6 +22,7 @@ public class JpaIndexOutput extends OutputStreamIndexOutput {
         final ByteArrayOutputStream baos,
         final String directoryName) {
         super(name, baos, 8192);
+        System.out.println("OUTPUT TO " + name);
         this.baos = baos;
         this.em = em;
         entry = new DoxSearchIndex();
@@ -35,11 +38,14 @@ public class JpaIndexOutput extends OutputStreamIndexOutput {
     public void close() throws IOException {
 
         super.close();
-
+        baos.close();
         final byte[] buffer = baos.toByteArray();
         entry.setContent(baos.toByteArray());
         entry.setContentLength(buffer.length);
-        em.merge(entry);
+        if (buffer.length > DoxLength.INDEX_FILE_LENGTH) {
+            throw new IOException();
+        }
+        em.persist(entry);
     }
 
 }
