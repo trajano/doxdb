@@ -40,12 +40,12 @@ public class JpaIndexOutput extends OutputStreamIndexOutput {
         super.close();
         baos.close();
         final byte[] buffer = baos.toByteArray();
-        entry.setContent(baos.toByteArray());
+        entry.setContent(buffer);
         entry.setContentLength(buffer.length);
         if (buffer.length > DoxLength.INDEX_FILE_LENGTH) {
             throw new IOException();
         }
-        em.persist(entry);
+        em.merge(entry);
     }
 
 }

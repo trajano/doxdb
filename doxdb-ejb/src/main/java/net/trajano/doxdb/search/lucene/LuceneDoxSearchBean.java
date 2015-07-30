@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map.Entry;
 
 import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -34,11 +35,13 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ejb.internal.DoxSearch;
+import net.trajano.doxdb.sample.test.LuceneDirectoryProvider;
 
 /**
  * Handles lucene searches.
@@ -63,6 +66,9 @@ public class LuceneDoxSearchBean implements
 
     private static final String FIELD_UNIQUE_ID = "\t uid";
 
+    @EJB
+    LuceneDirectoryProvider directoryProvider;
+
     private EntityManager em;
 
     @Override
@@ -70,7 +76,7 @@ public class LuceneDoxSearchBean implements
     public void addToIndex(
         final IndexView... indexViews) {
 
-        final JpaDirectory dir = new JpaDirectory(em, DIRECTORY_NAME);
+        final Directory dir = directoryProvider.provideDirectory();
         final Analyzer analyzer = new StandardAnalyzer();
         final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         iwc.setWriteLockTimeout(5000);
@@ -166,7 +172,8 @@ public class LuceneDoxSearchBean implements
 
         final Analyzer analyzer = new StandardAnalyzer();
         final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-        final JpaDirectory dir = new JpaDirectory(em, DIRECTORY_NAME);
+        final Directory dir = directoryProvider.provideDirectory();
+
         try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
             final BooleanQuery booleanQuery = new BooleanQuery();
             booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
@@ -186,7 +193,7 @@ public class LuceneDoxSearchBean implements
 
         final Analyzer analyzer = new StandardAnalyzer();
         final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-        final JpaDirectory dir = new JpaDirectory(em, DIRECTORY_NAME);
+        final Directory dir = directoryProvider.provideDirectory();
         try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
             indexWriter.deleteAll();
 
@@ -213,7 +220,8 @@ public class LuceneDoxSearchBean implements
             booleanQuery.add(query, Occur.MUST);
             booleanQuery.add(new TermQuery(new Term(FIELD_INDEX, index)), Occur.MUST);
 
-            final JpaDirectory dir = new JpaDirectory(em, DIRECTORY_NAME);
+            final Directory dir = directoryProvider.provideDirectory();
+
             try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
 
                 final IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(indexWriter, true));

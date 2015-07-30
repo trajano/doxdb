@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 
 import org.apache.lucene.store.BaseDirectory;
 import org.apache.lucene.store.IOContext;
@@ -84,17 +85,10 @@ public class JpaDirectory extends BaseDirectory {
         }
 
         System.out.println("RENAME " + source + " TO " + dest);
-        final DoxSearchIndex src = em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, source));
-
-        final DoxSearchIndex entry = new DoxSearchIndex();
-        entry.setContent(src.getContent());
-        entry.setContentLength(src.getContentLength());
-        final DirectoryFile directoryFile = new DirectoryFile();
-        directoryFile.setDirectoryName(directoryName);
-        directoryFile.setFileName(dest);
-        entry.setDirectoryFile(directoryFile);
-        em.remove(src);
-        em.persist(entry);
+        final int c = em.createQuery("update DoxSearchIndex e set e.directoryFile.fileName = :dest where e.directoryFile.fileName = :source and e.directoryFile.directoryName = :directoryName").setParameter("directoryName", directoryName).setParameter("dest", dest).setParameter("source", source).executeUpdate();
+        if (c != 1) {
+            throw new PersistenceException("Rename failed");
+        }
 
     }
 
