@@ -6,17 +6,12 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 
-import org.apache.lucene.store.AlreadyClosedException;
-import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.BaseDirectory;
 import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
-import org.apache.lucene.store.Lock;
-import org.apache.lucene.store.LockFactory;
 
-public class JpaDirectory extends Directory {
-
-    private boolean closed = false;
+public class JpaDirectory extends BaseDirectory {
 
     /**
      * Directory name.
@@ -25,20 +20,18 @@ public class JpaDirectory extends Directory {
 
     private final EntityManager em;
 
-    private final LockFactory lockFactory;
-
     public JpaDirectory(final EntityManager em,
         final String directoryName) {
+        super(new JpaLockFactory(em, directoryName));
         this.em = em;
         this.directoryName = directoryName;
-        lockFactory = new JpaLockFactory(em, directoryName);
 
     }
 
     @Override
     public void close() throws IOException {
 
-        closed = true;
+        isOpen = false;
 
     }
 
@@ -56,18 +49,6 @@ public class JpaDirectory extends Directory {
         em.remove(em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name)));
     }
 
-    /**
-     * @throws AlreadyClosedException
-     *             if this Directory is closed
-     */
-    @Override
-    protected void ensureOpen() throws AlreadyClosedException {
-
-        if (closed) {
-            throw new AlreadyClosedException("closed");
-        }
-    }
-
     @Override
     public long fileLength(final String name) throws IOException {
 
@@ -78,17 +59,6 @@ public class JpaDirectory extends Directory {
     public String[] listAll() throws IOException {
 
         return em.createNamedQuery("searchListAll", String.class).setParameter("directoryName", directoryName).getResultList().toArray(new String[0]);
-    }
-
-    /**
-     * Creates a new lock. It does not store the lock in a map as that would
-     * force this to be a singleton.
-     */
-    @Override
-    public Lock makeLock(final String name) {
-
-        return lockFactory.makeLock(this, name);
-
     }
 
     @Override
