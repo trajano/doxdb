@@ -8,17 +8,15 @@ import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.PersistenceException;
 
 import io.searchbox.client.JestClient;
-import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
-import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -38,16 +36,6 @@ import net.trajano.doxdb.ejb.internal.DoxSearch;
 public class JestDoxSearchBean implements
     DoxSearch {
 
-    private static final String MAPPING_CONFIG;
-
-    static {
-        final JsonArrayBuilder excludesBuilder = Json.createArrayBuilder().add("_.*");
-        final JsonObjectBuilder sourceBuilder = Json.createObjectBuilder().add("excludes", excludesBuilder);
-        final JsonObjectBuilder idBuilder = Json.createObjectBuilder().add("index", "not_analyzed").add("store", true);
-
-        MAPPING_CONFIG = Json.createObjectBuilder().add("_source", sourceBuilder).add("_id", idBuilder).build().toString();
-    }
-
     /**
      * Create a unique ID for the search index record.
      *
@@ -60,6 +48,9 @@ public class JestDoxSearchBean implements
     }
 
     private JestClient client;
+
+    @EJB
+    private JestProvider provider;
 
     /**
      * {@inheritDoc}
@@ -106,11 +97,7 @@ public class JestDoxSearchBean implements
     @PostConstruct
     public void init() {
 
-        final JestClientFactory factory = new JestClientFactory();
-        factory.setHttpClientConfig(new HttpClientConfig.Builder("http://localhost:9200")
-            .multiThreaded(true)
-            .build());
-        client = factory.getObject();
+        client = provider.getClient();
 
     }
 
@@ -143,7 +130,10 @@ public class JestDoxSearchBean implements
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({
+        "rawtypes",
+        "deprecation"
+    })
     public SearchResult search(final String index,
         final String queryString,
         final int limit,
@@ -163,7 +153,6 @@ public class JestDoxSearchBean implements
 
         try {
             final SearchResult2 esResults = new SearchResult2(client.execute(new Search.Builder(query).addIndex(index).build()));
-            System.out.println(esResults.getJsonString());
             result.setTotalHits(esResults.getTotal());
 
             final List<Map> hits = esResults.getSourceAsObjectList(Map.class);

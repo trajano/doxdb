@@ -3,6 +3,7 @@ package net.trajano.doxdb.ejb.jest;
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
@@ -29,7 +30,7 @@ import net.trajano.doxdb.schema.IndexType;
 @Singleton
 @Startup
 @LocalBean
-public class JestInitializer {
+public class JestProvider {
 
     private static final String MAPPING_CONFIG;
 
@@ -41,6 +42,8 @@ public class JestInitializer {
         MAPPING_CONFIG = Json.createObjectBuilder().add("_source", sourceBuilder).add("_id", idBuilder).build().toString();
     }
 
+    private JestClient client;
+
     @EJB
     private ConfigurationProvider configurationProvider;
 
@@ -51,7 +54,7 @@ public class JestInitializer {
         factory.setHttpClientConfig(new HttpClientConfig.Builder("http://localhost:9200")
             .multiThreaded(true)
             .build());
-        final JestClient client = factory.getObject();
+        client = factory.getObject();
 
         try {
             for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
@@ -64,12 +67,22 @@ public class JestInitializer {
                     client.execute(putMapping);
                 }
             }
-            client.shutdownClient();
 
         } catch (final IOException e) {
             throw new PersistenceException();
         }
 
+    }
+
+    public JestClient getClient() {
+
+        return client;
+    }
+
+    @PreDestroy
+    public void shutdown() {
+
+        client.shutdownClient();
     }
 
 }
