@@ -1,14 +1,20 @@
 package net.trajano.doxdb.search.lucene;
 
-import java.io.IOException;
-import java.util.Map.Entry;
+import static net.trajano.doxdb.search.lucene.LuceneConverterUtil.FIELD_INDEX;
+import static net.trajano.doxdb.search.lucene.LuceneConverterUtil.FIELD_TEXT;
+import static net.trajano.doxdb.search.lucene.LuceneConverterUtil.buildFromDoc;
 
-import javax.ejb.Asynchronous;
+import java.io.IOException;
+
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -16,15 +22,9 @@ import javax.persistence.PersistenceException;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.DoubleField;
-import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.LongField;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -55,97 +55,23 @@ public class LuceneDoxSearchBean implements
 
     public static final String DIRECTORY_NAME = "DOX";
 
-    private static final String FIELD_COLLECTION = "\t collection";
-
-    private static final String FIELD_ID = "\t id";
-
-    private static final String FIELD_INDEX = "\t index";
-
-    private static final String FIELD_TEXT = "\t text";
-
-    private static final String FIELD_UNIQUE_ID = "\t uid";
-
     @EJB
     LuceneDirectoryProvider directoryProvider;
 
+    @SuppressWarnings("unused")
     private EntityManager em;
 
+    @Inject
+    private JMSContext jmsContext;
+
+    @Resource(lookup = "java:/queue/indexupdate")
+    private Queue queue;
+
     @Override
-    @Asynchronous
     public void addToIndex(
         final IndexView... indexViews) {
 
-        final Directory dir = directoryProvider.provideDirectory();
-        final Analyzer analyzer = new StandardAnalyzer();
-        final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-        iwc.setWriteLockTimeout(5000);
-
-        try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
-            for (final IndexView indexView : indexViews) {
-                final Document doc = buildFromIndexView(indexView);
-                indexWriter.updateDocument(new Term(FIELD_UNIQUE_ID, uid(indexView)), doc);
-            }
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
-        }
-    }
-
-    private IndexView buildFromDoc(final Document doc) {
-
-        final IndexView ret = new IndexView();
-        for (final IndexableField field : doc.getFields()) {
-            if (FIELD_ID.equals(field.name()) || FIELD_UNIQUE_ID.equals(field.name()) || FIELD_COLLECTION.equals(field.name())) {
-                continue;
-            }
-            final Number numericValue = field.numericValue();
-            if (numericValue == null) {
-                ret.setString(field.name(), field.stringValue());
-            } else if (numericValue instanceof Double) {
-                ret.setDouble(field.name(), numericValue
-                    .doubleValue());
-            } else if (numericValue instanceof Long) {
-                ret.setLong(field.name(), numericValue
-                    .longValue());
-            }
-        }
-        final String idValue = doc.get(FIELD_ID);
-        if (idValue != null) {
-            ret.setDoxID(new DoxID(idValue));
-        } else {
-            ret.setMasked(true);
-        }
-        ret.setCollection(doc.get(FIELD_COLLECTION));
-        return ret;
-
-    }
-
-    private Document buildFromIndexView(
-        final IndexView indexView) {
-
-        final Document doc = new Document();
-        doc.add(new StringField(FIELD_UNIQUE_ID, uid(indexView), Store.NO));
-        doc.add(new StringField(FIELD_INDEX, indexView.getIndex(), Store.NO));
-        doc.add(new StringField(FIELD_COLLECTION, indexView.getCollection(), Store.YES));
-        if (!indexView.isMasked()) {
-            doc.add(new StringField(FIELD_ID, indexView.getDoxID().toString(), Store.YES));
-        } else {
-            doc.add(new StringField(FIELD_ID, indexView.getDoxID().toString(), Store.NO));
-        }
-        for (final Entry<String, String> entry : indexView.getStrings()) {
-            doc.add(new StringField(entry.getKey(), entry.getValue(), Store.YES));
-        }
-        for (final Entry<String, String> entry : indexView.getTexts()) {
-            doc.add(new TextField(entry.getKey(), entry.getValue(), Store.NO));
-        }
-        for (final Entry<String, Double> entry : indexView.getDoubles()) {
-            doc.add(new DoubleField(entry.getKey(), entry.getValue(), Store.YES));
-        }
-        for (final Entry<String, Long> entry : indexView.getLongs()) {
-            doc.add(new LongField(entry.getKey(), entry.getValue(), Store.YES));
-        }
-        doc.add(new TextField(FIELD_TEXT, indexView.getText(), Store.NO));
-        return doc;
-
+        jmsContext.createProducer().send(queue, indexViews);
     }
 
     private SearchResult buildSearchResults(final IndexSearcher indexSearcher,
@@ -165,23 +91,15 @@ public class LuceneDoxSearchBean implements
     }
 
     @Override
-    @Asynchronous
     public void removeFromIndex(final String collection,
         final DoxID doxID) {
 
-        final Analyzer analyzer = new StandardAnalyzer();
-        final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-        final Directory dir = directoryProvider.provideDirectory();
+        final IndexView[] removeView = new IndexView[1];
+        removeView[0].setRemove(true);
+        removeView[0].setCollection(collection);
+        removeView[0].setDoxID(doxID);
+        jmsContext.createProducer().send(queue, removeView);
 
-        try (final IndexWriter indexWriter = new IndexWriter(dir, iwc)) {
-            final BooleanQuery booleanQuery = new BooleanQuery();
-            booleanQuery.add(new TermQuery(new Term(FIELD_ID, doxID.toString())), Occur.MUST);
-            booleanQuery.add(new TermQuery(new Term(FIELD_COLLECTION, collection)), Occur.MUST);
-            indexWriter.deleteDocuments(booleanQuery);
-
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
-        }
     }
 
     /**
@@ -248,17 +166,6 @@ public class LuceneDoxSearchBean implements
     public void setEntityManager(final EntityManager em) {
 
         this.em = em;
-    }
-
-    /**
-     * Create a unique ID for the search index record.
-     *
-     * @param view
-     * @return
-     */
-    private String uid(final IndexView view) {
-
-        return view.getIndex() + "\t" + view.getCollection() + "\t" + view.getDoxID();
     }
 
 }

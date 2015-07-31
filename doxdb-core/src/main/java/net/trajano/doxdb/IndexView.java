@@ -44,6 +44,11 @@ public class IndexView implements
      */
     private boolean masked = false;
 
+    /**
+     * If this is true, the entry will be removed from the index.
+     */
+    private boolean remove;
+
     private final ConcurrentMap<String, String> strings = new ConcurrentHashMap<>();
 
     private final StringBuilder text = new StringBuilder();
@@ -114,6 +119,16 @@ public class IndexView implements
         return masked;
     }
 
+    /**
+     * Gets remove.
+     *
+     * @return the remove
+     */
+    public boolean isRemove() {
+
+        return remove;
+    }
+
     public void setCollection(final String collection) {
 
         this.collection = collection;
@@ -148,6 +163,17 @@ public class IndexView implements
     public void setMasked(final boolean masked) {
 
         this.masked = masked;
+    }
+
+    /**
+     * Sets remove.
+     *
+     * @param remove
+     *            the remove to set
+     */
+    public void setRemove(final boolean remove) {
+
+        this.remove = remove;
     }
 
     /**

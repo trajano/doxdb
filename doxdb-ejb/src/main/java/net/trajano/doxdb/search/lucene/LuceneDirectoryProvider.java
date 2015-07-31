@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.jms.JMSDestinationDefinition;
+import javax.jms.JMSDestinationDefinitions;
 import javax.persistence.PersistenceException;
 
 import org.apache.lucene.store.Directory;
@@ -15,6 +17,13 @@ import org.apache.lucene.store.FSDirectory;
 
 import net.trajano.doxdb.Dox;
 
+@JMSDestinationDefinitions(
+    value = {
+        @JMSDestinationDefinition(
+            name = "java:/queue/indexupdate",
+            interfaceName = "javax.jms.Queue",
+            destinationName = "indexupdate")
+})
 @Singleton
 @Startup
 public class LuceneDirectoryProvider {
