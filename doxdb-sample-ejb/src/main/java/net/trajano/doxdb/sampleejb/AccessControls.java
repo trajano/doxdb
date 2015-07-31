@@ -49,7 +49,7 @@ public class AccessControls implements
                 indexView.appendText(json);
                 indexView.setString("collection", collection);
                 indexView.setString("name", horse.getName());
-                indexView.setIndex("MYINDEX");
+                indexView.setIndex("myindex");
 
                 final IndexView indexView2 = new IndexView();
                 indexView2.appendText(json);
@@ -60,7 +60,7 @@ public class AccessControls implements
                 } else {
                     indexView2.setString("name", horse.getName());
                 }
-                indexView2.setIndex("MASKINDEX");
+                indexView2.setIndex("maskedindex");
 
                 return new IndexView[] {
                     indexView,
@@ -74,7 +74,9 @@ public class AccessControls implements
                 indexView.appendText(json);
                 indexView.setString("collection", collection);
                 indexView.setString("name", venue.getName());
-                indexView.setIndex("MYINDEX");
+                indexView.setLong("time", System.currentTimeMillis());
+                indexView.setDouble("float", 156.6 / System.currentTimeMillis());
+                indexView.setIndex("myindex");
 
                 final IndexView indexView2 = new IndexView();
                 indexView2.appendText(json);
@@ -85,7 +87,7 @@ public class AccessControls implements
                 } else {
                     indexView2.setString("name", venue.getName());
                 }
-                indexView2.setIndex("MASKINDEX");
+                indexView2.setIndex("maskedindex");
 
                 return new IndexView[] {
                     indexView,

@@ -16,6 +16,8 @@
 			<sequence>
 				<element type="tns:DoxType" name="dox" minOccurs="1"
 					maxOccurs="unbounded" />
+				<element type="tns:IndexType" name="index" minOccurs="0"
+					maxOccurs="unbounded" />
 			</sequence>
 		</complexType>
 		<unique name="uniqueName">
@@ -96,5 +98,17 @@
 			</annotation>
 		</attribute>
 		<attribute name="uri" type="anyURI" use="required" />
+	</complexType>
+	<complexType name="IndexType">
+		<attribute name="name" type="token" use="required">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Name of the index
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
 	</complexType>
 </schema>
