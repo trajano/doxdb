@@ -1,22 +1,18 @@
 package net.trajano.doxdb.search.lucene;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
+import javax.persistence.PersistenceException;
 
-import org.apache.lucene.store.AlreadyClosedException;
-import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.BaseDirectory;
 import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
-import org.apache.lucene.store.Lock;
-import org.apache.lucene.store.LockFactory;
 
-public class JpaDirectory extends Directory {
-
-    private boolean closed = false;
+public class JpaDirectory extends BaseDirectory {
 
     /**
      * Directory name.
@@ -25,20 +21,18 @@ public class JpaDirectory extends Directory {
 
     private final EntityManager em;
 
-    private final LockFactory lockFactory;
-
     public JpaDirectory(final EntityManager em,
         final String directoryName) {
+        super(new JpaLockFactory(em, directoryName));
         this.em = em;
         this.directoryName = directoryName;
-        lockFactory = new JpaLockFactory(em, directoryName);
 
     }
 
     @Override
     public void close() throws IOException {
 
-        closed = true;
+        isOpen = false;
 
     }
 
@@ -46,35 +40,21 @@ public class JpaDirectory extends Directory {
     public IndexOutput createOutput(final String name,
         final IOContext context) throws IOException {
 
-        return new JpaIndexOutput(name, em, directoryName);
+        return new JpaIndexOutput(name, em, new ByteArrayOutputStream(), directoryName);
 
     }
 
     @Override
     public void deleteFile(final String name) throws IOException {
 
-        final DoxSearchIndex indexEntry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", name).setLockMode(LockModeType.PESSIMISTIC_WRITE).getSingleResult();
-        em.remove(indexEntry);
-
-    }
-
-    /**
-     * @throws AlreadyClosedException
-     *             if this Directory is closed
-     */
-    @Override
-    protected void ensureOpen() throws AlreadyClosedException {
-
-        if (closed) {
-            throw new AlreadyClosedException("closed");
-        }
+        System.out.println("DELETE " + name);
+        em.remove(em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name)));
     }
 
     @Override
     public long fileLength(final String name) throws IOException {
 
-        final DoxSearchIndex indexEntry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", name).getSingleResult();
-        return indexEntry.getContentlength();
+        return em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name)).getContentLength();
     }
 
     @Override
@@ -83,22 +63,17 @@ public class JpaDirectory extends Directory {
         return em.createNamedQuery("searchListAll", String.class).setParameter("directoryName", directoryName).getResultList().toArray(new String[0]);
     }
 
-    /**
-     * Creates a new lock. It does not store the lock in a map as that would
-     * force this to be a singleton.
-     */
-    @Override
-    public Lock makeLock(final String name) {
-
-        return lockFactory.makeLock(this, name);
-
-    }
-
     @Override
     public IndexInput openInput(final String name,
         final IOContext context) throws IOException {
 
-        return new JpaIndexInput(name, em, directoryName, context);
+        System.out.println("READ " + name);
+        final DoxSearchIndex entry = em.find(DoxSearchIndex.class, new DirectoryFile(directoryName, name));
+        if (entry == null) {
+            return null;
+        }
+
+        return new ByteArrayIndexInput(name, context, entry.getContent());
     }
 
     @Override
@@ -109,9 +84,12 @@ public class JpaDirectory extends Directory {
             return;
         }
 
-        final DoxSearchIndex indexEntry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", source).setLockMode(LockModeType.PESSIMISTIC_WRITE).getSingleResult();
-        indexEntry.setFileName(dest);
-        em.persist(indexEntry);
+        System.out.println("RENAME " + source + " TO " + dest);
+        final int c = em.createQuery("update DoxSearchIndex e set e.directoryFile.fileName = :dest where e.directoryFile.fileName = :source and e.directoryFile.directoryName = :directoryName").setParameter("directoryName", directoryName).setParameter("dest", dest).setParameter("source", source).executeUpdate();
+        if (c != 1) {
+            throw new PersistenceException("Rename failed");
+        }
+
     }
 
     /**

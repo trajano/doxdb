@@ -27,8 +27,19 @@ public interface DoxSearch {
      */
     void reset();
 
+    /**
+     * @param index
+     * @param queryString
+     * @param limit
+     *            maximum number of results.
+     * @param fromDoc
+     *            return the results starting from this identifier. This may be
+     *            <code>null</code>.
+     * @return
+     */
     SearchResult search(String index,
         String queryString,
-        int limit);
+        int limit,
+        Integer fromDoc);
 
 }

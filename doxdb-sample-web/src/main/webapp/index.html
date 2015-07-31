@@ -17,8 +17,14 @@
 		</select>
 
 		<form x-ng-submit="todoList.addTodo()">
-			<input type="text" x-ng-model="todoList.venue.name" size="30"
-				placeholder="Name">
+			<p>
+				<input type="text" x-ng-model="todoList.venue.name" size="30"
+					placeholder="Name">
+			</p>
+			<p>
+				<input type="text" x-ng-model="todoList.venue.language" size="30"
+					placeholder="Language">
+			</p>
 			<button x-ng-click="todoList.saveVenue()">save</button>
 			<button x-ng-click="todoList.deleteVenue()">delete</button>
 		</form>

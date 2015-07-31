@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 import javax.ejb.EJB;
@@ -12,7 +13,6 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.persistence.OptimisticLockException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -33,7 +33,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.bson.BsonArray;
 import org.bson.BsonDocument;
-import org.bson.BsonNumber;
 import org.bson.BsonValue;
 
 import net.trajano.doxdb.Dox;
@@ -170,20 +169,18 @@ public class DoxResource {
 
     private Response save(final String collection,
         final String id,
-        final String json) {
+        final String json,
+        final int version) {
 
         final BsonDocument bson = BsonDocument.parse(json);
 
-        final BsonValue removed = bson.remove("_version");
-        if (removed == null) {
-            throw new OptimisticLockException("Missing version");
-        }
-        for (final String key : bson.keySet()) {
-            if (key.startsWith("_")) {
-                bson.remove(key);
+        final Iterator<Entry<String, BsonValue>> iterator = bson.entrySet().iterator();
+        while (iterator.hasNext()) {
+            final Entry<String, BsonValue> entry = iterator.next();
+            if (entry.getKey().startsWith("_")) {
+                iterator.remove();
             }
         }
-        final int version = ((BsonNumber) removed).intValue();
 
         final DoxMeta meta = dox.update(collection, new DoxID(id), bson, version);
         return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
@@ -205,12 +202,13 @@ public class DoxResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveOrOp(@PathParam("collection") final String collection,
         @PathParam("idOrOp") final String idOrOp,
+        @QueryParam("v") final int version,
         final String content) {
 
         if (idOrOp.startsWith("_")) {
             return op(collection, idOrOp.substring(1), content);
         } else {
-            return save(collection, idOrOp, content);
+            return save(collection, idOrOp, content, version);
         }
     }
 
@@ -219,9 +217,10 @@ public class DoxResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response simpleSearch(@PathParam("index") final String index,
         @QueryParam("q") final String queryString,
+        @QueryParam("f") final Integer from,
         @Context final UriInfo uriInfo) {
 
-        final SearchResult results = dox.search(index, queryString, 50);
+        final SearchResult results = dox.search(index, queryString, 50, from);
         //results.get
         final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
         for (final IndexView hit : results.getHits()) {
@@ -243,7 +242,12 @@ public class DoxResource {
             }
             hitsBuilder.add(hitBuilder);
         }
-        final JsonObject resultJson = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder).build();
+        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder);
+        if (results.getBottomDoc() != null) {
+            final String nextPage = uriInfo.getBaseUriBuilder().path("search").path(index).queryParam("q", queryString).queryParam("f", results.getBottomDoc()).build().toASCIIString();
+            jsonBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
+        }
+        final JsonObject resultJson = jsonBuilder.build();
         return Response.ok().entity(resultJson).build();
     }
 }

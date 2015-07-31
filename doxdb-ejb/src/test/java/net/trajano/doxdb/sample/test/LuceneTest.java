@@ -2,8 +2,8 @@ package net.trajano.doxdb.sample.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
 import java.util.Map.Entry;
 
 import javax.json.Json;
@@ -26,11 +26,12 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.store.FSDirectory;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import net.trajano.commons.testing.ResourceUtil;
-import net.trajano.doxdb.search.lucene.JpaDirectory;
 
 /**
  * Tests Lucene bean.
@@ -39,6 +40,21 @@ import net.trajano.doxdb.search.lucene.JpaDirectory;
  */
 public class LuceneTest extends AbstractBeanTest {
 
+    private Directory dir;
+
+    @Before
+    public void setUpDirectory() throws IOException {
+
+        //        dir = new JpaDirectory(em, "searchtable");
+        dir = FSDirectory.open(testFolder.getRoot().toPath());
+    }
+
+    @After
+    public void tearDownDirectory() throws IOException {
+
+        dir.close();
+    }
+
     @Test
     public void testLargeLucene() throws Exception {
 
@@ -46,7 +62,8 @@ public class LuceneTest extends AbstractBeanTest {
         {
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JpaDirectory dir = new JpaDirectory(em, "searchtable");
+            iwc.setUseCompoundFile(false);
+
             final IndexWriter indexWriter = new IndexWriter(dir, iwc);
 
             final InputStream resourceAsStream = ResourceUtil.getResourceAsStream("MOCK_DATA.json");
@@ -58,7 +75,7 @@ public class LuceneTest extends AbstractBeanTest {
                 final Document doc = new Document();
                 for (final Entry<String, JsonValue> field : record.entrySet()) {
                     if (field.getValue() instanceof JsonString) {
-                        doc.add(new StringField(field.getKey(), ((JsonString) field.getValue()).getString(), Store.YES));
+                        doc.add(new TextField(field.getKey(), ((JsonString) field.getValue()).getString(), Store.YES));
                     }
                 }
                 indexWriter.addDocument(doc);
@@ -66,11 +83,41 @@ public class LuceneTest extends AbstractBeanTest {
 
             indexWriter.close();
         }
+        {
+
+            final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
+            final Analyzer analyzer = new StandardAnalyzer();
+            final QueryParser parser = new QueryParser("last_name", analyzer);
+            final Query query = parser.parse("Trajano");
+            final TopDocs search = searcher.search(query, 10);
+            assertEquals(1, search.totalHits);
+            final Document doc = searcher.doc(search.scoreDocs[0].doc);
+            assertEquals("Archimedes", doc.get("first_name"));
+        }
         tx.commit();
+
+    }
+
+    @Test
+    public void testLucene() throws Exception {
+
         tx.begin();
         {
 
-            final JpaDirectory dir = new JpaDirectory(em, "searchtable");
+            final Analyzer analyzer = new StandardAnalyzer();
+            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
+            iwc.setUseCompoundFile(false);
+            final IndexWriter indexWriter = new IndexWriter(dir, iwc);
+
+            final Document doc = new Document();
+            doc.add(new StringField("name", "value", Store.YES));
+            indexWriter.addDocument(doc);
+            indexWriter.commit();
+            indexWriter.close();
+            dir.close();
+        }
+        {
+
             final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
             final Analyzer analyzer = new StandardAnalyzer();
             final QueryParser parser = new QueryParser("name", analyzer);
@@ -84,14 +131,15 @@ public class LuceneTest extends AbstractBeanTest {
     }
 
     @Test
-    public void testLargeLucene2() throws Exception {
+    public void testReallyLargeLucene() throws Exception {
 
-        final Path path = testFolder.getRoot().toPath();
-
-        {
+        tx.begin();
+        for (int i = 0; i < 100; ++i) {
             final Analyzer analyzer = new StandardAnalyzer();
             final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final Directory dir = new NIOFSDirectory(path);
+            iwc.setUseCompoundFile(false);
+            iwc.setCommitOnClose(true);
+
             final IndexWriter indexWriter = new IndexWriter(dir, iwc);
 
             final InputStream resourceAsStream = ResourceUtil.getResourceAsStream("MOCK_DATA.json");
@@ -111,52 +159,18 @@ public class LuceneTest extends AbstractBeanTest {
             }
 
             indexWriter.close();
-            dir.close();
         }
 
         {
 
-            final Directory dir = new NIOFSDirectory(path);
             final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
             final Analyzer analyzer = new StandardAnalyzer();
             final QueryParser parser = new QueryParser("last_name", analyzer);
             final Query query = parser.parse("Trajano");
             final TopDocs search = searcher.search(query, 10);
-            assertEquals(1, search.totalHits);
+            assertEquals(100, search.totalHits);
             final Document doc = searcher.doc(search.scoreDocs[0].doc);
             assertEquals("Archimedes", doc.get("first_name"));
-        }
-    }
-
-    @Test
-    public void testLucene() throws Exception {
-
-        tx.begin();
-        {
-
-            final Analyzer analyzer = new StandardAnalyzer();
-            final IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-            final JpaDirectory dir = new JpaDirectory(em, "searchtable");
-            final IndexWriter indexWriter = new IndexWriter(dir, iwc);
-
-            final Document doc = new Document();
-            doc.add(new StringField("name", "value", Store.YES));
-            indexWriter.addDocument(doc);
-            indexWriter.commit();
-            indexWriter.close();
-            dir.close();
-        }
-        {
-
-            final JpaDirectory dir = new JpaDirectory(em, "searchtable");
-            final IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(dir));
-            final Analyzer analyzer = new StandardAnalyzer();
-            final QueryParser parser = new QueryParser("name", analyzer);
-            final Query query = parser.parse("value");
-            final TopDocs search = searcher.search(query, 10);
-            assertEquals(1, search.totalHits);
-            final Document doc = searcher.doc(search.scoreDocs[0].doc);
-            assertEquals("value", doc.get("name"));
         }
         tx.commit();
     }

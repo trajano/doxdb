@@ -2,87 +2,50 @@ package net.trajano.doxdb.search.lucene;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.zip.CRC32;
-import java.util.zip.Checksum;
 
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.persistence.NoResultException;
 
-import org.apache.lucene.store.IndexOutput;
+import org.apache.lucene.store.OutputStreamIndexOutput;
 
-public class JpaIndexOutput extends IndexOutput {
+import net.trajano.doxdb.ejb.internal.DoxLength;
 
-    /**
-     * At the moment this is the most portable approach at the expense of memory
-     * usage spikes.
-     */
+public class JpaIndexOutput extends OutputStreamIndexOutput {
+
     private final ByteArrayOutputStream baos;
 
-    private final Checksum digest;
+    private final EntityManager em;
 
-    private DoxSearchIndex entry;
-
-    private long pos;
+    private final DoxSearchIndex entry;
 
     public JpaIndexOutput(final String name,
         final EntityManager em,
+        final ByteArrayOutputStream baos,
         final String directoryName) {
-        super(name);
-
-        try {
-            entry = em.createNamedQuery("searchReadOne", DoxSearchIndex.class).setParameter("directoryName", directoryName).setParameter("fileName", name).setLockMode(LockModeType.PESSIMISTIC_WRITE).getSingleResult();
-        } catch (final NoResultException e) {
-            entry = new DoxSearchIndex();
-            entry.setContent(new byte[0]);
-            entry.setContentlength(0);
-            entry.setDirectoryName(directoryName);
-            entry.setFileName(name);
-            em.persist(entry);
-        }
-        pos = 0;
-        digest = new CRC32();
-        baos = new ByteArrayOutputStream();
+        super(name, baos, 8192);
+        System.out.println("OUTPUT TO " + name);
+        this.baos = baos;
+        this.em = em;
+        entry = new DoxSearchIndex();
+        final DirectoryFile directoryFile = new DirectoryFile();
+        directoryFile
+            .setDirectoryName(directoryName);
+        directoryFile.setFileName(name);
+        entry.setDirectoryFile(directoryFile);
 
     }
 
     @Override
     public void close() throws IOException {
 
+        super.close();
+        baos.close();
         final byte[] buffer = baos.toByteArray();
-        entry.setContent(baos.toByteArray());
-        entry.setContentlength(buffer.length);
-    }
-
-    @Override
-    public long getChecksum() throws IOException {
-
-        return digest.getValue();
-    }
-
-    @Override
-    public long getFilePointer() {
-
-        return pos;
-    }
-
-    @Override
-    public void writeByte(final byte b) throws IOException {
-
-        baos.write(b);
-        ++pos;
-        digest.update(b);
-
-    }
-
-    @Override
-    public void writeBytes(final byte[] buffer,
-        final int offset,
-        final int length) throws IOException {
-
-        baos.write(buffer, offset, length);
-        digest.update(buffer, offset, length);
-        pos += length;
+        entry.setContent(buffer);
+        entry.setContentLength(buffer.length);
+        if (buffer.length > DoxLength.INDEX_FILE_LENGTH) {
+            throw new IOException();
+        }
+        em.merge(entry);
     }
 
 }
