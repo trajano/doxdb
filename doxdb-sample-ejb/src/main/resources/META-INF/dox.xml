@@ -8,4 +8,6 @@
 	<dox name="venue" oob="false" readAll="true">
 		<schema version="1" uri="/schema/venue.json" />
 	</dox>
+	<index name="myindex"/>
+	<index name="maskedindex"/>
 </dox-persistence>

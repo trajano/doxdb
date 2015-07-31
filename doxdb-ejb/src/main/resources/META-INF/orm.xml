@@ -16,8 +16,4 @@
 		<query>from Dox e where e.schemaName = :schemaName</query>
 		<lock-mode>OPTIMISTIC</lock-mode>
 	</named-query>
-	<named-query name="searchListAll">
-		<query>select e.directoryFile.fileName from DoxSearchIndex e where e.directoryFile.directoryName = :directoryName</query>
-		<lock-mode>PESSIMISTIC_READ</lock-mode>
-	</named-query>
 </entity-mappings>

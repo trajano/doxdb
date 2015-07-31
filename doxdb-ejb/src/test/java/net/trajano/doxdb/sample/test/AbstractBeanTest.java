@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,6 +25,8 @@ import com.google.common.io.Resources;
 
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.ejb.DoxBean;
+import net.trajano.doxdb.ejb.jest.JestDoxSearchBean;
+import net.trajano.doxdb.ejb.jest.JestProvider;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.DefaultEventHandler;
@@ -31,8 +34,8 @@ import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
+import net.trajano.doxdb.schema.IndexType;
 import net.trajano.doxdb.schema.SchemaType;
-import net.trajano.doxdb.search.lucene.LuceneDoxSearchBean;
 
 public class AbstractBeanTest {
 
@@ -46,11 +49,13 @@ public class AbstractBeanTest {
 
     protected DoxBean bean;
 
-    protected LuceneDoxSearchBean doxSearchBean;
+    protected JestDoxSearchBean doxSearchBean;
 
     protected EntityManager em;
 
     protected EntityManagerFactory emf;
+
+    private JestProvider jestProvider;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -74,6 +79,15 @@ public class AbstractBeanTest {
         final ConfigurationProvider configurationProvider = new ConfigurationProvider() {
 
             @Override
+            public String getMappedIndex(final String name) {
+
+                if ("myindex".equals(name)) {
+                    return "test_myindex";
+                }
+                throw new PersistenceException();
+            }
+
+            @Override
             public DoxPersistence getPersistenceConfig() {
 
                 final DoxPersistence doxPersistence = new DoxPersistence();
@@ -84,6 +98,12 @@ public class AbstractBeanTest {
                 schema.setVersion(1);
                 doxType.getSchema().add(schema);
                 doxPersistence.getDox().add(doxType);
+                {
+                    final IndexType indexType = new IndexType();
+                    indexType.setName("myindex");
+                    indexType.setMappedName("test_myindex");
+                    doxPersistence.getIndex().add(indexType);
+                }
                 return doxPersistence;
             }
         };
@@ -92,7 +112,8 @@ public class AbstractBeanTest {
         when(sessionContextMock.getCallerPrincipal()).thenReturn(new DoxPrincipal("ANONYMOUS"));
 
         bean = new DoxBean();
-        doxSearchBean = new LuceneDoxSearchBean();
+        jestProvider = new JestProvider();
+        doxSearchBean = new JestDoxSearchBean();
 
         bean.setEntityManager(em);
         bean.setSessionContext(sessionContextMock);
@@ -119,15 +140,21 @@ public class AbstractBeanTest {
         bean.setConfigurationProvider(configurationProvider);
         bean.setDoxSearchBean(doxSearchBean);
 
-        doxSearchBean.setEntityManager(em);
+        jestProvider.setConfigurationProvider(configurationProvider);
+        jestProvider.init();
+
+        doxSearchBean.setConfigurationProvider(configurationProvider);
+        doxSearchBean.setJestProvider(jestProvider);
 
         bean.init();
 
     }
 
     @After
-    public void tearDownEntityManager() {
+    public void tearDownObjects() {
 
+        jestProvider.dropIndexes();
+        jestProvider.shutdown();
         em.close();
         emf.close();
     }
