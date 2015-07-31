@@ -13,10 +13,13 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.PersistenceException;
 
+import io.searchbox.action.Action;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.indices.CreateIndex;
+import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.PutMapping;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.schema.DoxType;
@@ -42,13 +45,15 @@ public class JestProvider {
         MAPPING_CONFIG = Json.createObjectBuilder().add("_source", sourceBuilder).add("_id", idBuilder).build().toString();
     }
 
+    /**
+     * Client managed by the singletone.
+     */
     private JestClient client;
 
-    @EJB
     private ConfigurationProvider configurationProvider;
 
     @PostConstruct
-    public void createIndices() {
+    public void init() {
 
         final JestClientFactory factory = new JestClientFactory();
         factory.setHttpClientConfig(new HttpClientConfig.Builder("http://localhost:9200")
@@ -58,10 +63,11 @@ public class JestProvider {
 
         try {
             for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
-                client.execute(new CreateIndex.Builder(indexType.getName()).build());
+                final String mappedName = configurationProvider.getMappedIndex(indexType.getName());
+                client.execute(new CreateIndex.Builder(mappedName).build());
                 for (final DoxType doxType : configurationProvider.getPersistenceConfig().getDox()) {
                     final PutMapping putMapping = new PutMapping.Builder(
-                        indexType.getName(),
+                        mappedName,
                         doxType.getName(),
                         MAPPING_CONFIG).build();
                     client.execute(putMapping);
@@ -74,9 +80,41 @@ public class JestProvider {
 
     }
 
+    /**
+     * This will be used to drop indexes created by this provider. This is used
+     * when doing testing.
+     */
+    public void dropIndexes() {
+
+        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
+            execute(new DeleteIndex.Builder(configurationProvider.getMappedIndex(indexType.getName())).build());
+        }
+    }
+
+    public <T extends JestResult> T execute(final Action<T> clientRequest) {
+
+        try {
+            return client.execute(clientRequest);
+        } catch (final IOException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
     public JestClient getClient() {
 
         return client;
+    }
+
+    /**
+     * Sets configurationProvider.
+     *
+     * @param configurationProvider
+     *            the configurationProvider to set
+     */
+    @EJB
+    public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
+
+        this.configurationProvider = configurationProvider;
     }
 
     @PreDestroy

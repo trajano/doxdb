@@ -2,7 +2,10 @@ package net.trajano.doxdb.ext;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import javax.persistence.PersistenceException;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -12,6 +15,7 @@ import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
 
 import net.trajano.doxdb.schema.DoxPersistence;
+import net.trajano.doxdb.schema.IndexType;
 
 /**
  * <p>
@@ -38,6 +42,8 @@ import net.trajano.doxdb.schema.DoxPersistence;
 public class XmlConfigurationProvider implements
     ConfigurationProvider {
 
+    private final Map<String, String> indexMap;
+
     private final DoxPersistence persistenceConfig;
 
     public XmlConfigurationProvider() {
@@ -47,12 +53,28 @@ public class XmlConfigurationProvider implements
             final Unmarshaller unmarshaller = jaxb.createUnmarshaller();
             unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(getClass().getResource("/META-INF/xsd/dox.xsd")));
             persistenceConfig = (DoxPersistence) unmarshaller.unmarshal(is);
-
+            indexMap = new ConcurrentHashMap<>(persistenceConfig.getIndex().size());
+            for (final IndexType indexType : persistenceConfig.getIndex()) {
+                indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());
+            }
         } catch (final IOException
             | SAXException
             | JAXBException e) {
             throw new ExceptionInInitializerError(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMappedIndex(final String name) {
+
+        final String mappedName = indexMap.get(name);
+        if (mappedName == null) {
+            throw new PersistenceException("No index defined for " + name);
+        }
+        return mappedName;
     }
 
     @Override

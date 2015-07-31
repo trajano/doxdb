@@ -12,7 +12,7 @@ standard RDBMS transactions.
 Completed:
 
    * JSON validation
-   * Non-Distributed Search
+   * Distributed Search (using ElasticSearch REST API via Jest)
    * CRUD
    * Event handling
    * Corrupted index check
@@ -22,7 +22,7 @@ Completed:
 Remaining:
 
    * Access control
-   * Distributed Search
+   * Remove hard coded elasticsearch URL.
    * OOB
    * Automatic Schema migration
    * Import/Export

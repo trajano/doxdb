@@ -1,12 +1,10 @@
 package net.trajano.doxdb.ejb.jest;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -15,9 +13,9 @@ import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.PersistenceException;
 
-import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Bulk;
+import io.searchbox.core.Delete;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.indices.DeleteIndex;
@@ -25,6 +23,8 @@ import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ejb.internal.DoxSearch;
+import net.trajano.doxdb.ext.ConfigurationProvider;
+import net.trajano.doxdb.schema.IndexType;
 
 /**
  * Handles JEST searches.
@@ -47,10 +47,9 @@ public class JestDoxSearchBean implements
         return view.getIndex() + "\t" + view.getCollection() + "\t" + view.getDoxID();
     }
 
-    private JestClient client;
+    private ConfigurationProvider configurationProvider;
 
-    @EJB
-    private JestProvider provider;
+    private transient JestProvider jestProvider;
 
     /**
      * {@inheritDoc}
@@ -59,45 +58,33 @@ public class JestDoxSearchBean implements
     @Asynchronous
     public void addToIndex(final IndexView... indexViews) {
 
-        try {
-            final Bulk.Builder bulkBuilder = new Bulk.Builder();
-            for (final IndexView indexView : indexViews) {
+        final Bulk.Builder bulkBuilder = new Bulk.Builder();
+        for (final IndexView indexView : indexViews) {
 
-                final Map<String, Object> map = new HashMap<>();
-                for (final Entry<String, Double> d : indexView.getDoubles()) {
-                    map.put(d.getKey(), d.getValue());
-                }
-                for (final Entry<String, Long> d : indexView.getLongs()) {
-                    map.put(d.getKey(), d.getValue());
-                }
-                for (final Entry<String, String> d : indexView.getStrings()) {
-                    map.put(d.getKey(), d.getValue());
-                }
-                final Map<String, Object> metaMap = new HashMap<>();
-                for (final Entry<String, String> d : indexView.getTexts()) {
-                    metaMap.put(d.getKey(), d.getValue());
-                }
-                metaMap.put("_text", indexView.getText());
-
-                final Index index = new Index.Builder(map).index(indexView.getIndex()).type(indexView.getCollection()).id(indexView.getDoxID().toString()).build();
-
-                bulkBuilder.addAction(index);
+            final Map<String, Object> map = new HashMap<>();
+            for (final Entry<String, Double> d : indexView.getDoubles()) {
+                map.put(d.getKey(), d.getValue());
             }
-            final JestResult result = client.execute(bulkBuilder.build());
-            if (!result.isSucceeded()) {
-                throw new PersistenceException(result.getJsonString());
+            for (final Entry<String, Long> d : indexView.getLongs()) {
+                map.put(d.getKey(), d.getValue());
             }
+            for (final Entry<String, String> d : indexView.getStrings()) {
+                map.put(d.getKey(), d.getValue());
+            }
+            final Map<String, Object> metaMap = new HashMap<>();
+            for (final Entry<String, String> d : indexView.getTexts()) {
+                metaMap.put(d.getKey(), d.getValue());
+            }
+            metaMap.put("_text", indexView.getText());
 
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
+            final Index index = new Index.Builder(map).index(configurationProvider.getMappedIndex(indexView.getIndex())).type(indexView.getCollection()).id(indexView.getDoxID().toString()).build();
+
+            bulkBuilder.addAction(index);
         }
-
-    }
-
-    @PostConstruct
-    public void init() {
-
-        client = provider.getClient();
+        final JestResult result = jestProvider.execute(bulkBuilder.build());
+        if (!result.isSucceeded()) {
+            throw new PersistenceException(result.getJsonString());
+        }
 
     }
 
@@ -105,11 +92,17 @@ public class JestDoxSearchBean implements
      * {@inheritDoc}
      */
     @Override
-    public void removeFromIndex(final String collection,
+    public void removeFromIndex(final String schemaName,
         final DoxID doxID) {
 
-        // TODO Auto-generated method stub
+        final Bulk.Builder bulkBuilder = new Bulk.Builder();
+        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
 
+            final Delete del = new Delete.Builder(doxID.toString()).type(schemaName).index(configurationProvider.getMappedIndex(indexType.getName())).build();
+
+            bulkBuilder.addAction(del);
+        }
+        jestProvider.execute(bulkBuilder.build());
     }
 
     /**
@@ -118,11 +111,7 @@ public class JestDoxSearchBean implements
     @Override
     public void reset() {
 
-        try {
-            client.execute(new DeleteIndex.Builder("_all").build());
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
-        }
+        jestProvider.execute(new DeleteIndex.Builder("_all").build());
 
     }
 
@@ -151,35 +140,56 @@ public class JestDoxSearchBean implements
         final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add("size", limit).add("query", qBuilder).add("from", from);
         final String query = queryBuilder.build().toString();
 
-        try {
-            final SearchResult2 esResults = new SearchResult2(client.execute(new Search.Builder(query).addIndex(index).build()));
-            result.setTotalHits(esResults.getTotal());
+        final SearchResult2 esResults = new SearchResult2(jestProvider.execute(new Search.Builder(query).addIndex(index).build()));
+        result.setTotalHits(esResults.getTotal());
 
-            final List<Map> hits = esResults.getSourceAsObjectList(Map.class);
-            result.setBottomDoc(Math.min(from + hits.size(), from + limit));
-            for (final Map hit : hits) {
-                final IndexView iv = new IndexView();
-                for (final Object key : hit.keySet()) {
-                    final Object value = hit.get(key);
-                    if (JestResult.ES_METADATA_ID.equals(key)) {
-                        iv.setDoxID(new DoxID((String) value));
-                    } else if (SearchResult2.ES_METADATA_TYPE.equals(key)) {
-                        iv.setCollection((String) value);
-                    } else if (value instanceof Double) {
-                        iv.setDouble(key.toString(), (double) value);
-                    } else if (value instanceof Long) {
-                        iv.setLong(key.toString(), (long) value);
-                    } else if (value instanceof String) {
-                        iv.setString((String) key, (String) value);
-                    }
+        final List<Map> hits = esResults.getSourceAsObjectList(Map.class);
+        result.setBottomDoc(Math.min(from + hits.size(), from + limit));
+        for (final Map hit : hits) {
+            final IndexView iv = new IndexView();
+            for (final Object key : hit.keySet()) {
+                final Object value = hit.get(key);
+                if (JestResult.ES_METADATA_ID.equals(key)) {
+                    iv.setDoxID(new DoxID((String) value));
+                } else if (SearchResult2.ES_METADATA_TYPE.equals(key)) {
+                    iv.setCollection((String) value);
+                } else if (value instanceof Double) {
+                    iv.setDouble(key.toString(), (double) value);
+                } else if (value instanceof Long) {
+                    iv.setLong(key.toString(), (long) value);
+                } else if (value instanceof String) {
+                    iv.setString((String) key, (String) value);
                 }
-                result.addHit(iv);
             }
-
-            return result;
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
+            result.addHit(iv);
         }
+
+        return result;
+
+    }
+
+    /**
+     * Sets configurationProvider.
+     *
+     * @param configurationProvider
+     *            the configurationProvider to set
+     */
+    @EJB
+    public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
+
+        this.configurationProvider = configurationProvider;
+    }
+
+    /**
+     * Sets provider.
+     *
+     * @param provider
+     *            the provider to set
+     */
+    @EJB
+    public void setJestProvider(final JestProvider provider) {
+
+        jestProvider = provider;
     }
 
 }

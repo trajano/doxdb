@@ -5,4 +5,6 @@
 	<dox name="horse" oob="true">
 		<schema version="1" uri="/schema/horse.json" />
 	</dox>
+	<index name="myindex" mappedName="testIndex1" />
+	<index name="maskedindex" mappedName="testIndex2" />
 </dox-persistence>

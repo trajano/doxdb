@@ -110,5 +110,16 @@
 				</appinfo>
 			</annotation>
 		</attribute>
+		<attribute name="mappedName" type="token" use="optional">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Name of the physical index if it is not the same as
+							'name'.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
 	</complexType>
 </schema>
