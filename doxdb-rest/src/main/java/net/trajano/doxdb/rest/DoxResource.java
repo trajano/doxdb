@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -71,6 +72,7 @@ import net.trajano.doxdb.SearchResult;
  */
 @Path("")
 @Stateless
+@LocalBean
 public class DoxResource {
 
     @EJB
