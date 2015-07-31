@@ -6,13 +6,13 @@
 	<enterprise-beans>
 		<session>
 			<ejb-name>XmlConfigurationProvider</ejb-name>
-			<business-local>net.trajano.doxdb.ext.ConfigurationProvider</business-local>
+			<business-remote>net.trajano.doxdb.ext.ConfigurationProvider</business-remote>
 			<ejb-class>net.trajano.doxdb.ext.XmlConfigurationProvider</ejb-class>
 			<session-type>Stateless</session-type>
 		</session>
 		<session>
 			<ejb-name>DefaultEventHandler</ejb-name>
-			<business-local>net.trajano.doxdb.ext.EventHandler</business-local>
+			<business-remote>net.trajano.doxdb.ext.EventHandler</business-remote>
 			<ejb-class>net.trajano.doxdb.ext.DefaultEventHandler</ejb-class>
 			<session-type>Stateless</session-type>
 		</session>

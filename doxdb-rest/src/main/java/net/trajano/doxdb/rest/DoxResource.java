@@ -36,11 +36,11 @@ import org.bson.BsonArray;
 import org.bson.BsonDocument;
 import org.bson.BsonValue;
 
-import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
+import net.trajano.doxdb.ejb.DoxLocal;
 
 /**
  * This class is extended by clients to provide a list of objects that are
@@ -76,7 +76,7 @@ import net.trajano.doxdb.SearchResult;
 public class DoxResource {
 
     @EJB
-    private Dox dox;
+    private DoxLocal dox;
 
     @Path("{collection}")
     @POST
@@ -212,6 +212,16 @@ public class DoxResource {
         } else {
             return save(collection, idOrOp, content, version);
         }
+    }
+
+    @GET
+    @Path("asearch/{index}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String simpleSearch(@PathParam("index") final String index) {
+
+        dox.noop();
+        return index + " " + dox;
+
     }
 
     @GET

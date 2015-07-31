@@ -14,7 +14,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
-import javax.ejb.Remote;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,14 +37,13 @@ import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
-import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
-import net.trajano.doxdb.ejb.internal.DoxSearch;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.ConfigurationProvider;
+import net.trajano.doxdb.ext.DoxSearch;
 import net.trajano.doxdb.ext.EventHandler;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.ext.Migrator;
@@ -53,16 +51,9 @@ import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
 
-/**
- * This will be an SLSB. There should be many instances of this and should be
- * able to spread through the EJB pool.
- *
- * @author Archimedes Trajano
- */
 @Stateless
-@Remote(Dox.class)
 public class DoxBean implements
-    Dox {
+    DoxLocal {
 
     private CollectionAccessControl collectionAccessControl;
 
@@ -121,7 +112,7 @@ public class DoxBean implements
 
         final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal());
 
-        final DoxEntity entity = new DoxEntity();
+        final Dox entity = new Dox();
         entity.setDoxId(doxId);
         entity.setContent(bson);
         entity.setCreatedBy(ctx.getCallerPrincipal());
@@ -165,7 +156,7 @@ public class DoxBean implements
         final DoxType config = doxen.get(collection);
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
 
-        final DoxEntity toBeDeleted = em.find(DoxEntity.class, meta.getId());
+        final Dox toBeDeleted = em.find(Dox.class, meta.getId());
         final DoxTombstone tombstone = toBeDeleted.buildTombstone(ctx.getCallerPrincipal(), ts);
         em.persist(tombstone);
         em.remove(toBeDeleted);
@@ -210,7 +201,7 @@ public class DoxBean implements
         String contentJson;
 
         if (meta.getSchemaVersion() != schema.getVersion()) {
-            final DoxEntity e = em.find(DoxEntity.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());
             final BsonDocument document = BsonDocument.parse(contentJson);
             meta.setSchemaVersion(schema.getVersion());
@@ -218,7 +209,7 @@ public class DoxBean implements
             contentJson = document.toJson();
             em.persist(e);
         } else {
-            final DoxEntity e = em.find(DoxEntity.class, meta.getId(), LockModeType.OPTIMISTIC);
+            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC);
             final BsonDocument document = e.getContent();
             addMeta(document, e.getDoxId(), e.getVersion());
             contentJson = document.toJson();
@@ -241,8 +232,8 @@ public class DoxBean implements
 
         final BsonArray all = new BsonArray();
 
-        final List<DoxEntity> results = em.createNamedQuery("readAllBySchemaName", DoxEntity.class).setParameter("schemaName", config.getName()).getResultList();
-        for (final DoxEntity result : results) {
+        final List<Dox> results = em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", config.getName()).getResultList();
+        for (final Dox result : results) {
 
             result.getAccessKey();
             // TODO check security
@@ -281,7 +272,7 @@ public class DoxBean implements
         for (final DoxType config : doxen.values()) {
 
             final List<IndexView> indexViews = new LinkedList<>();
-            for (final DoxEntity e : em.createNamedQuery("readAllBySchemaName", DoxEntity.class).setParameter("schemaName", config.getName()).getResultList()) {
+            for (final Dox e : em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", config.getName()).getResultList()) {
 
                 // TODO later
                 //                rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
@@ -370,6 +361,9 @@ public class DoxBean implements
         this.ctx = ctx;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DoxMeta update(final String collectionName,
         final DoxID doxid,
@@ -393,7 +387,7 @@ public class DoxBean implements
 
         final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal());
 
-        final DoxEntity e = em.find(DoxEntity.class, meta.getId());
+        final Dox e = em.find(Dox.class, meta.getId());
         e.setLastUpdatedBy(ctx.getCallerPrincipal());
         e.setLastUpdatedOn(ts);
         e.setContent(bson);
@@ -442,4 +436,5 @@ public class DoxBean implements
             throw new PersistenceException(e);
         }
     }
+
 }

@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
@@ -22,8 +22,8 @@ import io.searchbox.indices.DeleteIndex;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
-import net.trajano.doxdb.ejb.internal.DoxSearch;
 import net.trajano.doxdb.ext.ConfigurationProvider;
+import net.trajano.doxdb.ext.DoxSearch;
 import net.trajano.doxdb.schema.IndexType;
 
 /**
@@ -32,7 +32,7 @@ import net.trajano.doxdb.schema.IndexType;
  * @author Archimedes
  */
 @Stateless
-@LocalBean
+@Remote(DoxSearch.class)
 public class JestDoxSearchBean implements
     DoxSearch {
 

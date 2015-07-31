@@ -35,14 +35,14 @@ import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.ejb.internal.DoxLength;
 import net.trajano.doxdb.internal.DoxPrincipal;
 
-@Entity(name = "Dox")
-@Table(name = "dox",
+@Entity
+@Table(
     indexes = @Index(columnList = "schemaName") ,
     uniqueConstraints = @UniqueConstraint(columnNames = {
         "doxId",
         "schemaName"
 }) )
-public class DoxEntity {
+public class Dox {
 
     @Basic(fetch = FetchType.EAGER)
     @Column(nullable = true,

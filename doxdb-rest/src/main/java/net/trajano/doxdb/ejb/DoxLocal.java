@@ -1,9 +1,16 @@
-package net.trajano.doxdb;
+package net.trajano.doxdb.ejb;
+
+import javax.ejb.Local;
 
 import org.bson.BsonArray;
 import org.bson.BsonDocument;
 
-public interface Dox {
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
+import net.trajano.doxdb.SearchResult;
+
+@Local
+public interface DoxLocal {
 
     /**
      * Creates a dox record into the database. This will allocate a "_id" value
