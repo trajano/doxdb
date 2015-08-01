@@ -63,7 +63,7 @@ public class DoxOob {
     @ManyToOne(fetch = FetchType.LAZY,
         optional = false)
     @JoinColumn(name = "parentId")
-    private DoxEntity parentDox;
+    private Dox parentDox;
 
     public byte[] getContent() {
 
@@ -100,7 +100,7 @@ public class DoxOob {
         return name;
     }
 
-    public DoxEntity getParentDox() {
+    public Dox getParentDox() {
 
         return parentDox;
     }
@@ -140,7 +140,7 @@ public class DoxOob {
         this.name = name;
     }
 
-    public void setParentDox(final DoxEntity parentDox) {
+    public void setParentDox(final Dox parentDox) {
 
         this.parentDox = parentDox;
     }
