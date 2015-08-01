@@ -10,28 +10,28 @@
 <script src="search.js"></script>
 <link rel="stylesheet" href="styles.css">
 </head>
-<body x-ng-cloak>
-	<div x-ng-controller="TodoListController as todoList">
+<body class="ng-cloak">
+	<div x-ng-controller="DoxDbController as doxdb">
 
 		<h1>data entry</h1>
-		<select x-ng-options="item.name for item in todoList.venues"
-			x-ng-model="todoList.venue">
+		<select x-ng-options="item.name for item in doxdb.venues"
+			x-ng-model="doxdb.venue">
 			<option value="">--new--</option>
 		</select>
 
-		<form x-ng-submit="todoList.addTodo()">
+		<form x-ng-submit="doxdb.addTodo()">
 			<p>
-				<input type="text" x-ng-model="todoList.venue.name" size="30"
+				<input type="text" x-ng-model="doxdb.venue.name" size="30"
 					placeholder="Name">
 			</p>
 			<p>
-				<input type="text" x-ng-model="todoList.venue.language" size="30"
+				<input type="text" x-ng-model="doxdb.venue.language" size="30"
 					placeholder="Language">
 			</p>
-			<button x-ng-click="todoList.saveVenue()">save</button>
-			<button x-ng-click="todoList.deleteVenue()">delete</button>
+			<button x-ng-click="doxdb.saveVenue()">save</button>
+			<button x-ng-click="doxdb.deleteVenue()">delete</button>
 		</form>
-		<pre>{{todoList.venue | json}}</pre>
+		<pre>{{doxdb.venue | json}}</pre>
 	</div>
 	<div x-ng-controller="SearchController as search">
 

@@ -1,47 +1,47 @@
 angular.module('doxdbApp', [
     'ngResource', 'search'
-]).controller('TodoListController', function($resource) {
+]).controller('DoxDbController', function($resource) {
 
     var Venue = $resource('V1/venue/:id?v=:version', {
         id : '@_id',
         version : '@_version'
     });
 
-    var todoList = this;
+    var doxdb = this;
 
     Venue.query({}, function(venues) {
 
-        todoList.venues = venues;
+        doxdb.venues = venues;
         if (venues.length > 0) {
-            todoList.venue = venues[0];
+            doxdb.venue = venues[0];
         }
     });
 
-    todoList.saveVenue = function() {
+    doxdb.saveVenue = function() {
 
-        if (!todoList.venue._id) {
+        if (!doxdb.venue._id) {
 
-            new Venue(todoList.venue).$save().then(function(venue) {
+            new Venue(doxdb.venue).$save().then(function(venue) {
 
-                todoList.venue = venue;
-                todoList.venues.push(venue);
+                doxdb.venue = venue;
+                doxdb.venues.push(venue);
             });
         } else {
-            todoList.venue.$save().then(function(venue) {
+            doxdb.venue.$save().then(function(venue) {
 
-                todoList.venue = venue;
+                doxdb.venue = venue;
             });
         }
     };
-    todoList.deleteVenue = function() {
+    doxdb.deleteVenue = function() {
 
-        if (todoList.venue._id) {
+        if (doxdb.venue._id) {
 
-            var toBeDeleted = todoList.venue;
+            var toBeDeleted = doxdb.venue;
             toBeDeleted.$delete().then(function(venue) {
 
-                todoList.venues.splice(todoList.venues.indexOf(toBeDeleted), 1);
-                todoList.venue = null;
+                doxdb.venues.splice(doxdb.venues.indexOf(toBeDeleted), 1);
+                doxdb.venue = null;
             });
         }
     };

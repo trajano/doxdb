@@ -8,7 +8,7 @@
     </parent>
     <groupId>net.trajano.doxdb</groupId>
     <artifactId>doxdb</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>doxdb</name>
     <description>A data framework to allow storing of structured data using JDBC.</description>
