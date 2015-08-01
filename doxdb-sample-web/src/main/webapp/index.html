@@ -1,16 +1,19 @@
 <!doctype html>
-<html lang="en" x-ng-app="todoApp">
+<html lang="en" x-ng-app="doxdbApp">
 <head>
+<meta charset="UTF-8">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-resource.min.js"></script>
 <script src="angular-app.js"></script>
-
+<script src="search.js"></script>
+<link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body x-ng-cloak>
 	<div x-ng-controller="TodoListController as todoList">
 
+		<h1>data entry</h1>
 		<select x-ng-options="item.name for item in todoList.venues"
 			x-ng-model="todoList.venue">
 			<option value="">--new--</option>
@@ -29,6 +32,15 @@
 			<button x-ng-click="todoList.deleteVenue()">delete</button>
 		</form>
 		<pre>{{todoList.venue | json}}</pre>
+	</div>
+	<div x-ng-controller="SearchController as search">
+
+		<h1>search</h1>
+		<p>
+			<input type="search" x-ng-model="search.query" size="30"
+				placeholder="Search query" x-ng-change="search.doSearch()">
+		</p>
+		<pre>{{search.result| json}}</pre>
 	</div>
 </body>
 </html>

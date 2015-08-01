@@ -15,7 +15,6 @@ Completed:
    * Distributed Search (using ElasticSearch REST API via Jest)
    * CRUD
    * Event handling
-   * Corrupted index check
    * REST API
    * Angular JS sample
 

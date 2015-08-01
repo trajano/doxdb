@@ -1,5 +1,5 @@
-angular.module('todoApp', [
-    'ngResource'
+angular.module('doxdbApp', [
+    'ngResource', 'search'
 ]).controller('TodoListController', function($resource) {
 
     var Venue = $resource('V1/venue/:id?v=:version', {
