@@ -6,8 +6,8 @@ doxdb-rest,net.trajano.doxdb.ejb,DoxOob,56,3,0,0,24,1,16,1,16,1
 doxdb-rest,net.trajano.doxdb.ejb,Dox,103,105,0,0,26,29,11,14,11,14
 doxdb-rest,net.trajano.doxdb.ejb,DoxBean,468,359,18,8,83,80,20,15,9,13
 doxdb-rest,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},57,0,2,0,10,0,3,0,2,0
-doxdb-rest,net.trajano.doxdb.rest,OptimisticLockingMapper,11,0,0,0,2,0,2,0,2,0
 doxdb-rest,net.trajano.doxdb.rest,EntityNotFoundMapper,11,0,0,0,2,0,2,0,2,0
+doxdb-rest,net.trajano.doxdb.rest,OptimisticLockingMapper,11,0,0,0,2,0,2,0,2,0
 doxdb-rest,net.trajano.doxdb.rest,DoxIDMapper,11,0,0,0,3,0,3,0,3,0
 doxdb-rest,net.trajano.doxdb.rest,DoxRestApplication,50,0,0,0,3,0,2,0,2,0
 doxdb-rest,net.trajano.doxdb.rest,DoxResource,397,0,26,0,65,0,25,0,12,0

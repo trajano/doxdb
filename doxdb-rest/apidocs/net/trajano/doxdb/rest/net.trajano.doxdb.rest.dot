@@ -5,39 +5,39 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// net.trajano.doxdb.rest.OptimisticLockingMapper
-	c31 [label=<<table title="net.trajano.doxdb.rest.OptimisticLockingMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OptimisticLockingMapper.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> OptimisticLockingMapper </td></tr>
-		</table></td></tr>
-		</table>>, URL="./OptimisticLockingMapper.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.rest.EntityNotFoundMapper
-	c32 [label=<<table title="net.trajano.doxdb.rest.EntityNotFoundMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EntityNotFoundMapper.html">
+	c31 [label=<<table title="net.trajano.doxdb.rest.EntityNotFoundMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EntityNotFoundMapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EntityNotFoundMapper </td></tr>
 		</table></td></tr>
-		</table>>, URL="./EntityNotFoundMapper.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./EntityNotFoundMapper.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.rest.DoxIDMapper
+	c32 [label=<<table title="net.trajano.doxdb.rest.DoxIDMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxIDMapper.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxIDMapper </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxIDMapper.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.rest.DoxRestApplication
 	c33 [label=<<table title="net.trajano.doxdb.rest.DoxRestApplication" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxRestApplication.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxRestApplication </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxRestApplication.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./DoxRestApplication.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.rest.OptimisticLockingMapper
+	c34 [label=<<table title="net.trajano.doxdb.rest.OptimisticLockingMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OptimisticLockingMapper.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> OptimisticLockingMapper </td></tr>
+		</table></td></tr>
+		</table>>, URL="./OptimisticLockingMapper.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.rest.DoxResource
-	c34 [label=<<table title="net.trajano.doxdb.rest.DoxResource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxResource.html">
+	c35 [label=<<table title="net.trajano.doxdb.rest.DoxResource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxResource.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxResource </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxResource.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.rest.DoxIDMapper
-	c35 [label=<<table title="net.trajano.doxdb.rest.DoxIDMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxIDMapper.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxIDMapper </td></tr>
-		</table></td></tr>
-		</table>>, URL="./DoxIDMapper.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./DoxResource.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

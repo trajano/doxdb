@@ -2,9 +2,9 @@
 <pmd-cpd>
    <duplication lines="33" tokens="134">
       <file line="28"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
       <file line="27"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
       <codefragment><![CDATA[public class DoxOobTombstone {
 
     @Lob
@@ -41,9 +41,9 @@
    </duplication>
    <duplication lines="40" tokens="110">
       <file line="138"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
       <file line="127"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
       <codefragment><![CDATA[    }
 
     public String getSchemaName() {
