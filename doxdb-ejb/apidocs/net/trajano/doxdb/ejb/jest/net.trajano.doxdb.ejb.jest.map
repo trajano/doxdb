@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./SearchResult2.html" title="net.trajano.doxdb.ejb.jest.SearchResult2" alt="" coords="16,17,120,42"/>
-<area shape="rect" id="node1" href="./SearchResult2.html" title="&lt;TABLE&gt;" alt="" coords="5,5,131,53"/>
-<area shape="rect" id="node2_1" href="./JestProvider.html" title="net.trajano.doxdb.ejb.jest.JestProvider" alt="" coords="166,17,255,42"/>
-<area shape="rect" id="node2" href="./JestProvider.html" title="&lt;TABLE&gt;" alt="" coords="155,5,266,53"/>
-<area shape="rect" id="node3_2" href="./JestDoxSearchBean.html" title="net.trajano.doxdb.ejb.jest.JestDoxSearchBean" alt="" coords="301,17,438,42"/>
-<area shape="rect" id="node3" href="./JestDoxSearchBean.html" title="&lt;TABLE&gt;" alt="" coords="290,5,449,53"/>
+<area shape="rect" id="node1_0" href="./JestDoxSearchBean.html" title="net.trajano.doxdb.ejb.jest.JestDoxSearchBean" alt="" coords="16,17,156,42"/>
+<area shape="rect" id="node1" href="./JestDoxSearchBean.html" title="&lt;TABLE&gt;" alt="" coords="5,5,167,53"/>
+<area shape="rect" id="node2_1" href="./JestProvider.html" title="net.trajano.doxdb.ejb.jest.JestProvider" alt="" coords="201,17,293,42"/>
+<area shape="rect" id="node2" href="./JestProvider.html" title="&lt;TABLE&gt;" alt="" coords="191,5,304,53"/>
+<area shape="rect" id="node3_2" href="./SearchResult2.html" title="net.trajano.doxdb.ejb.jest.SearchResult2" alt="" coords="339,17,444,42"/>
+<area shape="rect" id="node3" href="./SearchResult2.html" title="&lt;TABLE&gt;" alt="" coords="328,5,455,53"/>
 </map>

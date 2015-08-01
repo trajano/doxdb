@@ -5,27 +5,27 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// net.trajano.doxdb.ejb.jest.SearchResult2
-	c0 [label=<<table title="net.trajano.doxdb.ejb.jest.SearchResult2" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SearchResult2.html">
+	// net.trajano.doxdb.ejb.jest.JestDoxSearchBean
+	c0 [label=<<table title="net.trajano.doxdb.ejb.jest.JestDoxSearchBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JestDoxSearchBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> SearchResult2 </td></tr>
+<tr><td align="center" balign="center"> JestDoxSearchBean </td></tr>
 		</table></td></tr>
-		</table>>, URL="./SearchResult2.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./JestDoxSearchBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.jest.JestProvider
 	c1 [label=<<table title="net.trajano.doxdb.ejb.jest.JestProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JestProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> JestProvider </td></tr>
 		</table></td></tr>
-		</table>>, URL="./JestProvider.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ejb.jest.JestDoxSearchBean
-	c2 [label=<<table title="net.trajano.doxdb.ejb.jest.JestDoxSearchBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JestDoxSearchBean.html">
+		</table>>, URL="./JestProvider.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.ejb.jest.SearchResult2
+	c2 [label=<<table title="net.trajano.doxdb.ejb.jest.SearchResult2" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SearchResult2.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> JestDoxSearchBean </td></tr>
+<tr><td align="center" balign="center"> SearchResult2 </td></tr>
 		</table></td></tr>
-		</table>>, URL="./JestDoxSearchBean.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./SearchResult2.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 
