@@ -4,7 +4,7 @@
     <parent>
         <groupId>net.trajano.doxdb</groupId>
         <artifactId>doxdb</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>doxdb-ejb</artifactId>
     <packaging>ejb</packaging>
