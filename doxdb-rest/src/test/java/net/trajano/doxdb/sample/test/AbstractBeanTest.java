@@ -19,17 +19,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.Mockito;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.ejb.DoxBean;
-import net.trajano.doxdb.ejb.jest.JestDoxSearchBean;
-import net.trajano.doxdb.ejb.jest.JestProvider;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.DefaultEventHandler;
+import net.trajano.doxdb.ext.DoxSearch;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
@@ -49,13 +49,11 @@ public class AbstractBeanTest {
 
     protected DoxBean bean;
 
-    protected JestDoxSearchBean doxSearchBean;
+    protected DoxSearch doxSearchBean;
 
     protected EntityManager em;
 
     protected EntityManagerFactory emf;
-
-    private JestProvider jestProvider;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
@@ -112,8 +110,7 @@ public class AbstractBeanTest {
         when(sessionContextMock.getCallerPrincipal()).thenReturn(new DoxPrincipal("ANONYMOUS"));
 
         bean = new DoxBean();
-        jestProvider = new JestProvider();
-        doxSearchBean = new JestDoxSearchBean();
+        doxSearchBean = Mockito.mock(DoxSearch.class);
 
         bean.setEntityManager(em);
         bean.setSessionContext(sessionContextMock);
@@ -140,12 +137,6 @@ public class AbstractBeanTest {
         bean.setConfigurationProvider(configurationProvider);
         bean.setDoxSearchBean(doxSearchBean);
 
-        jestProvider.setConfigurationProvider(configurationProvider);
-        jestProvider.init();
-
-        doxSearchBean.setConfigurationProvider(configurationProvider);
-        doxSearchBean.setJestProvider(jestProvider);
-
         bean.init();
 
     }
@@ -153,8 +144,6 @@ public class AbstractBeanTest {
     @After
     public void tearDownObjects() {
 
-        jestProvider.dropIndexes();
-        jestProvider.shutdown();
         em.close();
         emf.close();
     }
