@@ -15,7 +15,7 @@ angular.module('search', [ 'ngResource' ]).controller('SearchController',
 				if (search.query) {
 					MyIndex.search({
 						'q' : search.query
-					}).$promise.then(function(result) {
+					}, function(result) {
 						search.result = result;
 					});
 				}
