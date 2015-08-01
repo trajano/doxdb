@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./Venue.html" title="net.trajano.doxdb.sample.json.Venue" alt="" coords="16,19,72,45"/>
+<area shape="rect" id="node1" href="./Venue.html" title="&lt;TABLE&gt;" alt="" coords="5,8,83,56"/>
+<area shape="rect" id="node2_1" href="./Horse.html" title="net.trajano.doxdb.sample.json.Horse" alt="" coords="117,19,171,45"/>
+<area shape="rect" id="node2" href="./Horse.html" title="&lt;TABLE&gt;" alt="" coords="107,8,181,56"/>
+<area shape="rect" id="node3_2" href="./Horse.Gender.html" title="net.trajano.doxdb.sample.json.Horse.Gender" alt="" coords="216,11,320,53"/>
+<area shape="rect" id="node3" href="./Horse.Gender.html" title="&lt;TABLE&gt;" alt="" coords="205,5,331,59"/>
+<area shape="rect" id="node4_3" href="./Country.html" title="net.trajano.doxdb.sample.json.Country" alt="" coords="365,11,469,53"/>
+<area shape="rect" id="node4" href="./Country.html" title="&lt;TABLE&gt;" alt="" coords="355,5,480,59"/>
+</map>
