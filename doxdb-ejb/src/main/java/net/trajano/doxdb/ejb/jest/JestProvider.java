@@ -6,6 +6,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.json.Json;
@@ -46,11 +48,41 @@ public class JestProvider {
     }
 
     /**
-     * Client managed by the singletone.
+     * Client managed by the singleton. This client already has its own
+     * connection pooling so there's no need to have it managed by the
+     * container.
      */
     private JestClient client;
 
     private ConfigurationProvider configurationProvider;
+
+    /**
+     * This will be used to drop indexes created by this provider. This is used
+     * when doing testing.
+     */
+    @Lock(LockType.WRITE)
+    public void dropIndexes() {
+
+        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
+            execute(new DeleteIndex.Builder(configurationProvider.getMappedIndex(indexType.getName())).build());
+        }
+    }
+
+    @Lock(LockType.READ)
+    public <T extends JestResult> T execute(final Action<T> clientRequest) {
+
+        try {
+            return client.execute(clientRequest);
+        } catch (final IOException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+    @Lock(LockType.READ)
+    public JestClient getClient() {
+
+        return client;
+    }
 
     @PostConstruct
     public void init() {
@@ -78,31 +110,6 @@ public class JestProvider {
             throw new PersistenceException();
         }
 
-    }
-
-    /**
-     * This will be used to drop indexes created by this provider. This is used
-     * when doing testing.
-     */
-    public void dropIndexes() {
-
-        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
-            execute(new DeleteIndex.Builder(configurationProvider.getMappedIndex(indexType.getName())).build());
-        }
-    }
-
-    public <T extends JestResult> T execute(final Action<T> clientRequest) {
-
-        try {
-            return client.execute(clientRequest);
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
-        }
-    }
-
-    public JestClient getClient() {
-
-        return client;
     }
 
     /**
