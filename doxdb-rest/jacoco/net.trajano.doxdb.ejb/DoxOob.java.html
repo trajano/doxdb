@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxOob.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ejb</a> &gt; <span class="el_source">DoxOob.java</span></div><h1>DoxOob.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ejb;
+
+import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+
+import net.trajano.doxdb.ejb.internal.DoxLength;
+
+@Entity
+@Table(
+    uniqueConstraints = @UniqueConstraint(columnNames = {
+        &quot;parentId&quot;,
+        &quot;name&quot;
+}) )
+<span class="fc" id="L28">public class DoxOob {</span>
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(nullable = false,
+        length = DoxLength.CONTENT_LENGTH)
+    private byte[] content;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String createdBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdOn;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(nullable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String lastUpdatedBy;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdatedOn;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.OOB_NAME_LENGTH)
+    private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY,
+        optional = false)
+    @JoinColumn(name = &quot;parentId&quot;)
+    private Dox parentDox;
+
+    public byte[] getContent() {
+
+<span class="nc" id="L70">        return content;</span>
+    }
+
+    public String getCreatedBy() {
+
+<span class="nc" id="L75">        return createdBy;</span>
+    }
+
+    public Date getCreatedOn() {
+
+<span class="nc" id="L80">        return createdOn;</span>
+    }
+
+    public long getId() {
+
+<span class="nc" id="L85">        return id;</span>
+    }
+
+    public String getLastUpdatedBy() {
+
+<span class="nc" id="L90">        return lastUpdatedBy;</span>
+    }
+
+    public Date getLastUpdatedOn() {
+
+<span class="nc" id="L95">        return lastUpdatedOn;</span>
+    }
+
+    public String getName() {
+
+<span class="nc" id="L100">        return name;</span>
+    }
+
+    public Dox getParentDox() {
+
+<span class="nc" id="L105">        return parentDox;</span>
+    }
+
+    public void setContent(final byte[] content) {
+
+<span class="nc" id="L110">        this.content = content;</span>
+<span class="nc" id="L111">    }</span>
+
+    public void setCreatedBy(final String createdBy) {
+
+<span class="nc" id="L115">        this.createdBy = createdBy;</span>
+<span class="nc" id="L116">    }</span>
+
+    public void setCreatedOn(final Date createdOn) {
+
+<span class="nc" id="L120">        this.createdOn = createdOn;</span>
+<span class="nc" id="L121">    }</span>
+
+    public void setId(final long id) {
+
+<span class="nc" id="L125">        this.id = id;</span>
+<span class="nc" id="L126">    }</span>
+
+    public void setLastUpdatedBy(final String lastUpdatedBy) {
+
+<span class="nc" id="L130">        this.lastUpdatedBy = lastUpdatedBy;</span>
+<span class="nc" id="L131">    }</span>
+
+    public void setLastUpdatedOn(final Date lastUpdatedOn) {
+
+<span class="nc" id="L135">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="nc" id="L136">    }</span>
+
+    public void setName(final String name) {
+
+<span class="nc" id="L140">        this.name = name;</span>
+<span class="nc" id="L141">    }</span>
+
+    public void setParentDox(final Dox parentDox) {
+
+<span class="nc" id="L145">        this.parentDox = parentDox;</span>
+<span class="nc" id="L146">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

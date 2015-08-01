@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ejb</a> &gt; <span class="el_source">DoxBean.java</span></div><h1>DoxBean.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ejb;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
+import javax.ejb.SessionContext;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.NoResultException;
+import javax.persistence.OptimisticLockException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.validation.ValidationException;
+
+import org.bson.BsonArray;
+import org.bson.BsonDocument;
+import org.bson.BsonInt32;
+import org.bson.BsonString;
+
+import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonschema.SchemaVersion;
+import com.github.fge.jsonschema.cfg.ValidationConfiguration;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.report.ProcessingReport;
+import com.github.fge.jsonschema.main.JsonSchema;
+import com.github.fge.jsonschema.main.JsonSchemaFactory;
+
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
+import net.trajano.doxdb.IndexView;
+import net.trajano.doxdb.SearchResult;
+import net.trajano.doxdb.ext.CollectionAccessControl;
+import net.trajano.doxdb.ext.ConfigurationProvider;
+import net.trajano.doxdb.ext.DoxSearch;
+import net.trajano.doxdb.ext.EventHandler;
+import net.trajano.doxdb.ext.Indexer;
+import net.trajano.doxdb.ext.Migrator;
+import net.trajano.doxdb.schema.DoxPersistence;
+import net.trajano.doxdb.schema.DoxType;
+import net.trajano.doxdb.schema.SchemaType;
+
+@Stateless
+<span class="fc" id="L55">public class DoxBean implements</span>
+    DoxLocal {
+
+    private CollectionAccessControl collectionAccessControl;
+
+    private ConfigurationProvider configurationProvider;
+
+    private SessionContext ctx;
+
+<span class="fc" id="L64">    private transient Map&lt;String, SchemaType&gt; currentSchemaMap = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L66">    private transient Map&lt;String, DoxType&gt; doxen = new HashMap&lt;&gt;();</span>
+
+    private DoxSearch doxSearchBean;
+
+    private EntityManager em;
+
+    private EventHandler eventHandler;
+
+    private Indexer indexer;
+
+<span class="fc" id="L76">    private transient ConcurrentMap&lt;String, JsonSchema&gt; jsonSchemaMap = new ConcurrentHashMap&lt;&gt;();</span>
+
+    private Migrator migrator;
+
+    private transient DoxPersistence persistenceConfig;
+
+    /**
+     * Adds the meta fields to the BSON document that is being returned.
+     *
+     * @param document
+     *            document to update (will be modified).
+     * @param doxId
+     * @param version
+     * @return updated document
+     */
+    private BsonDocument addMeta(final BsonDocument document,
+        final DoxID doxId,
+        final int version) {
+
+<span class="fc" id="L95">        document.put(&quot;_id&quot;, new BsonString(doxId.toString()));</span>
+<span class="fc" id="L96">        document.put(&quot;_version&quot;, new BsonInt32(version));</span>
+<span class="fc" id="L97">        return document;</span>
+    }
+
+    @Override
+    public DoxMeta create(final String schemaName,
+        final BsonDocument bson) {
+
+<span class="fc" id="L104">        final Date ts = new Date();</span>
+<span class="fc" id="L105">        final DoxType config = doxen.get(schemaName);</span>
+<span class="fc" id="L106">        final SchemaType schema = currentSchemaMap.get(schemaName);</span>
+
+<span class="fc" id="L108">        final String inputJson = bson.toJson();</span>
+<span class="fc" id="L109">        validate(schema, inputJson);</span>
+
+<span class="fc" id="L111">        final DoxID doxId = DoxID.generate();</span>
+
+<span class="fc" id="L113">        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal());</span>
+
+<span class="fc" id="L115">        final Dox entity = new Dox();</span>
+<span class="fc" id="L116">        entity.setDoxId(doxId);</span>
+<span class="fc" id="L117">        entity.setContent(bson);</span>
+<span class="fc" id="L118">        entity.setCreatedBy(ctx.getCallerPrincipal());</span>
+<span class="fc" id="L119">        entity.setCreatedOn(ts);</span>
+<span class="fc" id="L120">        entity.setLastUpdatedBy(ctx.getCallerPrincipal());</span>
+<span class="fc" id="L121">        entity.setLastUpdatedOn(ts);</span>
+<span class="fc" id="L122">        entity.setSchemaName(config.getName());</span>
+<span class="fc" id="L123">        entity.setSchemaVersion(schema.getVersion());</span>
+<span class="fc" id="L124">        entity.setAccessKey(accessKey);</span>
+<span class="fc" id="L125">        entity.setVersion(1);</span>
+
+<span class="fc" id="L127">        em.persist(entity);</span>
+
+<span class="fc" id="L129">        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        for (final IndexView indexView : indexViews) {</span>
+<span class="nc" id="L131">            indexView.setCollection(config.getName());</span>
+<span class="nc" id="L132">            indexView.setDoxID(doxId);</span>
+        }
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (indexViews.length &gt; 0) {</span>
+<span class="nc" id="L135">            doxSearchBean.addToIndex(indexViews);</span>
+        }
+<span class="fc" id="L137">        final DoxMeta meta = new DoxMeta();</span>
+<span class="fc" id="L138">        meta.setAccessKey(accessKey);</span>
+<span class="fc" id="L139">        meta.setLastUpdatedOn(ts);</span>
+<span class="fc" id="L140">        meta.setVersion(1);</span>
+<span class="fc" id="L141">        meta.setDoxId(doxId);</span>
+
+<span class="fc" id="L143">        addMeta(bson, doxId, 1);</span>
+<span class="fc" id="L144">        meta.setContentJson(bson.toJson());</span>
+
+<span class="fc" id="L146">        eventHandler.onRecordCreate(config.getName(), doxId, inputJson);</span>
+<span class="fc" id="L147">        return meta;</span>
+    }
+
+    @Override
+    public void delete(final String collection,
+        final DoxID doxid,
+        final int version) {
+
+<span class="nc" id="L155">        final Date ts = new Date();</span>
+<span class="nc" id="L156">        final DoxType config = doxen.get(collection);</span>
+<span class="nc" id="L157">        final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);</span>
+
+<span class="nc" id="L159">        final Dox toBeDeleted = em.find(Dox.class, meta.getId());</span>
+<span class="nc" id="L160">        final DoxTombstone tombstone = toBeDeleted.buildTombstone(ctx.getCallerPrincipal(), ts);</span>
+<span class="nc" id="L161">        em.persist(tombstone);</span>
+<span class="nc" id="L162">        em.remove(toBeDeleted);</span>
+
+<span class="nc" id="L164">        doxSearchBean.removeFromIndex(config.getName(), doxid);</span>
+<span class="nc" id="L165">        eventHandler.onRecordDelete(config.getName(), doxid);</span>
+
+<span class="nc" id="L167">    }</span>
+
+    /**
+     * This will initialize the EJB and prepare the statements used by the
+     * framework. It will create the tables as needed.
+     */
+    @PostConstruct
+    public void init() {
+
+<span class="fc" id="L176">        persistenceConfig = configurationProvider.getPersistenceConfig();</span>
+
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        for (final DoxType doxConfig : persistenceConfig.getDox()) {</span>
+<span class="fc" id="L179">            doxen.put(doxConfig.getName(), doxConfig);</span>
+<span class="fc" id="L180">            currentSchemaMap.put(doxConfig.getName(), doxConfig.getSchema().get(doxConfig.getSchema().size() - 1));</span>
+<span class="fc" id="L181">        }</span>
+<span class="fc" id="L182">    }</span>
+
+    @Override
+    public void noop() {
+
+<span class="nc" id="L187">    }</span>
+
+    @Override
+    public DoxMeta read(final String collectionName,
+        final DoxID doxid) {
+
+<span class="fc" id="L193">        final DoxType config = doxen.get(collectionName);</span>
+<span class="fc" id="L194">        final SchemaType schema = currentSchemaMap.get(collectionName);</span>
+
+<span class="fc" id="L196">        final DoxMeta meta = em.createNamedQuery(&quot;readMetaBySchemaNameDoxID&quot;, DoxMeta.class).setParameter(&quot;doxId&quot;, doxid.toString()).setParameter(&quot;schemaName&quot;, config.getName()).getSingleResult();</span>
+
+<span class="fc" id="L198">        meta.getAccessKey();</span>
+        // TODO check the security.
+
+        String contentJson;
+
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">        if (meta.getSchemaVersion() != schema.getVersion()) {</span>
+<span class="nc" id="L204">            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);</span>
+<span class="nc" id="L205">            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());</span>
+<span class="nc" id="L206">            final BsonDocument document = BsonDocument.parse(contentJson);</span>
+<span class="nc" id="L207">            meta.setSchemaVersion(schema.getVersion());</span>
+<span class="nc" id="L208">            e.setSchemaVersion(schema.getVersion());</span>
+<span class="nc" id="L209">            contentJson = document.toJson();</span>
+<span class="nc" id="L210">            em.persist(e);</span>
+<span class="nc" id="L211">        } else {</span>
+<span class="fc" id="L212">            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC);</span>
+<span class="fc" id="L213">            final BsonDocument document = e.getContent();</span>
+<span class="fc" id="L214">            addMeta(document, e.getDoxId(), e.getVersion());</span>
+<span class="fc" id="L215">            contentJson = document.toJson();</span>
+        }
+
+<span class="fc" id="L218">        meta.setContentJson(contentJson);</span>
+<span class="fc" id="L219">        eventHandler.onRecordCreate(config.getName(), doxid, contentJson);</span>
+<span class="fc" id="L220">        return meta;</span>
+
+    }
+
+    @Override
+    public BsonArray readAll(final String collectionName) {
+
+<span class="nc" id="L227">        final DoxType config = doxen.get(collectionName);</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        if (!config.isReadAll()) {</span>
+<span class="nc" id="L229">            throw new PersistenceException(&quot;Not supported&quot;);</span>
+        }
+<span class="nc" id="L231">        final SchemaType schema = currentSchemaMap.get(collectionName);</span>
+
+<span class="nc" id="L233">        final BsonArray all = new BsonArray();</span>
+
+<span class="nc" id="L235">        final List&lt;Dox&gt; results = em.createNamedQuery(&quot;readAllBySchemaName&quot;, Dox.class).setParameter(&quot;schemaName&quot;, config.getName()).getResultList();</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">        for (final Dox result : results) {</span>
+
+<span class="nc" id="L238">            result.getAccessKey();</span>
+            // TODO check security
+<span class="nc bnc" id="L240" title="All 2 branches missed.">            if (result.getSchemaVersion() != schema.getVersion()) {</span>
+<span class="nc" id="L241">                migrator.migrate(config.getName(), result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());</span>
+                // queue migrate later?
+            } else {
+<span class="nc" id="L244">                all.add(addMeta(result.getContent(), result.getDoxId(), result.getVersion()));</span>
+            }
+
+<span class="nc" id="L247">        }</span>
+<span class="nc" id="L248">        return all;</span>
+    }
+
+    private DoxMeta readMetaAndLock(
+        final String schemaName,
+        final DoxID doxid,
+        final int version) {
+
+        try {
+<span class="nc" id="L257">            return em.createNamedQuery(&quot;readForUpdateMetaBySchemaNameDoxIDVersion&quot;, DoxMeta.class).setParameter(&quot;doxId&quot;, doxid.toString()).setParameter(&quot;schemaName&quot;, schemaName).setParameter(&quot;version&quot;, version).getSingleResult();</span>
+
+<span class="nc" id="L259">        } catch (final NoResultException e) {</span>
+<span class="nc" id="L260">            throw new OptimisticLockException(e);</span>
+        }
+    }
+
+    @Override
+    @Asynchronous
+    public void reindex() {
+
+<span class="nc" id="L268">        doxSearchBean.reset();</span>
+
+        // TODO this will do everything in one transaction which can kill the database.  What could be done is the
+        // reindexing can be done in chunks and let an MDB do the process
+<span class="nc bnc" id="L272" title="All 2 branches missed.">        for (final DoxType config : doxen.values()) {</span>
+
+<span class="nc" id="L274">            final List&lt;IndexView&gt; indexViews = new LinkedList&lt;&gt;();</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">            for (final Dox e : em.createNamedQuery(&quot;readAllBySchemaName&quot;, Dox.class).setParameter(&quot;schemaName&quot;, config.getName()).getResultList()) {</span>
+
+                // TODO later
+                //                rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
+<span class="nc" id="L279">                final IndexView[] indexViewBuilt = indexer.buildIndexViews(config.getName(), e.getJsonContent());</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">                for (final IndexView indexView : indexViewBuilt) {</span>
+<span class="nc" id="L281">                    indexView.setCollection(e.getSchemaName());</span>
+<span class="nc" id="L282">                    indexView.setDoxID(e.getDoxId());</span>
+<span class="nc" id="L283">                    indexViews.add(indexView);</span>
+                }
+
+<span class="nc" id="L286">            }</span>
+<span class="nc" id="L287">            doxSearchBean.addToIndex(indexViews.toArray(new IndexView[0]));</span>
+
+<span class="nc" id="L289">        }</span>
+
+<span class="nc" id="L291">    }</span>
+
+    @Override
+    public SearchResult search(final String index,
+        final String queryString,
+        final int limit) {
+
+<span class="nc" id="L298">        return doxSearchBean.search(index, queryString, limit, null);</span>
+    }
+
+    @Override
+    public SearchResult search(final String index,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+<span class="nc" id="L307">        return doxSearchBean.search(index, queryString, limit, fromDoc);</span>
+    }
+
+    @EJB
+    public void setCollectionAccessControl(final CollectionAccessControl collectionAccessControl) {
+
+<span class="fc" id="L313">        this.collectionAccessControl = collectionAccessControl;</span>
+<span class="fc" id="L314">    }</span>
+
+    @EJB
+    public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
+
+<span class="fc" id="L319">        this.configurationProvider = configurationProvider;</span>
+<span class="fc" id="L320">    }</span>
+
+    @EJB
+    public void setDoxSearchBean(final DoxSearch doxSearchBean) {
+
+<span class="fc" id="L325">        this.doxSearchBean = doxSearchBean;</span>
+<span class="fc" id="L326">    }</span>
+
+    /**
+     * Injects the {@link EntityManager}.
+     *
+     * @param em
+     *            entity manager
+     */
+    @PersistenceContext
+    public void setEntityManager(final EntityManager em) {
+
+<span class="fc" id="L337">        this.em = em;</span>
+<span class="fc" id="L338">    }</span>
+
+    @EJB
+    public void setEventHandler(final EventHandler eventHandler) {
+
+<span class="fc" id="L343">        this.eventHandler = eventHandler;</span>
+<span class="fc" id="L344">    }</span>
+
+    @EJB
+    public void setIndexer(final Indexer indexer) {
+
+<span class="fc" id="L349">        this.indexer = indexer;</span>
+<span class="fc" id="L350">    }</span>
+
+    @EJB
+    public void setMigrator(final Migrator migrator) {
+
+<span class="nc" id="L355">        this.migrator = migrator;</span>
+<span class="nc" id="L356">    }</span>
+
+    @Resource
+    public void setSessionContext(final SessionContext ctx) {
+
+<span class="fc" id="L361">        this.ctx = ctx;</span>
+<span class="fc" id="L362">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DoxMeta update(final String collectionName,
+        final DoxID doxid,
+        final BsonDocument bson,
+        final int version) {
+
+<span class="nc" id="L373">        final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
+<span class="nc" id="L374">        final DoxType config = doxen.get(collectionName);</span>
+<span class="nc" id="L375">        final SchemaType schema = currentSchemaMap.get(collectionName);</span>
+
+<span class="nc" id="L377">        final String inputJson = bson.toJson();</span>
+<span class="nc" id="L378">        validate(schema, inputJson);</span>
+
+<span class="nc" id="L380">        final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);</span>
+<span class="nc" id="L381">        meta.incrementVersion();</span>
+
+<span class="nc" id="L383">        meta.getAccessKey();</span>
+        // TODO check the security.
+
+<span class="nc" id="L386">        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);</span>
+
+<span class="nc" id="L388">        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal());</span>
+
+<span class="nc" id="L390">        final Dox e = em.find(Dox.class, meta.getId());</span>
+<span class="nc" id="L391">        e.setLastUpdatedBy(ctx.getCallerPrincipal());</span>
+<span class="nc" id="L392">        e.setLastUpdatedOn(ts);</span>
+<span class="nc" id="L393">        e.setContent(bson);</span>
+<span class="nc" id="L394">        e.setAccessKey(accessKey);</span>
+<span class="nc" id="L395">        em.persist(e);</span>
+<span class="nc" id="L396">        em.flush();</span>
+<span class="nc" id="L397">        em.refresh(e);</span>
+
+<span class="nc bnc" id="L399" title="All 2 branches missed.">        for (final IndexView indexView : indexViews) {</span>
+<span class="nc" id="L400">            indexView.setCollection(config.getName());</span>
+<span class="nc" id="L401">            indexView.setDoxID(doxid);</span>
+        }
+<span class="nc" id="L403">        doxSearchBean.addToIndex(indexViews);</span>
+
+<span class="nc" id="L405">        eventHandler.onRecordUpdate(config.getName(), doxid, e.getJsonContent());</span>
+<span class="nc" id="L406">        addMeta(bson, doxid, e.getVersion());</span>
+<span class="nc" id="L407">        meta.setContentJson(bson.toJson());</span>
+<span class="nc" id="L408">        return meta;</span>
+
+    }
+
+    private void validate(final SchemaType schema,
+        final String json) {
+
+        try {
+
+<span class="fc" id="L417">            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getUri());</span>
+<span class="pc bpc" id="L418" title="1 of 2 branches missed.">            if (jsonSchema == null) {</span>
+<span class="fc" id="L419">                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()</span>
+                    .setDefaultVersion(SchemaVersion.DRAFTV4)
+                    .freeze();
+
+<span class="fc" id="L423">                jsonSchema = JsonSchemaFactory.newBuilder()</span>
+                    .setValidationConfiguration(cfg)
+                    .freeze()
+                    .getJsonSchema(JsonLoader.fromResource(schema.getUri()));
+<span class="fc" id="L427">                jsonSchemaMap.putIfAbsent(schema.getUri(), jsonSchema);</span>
+            }
+
+<span class="fc" id="L430">            final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));</span>
+<span class="fc bfc" id="L431" title="All 2 branches covered.">            if (!validate.isSuccess()) {</span>
+<span class="fc" id="L432">                throw new ValidationException(validate.toString());</span>
+            }
+<span class="nc" id="L434">        } catch (ProcessingException</span>
+            | IOException e) {
+<span class="nc" id="L436">            throw new PersistenceException(e);</span>
+<span class="fc" id="L437">        }</span>
+<span class="fc" id="L438">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxResource.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.rest</a> &gt; <span class="el_source">DoxResource.java</span></div><h1>DoxResource.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.rest;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.StreamingOutput;
+import javax.ws.rs.core.UriInfo;
+
+import org.bson.BsonArray;
+import org.bson.BsonDocument;
+import org.bson.BsonValue;
+
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
+import net.trajano.doxdb.IndexView;
+import net.trajano.doxdb.SearchResult;
+import net.trajano.doxdb.ejb.DoxLocal;
+
+/**
+ * This class is extended by clients to provide a list of objects that are
+ * allowed and allowed OOB references along with their schema.
+ * &lt;p&gt;
+ * Registration is done through a list of schemas provided by the
+ * {@link #getRegisteredSchemaResources()} method. The DOXDB table that gets
+ * created would be based on the the &quot;$doxdb&quot; object that is required in the
+ * schema. In the future an alternate version of this provider will allow
+ * passing in the contents of &quot;$doxdb&quot; only with a reference to a schema.
+ * &lt;p&gt;
+ * Given the following, there's no need for a &quot;customized&quot; WAR file for the REST
+ * API. However, there still is a need actually... in case we want the web
+ * resources in the same WAR... or perhaps we just have it as a separate web
+ * module? Let's try separate web module first.
+ *
+ * &lt;pre&gt;
+ * GET search/{index}?q={query}
+ * GET {collection}/{id : [A-Za-z0-9]{32} }
+ * GET {collection}/{id : [A-Za-z0-9]{32} }/{oobname}
+ * POST {collection}
+ * POST {collection}/{id : [A-Za-z0-9]{32} }
+ * POST {collection}/{id : [A-Za-z0-9]{32} }/{oobname}
+ * POST {collection}/{operation : _[A-Za-z0-9]+}
+ * DELETE {collection}/{id : [A-Za-z0-9]{32} }
+ * &lt;/pre&gt;
+ *
+ * @author Archimedes
+ */
+@Path(&quot;&quot;)
+@Stateless
+@LocalBean
+<span class="nc" id="L76">public class DoxResource {</span>
+
+    @EJB
+    private DoxLocal dox;
+
+    @Path(&quot;{collection}&quot;)
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create(@PathParam(&quot;collection&quot;) final String collection,
+        final String json) {
+
+<span class="nc" id="L88">        final BsonDocument bson = BsonDocument.parse(json);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        for (final String key : bson.keySet()) {</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            if (key.startsWith(&quot;_&quot;)) {</span>
+<span class="nc" id="L91">                bson.remove(key);</span>
+            }
+<span class="nc" id="L93">        }</span>
+
+<span class="nc" id="L95">        final DoxMeta meta = dox.create(collection, bson);</span>
+<span class="nc" id="L96">        return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();</span>
+    }
+
+    @DELETE
+    @Path(&quot;{collection}/{id}&quot;)
+    public Response delete(@PathParam(&quot;collection&quot;) final String collection,
+        @PathParam(&quot;id&quot;) final DoxID doxid,
+        @QueryParam(&quot;v&quot;) final int version) {
+
+<span class="nc" id="L105">        dox.delete(collection, doxid, version);</span>
+<span class="nc" id="L106">        return Response.noContent().build();</span>
+    }
+
+    @GET
+    @Path(&quot;{collection}/{id}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response get(@PathParam(&quot;collection&quot;) final String collection,
+        @PathParam(&quot;id&quot;) final DoxID doxid) {
+
+<span class="nc" id="L115">        final DoxMeta meta = dox.read(collection, doxid);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (meta == null) {</span>
+<span class="nc" id="L117">            return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity(&quot;Dox not found&quot;).build();</span>
+        }
+<span class="nc" id="L119">        final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));</span>
+<span class="nc" id="L120">        return Response.ok().tag(entityTag).entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();</span>
+    }
+
+    private Response op(final String collection,
+        final String opName,
+        final String content) {
+
+<span class="nc" id="L127">        System.out.println(collection + &quot; &quot; + opName + &quot; SAVE&quot;);</span>
+<span class="nc" id="L128">        return Response.ok().entity(content).build();</span>
+    }
+
+    @GET
+    @Path(&quot;{collection}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response readAll(@PathParam(&quot;collection&quot;) final String collection) {
+
+        // FIXME this is so yucky.
+<span class="nc" id="L137">        final BsonArray all = dox.readAll(collection);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (all.isEmpty()) {</span>
+<span class="nc" id="L139">            return Response.ok(&quot;[]&quot;).build();</span>
+        }
+<span class="nc" id="L141">        final StreamingOutput stream = new StreamingOutput() {</span>
+
+            @Override
+            public void write(final OutputStream os) throws IOException,
+                WebApplicationException {
+
+<span class="nc" id="L147">                final Writer writer = new OutputStreamWriter(os);</span>
+<span class="nc" id="L148">                writer.write('[');</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                for (int i = 0; i &lt; all.size() - 1; ++i) {</span>
+<span class="nc" id="L150">                    writer.write(all.get(i).asDocument().toJson());</span>
+<span class="nc" id="L151">                    writer.write(',');</span>
+
+                }
+<span class="nc" id="L154">                writer.write(all.get(all.size() - 1).asDocument().toJson());</span>
+<span class="nc" id="L155">                writer.write(']');</span>
+<span class="nc" id="L156">                writer.flush();</span>
+<span class="nc" id="L157">            }</span>
+        };
+
+<span class="nc" id="L160">        return Response.ok(stream).build();</span>
+    }
+
+    @OPTIONS
+    @Path(&quot;reindex&quot;)
+    public Response reindex() {
+
+        // TODO remove this later.
+<span class="nc" id="L168">        dox.reindex();</span>
+<span class="nc" id="L169">        return Response.noContent().build();</span>
+    }
+
+    private Response save(final String collection,
+        final String id,
+        final String json,
+        final int version) {
+
+<span class="nc" id="L177">        final BsonDocument bson = BsonDocument.parse(json);</span>
+
+<span class="nc" id="L179">        final Iterator&lt;Entry&lt;String, BsonValue&gt;&gt; iterator = bson.entrySet().iterator();</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        while (iterator.hasNext()) {</span>
+<span class="nc" id="L181">            final Entry&lt;String, BsonValue&gt; entry = iterator.next();</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">            if (entry.getKey().startsWith(&quot;_&quot;)) {</span>
+<span class="nc" id="L183">                iterator.remove();</span>
+            }
+<span class="nc" id="L185">        }</span>
+
+<span class="nc" id="L187">        final DoxMeta meta = dox.update(collection, new DoxID(id), bson, version);</span>
+<span class="nc" id="L188">        return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();</span>
+    }
+
+    @POST
+    @Path(&quot;{collection}/{id}/{oobname}&quot;)
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response saveOob(@PathParam(&quot;collection&quot;) final String collection,
+        @PathParam(&quot;id&quot;) final DoxID id,
+        @PathParam(&quot;oobname&quot;) final String oobname) {
+
+<span class="nc" id="L198">        return Response.ok().entity(&quot;OOB&quot;).build();</span>
+    }
+
+    @POST
+    @Path(&quot;{collection}/{idOrOp}&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response saveOrOp(@PathParam(&quot;collection&quot;) final String collection,
+        @PathParam(&quot;idOrOp&quot;) final String idOrOp,
+        @QueryParam(&quot;v&quot;) final int version,
+        final String content) {
+
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (idOrOp.startsWith(&quot;_&quot;)) {</span>
+<span class="nc" id="L211">            return op(collection, idOrOp.substring(1), content);</span>
+        } else {
+<span class="nc" id="L213">            return save(collection, idOrOp, content, version);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;asearch/{index}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String simpleSearch(@PathParam(&quot;index&quot;) final String index) {
+
+<span class="nc" id="L222">        dox.noop();</span>
+<span class="nc" id="L223">        return index + &quot; &quot; + dox;</span>
+
+    }
+
+    @GET
+    @Path(&quot;search/{index}&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response simpleSearch(@PathParam(&quot;index&quot;) final String index,
+        @QueryParam(&quot;q&quot;) final String queryString,
+        @QueryParam(&quot;f&quot;) final Integer from,
+        @Context final UriInfo uriInfo) {
+
+<span class="nc" id="L235">        final SearchResult results = dox.search(index, queryString, 50, from);</span>
+        //results.get
+<span class="nc" id="L237">        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">        for (final IndexView hit : results.getHits()) {</span>
+<span class="nc" id="L239">            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();</span>
+<span class="nc" id="L240">            final String id = hit.getDoxID().toString();</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">            for (final Entry&lt;String, Double&gt; entry : hit.getDoubles()) {</span>
+<span class="nc" id="L242">                hitBuilder.add(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L243">            }</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">            for (final Entry&lt;String, Long&gt; entry : hit.getLongs()) {</span>
+<span class="nc" id="L245">                hitBuilder.add(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L246">            }</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; entry : hit.getStrings()) {</span>
+<span class="nc" id="L248">                hitBuilder.add(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L249">            }</span>
+<span class="nc" id="L250">            hitBuilder.add(&quot;_collection&quot;, hit.getCollection());</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">            if (!hit.isMasked()) {</span>
+<span class="nc" id="L252">                hitBuilder.add(&quot;_id&quot;, id);</span>
+<span class="nc" id="L253">                hitBuilder.add(&quot;_url&quot;, uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());</span>
+            }
+<span class="nc" id="L255">            hitsBuilder.add(hitBuilder);</span>
+<span class="nc" id="L256">        }</span>
+<span class="nc" id="L257">        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add(&quot;totalHits&quot;, results.getTotalHits()).add(&quot;hits&quot;, hitsBuilder);</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">        if (results.getBottomDoc() != null) {</span>
+<span class="nc" id="L259">            final String nextPage = uriInfo.getBaseUriBuilder().path(&quot;search&quot;).path(index).queryParam(&quot;q&quot;, queryString).queryParam(&quot;f&quot;, results.getBottomDoc()).build().toASCIIString();</span>
+<span class="nc" id="L260">            jsonBuilder.add(&quot;bottomDoc&quot;, results.getBottomDoc()).add(&quot;next&quot;, nextPage);</span>
+        }
+<span class="nc" id="L262">        final JsonObject resultJson = jsonBuilder.build();</span>
+<span class="nc" id="L263">        return Response.ok().entity(resultJson).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

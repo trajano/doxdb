@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./OptimisticLockingMapper.html" title="net.trajano.doxdb.rest.OptimisticLockingMapper" alt="" coords="16,17,183,42"/>
+<area shape="rect" id="node1" href="./OptimisticLockingMapper.html" title="&lt;TABLE&gt;" alt="" coords="5,5,193,53"/>
+<area shape="rect" id="node2_1" href="./EntityNotFoundMapper.html" title="net.trajano.doxdb.rest.EntityNotFoundMapper" alt="" coords="229,17,381,42"/>
+<area shape="rect" id="node2" href="./EntityNotFoundMapper.html" title="&lt;TABLE&gt;" alt="" coords="218,5,391,53"/>
+<area shape="rect" id="node3_2" href="./DoxRestApplication.html" title="net.trajano.doxdb.rest.DoxRestApplication" alt="" coords="426,17,559,42"/>
+<area shape="rect" id="node3" href="./DoxRestApplication.html" title="&lt;TABLE&gt;" alt="" coords="415,5,570,53"/>
+<area shape="rect" id="node4_3" href="./DoxResource.html" title="net.trajano.doxdb.rest.DoxResource" alt="" coords="605,17,703,42"/>
+<area shape="rect" id="node4" href="./DoxResource.html" title="&lt;TABLE&gt;" alt="" coords="595,5,713,53"/>
+<area shape="rect" id="node5_4" href="./DoxIDMapper.html" title="net.trajano.doxdb.rest.DoxIDMapper" alt="" coords="748,17,845,42"/>
+<area shape="rect" id="node5" href="./DoxIDMapper.html" title="&lt;TABLE&gt;" alt="" coords="737,5,856,53"/>
+</map>

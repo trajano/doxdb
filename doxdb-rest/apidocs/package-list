@@ -1,0 +1,4 @@
+net.trajano.doxdb.ejb
+net.trajano.doxdb.ejb.internal
+net.trajano.doxdb.rest
+net.trajano.doxdb.rest.internal

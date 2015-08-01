@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pmd-cpd>
+   <duplication lines="33" tokens="134">
+      <file line="28"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+      <file line="27"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+      <codefragment><![CDATA[public class DoxOobTombstone {
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.CONTENT_LENGTH)
+    private byte[] content;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String createdBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdOn;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String deletedBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedOn;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxID.LENGTH)
+    private DoxID doxId;]]></codefragment>
+   </duplication>
+   <duplication lines="40" tokens="110">
+      <file line="138"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+      <file line="127"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+      <codefragment><![CDATA[    }
+
+    public String getSchemaName() {
+
+        return schemaName;
+    }
+
+    public int getSchemaVersion() {
+
+        return schemaVersion;
+    }
+
+    public void setContent(final byte[] content) {
+
+        this.content = content;
+    }
+
+    public void setCreatedBy(final String createdBy) {
+
+        this.createdBy = createdBy;
+    }
+
+    public void setCreatedOn(final Date createdOn) {
+
+        this.createdOn = createdOn;
+    }
+
+    public void setDeletedBy(final String deletedBy) {
+
+        this.deletedBy = deletedBy;
+    }
+
+    public void setDeletedOn(final Date deletedOn) {
+
+        this.deletedOn = deletedOn;
+    }
+
+    public void setDoxId(final DoxID doxId) {
+
+        this.doxId = doxId;]]></codefragment>
+   </duplication>
+</pmd-cpd>

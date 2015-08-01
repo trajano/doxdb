@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxTombstone.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ejb</a> &gt; <span class="el_source">DoxTombstone.java</span></div><h1>DoxTombstone.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ejb;
+
+import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.ejb.internal.DoxLength;
+
+@Entity
+@Table(
+    uniqueConstraints = @UniqueConstraint(columnNames = {
+        &quot;doxId&quot;,
+        &quot;schemaName&quot;
+}) )
+<span class="fc" id="L27">public class DoxTombstone {</span>
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.CONTENT_LENGTH)
+    private byte[] content;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String createdBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdOn;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String deletedBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedOn;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxID.LENGTH)
+    private String doxId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String lastUpdatedBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdatedOn;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.SCHEMA_NAME_LENGTH)
+    private String schemaName;
+
+    @Column(nullable = false,
+        updatable = false)
+    private int schemaVersion;
+
+    public byte[] getContent() {
+
+<span class="nc" id="L86">        return content;</span>
+    }
+
+    public String getCreatedBy() {
+
+<span class="nc" id="L91">        return createdBy;</span>
+    }
+
+    public Date getCreatedOn() {
+
+<span class="nc" id="L96">        return createdOn;</span>
+    }
+
+    public String getDeletedBy() {
+
+<span class="nc" id="L101">        return deletedBy;</span>
+    }
+
+    public Date getDeletedOn() {
+
+<span class="nc" id="L106">        return deletedOn;</span>
+    }
+
+    public DoxID getDoxId() {
+
+<span class="nc" id="L111">        return new DoxID(doxId);</span>
+    }
+
+    public long getId() {
+
+<span class="nc" id="L116">        return id;</span>
+    }
+
+    public String getLastUpdatedBy() {
+
+<span class="nc" id="L121">        return lastUpdatedBy;</span>
+    }
+
+    public Date getLastUpdatedOn() {
+
+<span class="nc" id="L126">        return lastUpdatedOn;</span>
+    }
+
+    public String getSchemaName() {
+
+<span class="nc" id="L131">        return schemaName;</span>
+    }
+
+    public int getSchemaVersion() {
+
+<span class="nc" id="L136">        return schemaVersion;</span>
+    }
+
+    public void setContent(final byte[] content) {
+
+<span class="nc" id="L141">        this.content = content;</span>
+<span class="nc" id="L142">    }</span>
+
+    public void setCreatedBy(final String createdBy) {
+
+<span class="nc" id="L146">        this.createdBy = createdBy;</span>
+<span class="nc" id="L147">    }</span>
+
+    public void setCreatedOn(final Date createdOn) {
+
+<span class="nc" id="L151">        this.createdOn = createdOn;</span>
+<span class="nc" id="L152">    }</span>
+
+    public void setDeletedBy(final String deletedBy) {
+
+<span class="nc" id="L156">        this.deletedBy = deletedBy;</span>
+<span class="nc" id="L157">    }</span>
+
+    public void setDeletedOn(final Date deletedOn) {
+
+<span class="nc" id="L161">        this.deletedOn = deletedOn;</span>
+<span class="nc" id="L162">    }</span>
+
+    public void setDoxId(final DoxID doxId) {
+
+<span class="nc" id="L166">        this.doxId = doxId.toString();</span>
+<span class="nc" id="L167">    }</span>
+
+    public void setId(final long id) {
+
+<span class="nc" id="L171">        this.id = id;</span>
+<span class="nc" id="L172">    }</span>
+
+    public void setLastUpdatedBy(final String lastUpdatedBy) {
+
+<span class="nc" id="L176">        this.lastUpdatedBy = lastUpdatedBy;</span>
+<span class="nc" id="L177">    }</span>
+
+    public void setLastUpdatedOn(final Date lastUpdatedOn) {
+
+<span class="nc" id="L181">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="nc" id="L182">    }</span>
+
+    public void setSchemaName(final String schemaName) {
+
+<span class="nc" id="L186">        this.schemaName = schemaName;</span>
+<span class="nc" id="L187">    }</span>
+
+    public void setSchemaVersion(final int schemaVersion) {
+
+<span class="nc" id="L191">        this.schemaVersion = schemaVersion;</span>
+<span class="nc" id="L192">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
