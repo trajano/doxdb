@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Country.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-sample-ejb</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.sample.json</a> &gt; <span class="el_source">Country.java</span></div><h1>Country.java</h1><pre class="source lang-java linenums">
+package net.trajano.doxdb.sample.json;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+<span class="pc" id="L10">@Generated(&quot;org.jsonschema2pojo&quot;)</span>
+public enum Country {
+
+<span class="fc" id="L13">    AF(&quot;AF&quot;),</span>
+<span class="fc" id="L14">    AX(&quot;AX&quot;),</span>
+<span class="fc" id="L15">    AL(&quot;AL&quot;),</span>
+<span class="fc" id="L16">    DZ(&quot;DZ&quot;),</span>
+<span class="fc" id="L17">    AS(&quot;AS&quot;),</span>
+<span class="fc" id="L18">    AD(&quot;AD&quot;),</span>
+<span class="fc" id="L19">    AO(&quot;AO&quot;),</span>
+<span class="fc" id="L20">    AI(&quot;AI&quot;),</span>
+<span class="fc" id="L21">    AQ(&quot;AQ&quot;),</span>
+<span class="fc" id="L22">    AG(&quot;AG&quot;),</span>
+<span class="fc" id="L23">    AR(&quot;AR&quot;),</span>
+<span class="fc" id="L24">    AM(&quot;AM&quot;),</span>
+<span class="fc" id="L25">    AW(&quot;AW&quot;),</span>
+<span class="fc" id="L26">    AU(&quot;AU&quot;),</span>
+<span class="fc" id="L27">    AT(&quot;AT&quot;),</span>
+<span class="fc" id="L28">    AZ(&quot;AZ&quot;),</span>
+<span class="fc" id="L29">    BS(&quot;BS&quot;),</span>
+<span class="fc" id="L30">    BH(&quot;BH&quot;),</span>
+<span class="fc" id="L31">    BD(&quot;BD&quot;),</span>
+<span class="fc" id="L32">    BB(&quot;BB&quot;),</span>
+<span class="fc" id="L33">    BY(&quot;BY&quot;),</span>
+<span class="fc" id="L34">    BE(&quot;BE&quot;),</span>
+<span class="fc" id="L35">    BZ(&quot;BZ&quot;),</span>
+<span class="fc" id="L36">    BJ(&quot;BJ&quot;),</span>
+<span class="fc" id="L37">    BM(&quot;BM&quot;),</span>
+<span class="fc" id="L38">    BT(&quot;BT&quot;),</span>
+<span class="fc" id="L39">    BO(&quot;BO&quot;),</span>
+<span class="fc" id="L40">    BA(&quot;BA&quot;),</span>
+<span class="fc" id="L41">    BW(&quot;BW&quot;),</span>
+<span class="fc" id="L42">    BV(&quot;BV&quot;),</span>
+<span class="fc" id="L43">    BR(&quot;BR&quot;),</span>
+<span class="fc" id="L44">    IO(&quot;IO&quot;),</span>
+<span class="fc" id="L45">    BN(&quot;BN&quot;),</span>
+<span class="fc" id="L46">    BG(&quot;BG&quot;),</span>
+<span class="fc" id="L47">    BF(&quot;BF&quot;),</span>
+<span class="fc" id="L48">    BI(&quot;BI&quot;),</span>
+<span class="fc" id="L49">    KH(&quot;KH&quot;),</span>
+<span class="fc" id="L50">    CM(&quot;CM&quot;),</span>
+<span class="fc" id="L51">    CA(&quot;CA&quot;),</span>
+<span class="fc" id="L52">    CV(&quot;CV&quot;),</span>
+<span class="fc" id="L53">    KY(&quot;KY&quot;),</span>
+<span class="fc" id="L54">    CF(&quot;CF&quot;),</span>
+<span class="fc" id="L55">    TD(&quot;TD&quot;),</span>
+<span class="fc" id="L56">    CL(&quot;CL&quot;),</span>
+<span class="fc" id="L57">    CN(&quot;CN&quot;),</span>
+<span class="fc" id="L58">    CX(&quot;CX&quot;),</span>
+<span class="fc" id="L59">    CC(&quot;CC&quot;),</span>
+<span class="fc" id="L60">    CO(&quot;CO&quot;),</span>
+<span class="fc" id="L61">    KM(&quot;KM&quot;),</span>
+<span class="fc" id="L62">    CG(&quot;CG&quot;),</span>
+<span class="fc" id="L63">    CD(&quot;CD&quot;),</span>
+<span class="fc" id="L64">    CK(&quot;CK&quot;),</span>
+<span class="fc" id="L65">    CR(&quot;CR&quot;),</span>
+<span class="fc" id="L66">    CI(&quot;CI&quot;),</span>
+<span class="fc" id="L67">    HR(&quot;HR&quot;),</span>
+<span class="fc" id="L68">    CU(&quot;CU&quot;),</span>
+<span class="fc" id="L69">    CY(&quot;CY&quot;),</span>
+<span class="fc" id="L70">    CZ(&quot;CZ&quot;),</span>
+<span class="fc" id="L71">    DK(&quot;DK&quot;),</span>
+<span class="fc" id="L72">    DJ(&quot;DJ&quot;),</span>
+<span class="fc" id="L73">    DM(&quot;DM&quot;),</span>
+<span class="fc" id="L74">    DO(&quot;DO&quot;),</span>
+<span class="fc" id="L75">    EC(&quot;EC&quot;),</span>
+<span class="fc" id="L76">    EG(&quot;EG&quot;),</span>
+<span class="fc" id="L77">    SV(&quot;SV&quot;),</span>
+<span class="fc" id="L78">    GQ(&quot;GQ&quot;),</span>
+<span class="fc" id="L79">    ER(&quot;ER&quot;),</span>
+<span class="fc" id="L80">    EE(&quot;EE&quot;),</span>
+<span class="fc" id="L81">    ET(&quot;ET&quot;),</span>
+<span class="fc" id="L82">    FK(&quot;FK&quot;),</span>
+<span class="fc" id="L83">    FO(&quot;FO&quot;),</span>
+<span class="fc" id="L84">    FJ(&quot;FJ&quot;),</span>
+<span class="fc" id="L85">    FI(&quot;FI&quot;),</span>
+<span class="fc" id="L86">    FR(&quot;FR&quot;),</span>
+<span class="fc" id="L87">    GF(&quot;GF&quot;),</span>
+<span class="fc" id="L88">    PF(&quot;PF&quot;),</span>
+<span class="fc" id="L89">    TF(&quot;TF&quot;),</span>
+<span class="fc" id="L90">    GA(&quot;GA&quot;),</span>
+<span class="fc" id="L91">    GM(&quot;GM&quot;),</span>
+<span class="fc" id="L92">    GE(&quot;GE&quot;),</span>
+<span class="fc" id="L93">    DE(&quot;DE&quot;),</span>
+<span class="fc" id="L94">    GH(&quot;GH&quot;),</span>
+<span class="fc" id="L95">    GI(&quot;GI&quot;),</span>
+<span class="fc" id="L96">    GR(&quot;GR&quot;),</span>
+<span class="fc" id="L97">    GL(&quot;GL&quot;),</span>
+<span class="fc" id="L98">    GD(&quot;GD&quot;),</span>
+<span class="fc" id="L99">    GP(&quot;GP&quot;),</span>
+<span class="fc" id="L100">    GU(&quot;GU&quot;),</span>
+<span class="fc" id="L101">    GT(&quot;GT&quot;),</span>
+<span class="fc" id="L102">    GG(&quot;GG&quot;),</span>
+<span class="fc" id="L103">    GN(&quot;GN&quot;),</span>
+<span class="fc" id="L104">    GW(&quot;GW&quot;),</span>
+<span class="fc" id="L105">    GY(&quot;GY&quot;),</span>
+<span class="fc" id="L106">    HT(&quot;HT&quot;),</span>
+<span class="fc" id="L107">    HM(&quot;HM&quot;),</span>
+<span class="fc" id="L108">    VA(&quot;VA&quot;),</span>
+<span class="fc" id="L109">    HN(&quot;HN&quot;),</span>
+<span class="fc" id="L110">    HK(&quot;HK&quot;),</span>
+<span class="fc" id="L111">    HU(&quot;HU&quot;),</span>
+<span class="fc" id="L112">    IS(&quot;IS&quot;),</span>
+<span class="fc" id="L113">    IN(&quot;IN&quot;),</span>
+<span class="fc" id="L114">    ID(&quot;ID&quot;),</span>
+<span class="fc" id="L115">    IR(&quot;IR&quot;),</span>
+<span class="fc" id="L116">    IQ(&quot;IQ&quot;),</span>
+<span class="fc" id="L117">    IE(&quot;IE&quot;),</span>
+<span class="fc" id="L118">    IM(&quot;IM&quot;),</span>
+<span class="fc" id="L119">    IL(&quot;IL&quot;),</span>
+<span class="fc" id="L120">    IT(&quot;IT&quot;),</span>
+<span class="fc" id="L121">    JM(&quot;JM&quot;),</span>
+<span class="fc" id="L122">    JP(&quot;JP&quot;),</span>
+<span class="fc" id="L123">    JE(&quot;JE&quot;),</span>
+<span class="fc" id="L124">    JO(&quot;JO&quot;),</span>
+<span class="fc" id="L125">    KZ(&quot;KZ&quot;),</span>
+<span class="fc" id="L126">    KE(&quot;KE&quot;),</span>
+<span class="fc" id="L127">    KI(&quot;KI&quot;),</span>
+<span class="fc" id="L128">    KP(&quot;KP&quot;),</span>
+<span class="fc" id="L129">    KR(&quot;KR&quot;),</span>
+<span class="fc" id="L130">    KW(&quot;KW&quot;),</span>
+<span class="fc" id="L131">    KG(&quot;KG&quot;),</span>
+<span class="fc" id="L132">    LA(&quot;LA&quot;),</span>
+<span class="fc" id="L133">    LV(&quot;LV&quot;),</span>
+<span class="fc" id="L134">    LB(&quot;LB&quot;),</span>
+<span class="fc" id="L135">    LS(&quot;LS&quot;),</span>
+<span class="fc" id="L136">    LR(&quot;LR&quot;),</span>
+<span class="fc" id="L137">    LY(&quot;LY&quot;),</span>
+<span class="fc" id="L138">    LI(&quot;LI&quot;),</span>
+<span class="fc" id="L139">    LT(&quot;LT&quot;),</span>
+<span class="fc" id="L140">    LU(&quot;LU&quot;),</span>
+<span class="fc" id="L141">    MO(&quot;MO&quot;),</span>
+<span class="fc" id="L142">    MK(&quot;MK&quot;),</span>
+<span class="fc" id="L143">    MG(&quot;MG&quot;),</span>
+<span class="fc" id="L144">    MW(&quot;MW&quot;),</span>
+<span class="fc" id="L145">    MY(&quot;MY&quot;),</span>
+<span class="fc" id="L146">    MV(&quot;MV&quot;),</span>
+<span class="fc" id="L147">    ML(&quot;ML&quot;),</span>
+<span class="fc" id="L148">    MT(&quot;MT&quot;),</span>
+<span class="fc" id="L149">    MH(&quot;MH&quot;),</span>
+<span class="fc" id="L150">    MQ(&quot;MQ&quot;),</span>
+<span class="fc" id="L151">    MR(&quot;MR&quot;),</span>
+<span class="fc" id="L152">    MU(&quot;MU&quot;),</span>
+<span class="fc" id="L153">    YT(&quot;YT&quot;),</span>
+<span class="fc" id="L154">    MX(&quot;MX&quot;),</span>
+<span class="fc" id="L155">    FM(&quot;FM&quot;),</span>
+<span class="fc" id="L156">    MD(&quot;MD&quot;),</span>
+<span class="fc" id="L157">    MC(&quot;MC&quot;),</span>
+<span class="fc" id="L158">    MN(&quot;MN&quot;),</span>
+<span class="fc" id="L159">    MS(&quot;MS&quot;),</span>
+<span class="fc" id="L160">    MA(&quot;MA&quot;),</span>
+<span class="fc" id="L161">    MZ(&quot;MZ&quot;),</span>
+<span class="fc" id="L162">    MM(&quot;MM&quot;),</span>
+<span class="fc" id="L163">    NA(&quot;NA&quot;),</span>
+<span class="fc" id="L164">    NR(&quot;NR&quot;),</span>
+<span class="fc" id="L165">    NP(&quot;NP&quot;),</span>
+<span class="fc" id="L166">    NL(&quot;NL&quot;),</span>
+<span class="fc" id="L167">    AN(&quot;AN&quot;),</span>
+<span class="fc" id="L168">    NC(&quot;NC&quot;),</span>
+<span class="fc" id="L169">    NZ(&quot;NZ&quot;),</span>
+<span class="fc" id="L170">    NI(&quot;NI&quot;),</span>
+<span class="fc" id="L171">    NE(&quot;NE&quot;),</span>
+<span class="fc" id="L172">    NG(&quot;NG&quot;),</span>
+<span class="fc" id="L173">    NU(&quot;NU&quot;),</span>
+<span class="fc" id="L174">    NF(&quot;NF&quot;),</span>
+<span class="fc" id="L175">    MP(&quot;MP&quot;),</span>
+<span class="fc" id="L176">    NO(&quot;NO&quot;),</span>
+<span class="fc" id="L177">    OM(&quot;OM&quot;),</span>
+<span class="fc" id="L178">    PK(&quot;PK&quot;),</span>
+<span class="fc" id="L179">    PW(&quot;PW&quot;),</span>
+<span class="fc" id="L180">    PS(&quot;PS&quot;),</span>
+<span class="fc" id="L181">    PA(&quot;PA&quot;),</span>
+<span class="fc" id="L182">    PG(&quot;PG&quot;),</span>
+<span class="fc" id="L183">    PY(&quot;PY&quot;),</span>
+<span class="fc" id="L184">    PE(&quot;PE&quot;),</span>
+<span class="fc" id="L185">    PH(&quot;PH&quot;),</span>
+<span class="fc" id="L186">    PN(&quot;PN&quot;),</span>
+<span class="fc" id="L187">    PL(&quot;PL&quot;),</span>
+<span class="fc" id="L188">    PT(&quot;PT&quot;),</span>
+<span class="fc" id="L189">    PR(&quot;PR&quot;),</span>
+<span class="fc" id="L190">    QA(&quot;QA&quot;),</span>
+<span class="fc" id="L191">    RE(&quot;RE&quot;),</span>
+<span class="fc" id="L192">    RO(&quot;RO&quot;),</span>
+<span class="fc" id="L193">    RU(&quot;RU&quot;),</span>
+<span class="fc" id="L194">    RW(&quot;RW&quot;),</span>
+<span class="fc" id="L195">    SH(&quot;SH&quot;),</span>
+<span class="fc" id="L196">    KN(&quot;KN&quot;),</span>
+<span class="fc" id="L197">    LC(&quot;LC&quot;),</span>
+<span class="fc" id="L198">    PM(&quot;PM&quot;),</span>
+<span class="fc" id="L199">    VC(&quot;VC&quot;),</span>
+<span class="fc" id="L200">    WS(&quot;WS&quot;),</span>
+<span class="fc" id="L201">    SM(&quot;SM&quot;),</span>
+<span class="fc" id="L202">    ST(&quot;ST&quot;),</span>
+<span class="fc" id="L203">    SA(&quot;SA&quot;),</span>
+<span class="fc" id="L204">    SN(&quot;SN&quot;),</span>
+<span class="fc" id="L205">    CS(&quot;CS&quot;),</span>
+<span class="fc" id="L206">    SC(&quot;SC&quot;),</span>
+<span class="fc" id="L207">    SL(&quot;SL&quot;),</span>
+<span class="fc" id="L208">    SG(&quot;SG&quot;),</span>
+<span class="fc" id="L209">    SK(&quot;SK&quot;),</span>
+<span class="fc" id="L210">    SI(&quot;SI&quot;),</span>
+<span class="fc" id="L211">    SB(&quot;SB&quot;),</span>
+<span class="fc" id="L212">    SO(&quot;SO&quot;),</span>
+<span class="fc" id="L213">    ZA(&quot;ZA&quot;),</span>
+<span class="fc" id="L214">    GS(&quot;GS&quot;),</span>
+<span class="fc" id="L215">    ES(&quot;ES&quot;),</span>
+<span class="fc" id="L216">    LK(&quot;LK&quot;),</span>
+<span class="fc" id="L217">    SD(&quot;SD&quot;),</span>
+<span class="fc" id="L218">    SR(&quot;SR&quot;),</span>
+<span class="fc" id="L219">    SJ(&quot;SJ&quot;),</span>
+<span class="fc" id="L220">    SZ(&quot;SZ&quot;),</span>
+<span class="fc" id="L221">    SE(&quot;SE&quot;),</span>
+<span class="fc" id="L222">    CH(&quot;CH&quot;),</span>
+<span class="fc" id="L223">    SY(&quot;SY&quot;),</span>
+<span class="fc" id="L224">    TW(&quot;TW&quot;),</span>
+<span class="fc" id="L225">    TJ(&quot;TJ&quot;),</span>
+<span class="fc" id="L226">    TZ(&quot;TZ&quot;),</span>
+<span class="fc" id="L227">    TH(&quot;TH&quot;),</span>
+<span class="fc" id="L228">    TL(&quot;TL&quot;),</span>
+<span class="fc" id="L229">    TG(&quot;TG&quot;),</span>
+<span class="fc" id="L230">    TK(&quot;TK&quot;),</span>
+<span class="fc" id="L231">    TO(&quot;TO&quot;),</span>
+<span class="fc" id="L232">    TT(&quot;TT&quot;),</span>
+<span class="fc" id="L233">    TN(&quot;TN&quot;),</span>
+<span class="fc" id="L234">    TR(&quot;TR&quot;),</span>
+<span class="fc" id="L235">    TM(&quot;TM&quot;),</span>
+<span class="fc" id="L236">    TC(&quot;TC&quot;),</span>
+<span class="fc" id="L237">    TV(&quot;TV&quot;),</span>
+<span class="fc" id="L238">    UG(&quot;UG&quot;),</span>
+<span class="fc" id="L239">    UA(&quot;UA&quot;),</span>
+<span class="fc" id="L240">    AE(&quot;AE&quot;),</span>
+<span class="fc" id="L241">    GB(&quot;GB&quot;),</span>
+<span class="fc" id="L242">    US(&quot;US&quot;),</span>
+<span class="fc" id="L243">    UM(&quot;UM&quot;),</span>
+<span class="fc" id="L244">    UY(&quot;UY&quot;),</span>
+<span class="fc" id="L245">    UZ(&quot;UZ&quot;),</span>
+<span class="fc" id="L246">    VU(&quot;VU&quot;),</span>
+<span class="fc" id="L247">    VE(&quot;VE&quot;),</span>
+<span class="fc" id="L248">    VN(&quot;VN&quot;),</span>
+<span class="fc" id="L249">    VG(&quot;VG&quot;),</span>
+<span class="fc" id="L250">    VI(&quot;VI&quot;),</span>
+<span class="fc" id="L251">    WF(&quot;WF&quot;),</span>
+<span class="fc" id="L252">    EH(&quot;EH&quot;),</span>
+<span class="fc" id="L253">    YE(&quot;YE&quot;),</span>
+<span class="fc" id="L254">    ZM(&quot;ZM&quot;),</span>
+<span class="fc" id="L255">    ZW(&quot;ZW&quot;);</span>
+    private final String value;
+<span class="fc" id="L257">    private static Map&lt;String, Country&gt; constants = new HashMap&lt;String, Country&gt;();</span>
+
+    static {
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        for (Country c: values()) {</span>
+<span class="fc" id="L261">            constants.put(c.value, c);</span>
+        }
+<span class="fc" id="L263">    }</span>
+
+<span class="fc" id="L265">    private Country(String value) {</span>
+<span class="fc" id="L266">        this.value = value;</span>
+<span class="fc" id="L267">    }</span>
+
+    @JsonValue
+    @Override
+    public String toString() {
+<span class="fc" id="L272">        return this.value;</span>
+    }
+
+    @JsonCreator
+    public static Country fromValue(String value) {
+<span class="fc" id="L277">        Country constant = constants.get(value);</span>
+<span class="pc bpc" id="L278" title="1 of 2 branches missed.">        if (constant == null) {</span>
+<span class="nc" id="L279">            throw new IllegalArgumentException(value);</span>
+        } else {
+<span class="fc" id="L281">            return constant;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

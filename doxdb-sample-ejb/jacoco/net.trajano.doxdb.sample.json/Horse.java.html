@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Horse.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-sample-ejb</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.sample.json</a> &gt; <span class="el_source">Horse.java</span></div><h1>Horse.java</h1><pre class="source lang-java linenums">
+package net.trajano.doxdb.sample.json;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Generated;
+import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+
+/**
+ * Horse
+ * &lt;p&gt;
+ * Jackson data binding is done on this project for now, this avoids requiring it in the core doxdb
+ * 
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Generated(&quot;org.jsonschema2pojo&quot;)
+@JsonPropertyOrder({
+    &quot;name&quot;,
+    &quot;passport&quot;,
+    &quot;fei&quot;,
+    &quot;usef&quot;,
+    &quot;ec&quot;,
+    &quot;dateOfBirth&quot;,
+    &quot;countryOfBirth&quot;,
+    &quot;gender&quot;,
+    &quot;color&quot;,
+    &quot;breed&quot;,
+    &quot;sire&quot;,
+    &quot;sireDam&quot;
+})
+<span class="fc" id="L40">public class Horse {</span>
+
+    /**
+     * 
+     * (Required)
+     * 
+     */
+    @JsonProperty(&quot;name&quot;)
+    @NotNull
+    private String name;
+    @JsonProperty(&quot;passport&quot;)
+    private String passport;
+    @JsonProperty(&quot;fei&quot;)
+    private String fei;
+    @JsonProperty(&quot;usef&quot;)
+    private String usef;
+    @JsonProperty(&quot;ec&quot;)
+    private String ec;
+    @JsonProperty(&quot;dateOfBirth&quot;)
+    private String dateOfBirth;
+    /**
+     * Country
+     * &lt;p&gt;
+     * 
+     * 
+     */
+    @JsonProperty(&quot;countryOfBirth&quot;)
+    private Country countryOfBirth;
+    @JsonProperty(&quot;gender&quot;)
+    private Horse.Gender gender;
+    @JsonProperty(&quot;color&quot;)
+    private String color;
+    @JsonProperty(&quot;breed&quot;)
+    private String breed;
+    @JsonProperty(&quot;sire&quot;)
+    private String sire;
+    @JsonProperty(&quot;sireDam&quot;)
+    private String sireDam;
+
+    /**
+     * 
+     * (Required)
+     * 
+     * @return
+     *     The name
+     */
+    @JsonProperty(&quot;name&quot;)
+    public String getName() {
+<span class="fc" id="L88">        return name;</span>
+    }
+
+    /**
+     * 
+     * (Required)
+     * 
+     * @param name
+     *     The name
+     */
+    @JsonProperty(&quot;name&quot;)
+    public void setName(String name) {
+<span class="fc" id="L100">        this.name = name;</span>
+<span class="fc" id="L101">    }</span>
+
+    public Horse withName(String name) {
+<span class="fc" id="L104">        this.name = name;</span>
+<span class="fc" id="L105">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The passport
+     */
+    @JsonProperty(&quot;passport&quot;)
+    public String getPassport() {
+<span class="fc" id="L115">        return passport;</span>
+    }
+
+    /**
+     * 
+     * @param passport
+     *     The passport
+     */
+    @JsonProperty(&quot;passport&quot;)
+    public void setPassport(String passport) {
+<span class="nc" id="L125">        this.passport = passport;</span>
+<span class="nc" id="L126">    }</span>
+
+    public Horse withPassport(String passport) {
+<span class="nc" id="L129">        this.passport = passport;</span>
+<span class="nc" id="L130">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The fei
+     */
+    @JsonProperty(&quot;fei&quot;)
+    public String getFei() {
+<span class="fc" id="L140">        return fei;</span>
+    }
+
+    /**
+     * 
+     * @param fei
+     *     The fei
+     */
+    @JsonProperty(&quot;fei&quot;)
+    public void setFei(String fei) {
+<span class="nc" id="L150">        this.fei = fei;</span>
+<span class="nc" id="L151">    }</span>
+
+    public Horse withFei(String fei) {
+<span class="nc" id="L154">        this.fei = fei;</span>
+<span class="nc" id="L155">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The usef
+     */
+    @JsonProperty(&quot;usef&quot;)
+    public String getUsef() {
+<span class="fc" id="L165">        return usef;</span>
+    }
+
+    /**
+     * 
+     * @param usef
+     *     The usef
+     */
+    @JsonProperty(&quot;usef&quot;)
+    public void setUsef(String usef) {
+<span class="nc" id="L175">        this.usef = usef;</span>
+<span class="nc" id="L176">    }</span>
+
+    public Horse withUsef(String usef) {
+<span class="nc" id="L179">        this.usef = usef;</span>
+<span class="nc" id="L180">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The ec
+     */
+    @JsonProperty(&quot;ec&quot;)
+    public String getEc() {
+<span class="fc" id="L190">        return ec;</span>
+    }
+
+    /**
+     * 
+     * @param ec
+     *     The ec
+     */
+    @JsonProperty(&quot;ec&quot;)
+    public void setEc(String ec) {
+<span class="nc" id="L200">        this.ec = ec;</span>
+<span class="nc" id="L201">    }</span>
+
+    public Horse withEc(String ec) {
+<span class="nc" id="L204">        this.ec = ec;</span>
+<span class="nc" id="L205">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The dateOfBirth
+     */
+    @JsonProperty(&quot;dateOfBirth&quot;)
+    public String getDateOfBirth() {
+<span class="fc" id="L215">        return dateOfBirth;</span>
+    }
+
+    /**
+     * 
+     * @param dateOfBirth
+     *     The dateOfBirth
+     */
+    @JsonProperty(&quot;dateOfBirth&quot;)
+    public void setDateOfBirth(String dateOfBirth) {
+<span class="nc" id="L225">        this.dateOfBirth = dateOfBirth;</span>
+<span class="nc" id="L226">    }</span>
+
+    public Horse withDateOfBirth(String dateOfBirth) {
+<span class="nc" id="L229">        this.dateOfBirth = dateOfBirth;</span>
+<span class="nc" id="L230">        return this;</span>
+    }
+
+    /**
+     * Country
+     * &lt;p&gt;
+     * 
+     * 
+     * @return
+     *     The countryOfBirth
+     */
+    @JsonProperty(&quot;countryOfBirth&quot;)
+    public Country getCountryOfBirth() {
+<span class="fc" id="L243">        return countryOfBirth;</span>
+    }
+
+    /**
+     * Country
+     * &lt;p&gt;
+     * 
+     * 
+     * @param countryOfBirth
+     *     The countryOfBirth
+     */
+    @JsonProperty(&quot;countryOfBirth&quot;)
+    public void setCountryOfBirth(Country countryOfBirth) {
+<span class="fc" id="L256">        this.countryOfBirth = countryOfBirth;</span>
+<span class="fc" id="L257">    }</span>
+
+    public Horse withCountryOfBirth(Country countryOfBirth) {
+<span class="fc" id="L260">        this.countryOfBirth = countryOfBirth;</span>
+<span class="fc" id="L261">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The gender
+     */
+    @JsonProperty(&quot;gender&quot;)
+    public Horse.Gender getGender() {
+<span class="fc" id="L271">        return gender;</span>
+    }
+
+    /**
+     * 
+     * @param gender
+     *     The gender
+     */
+    @JsonProperty(&quot;gender&quot;)
+    public void setGender(Horse.Gender gender) {
+<span class="fc" id="L281">        this.gender = gender;</span>
+<span class="fc" id="L282">    }</span>
+
+    public Horse withGender(Horse.Gender gender) {
+<span class="fc" id="L285">        this.gender = gender;</span>
+<span class="fc" id="L286">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The color
+     */
+    @JsonProperty(&quot;color&quot;)
+    public String getColor() {
+<span class="fc" id="L296">        return color;</span>
+    }
+
+    /**
+     * 
+     * @param color
+     *     The color
+     */
+    @JsonProperty(&quot;color&quot;)
+    public void setColor(String color) {
+<span class="nc" id="L306">        this.color = color;</span>
+<span class="nc" id="L307">    }</span>
+
+    public Horse withColor(String color) {
+<span class="nc" id="L310">        this.color = color;</span>
+<span class="nc" id="L311">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The breed
+     */
+    @JsonProperty(&quot;breed&quot;)
+    public String getBreed() {
+<span class="fc" id="L321">        return breed;</span>
+    }
+
+    /**
+     * 
+     * @param breed
+     *     The breed
+     */
+    @JsonProperty(&quot;breed&quot;)
+    public void setBreed(String breed) {
+<span class="nc" id="L331">        this.breed = breed;</span>
+<span class="nc" id="L332">    }</span>
+
+    public Horse withBreed(String breed) {
+<span class="nc" id="L335">        this.breed = breed;</span>
+<span class="nc" id="L336">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The sire
+     */
+    @JsonProperty(&quot;sire&quot;)
+    public String getSire() {
+<span class="fc" id="L346">        return sire;</span>
+    }
+
+    /**
+     * 
+     * @param sire
+     *     The sire
+     */
+    @JsonProperty(&quot;sire&quot;)
+    public void setSire(String sire) {
+<span class="nc" id="L356">        this.sire = sire;</span>
+<span class="nc" id="L357">    }</span>
+
+    public Horse withSire(String sire) {
+<span class="nc" id="L360">        this.sire = sire;</span>
+<span class="nc" id="L361">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The sireDam
+     */
+    @JsonProperty(&quot;sireDam&quot;)
+    public String getSireDam() {
+<span class="fc" id="L371">        return sireDam;</span>
+    }
+
+    /**
+     * 
+     * @param sireDam
+     *     The sireDam
+     */
+    @JsonProperty(&quot;sireDam&quot;)
+    public void setSireDam(String sireDam) {
+<span class="nc" id="L381">        this.sireDam = sireDam;</span>
+<span class="nc" id="L382">    }</span>
+
+    public Horse withSireDam(String sireDam) {
+<span class="nc" id="L385">        this.sireDam = sireDam;</span>
+<span class="nc" id="L386">        return this;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L391">        return ToStringBuilder.reflectionToString(this);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L396">        return new HashCodeBuilder().append(name).append(passport).append(fei).append(usef).append(ec).append(dateOfBirth).append(countryOfBirth).append(gender).append(color).append(breed).append(sire).append(sireDam).toHashCode();</span>
+    }
+
+    @Override
+    public boolean equals(Object other) {
+<span class="pc bpc" id="L401" title="1 of 2 branches missed.">        if (other == this) {</span>
+<span class="nc" id="L402">            return true;</span>
+        }
+<span class="pc bpc" id="L404" title="1 of 2 branches missed.">        if ((other instanceof Horse) == false) {</span>
+<span class="nc" id="L405">            return false;</span>
+        }
+<span class="fc" id="L407">        Horse rhs = ((Horse) other);</span>
+<span class="fc" id="L408">        return new EqualsBuilder().append(name, rhs.name).append(passport, rhs.passport).append(fei, rhs.fei).append(usef, rhs.usef).append(ec, rhs.ec).append(dateOfBirth, rhs.dateOfBirth).append(countryOfBirth, rhs.countryOfBirth).append(gender, rhs.gender).append(color, rhs.color).append(breed, rhs.breed).append(sire, rhs.sire).append(sireDam, rhs.sireDam).isEquals();</span>
+    }
+
+<span class="pc" id="L411">    @Generated(&quot;org.jsonschema2pojo&quot;)</span>
+    public static enum Gender {
+
+<span class="fc" id="L414">        MARE(&quot;mare&quot;),</span>
+<span class="fc" id="L415">        GELDING(&quot;gelding&quot;);</span>
+        private final String value;
+<span class="fc" id="L417">        private static Map&lt;String, Horse.Gender&gt; constants = new HashMap&lt;String, Horse.Gender&gt;();</span>
+
+        static {
+<span class="fc bfc" id="L420" title="All 2 branches covered.">            for (Horse.Gender c: values()) {</span>
+<span class="fc" id="L421">                constants.put(c.value, c);</span>
+            }
+<span class="fc" id="L423">        }</span>
+
+<span class="fc" id="L425">        private Gender(String value) {</span>
+<span class="fc" id="L426">            this.value = value;</span>
+<span class="fc" id="L427">        }</span>
+
+        @JsonValue
+        @Override
+        public String toString() {
+<span class="fc" id="L432">            return this.value;</span>
+        }
+
+        @JsonCreator
+        public static Horse.Gender fromValue(String value) {
+<span class="fc" id="L437">            Horse.Gender constant = constants.get(value);</span>
+<span class="pc bpc" id="L438" title="1 of 2 branches missed.">            if (constant == null) {</span>
+<span class="nc" id="L439">                throw new IllegalArgumentException(value);</span>
+            } else {
+<span class="fc" id="L441">                return constant;</span>
+            }
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

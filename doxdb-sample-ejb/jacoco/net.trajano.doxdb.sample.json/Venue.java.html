@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Venue.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-sample-ejb</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.sample.json</a> &gt; <span class="el_source">Venue.java</span></div><h1>Venue.java</h1><pre class="source lang-java linenums">
+package net.trajano.doxdb.sample.json;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Generated;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+
+/**
+ * venue
+ * &lt;p&gt;
+ * Jackson data binding is done on this project for now, this avoids requiring it in the core doxdb
+ * 
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Generated(&quot;org.jsonschema2pojo&quot;)
+@JsonPropertyOrder({
+    &quot;name&quot;,
+    &quot;language&quot;,
+    &quot;ring&quot;
+})
+<span class="nc" id="L30">public class Venue {</span>
+
+    /**
+     * 
+     * (Required)
+     * 
+     */
+    @JsonProperty(&quot;name&quot;)
+    @NotNull
+    private String name;
+    @JsonProperty(&quot;language&quot;)
+    private String language;
+<span class="nc" id="L42">    @JsonProperty(&quot;ring&quot;)</span>
+    @Valid
+    private List&lt;Object&gt; ring = new ArrayList&lt;Object&gt;();
+
+    /**
+     * 
+     * (Required)
+     * 
+     * @return
+     *     The name
+     */
+    @JsonProperty(&quot;name&quot;)
+    public String getName() {
+<span class="nc" id="L55">        return name;</span>
+    }
+
+    /**
+     * 
+     * (Required)
+     * 
+     * @param name
+     *     The name
+     */
+    @JsonProperty(&quot;name&quot;)
+    public void setName(String name) {
+<span class="nc" id="L67">        this.name = name;</span>
+<span class="nc" id="L68">    }</span>
+
+    public Venue withName(String name) {
+<span class="nc" id="L71">        this.name = name;</span>
+<span class="nc" id="L72">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The language
+     */
+    @JsonProperty(&quot;language&quot;)
+    public String getLanguage() {
+<span class="nc" id="L82">        return language;</span>
+    }
+
+    /**
+     * 
+     * @param language
+     *     The language
+     */
+    @JsonProperty(&quot;language&quot;)
+    public void setLanguage(String language) {
+<span class="nc" id="L92">        this.language = language;</span>
+<span class="nc" id="L93">    }</span>
+
+    public Venue withLanguage(String language) {
+<span class="nc" id="L96">        this.language = language;</span>
+<span class="nc" id="L97">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The ring
+     */
+    @JsonProperty(&quot;ring&quot;)
+    public List&lt;Object&gt; getRing() {
+<span class="nc" id="L107">        return ring;</span>
+    }
+
+    /**
+     * 
+     * @param ring
+     *     The ring
+     */
+    @JsonProperty(&quot;ring&quot;)
+    public void setRing(List&lt;Object&gt; ring) {
+<span class="nc" id="L117">        this.ring = ring;</span>
+<span class="nc" id="L118">    }</span>
+
+    public Venue withRing(List&lt;Object&gt; ring) {
+<span class="nc" id="L121">        this.ring = ring;</span>
+<span class="nc" id="L122">        return this;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L127">        return ToStringBuilder.reflectionToString(this);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L132">        return new HashCodeBuilder().append(name).append(language).append(ring).toHashCode();</span>
+    }
+
+    @Override
+    public boolean equals(Object other) {
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (other == this) {</span>
+<span class="nc" id="L138">            return true;</span>
+        }
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        if ((other instanceof Venue) == false) {</span>
+<span class="nc" id="L141">            return false;</span>
+        }
+<span class="nc" id="L143">        Venue rhs = ((Venue) other);</span>
+<span class="nc" id="L144">        return new EqualsBuilder().append(name, rhs.name).append(language, rhs.language).append(ring, rhs.ring).isEquals();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
