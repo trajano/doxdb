@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>IndexView.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-core</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb</a> &gt; <span class="el_source">IndexView.java</span></div><h1>IndexView.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb;
+
+import java.io.Serializable;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+/**
+ * This represents a view of the data that will be stored in the index.
+ *
+ * @author Archimedes
+ */
+<span class="nc" id="L14">public class IndexView implements</span>
+    Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = -378816417510576056L;
+
+    private String collection;
+
+<span class="nc" id="L24">    private final ConcurrentMap&lt;String, Double&gt; doubles = new ConcurrentHashMap&lt;&gt;();</span>
+
+    /**
+     * Associated DoxID that was used to populate the view.
+     */
+    private DoxID doxID;
+
+    /**
+     * Defines the index that will store this data view. The purpose is to allow
+     * multiple indices to co-exist and prevent accidental views from another
+     * index. Underneath it all it is still one table. The value will be stored
+     * in &quot;_index&quot; field.
+     */
+    private String index;
+
+<span class="nc" id="L39">    private final ConcurrentMap&lt;String, Long&gt; longs = new ConcurrentHashMap&lt;&gt;();</span>
+
+    /**
+     * Flag to indicate that the data should be masked. If the data is masked,
+     * the ID and URLs should not appear in the search results.
+     */
+<span class="nc" id="L45">    private boolean masked = false;</span>
+
+    /**
+     * If this is true, the entry will be removed from the index.
+     */
+    private boolean remove;
+
+<span class="nc" id="L52">    private final ConcurrentMap&lt;String, String&gt; strings = new ConcurrentHashMap&lt;&gt;();</span>
+
+<span class="nc" id="L54">    private final StringBuilder text = new StringBuilder();</span>
+
+<span class="nc" id="L56">    private final ConcurrentMap&lt;String, String&gt; texts = new ConcurrentHashMap&lt;&gt;();</span>
+
+    /**
+     * Appends the contents of the specified text to the full text search
+     * content.
+     *
+     * @param text
+     * @return
+     */
+    public IndexView appendText(final String text) {
+
+<span class="nc" id="L67">        this.text.append(text)</span>
+            .append('\n');
+<span class="nc" id="L69">        return this;</span>
+    }
+
+    public String getCollection() {
+
+<span class="nc" id="L74">        return collection;</span>
+    }
+
+    public Set&lt;Entry&lt;String, Double&gt;&gt; getDoubles() {
+
+<span class="nc" id="L79">        return doubles.entrySet();</span>
+    }
+
+    public DoxID getDoxID() {
+
+<span class="nc" id="L84">        return doxID;</span>
+    }
+
+    public String getIndex() {
+
+<span class="nc" id="L89">        return index;</span>
+    }
+
+    public Set&lt;Entry&lt;String, Long&gt;&gt; getLongs() {
+
+<span class="nc" id="L94">        return longs.entrySet();</span>
+    }
+
+    public Set&lt;Entry&lt;String, String&gt;&gt; getStrings() {
+
+<span class="nc" id="L99">        return strings.entrySet();</span>
+    }
+
+    /**
+     * The value will be stored in &quot;_text&quot; which will also be the default.
+     *
+     * @return
+     */
+    public String getText() {
+
+<span class="nc" id="L109">        return text.toString();</span>
+    }
+
+    public Set&lt;Entry&lt;String, String&gt;&gt; getTexts() {
+
+<span class="nc" id="L114">        return texts.entrySet();</span>
+    }
+
+    public boolean isMasked() {
+
+<span class="nc" id="L119">        return masked;</span>
+    }
+
+    /**
+     * Gets remove.
+     *
+     * @return the remove
+     */
+    public boolean isRemove() {
+
+<span class="nc" id="L129">        return remove;</span>
+    }
+
+    public void setCollection(final String collection) {
+
+<span class="nc" id="L134">        this.collection = collection;</span>
+<span class="nc" id="L135">    }</span>
+
+    public IndexView setDouble(final String name,
+        final double value) {
+
+<span class="nc" id="L140">        doubles.put(name, value);</span>
+<span class="nc" id="L141">        return this;</span>
+    }
+
+    public void setDoxID(final DoxID doxId) {
+
+<span class="nc" id="L146">        doxID = doxId;</span>
+
+<span class="nc" id="L148">    }</span>
+
+    public IndexView setIndex(final String index) {
+
+<span class="nc" id="L152">        this.index = index;</span>
+<span class="nc" id="L153">        return this;</span>
+    }
+
+    public IndexView setLong(final String name,
+        final long value) {
+
+<span class="nc" id="L159">        longs.put(name, value);</span>
+<span class="nc" id="L160">        return this;</span>
+    }
+
+    public void setMasked(final boolean masked) {
+
+<span class="nc" id="L165">        this.masked = masked;</span>
+<span class="nc" id="L166">    }</span>
+
+    /**
+     * Sets remove.
+     *
+     * @param remove
+     *            the remove to set
+     */
+    public void setRemove(final boolean remove) {
+
+<span class="nc" id="L176">        this.remove = remove;</span>
+<span class="nc" id="L177">    }</span>
+
+    /**
+     * Strings are not broken up into tokens and must be exact match. The
+     * original text is stored in the index.
+     *
+     * @param name
+     * @param stringValue
+     * @return
+     */
+    public IndexView setString(final String name,
+        final String stringValue) {
+
+<span class="nc" id="L190">        strings.put(name, stringValue);</span>
+<span class="nc" id="L191">        return this;</span>
+
+    }
+
+    /**
+     * Text are broken up into tokens. The original text is not stored in the
+     * index.
+     *
+     * @param name
+     * @param stringValue
+     * @return
+     */
+    public IndexView setText(final String name,
+        final String stringValue) {
+
+<span class="nc" id="L206">        texts.put(name, stringValue);</span>
+<span class="nc" id="L207">        return this;</span>
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

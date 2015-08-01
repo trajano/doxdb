@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pmd-cpd>
+   <duplication lines="11" tokens="111">
+      <file line="730"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-core\src\main\java\net\trajano\doxdb\jdbc\JdbcDoxDAO.java"/>
+      <file line="765"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-core\src\main\java\net\trajano\doxdb\jdbc\JdbcDoxDAO.java"/>
+      <codefragment><![CDATA[                    throw new EntityNotFoundException();
+                }
+                final DoxMeta meta = new DoxMeta();
+                meta.setId(rs.getLong(1));
+                meta.setDoxId(new DoxID(rs.getString(2)));
+                meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));
+                meta.setCreatedOn(rs.getTimestamp(4));
+                meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));
+                meta.setLastUpdatedOn(rs.getTimestamp(6));
+                meta.setVersion(rs.getInt(7));
+                meta.setSchemaVersion(rs.getInt(8));]]></codefragment>
+   </duplication>
+</pmd-cpd>

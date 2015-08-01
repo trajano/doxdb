@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcDoxDAO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-core</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.jdbc</a> &gt; <span class="el_source">JdbcDoxDAO.java</span></div><h1>JdbcDoxDAO.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.jdbc;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.security.Principal;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.Calendar;
+
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.OptimisticLockException;
+import javax.persistence.PersistenceException;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.DatatypeConverter;
+
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
+import net.trajano.doxdb.internal.DoxPrincipal;
+
+public class JdbcDoxDAO implements
+    DoxDAO {
+
+    private final Connection c;
+
+    private final String copyToTombstoneSql;
+
+    private final String deleteSql;
+
+    private final boolean hasOob;
+
+    private final String insertSql;
+
+    private final long lobSize;
+
+    private final String oobCheckSql;
+
+    final String oobCopyAllToTombstoneSql;
+
+    private final String oobCopyToTombstoneSql;
+
+    final String oobDeleteAllSql;
+
+    private final String oobDeleteSql;
+
+    private final String oobInsertSql;
+
+    /**
+     * Size of the lobs for OOB in bytes.
+     */
+    private final long oobLobSize;
+
+    private final String oobReadAllSql;
+
+    private final String oobReadContentSql;
+
+    private final String oobReadForUpdateSql;
+
+    private final String oobReadSql;
+
+    private final String oobTableName;
+
+    private final String oobTombstoneDeleteSql;
+
+    private final String oobTombstoneTableName;
+
+    private final String oobUpdateSql;
+
+    private final String readContentSql;
+
+    private final String readForUpdateSql;
+
+    private final String readSql;
+
+    private final String tableName;
+
+    private final String tombstoneTableName;
+
+    private final String updateSql;
+
+    private final String updateVersionSql;
+
+    public JdbcDoxDAO(final Connection c,
+<span class="nc" id="L97">        final DoxConfiguration configuration) {</span>
+
+<span class="nc" id="L99">        this.c = c;</span>
+<span class="nc" id="L100">        tableName = configuration.getTableName()</span>
+            .toUpperCase();
+<span class="nc" id="L102">        hasOob = configuration.isHasOob();</span>
+<span class="nc" id="L103">        lobSize = configuration.getLobSize();</span>
+<span class="nc" id="L104">        oobLobSize = configuration.getOobLobSize();</span>
+<span class="nc" id="L105">        tombstoneTableName = (tableName + &quot;TOMBSTONE&quot;).toUpperCase();</span>
+<span class="nc" id="L106">        oobTableName = (tableName + &quot;OOB&quot;).toUpperCase();</span>
+<span class="nc" id="L107">        oobTombstoneTableName = (tableName + &quot;OOBTOMBSTONE&quot;).toUpperCase();</span>
+        try {
+<span class="nc" id="L109">            createTable();</span>
+<span class="nc" id="L110">            insertSql = String.format(&quot;insert into %1$s (CONTENT, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION, CONTENTVERSION) values (?, ?,?,?,?,?,?,?)&quot;, tableName);</span>
+<span class="nc" id="L111">            oobInsertSql = String.format(&quot;insert into %1$s (CONTENT, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION) values (?,?,?,?,?,?,?,?,?)&quot;, oobTableName);</span>
+
+<span class="nc" id="L113">            readSql = &quot;select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION, CONTENTVERSION from &quot; + tableName + &quot; E where E.DOXID=?&quot;;</span>
+<span class="nc" id="L114">            oobReadSql = &quot;select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from &quot; + tableName + &quot;OOB E where E.DOXID=? and E.REFERENCE = ?&quot;;</span>
+<span class="nc" id="L115">            oobCheckSql = String.format(&quot;select id, version from %s where parentid = ? and reference = ? for update&quot;, tableName + &quot;OOB&quot;);</span>
+<span class="nc" id="L116">            oobTombstoneDeleteSql = String.format(&quot;delete from %s where doxid = ? and reference = ?&quot;, oobTombstoneTableName);</span>
+<span class="nc" id="L117">            readForUpdateSql = &quot;select ID, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION, CONTENTVERSION from &quot; + tableName + &quot; E where E.DOXID=? AND E.VERSION = ? FOR UPDATE&quot;;</span>
+            // when reading for update on the OOB data it will lock all the OOB
+            // records not just the one referenced by the name.
+            // perhaps in future versions we will optimistic lock the OOB data
+            // but that would mean passing two version numbers
+<span class="nc" id="L122">            oobReadForUpdateSql = &quot;select ID, DOXID, PARENTID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from &quot; + tableName + &quot;OOB E where PARENTID = ? FOR UPDATE&quot;;</span>
+
+<span class="nc" id="L124">            readContentSql = &quot;select E.CONTENT from &quot; + tableName + &quot; E where E.ID=?&quot;;</span>
+<span class="nc" id="L125">            oobReadContentSql = &quot;select E.CONTENT from &quot; + tableName + &quot;OOB E where E.PARENTID=? and REFERENCE=?&quot;;</span>
+
+<span class="nc" id="L127">            updateSql = &quot;update &quot; + tableName + &quot; set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1, CONTENTVERSION=? where ID=? and VERSION=?&quot;;</span>
+<span class="nc" id="L128">            updateVersionSql = &quot;update &quot; + tableName + &quot; set VERSION=VERSION+1 where ID=? and VERSION=?&quot;;</span>
+<span class="nc" id="L129">            oobUpdateSql = &quot;update &quot; + tableName + &quot;OOB set CONTENT=?, LASTUPDATEDBY=?, LASTUPDATEDON=?, VERSION=VERSION+1 where ID=? and VERSION=?&quot;;</span>
+
+<span class="nc" id="L131">            copyToTombstoneSql = String.format(&quot;insert into %1$s (CONTENT, CONTENTVERSION, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, CONTENTVERSION, DOXID, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where id = ? and version = ?&quot;, tombstoneTableName, tableName);</span>
+<span class="nc" id="L132">            oobCopyAllToTombstoneSql = &quot;insert into &quot; + tableName + &quot;OOBTOMBSTONE (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from &quot; + tableName + &quot;OOB where parentid = ?&quot;;</span>
+<span class="nc" id="L133">            deleteSql = &quot;delete from &quot; + tableName + &quot; where ID=? and VERSION=?&quot;;</span>
+<span class="nc" id="L134">            oobReadAllSql = String.format(&quot;select CONTENT, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, VERSION from %1$s E where E.PARENTID=?&quot;, oobTableName);</span>
+<span class="nc" id="L135">            oobDeleteAllSql = &quot;delete from &quot; + tableName + &quot;OOB where PARENTID = ?&quot;;</span>
+<span class="nc" id="L136">            oobDeleteSql = &quot;delete from &quot; + tableName + &quot;OOB where PARENTID = ? AND REFERENCE = ?&quot;;</span>
+<span class="nc" id="L137">            oobCopyToTombstoneSql = String.format(&quot;insert into %1$s (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where parentid = ? and reference = ?&quot;, oobTombstoneTableName, oobTableName);</span>
+
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            for (final String sql : new String[] {</span>
+                insertSql,
+                readSql,
+                readContentSql,
+                updateSql,
+                updateVersionSql,
+                deleteSql,
+                readForUpdateSql
+            }) {
+<span class="nc" id="L148">                c.prepareStatement(sql)</span>
+                    .close();
+            }
+
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            if (hasOob) {</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                for (final String sql : new String[] {</span>
+                    oobReadAllSql,
+                    oobInsertSql,
+                    oobReadSql,
+                    oobReadContentSql,
+                    oobUpdateSql,
+                    oobDeleteSql,
+                    oobReadForUpdateSql,
+                    oobCheckSql,
+                    oobTombstoneDeleteSql,
+                    oobCopyAllToTombstoneSql,
+                    oobDeleteAllSql,
+                    oobCopyToTombstoneSql
+                }) {
+<span class="nc" id="L167">                    c.prepareStatement(sql)</span>
+                        .close();
+                }
+            }
+
+<span class="nc" id="L172">        } catch (final SQLException e) {</span>
+<span class="nc" id="L173">            throw new PersistenceException(e);</span>
+<span class="nc" id="L174">        }</span>
+<span class="nc" id="L175">    }</span>
+
+    public JdbcDoxDAO(final Connection c,
+        final String tableName) {
+
+<span class="nc" id="L180">        this(c, new DoxConfiguration(tableName));</span>
+<span class="nc" id="L181">    }</span>
+
+    /**
+     * Attaching will increment the doxid record version.
+     *
+     * @param doxId
+     * @param reference
+     * @param in
+     * @param version
+     * @param principal
+     */
+    @Override
+    public void attach(final DoxID doxId,
+        final String reference,
+        final InputStream in,
+        final int version,
+        final Principal principal) {
+
+<span class="nc" id="L199">        final DoxMeta meta = readMetaAndLock(doxId, version);</span>
+
+<span class="nc" id="L201">        try (final PreparedStatement check = c.prepareStatement(oobCheckSql)) {</span>
+<span class="nc" id="L202">            check.setLong(1, meta.getId());</span>
+<span class="nc" id="L203">            check.setString(2, reference);</span>
+
+<span class="nc" id="L205">            try (final ResultSet checkRs = check.executeQuery()) {</span>
+
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                if (checkRs.next()) {</span>
+                    // if the reference record already exists then do an
+                    // update
+<span class="nc" id="L210">                    final long existingId = checkRs.getLong(1);</span>
+<span class="nc" id="L211">                    final int existingVersion = checkRs.getInt(2);</span>
+
+<span class="nc" id="L213">                    try (final PreparedStatement s = c.prepareStatement(oobUpdateSql)) {</span>
+<span class="nc" id="L214">                        final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
+<span class="nc" id="L215">                        s.setBinaryStream(1, in);</span>
+<span class="nc" id="L216">                        s.setString(2, principal.getName());</span>
+<span class="nc" id="L217">                        s.setTimestamp(3, ts);</span>
+<span class="nc" id="L218">                        s.setLong(4, existingId);</span>
+<span class="nc" id="L219">                        s.setInt(5, existingVersion);</span>
+<span class="nc" id="L220">                        final int count = s.executeUpdate();</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                        if (count != 1) {</span>
+<span class="nc" id="L222">                            throw new PersistenceException(&quot;unable to update OOB&quot;);</span>
+                        }
+<span class="nc" id="L224">                        incrementVersionNumber(meta.getId(), version);</span>
+                        return;
+<span class="nc bnc" id="L226" title="All 8 branches missed.">                    }</span>
+                }
+<span class="nc bnc" id="L228" title="All 12 branches missed.">            }</span>
+<span class="nc bnc" id="L229" title="All 12 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L230">            throw new PersistenceException(e);</span>
+<span class="nc" id="L231">        }</span>
+
+        // Delete any tombstone data if one exists
+<span class="nc" id="L234">        try (final PreparedStatement checkTombStone = c.prepareStatement(oobTombstoneDeleteSql)) {</span>
+<span class="nc" id="L235">            checkTombStone.setString(1, doxId.toString());</span>
+<span class="nc" id="L236">            checkTombStone.setString(2, reference);</span>
+<span class="nc" id="L237">            checkTombStone.executeUpdate();</span>
+<span class="nc bnc" id="L238" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L239">            throw new PersistenceException(e);</span>
+<span class="nc" id="L240">        }</span>
+
+        // Insert a new OOB record
+<span class="nc" id="L243">        try (final PreparedStatement s = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS)) {</span>
+<span class="nc" id="L244">            final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
+<span class="nc" id="L245">            s.setBinaryStream(1, in);</span>
+<span class="nc" id="L246">            s.setString(2, doxId.toString());</span>
+<span class="nc" id="L247">            s.setLong(3, meta.getId());</span>
+<span class="nc" id="L248">            s.setString(4, reference);</span>
+<span class="nc" id="L249">            s.setString(5, principal.getName());</span>
+<span class="nc" id="L250">            s.setTimestamp(6, ts);</span>
+<span class="nc" id="L251">            s.setString(7, principal.getName());</span>
+<span class="nc" id="L252">            s.setTimestamp(8, ts);</span>
+<span class="nc" id="L253">            s.setInt(9, version);</span>
+<span class="nc" id="L254">            s.executeUpdate();</span>
+<span class="nc" id="L255">            incrementVersionNumber(meta.getId(), version);</span>
+<span class="nc bnc" id="L256" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L257">            throw new PersistenceException(e);</span>
+<span class="nc" id="L258">        }</span>
+
+<span class="nc" id="L260">    }</span>
+
+    @Override
+    public DoxID create(final InputStream in,
+        final int contentVersion,
+        final Principal principal) {
+
+<span class="nc" id="L267">        final DoxID doxId = DoxID.generate();</span>
+<span class="nc" id="L268">        try (final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {</span>
+
+<span class="nc" id="L270">            final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
+<span class="nc" id="L271">            s.setBinaryStream(1, in);</span>
+<span class="nc" id="L272">            s.setString(2, doxId.toString());</span>
+<span class="nc" id="L273">            s.setString(3, principal.getName());</span>
+<span class="nc" id="L274">            s.setTimestamp(4, ts);</span>
+<span class="nc" id="L275">            s.setString(5, principal.getName());</span>
+<span class="nc" id="L276">            s.setTimestamp(6, ts);</span>
+<span class="nc" id="L277">            s.setInt(7, 1);</span>
+<span class="nc" id="L278">            s.setInt(8, contentVersion);</span>
+<span class="nc" id="L279">            s.executeUpdate();</span>
+<span class="nc" id="L280">            try (final ResultSet rs = s.getGeneratedKeys()) {</span>
+<span class="nc" id="L281">                rs.next();</span>
+<span class="nc" id="L282">                return doxId;</span>
+<span class="nc bnc" id="L283" title="All 8 branches missed.">            }</span>
+<span class="nc bnc" id="L284" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L285">            throw new PersistenceException(e);</span>
+        }
+    }
+
+    private void createOobTables() throws SQLException {
+
+<span class="nc" id="L291">        try (final ResultSet tables = c.getMetaData()</span>
+            .getTables(null, null, oobTableName, null)) {
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            if (tables.next()) {</span>
+<span class="nc" id="L294">                throw new PersistenceException(&quot;OOB tables for &quot; + tableName + &quot; exist when they are not expected to exist&quot;);</span>
+            }
+
+<span class="nc" id="L297">            try (PreparedStatement s = c.prepareStatement(String.format(&quot;CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, PARENTID BIGINT NOT NULL, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, VERSION INTEGER NOT NULL, CONTENTVERSION INTEGER NOT NULL, PRIMARY KEY (ID))&quot;, oobTableName, oobLobSize))) {</span>
+<span class="nc" id="L298">                s.executeUpdate();</span>
+<span class="nc bnc" id="L299" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L300">            try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$s add unique (DOXID, REFERENCE)&quot;, oobTableName))) {</span>
+<span class="nc" id="L301">                s.executeUpdate();</span>
+<span class="nc bnc" id="L302" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L303">            try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$s add unique (PARENTID, REFERENCE)&quot;, oobTableName))) {</span>
+<span class="nc" id="L304">                s.executeUpdate();</span>
+<span class="nc bnc" id="L305" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L306">            try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$s add foreign key (PARENTID, DOXID) references %2$s (ID, DOXID)&quot;, oobTableName, tableName))) {</span>
+<span class="nc" id="L307">                s.executeUpdate();</span>
+<span class="nc bnc" id="L308" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L309">            try (PreparedStatement s = c.prepareStatement(String.format(&quot;CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, REFERENCE VARCHAR(128) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL, PRIMARY KEY (ID))&quot;, oobTombstoneTableName, oobLobSize))) {</span>
+<span class="nc" id="L310">                s.executeUpdate();</span>
+<span class="nc bnc" id="L311" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L312">            try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$s add unique (DOXID, REFERENCE)&quot;, oobTombstoneTableName))) {</span>
+<span class="nc" id="L313">                s.executeUpdate();</span>
+<span class="nc bnc" id="L314" title="All 8 branches missed.">            }</span>
+
+<span class="nc bnc" id="L316" title="All 8 branches missed.">        }</span>
+<span class="nc" id="L317">    }</span>
+
+    public void createTable() {
+
+<span class="nc" id="L321">        try (final ResultSet tables = c.getMetaData()</span>
+            .getTables(null, null, tableName, null)) {
+<span class="nc bnc" id="L323" title="All 2 branches missed.">            if (!tables.next()) {</span>
+
+<span class="nc" id="L325">                try (PreparedStatement s = c.prepareStatement(String.format(&quot;CREATE TABLE %1$s (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, CONTENTVERSION INTEGER NOT NULL, VERSION INTEGER NOT NULL, PRIMARY KEY (ID))&quot;, tableName, lobSize))) {</span>
+<span class="nc" id="L326">                    s.executeUpdate();</span>
+<span class="nc bnc" id="L327" title="All 8 branches missed.">                }</span>
+
+<span class="nc" id="L329">                try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$s add unique (DOXID)&quot;, tableName))) {</span>
+<span class="nc" id="L330">                    s.executeUpdate();</span>
+<span class="nc bnc" id="L331" title="All 8 branches missed.">                }</span>
+
+<span class="nc" id="L333">                try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$s add unique (ID, DOXID)&quot;, tableName))) {</span>
+<span class="nc" id="L334">                    s.executeUpdate();</span>
+<span class="nc bnc" id="L335" title="All 8 branches missed.">                }</span>
+
+<span class="nc" id="L337">                try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$s add check (VERSION &gt; 0)&quot;, tableName))) {</span>
+<span class="nc" id="L338">                    s.executeUpdate();</span>
+<span class="nc bnc" id="L339" title="All 8 branches missed.">                }</span>
+<span class="nc" id="L340">                try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$s add check (CONTENTVERSION &gt; 0)&quot;, tableName))) {</span>
+<span class="nc" id="L341">                    s.executeUpdate();</span>
+<span class="nc bnc" id="L342" title="All 8 branches missed.">                }</span>
+
+<span class="nc" id="L344">                try (PreparedStatement s = c.prepareStatement(String.format(&quot;CREATE TABLE %1$sTOMBSTONE (ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY, CONTENT BLOB(%2$d) NOT NULL, CREATEDBY VARCHAR(128) NOT NULL, CREATEDON TIMESTAMP NOT NULL, DOXID VARCHAR(32) NOT NULL, LASTUPDATEDBY VARCHAR(128) NOT NULL, LASTUPDATEDON TIMESTAMP NOT NULL, DELETEDBY VARCHAR(128) NOT NULL, DELETEDON TIMESTAMP NOT NULL,  CONTENTVERSION INTEGER NOT NULL, PRIMARY KEY (ID))&quot;, tableName, lobSize))) {</span>
+<span class="nc" id="L345">                    s.executeUpdate();</span>
+<span class="nc bnc" id="L346" title="All 8 branches missed.">                }</span>
+<span class="nc" id="L347">                try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$sTOMBSTONE  add unique (DOXID)&quot;, tableName))) {</span>
+<span class="nc" id="L348">                    s.executeUpdate();</span>
+<span class="nc bnc" id="L349" title="All 8 branches missed.">                }</span>
+<span class="nc" id="L350">                try (PreparedStatement s = c.prepareStatement(String.format(&quot;ALTER TABLE %1$sTOMBSTONE  add CHECK (CONTENTVERSION &gt; 0)&quot;, tableName))) {</span>
+<span class="nc" id="L351">                    s.executeUpdate();</span>
+<span class="nc bnc" id="L352" title="All 8 branches missed.">                }</span>
+                // An OOB table would have a reference label for the parent
+                // record
+                // but it needs to be unique. However in the tombstone it does
+                // not
+                // need to be unique. Also on the tombstone it does not
+                // reference
+                // the record by the primary key because the record may not have
+                // been deleted on the primary key level but the OOB data has
+                // been
+                // removed.
+<span class="nc bnc" id="L363" title="All 2 branches missed.">                if (hasOob) {</span>
+<span class="nc" id="L364">                    createOobTables();</span>
+                }
+            }
+<span class="nc bnc" id="L367" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L368">            throw new PersistenceException(e);</span>
+<span class="nc" id="L369">        }</span>
+
+<span class="nc" id="L371">    }</span>
+
+    /**
+     * Deletes make a copy of the current record to their respective tombstone
+     * table
+     *
+     * @param id
+     * @param version
+     */
+    @Override
+    public void delete(final DoxID id,
+        final int version,
+        final Principal principal) {
+
+<span class="nc" id="L385">        final DoxMeta meta = readMetaAndLock(id, version);</span>
+<span class="nc" id="L386">        final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
+
+        try {
+<span class="nc bnc" id="L389" title="All 2 branches missed.">            if (hasOob) {</span>
+<span class="nc" id="L390">                deleteOob(principal, meta, ts);</span>
+            }
+
+<span class="nc" id="L393">            try (final PreparedStatement s = c.prepareStatement(copyToTombstoneSql)) {</span>
+<span class="nc" id="L394">                s.setString(1, principal.toString());</span>
+<span class="nc" id="L395">                s.setTimestamp(2, ts);</span>
+<span class="nc" id="L396">                s.setLong(3, meta.getId());</span>
+<span class="nc" id="L397">                s.setInt(4, meta.getVersion());</span>
+<span class="nc" id="L398">                s.executeUpdate();</span>
+<span class="nc bnc" id="L399" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L400">            try (final PreparedStatement t = c.prepareStatement(deleteSql)) {</span>
+<span class="nc" id="L401">                t.setLong(1, meta.getId());</span>
+<span class="nc" id="L402">                t.setInt(2, meta.getVersion());</span>
+<span class="nc" id="L403">                final int deletedRows = t.executeUpdate();</span>
+<span class="nc bnc" id="L404" title="All 2 branches missed.">                if (deletedRows != 1) {</span>
+<span class="nc" id="L405">                    throw new PersistenceException(&quot;problem with the delete&quot;);</span>
+                }
+<span class="nc bnc" id="L407" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L408">        } catch (final SQLException e) {</span>
+<span class="nc" id="L409">            throw new PersistenceException(e);</span>
+<span class="nc" id="L410">        }</span>
+<span class="nc" id="L411">    }</span>
+
+    /**
+     * Removes the OOB records associated with the Dox.
+     *
+     * @param principal
+     * @param meta
+     * @param ts
+     * @throws SQLException
+     */
+    private void deleteOob(final Principal principal,
+        final DoxMeta meta,
+        final Timestamp ts) throws SQLException {
+
+<span class="nc" id="L425">        try (final PreparedStatement copy = c.prepareStatement(oobCopyAllToTombstoneSql)) {</span>
+<span class="nc" id="L426">            copy.setString(1, principal.toString());</span>
+<span class="nc" id="L427">            copy.setTimestamp(2, ts);</span>
+<span class="nc" id="L428">            copy.setLong(3, meta.getId());</span>
+<span class="nc" id="L429">            final int copyCount = copy.executeUpdate();</span>
+
+<span class="nc" id="L431">            final PreparedStatement del = c.prepareStatement(oobDeleteAllSql);</span>
+<span class="nc" id="L432">            del.setLong(1, meta.getId());</span>
+<span class="nc" id="L433">            final int delCount = del.executeUpdate();</span>
+<span class="nc bnc" id="L434" title="All 2 branches missed.">            if (copyCount != delCount) {</span>
+<span class="nc" id="L435">                throw new PersistenceException(&quot;Mismatch in moving OOB to tombstone&quot;);</span>
+            }
+<span class="nc bnc" id="L437" title="All 8 branches missed.">        }</span>
+<span class="nc" id="L438">    }</span>
+
+    /**
+     * Detaches an OOB data
+     *
+     * @param doxId
+     * @param reference
+     * @param version
+     * @param principal
+     */
+    @Override
+    public void detach(final DoxID doxId,
+        final String reference,
+        final int version,
+        final Principal principal) {
+
+<span class="nc bnc" id="L454" title="All 2 branches missed.">        if (!hasOob) {</span>
+<span class="nc" id="L455">            throw new UnsupportedOperationException(&quot;OOB support is not present in &quot; + tableName);</span>
+        }
+        try {
+<span class="nc" id="L458">            final DoxMeta meta = readMetaAndLock(doxId, version);</span>
+<span class="nc" id="L459">            final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
+
+            final int copyCount;
+<span class="nc" id="L462">            try (final PreparedStatement copy = c.prepareStatement(oobCopyToTombstoneSql)) {</span>
+<span class="nc" id="L463">                copy.setString(1, principal.toString());</span>
+<span class="nc" id="L464">                copy.setTimestamp(2, ts);</span>
+<span class="nc" id="L465">                copy.setLong(3, meta.getId());</span>
+<span class="nc" id="L466">                copy.setString(4, reference);</span>
+<span class="nc" id="L467">                copyCount = copy.executeUpdate();</span>
+<span class="nc bnc" id="L468" title="All 2 branches missed.">                if (copyCount != 1) {</span>
+<span class="nc" id="L469">                    throw new EntityNotFoundException();</span>
+                }
+<span class="nc bnc" id="L471" title="All 8 branches missed.">            }</span>
+
+<span class="nc" id="L473">            try (final PreparedStatement del = c.prepareStatement(oobDeleteSql)) {</span>
+<span class="nc" id="L474">                del.setLong(1, meta.getId());</span>
+<span class="nc" id="L475">                del.setString(2, reference);</span>
+<span class="nc" id="L476">                final int delCount = del.executeUpdate();</span>
+<span class="nc bnc" id="L477" title="All 2 branches missed.">                if (copyCount != delCount) {</span>
+<span class="nc" id="L478">                    throw new PersistenceException(&quot;Mismatch in moving OOB to tombstone&quot;);</span>
+                }
+<span class="nc" id="L480">                incrementVersionNumber(meta.getId(), version);</span>
+<span class="nc bnc" id="L481" title="All 8 branches missed.">            }</span>
+<span class="nc" id="L482">        } catch (final SQLException e) {</span>
+<span class="nc" id="L483">            throw new PersistenceException(e);</span>
+<span class="nc" id="L484">        }</span>
+
+<span class="nc" id="L486">    }</span>
+
+    @Override
+    public void exportDox(final DoxID doxID,
+        final OutputStream os) throws IOException {
+
+        try {
+<span class="nc" id="L493">            final MimeMultipart mimeMultipart = new MimeMultipart();</span>
+<span class="nc" id="L494">            mimeMultipart.setSubType(&quot;mixed&quot;);</span>
+
+<span class="nc" id="L496">            final DoxMeta meta = readMeta(doxID);</span>
+<span class="nc" id="L497">            try (final PreparedStatement s = c.prepareStatement(readContentSql)) {</span>
+<span class="nc" id="L498">                s.setLong(1, meta.getId());</span>
+<span class="nc" id="L499">                try (final ResultSet rs = s.executeQuery()) {</span>
+<span class="nc bnc" id="L500" title="All 2 branches missed.">                    if (!rs.next()) {</span>
+<span class="nc" id="L501">                        throw new EntityNotFoundException();</span>
+                    }
+<span class="nc" id="L503">                    final Blob contentBlob = rs.getBlob(1);</span>
+<span class="nc" id="L504">                    final MimeBodyPart mimeBodyPart = new MimeBodyPart(contentBlob.getBinaryStream());</span>
+<span class="nc" id="L505">                    mimeBodyPart.setHeader(&quot;Created-By&quot;, meta.getCreatedBy()</span>
+                        .getName());
+<span class="nc" id="L507">                    mimeBodyPart.setHeader(&quot;Created-On&quot;, meta.getCreatedOnString());</span>
+<span class="nc" id="L508">                    mimeBodyPart.setHeader(&quot;Last-Updated-By&quot;, meta.getLastUpdatedBy()</span>
+                        .getName());
+<span class="nc" id="L510">                    mimeBodyPart.setHeader(&quot;Last-Updated-On&quot;, meta.getLastUpdatedOnString());</span>
+<span class="nc" id="L511">                    mimeBodyPart.setHeader(&quot;Content-Length&quot;, String.valueOf(contentBlob.length()));</span>
+<span class="nc" id="L512">                    mimeBodyPart.setFileName(doxID.toString());</span>
+<span class="nc" id="L513">                    mimeMultipart.addBodyPart(mimeBodyPart);</span>
+<span class="nc" id="L514">                    contentBlob.free();</span>
+<span class="nc bnc" id="L515" title="All 8 branches missed.">                }</span>
+
+<span class="nc bnc" id="L517" title="All 8 branches missed.">            }</span>
+
+<span class="nc bnc" id="L519" title="All 2 branches missed.">            if (hasOob) {</span>
+                // &quot;select CONTENT, REFERENCE, CREATEDBY, CREATEDON,
+                // LASTUPDATEDBY,
+                // LASTUPDATEDON, VERSION from %1$s E where E.PARENTID=?&quot;
+<span class="nc" id="L523">                try (final PreparedStatement s = c.prepareStatement(oobReadAllSql)) {</span>
+<span class="nc" id="L524">                    s.setLong(1, meta.getId());</span>
+<span class="nc" id="L525">                    try (final ResultSet rs = s.executeQuery()) {</span>
+<span class="nc bnc" id="L526" title="All 2 branches missed.">                        while (rs.next()) {</span>
+<span class="nc" id="L527">                            final Calendar createdOnCal = Calendar.getInstance();</span>
+<span class="nc" id="L528">                            createdOnCal.setTimeInMillis(rs.getTimestamp(4)</span>
+                                .getTime());
+
+<span class="nc" id="L531">                            final Calendar lastUpdatedOnCal = Calendar.getInstance();</span>
+<span class="nc" id="L532">                            lastUpdatedOnCal.setTimeInMillis(rs.getTimestamp(6)</span>
+                                .getTime());
+
+<span class="nc" id="L535">                            final Blob contentBlob = rs.getBlob(1);</span>
+<span class="nc" id="L536">                            final MimeBodyPart mimeBodyPart = new MimeBodyPart(contentBlob.getBinaryStream());</span>
+<span class="nc" id="L537">                            mimeBodyPart.setHeader(&quot;Created-By&quot;, rs.getString(3));</span>
+<span class="nc" id="L538">                            mimeBodyPart.setHeader(&quot;Created-On&quot;, DatatypeConverter.printDateTime(createdOnCal));</span>
+<span class="nc" id="L539">                            mimeBodyPart.setHeader(&quot;Last-Updated-By&quot;, rs.getString(5));</span>
+<span class="nc" id="L540">                            mimeBodyPart.setHeader(&quot;Last-Updated-On&quot;, DatatypeConverter.printDateTime(lastUpdatedOnCal));</span>
+<span class="nc" id="L541">                            mimeBodyPart.setHeader(&quot;Content-Length&quot;, String.valueOf(contentBlob.length()));</span>
+<span class="nc" id="L542">                            mimeBodyPart.setFileName(rs.getString(2));</span>
+<span class="nc" id="L543">                            mimeMultipart.addBodyPart(mimeBodyPart);</span>
+<span class="nc" id="L544">                        }</span>
+<span class="nc bnc" id="L545" title="All 8 branches missed.">                    }</span>
+<span class="nc bnc" id="L546" title="All 8 branches missed.">                }</span>
+            }
+<span class="nc" id="L548">            mimeMultipart.writeTo(os);</span>
+
+<span class="nc" id="L550">        } catch (final MessagingException</span>
+            | SQLException e) {
+<span class="nc" id="L552">            throw new PersistenceException(e);</span>
+<span class="nc" id="L553">        } finally {</span>
+
+<span class="nc" id="L555">        }</span>
+<span class="nc" id="L556">    }</span>
+
+    @Override
+    public int getContentVersion(final DoxID id) {
+
+<span class="nc" id="L561">        return readMeta(id).getSchemaVersion();</span>
+    }
+
+    @Override
+    public int getVersion(final DoxID id) {
+
+<span class="nc" id="L567">        return readMeta(id).getVersion();</span>
+    }
+
+    @Override
+    public void importDox(final InputStream is,
+        final int contentVersion) throws IOException {
+
+        try {
+<span class="nc" id="L575">            final MimeMultipart mmp = new MimeMultipart(new ByteArrayDataSource(is, MediaType.MULTIPART_FORM_DATA));</span>
+
+<span class="nc bnc" id="L577" title="All 2 branches missed.">            if (mmp.getCount() == 0) {</span>
+<span class="nc" id="L578">                throw new PersistenceException(&quot;No data was found for import&quot;);</span>
+            }
+
+<span class="nc" id="L581">            final BodyPart mainBody = mmp.getBodyPart(0);</span>
+
+<span class="nc bnc" id="L583" title="All 4 branches missed.">            if (!hasOob &amp;&amp; mmp.getCount() &gt; 1) {</span>
+<span class="nc" id="L584">                throw new PersistenceException(&quot;OOB data was found but the table &quot; + tableName + &quot; does not support OOB data&quot;);</span>
+            }
+
+            final long primaryKey;
+
+<span class="nc" id="L589">            try (final PreparedStatement s = c.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {</span>
+<span class="nc" id="L590">                final ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="nc" id="L591">                mainBody.writeTo(baos);</span>
+<span class="nc" id="L592">                baos.close();</span>
+<span class="nc" id="L593">                final SerialBlob contentBlob = new SerialBlob(baos.toByteArray());</span>
+
+<span class="nc" id="L595">                s.setBlob(1, contentBlob);</span>
+<span class="nc" id="L596">                s.setString(2, mainBody.getFileName());</span>
+<span class="nc" id="L597">                s.setString(3, mainBody.getHeader(&quot;Created-By&quot;)[0]);</span>
+<span class="nc" id="L598">                s.setTimestamp(4, new Timestamp(DatatypeConverter.parseDateTime(mainBody.getHeader(&quot;Created-On&quot;)[0])</span>
+                    .getTimeInMillis()));
+<span class="nc" id="L600">                s.setString(5, mainBody.getHeader(&quot;Last-Updated-By&quot;)[0]);</span>
+<span class="nc" id="L601">                s.setTimestamp(6, new Timestamp(DatatypeConverter.parseDateTime(mainBody.getHeader(&quot;Last-Updated-On&quot;)[0])</span>
+                    .getTimeInMillis()));
+<span class="nc" id="L603">                s.setInt(7, 1);</span>
+<span class="nc" id="L604">                s.setInt(8, contentVersion);</span>
+<span class="nc" id="L605">                s.executeUpdate();</span>
+<span class="nc" id="L606">                try (final ResultSet rs = s.getGeneratedKeys()) {</span>
+<span class="nc" id="L607">                    rs.next();</span>
+<span class="nc" id="L608">                    primaryKey = rs.getLong(1);</span>
+<span class="nc bnc" id="L609" title="All 8 branches missed.">                }</span>
+<span class="nc bnc" id="L610" title="All 8 branches missed.">            }</span>
+
+<span class="nc bnc" id="L612" title="All 2 branches missed.">            for (int i = 1; i &lt; mmp.getCount(); ++i) {</span>
+<span class="nc" id="L613">                final BodyPart oobBody = mmp.getBodyPart(i);</span>
+
+<span class="nc" id="L615">                final ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="nc" id="L616">                oobBody.writeTo(baos);</span>
+<span class="nc" id="L617">                baos.close();</span>
+
+<span class="nc" id="L619">                try (final PreparedStatement os = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS)) {</span>
+<span class="nc" id="L620">                    final SerialBlob contentBlob = new SerialBlob(baos.toByteArray());</span>
+
+<span class="nc" id="L622">                    os.setBlob(1, contentBlob);</span>
+<span class="nc" id="L623">                    os.setString(2, mainBody.getFileName());</span>
+<span class="nc" id="L624">                    os.setLong(3, primaryKey);</span>
+<span class="nc" id="L625">                    os.setString(4, oobBody.getFileName());</span>
+<span class="nc" id="L626">                    os.setString(5, oobBody.getHeader(&quot;Created-By&quot;)[0]);</span>
+<span class="nc" id="L627">                    os.setTimestamp(6, new Timestamp(DatatypeConverter.parseDateTime(oobBody.getHeader(&quot;Created-On&quot;)[0])</span>
+                        .getTimeInMillis()));
+<span class="nc" id="L629">                    os.setString(7, oobBody.getHeader(&quot;Last-Updated-By&quot;)[0]);</span>
+<span class="nc" id="L630">                    os.setTimestamp(8, new Timestamp(DatatypeConverter.parseDateTime(oobBody.getHeader(&quot;Last-Updated-On&quot;)[0])</span>
+                        .getTimeInMillis()));
+<span class="nc" id="L632">                    os.setInt(9, 1);</span>
+<span class="nc" id="L633">                    os.executeUpdate();</span>
+<span class="nc" id="L634">                    try (final ResultSet rs = os.getGeneratedKeys()) {</span>
+<span class="nc" id="L635">                        rs.next();</span>
+<span class="nc bnc" id="L636" title="All 8 branches missed.">                    }</span>
+<span class="nc bnc" id="L637" title="All 8 branches missed.">                }</span>
+            }
+
+<span class="nc" id="L640">        } catch (MessagingException</span>
+            | SQLException
+            | IOException e) {
+<span class="nc" id="L643">            throw new PersistenceException(e);</span>
+<span class="nc" id="L644">        }</span>
+
+<span class="nc" id="L646">    }</span>
+
+    private void incrementVersionNumber(final long id,
+        final int version) throws SQLException {
+
+<span class="nc" id="L651">        try (final PreparedStatement u = c.prepareStatement(updateVersionSql)) {</span>
+<span class="nc" id="L652">            u.setLong(1, id);</span>
+<span class="nc" id="L653">            u.setInt(2, version);</span>
+<span class="nc" id="L654">            u.executeUpdate();</span>
+<span class="nc bnc" id="L655" title="All 8 branches missed.">        }</span>
+
+<span class="nc" id="L657">    }</span>
+
+    @Override
+    public int readContent(final DoxID id,
+        final ByteBuffer buffer) {
+
+<span class="nc" id="L663">        try (final PreparedStatement s = c.prepareStatement(readContentSql)) {</span>
+<span class="nc" id="L664">            s.setLong(1, readMeta(id).getId());</span>
+<span class="nc" id="L665">            try (final ResultSet rs = s.executeQuery()) {</span>
+<span class="nc bnc" id="L666" title="All 2 branches missed.">                if (!rs.next()) {</span>
+<span class="nc" id="L667">                    throw new EntityNotFoundException();</span>
+                }
+<span class="nc" id="L669">                try (final InputStream ret = rs.getBinaryStream(1)) {</span>
+<span class="nc" id="L670">                    return readFully(ret, buffer.array());</span>
+<span class="nc bnc" id="L671" title="All 8 branches missed.">                }</span>
+<span class="nc bnc" id="L672" title="All 8 branches missed.">            }</span>
+<span class="nc bnc" id="L673" title="All 8 branches missed.">        } catch (final IOException</span>
+            | SQLException e) {
+<span class="nc" id="L675">            throw new PersistenceException(e);</span>
+        }
+    }
+
+    @Override
+    public void readContentToStream(final DoxID id,
+        final OutputStream os) throws IOException {
+
+<span class="nc" id="L683">        try (final PreparedStatement s = c.prepareStatement(readContentSql)) {</span>
+<span class="nc" id="L684">            s.setLong(1, readMeta(id).getId());</span>
+<span class="nc" id="L685">            try (final ResultSet rs = s.executeQuery()) {</span>
+<span class="nc bnc" id="L686" title="All 2 branches missed.">                if (!rs.next()) {</span>
+<span class="nc" id="L687">                    throw new EntityNotFoundException();</span>
+                }
+<span class="nc" id="L689">                try (final InputStream ret = rs.getBinaryStream(1)) {</span>
+<span class="nc" id="L690">                    int c = ret.read();</span>
+<span class="nc bnc" id="L691" title="All 2 branches missed.">                    while (c != -1) {</span>
+<span class="nc" id="L692">                        os.write(c);</span>
+<span class="nc" id="L693">                        c = ret.read();</span>
+                    }
+<span class="nc bnc" id="L695" title="All 8 branches missed.">                }</span>
+<span class="nc bnc" id="L696" title="All 8 branches missed.">            }</span>
+<span class="nc bnc" id="L697" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L698">            throw new PersistenceException(e);</span>
+<span class="nc" id="L699">        }</span>
+<span class="nc" id="L700">    }</span>
+
+    /**
+     * Reads the contents of the stream into a byte array buffer.
+     *
+     * @param is
+     *            input stream
+     * @param buffer
+     *            buffer
+     * @return
+     * @throws IOException
+     */
+    private int readFully(final InputStream is,
+        final byte[] buffer) throws IOException {
+
+<span class="nc" id="L715">        int len = 0;</span>
+<span class="nc" id="L716">        int c = is.read(buffer);</span>
+<span class="nc bnc" id="L717" title="All 4 branches missed.">        while (c != -1 &amp;&amp; len &lt; buffer.length) {</span>
+<span class="nc" id="L718">            len += c;</span>
+<span class="nc" id="L719">            c = is.read(buffer, len, buffer.length - len);</span>
+        }
+<span class="nc" id="L721">        return len;</span>
+    }
+
+    public DoxMeta readMeta(final DoxID id) {
+
+<span class="nc" id="L726">        try (final PreparedStatement s = c.prepareStatement(readSql)) {</span>
+<span class="nc" id="L727">            s.setString(1, id.toString());</span>
+<span class="nc" id="L728">            try (final ResultSet rs = s.executeQuery()) {</span>
+<span class="nc bnc" id="L729" title="All 2 branches missed.">                if (!rs.next()) {</span>
+<span class="nc" id="L730">                    throw new EntityNotFoundException();</span>
+                }
+<span class="nc" id="L732">                final DoxMeta meta = new DoxMeta();</span>
+<span class="nc" id="L733">                meta.setId(rs.getLong(1));</span>
+<span class="nc" id="L734">                meta.setDoxId(new DoxID(rs.getString(2)));</span>
+<span class="nc" id="L735">                meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));</span>
+<span class="nc" id="L736">                meta.setCreatedOn(rs.getTimestamp(4));</span>
+<span class="nc" id="L737">                meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));</span>
+<span class="nc" id="L738">                meta.setLastUpdatedOn(rs.getTimestamp(6));</span>
+<span class="nc" id="L739">                meta.setVersion(rs.getInt(7));</span>
+<span class="nc" id="L740">                meta.setSchemaVersion(rs.getInt(8));</span>
+<span class="nc" id="L741">                return meta;</span>
+<span class="nc bnc" id="L742" title="All 8 branches missed.">            }</span>
+<span class="nc bnc" id="L743" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L744">            throw new PersistenceException(e);</span>
+        }
+    }
+
+    /**
+     * This will read the meta data for a record for locking. The version number
+     * is not touched.
+     *
+     * @param id
+     * @param version
+     * @return
+     * @throws SQLException
+     */
+    private DoxMeta readMetaAndLock(final DoxID id,
+        final int version) {
+
+<span class="nc" id="L760">        try (final PreparedStatement s = c.prepareStatement(readForUpdateSql)) {</span>
+<span class="nc" id="L761">            s.setString(1, id.toString());</span>
+<span class="nc" id="L762">            s.setInt(2, version);</span>
+<span class="nc" id="L763">            try (final ResultSet rs = s.executeQuery()) {</span>
+<span class="nc bnc" id="L764" title="All 2 branches missed.">                if (!rs.next()) {</span>
+<span class="nc" id="L765">                    throw new OptimisticLockException();</span>
+                }
+<span class="nc" id="L767">                final DoxMeta meta = new DoxMeta();</span>
+<span class="nc" id="L768">                meta.setId(rs.getLong(1));</span>
+<span class="nc" id="L769">                meta.setDoxId(new DoxID(rs.getString(2)));</span>
+<span class="nc" id="L770">                meta.setCreatedBy(new DoxPrincipal(rs.getString(3)));</span>
+<span class="nc" id="L771">                meta.setCreatedOn(rs.getTimestamp(4));</span>
+<span class="nc" id="L772">                meta.setLastUpdatedBy(new DoxPrincipal(rs.getString(5)));</span>
+<span class="nc" id="L773">                meta.setLastUpdatedOn(rs.getTimestamp(6));</span>
+<span class="nc" id="L774">                meta.setVersion(rs.getInt(7));</span>
+<span class="nc" id="L775">                meta.setSchemaVersion(rs.getInt(8));</span>
+
+<span class="nc bnc" id="L777" title="All 2 branches missed.">                if (hasOob) {</span>
+<span class="nc" id="L778">                    try (final PreparedStatement os = c.prepareStatement(oobReadForUpdateSql)) {</span>
+<span class="nc" id="L779">                        os.setLong(1, meta.getId());</span>
+<span class="nc" id="L780">                        os.executeQuery()</span>
+                            .close();
+<span class="nc bnc" id="L782" title="All 8 branches missed.">                    }</span>
+                }
+
+<span class="nc" id="L785">                return meta;</span>
+<span class="nc bnc" id="L786" title="All 8 branches missed.">            }</span>
+<span class="nc bnc" id="L787" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L788">            throw new PersistenceException(e);</span>
+        }
+    }
+
+    @Override
+    public int readOobContent(final DoxID doxId,
+        final String reference,
+        final ByteBuffer buffer) {
+
+<span class="nc" id="L797">        try (final PreparedStatement s = c.prepareStatement(oobReadContentSql)) {</span>
+
+<span class="nc" id="L799">            s.setLong(1, readMeta(doxId).getId());</span>
+<span class="nc" id="L800">            s.setString(2, reference);</span>
+<span class="nc" id="L801">            final ResultSet rs = s.executeQuery();</span>
+<span class="nc bnc" id="L802" title="All 2 branches missed.">            if (!rs.next()) {</span>
+<span class="nc" id="L803">                throw new EntityNotFoundException();</span>
+            }
+<span class="nc" id="L805">            try (final InputStream ret = rs.getBinaryStream(1)) {</span>
+<span class="nc" id="L806">                return readFully(ret, buffer.array());</span>
+<span class="nc bnc" id="L807" title="All 8 branches missed.">            }</span>
+
+<span class="nc bnc" id="L809" title="All 8 branches missed.">        } catch (final IOException</span>
+            | SQLException e) {
+<span class="nc" id="L811">            throw new PersistenceException(e);</span>
+        }
+    }
+
+    @Override
+    public void readOobContentToStream(final DoxID doxId,
+        final String reference,
+        final OutputStream os) throws IOException {
+
+<span class="nc" id="L820">        try (final PreparedStatement s = c.prepareStatement(oobReadContentSql)) {</span>
+
+<span class="nc" id="L822">            s.setLong(1, readMeta(doxId).getId());</span>
+<span class="nc" id="L823">            s.setString(2, reference);</span>
+<span class="nc" id="L824">            final ResultSet rs = s.executeQuery();</span>
+<span class="nc bnc" id="L825" title="All 2 branches missed.">            if (!rs.next()) {</span>
+<span class="nc" id="L826">                throw new EntityNotFoundException();</span>
+            }
+<span class="nc" id="L828">            try (final InputStream ret = rs.getBinaryStream(1)) {</span>
+<span class="nc" id="L829">                int c = ret.read();</span>
+<span class="nc bnc" id="L830" title="All 2 branches missed.">                while (c != -1) {</span>
+<span class="nc" id="L831">                    os.write(c);</span>
+<span class="nc" id="L832">                    c = ret.read();</span>
+                }
+<span class="nc bnc" id="L834" title="All 8 branches missed.">            }</span>
+
+<span class="nc bnc" id="L836" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc" id="L837">            throw new PersistenceException(e);</span>
+<span class="nc" id="L838">        }</span>
+<span class="nc" id="L839">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateContent(final DoxID doxId,
+        final InputStream contentStream,
+        final int contentVersion,
+        final int version,
+        final Principal principal) {
+
+        try {
+<span class="nc" id="L852">            final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
+<span class="nc" id="L853">            final DoxMeta meta = readMetaAndLock(doxId, version);</span>
+<span class="nc" id="L854">            final PreparedStatement u = c.prepareStatement(updateSql);</span>
+<span class="nc" id="L855">            u.setBinaryStream(1, contentStream);</span>
+<span class="nc" id="L856">            u.setString(2, principal.getName());</span>
+<span class="nc" id="L857">            u.setTimestamp(3, ts);</span>
+<span class="nc" id="L858">            u.setInt(4, contentVersion);</span>
+
+<span class="nc" id="L860">            u.setLong(5, meta.getId());</span>
+<span class="nc" id="L861">            u.setInt(6, version + 1);</span>
+<span class="nc" id="L862">            u.executeUpdate();</span>
+<span class="nc" id="L863">        } catch (final SQLException e) {</span>
+<span class="nc" id="L864">            throw new PersistenceException(e);</span>
+<span class="nc" id="L865">        }</span>
+<span class="nc" id="L866">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

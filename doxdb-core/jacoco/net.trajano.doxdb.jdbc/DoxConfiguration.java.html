@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxConfiguration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-core</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.jdbc</a> &gt; <span class="el_source">DoxConfiguration.java</span></div><h1>DoxConfiguration.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.jdbc;
+
+/**
+ * Configuration for a Dox
+ *
+ * @author Archimedes
+ */
+public class DoxConfiguration {
+
+    private boolean hasOob;
+
+    private boolean hasTemporal;
+
+    /**
+     * Size of the LOB containing the Dox data. Defaults to 1GB.
+     */
+<span class="nc" id="L17">    private long lobSize = 1073741824;</span>
+
+    /**
+     * Size of the LOB containing the OOB data. Defaults to 2GB.
+     */
+<span class="nc" id="L22">    private long oobLobSize = 2147483647;</span>
+
+    private String tableName;
+
+<span class="nc" id="L26">    public DoxConfiguration() {</span>
+
+<span class="nc" id="L28">    }</span>
+
+<span class="nc" id="L30">    public DoxConfiguration(final String tableName) {</span>
+
+<span class="nc" id="L32">        this.tableName = tableName;</span>
+<span class="nc" id="L33">    }</span>
+
+    public long getLobSize() {
+
+<span class="nc" id="L37">        return lobSize;</span>
+    }
+
+    public long getOobLobSize() {
+
+<span class="nc" id="L42">        return oobLobSize;</span>
+    }
+
+    public String getTableName() {
+
+<span class="nc" id="L47">        return tableName;</span>
+    }
+
+    public boolean isHasOob() {
+
+<span class="nc" id="L52">        return hasOob;</span>
+    }
+
+    public boolean isHasTemporal() {
+
+<span class="nc" id="L57">        return hasTemporal;</span>
+    }
+
+    public void setHasOob(final boolean hasOob) {
+
+<span class="nc" id="L62">        this.hasOob = hasOob;</span>
+<span class="nc" id="L63">    }</span>
+
+    public void setHasTemporal(final boolean hasTemporal) {
+
+<span class="nc" id="L67">        this.hasTemporal = hasTemporal;</span>
+<span class="nc" id="L68">    }</span>
+
+    public void setLobSize(long lobSize) {
+
+<span class="nc" id="L72">        this.lobSize = lobSize;</span>
+<span class="nc" id="L73">    }</span>
+
+    public void setOobLobSize(long size) {
+
+<span class="nc" id="L77">        oobLobSize = size;</span>
+<span class="nc" id="L78">    }</span>
+
+    public void setTableName(final String tableName) {
+
+<span class="nc" id="L82">        this.tableName = tableName;</span>
+<span class="nc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
