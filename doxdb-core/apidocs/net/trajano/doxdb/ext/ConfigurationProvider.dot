@@ -5,24 +5,24 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.ext.XmlConfigurationProvider
-	c153 [label=<<table title="net.trajano.doxdb.ext.XmlConfigurationProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./XmlConfigurationProvider.html">
+	c157 [label=<<table title="net.trajano.doxdb.ext.XmlConfigurationProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./XmlConfigurationProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> XmlConfigurationProvider </td></tr>
 		</table></td></tr>
-		</table>>, URL="./XmlConfigurationProvider.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./XmlConfigurationProvider.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ext.ConfigurationProvider
-	c159 [label=<<table title="net.trajano.doxdb.ext.ConfigurationProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ConfigurationProvider.html">
+	c163 [label=<<table title="net.trajano.doxdb.ext.ConfigurationProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ConfigurationProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ConfigurationProvider </td></tr>
 		</table></td></tr>
-		</table>>, URL="./ConfigurationProvider.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./ConfigurationProvider.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.ext.XmlConfigurationProvider implements net.trajano.doxdb.ext.ConfigurationProvider
-	c159:p -> c153:p [dir=back,arrowtail=empty,style=dashed];
+	c163:p -> c157:p [dir=back,arrowtail=empty,style=dashed];
 }
 

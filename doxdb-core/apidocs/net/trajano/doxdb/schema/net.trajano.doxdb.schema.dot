@@ -5,39 +5,39 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// net.trajano.doxdb.schema.SchemaType
-	c100 [label=<<table title="net.trajano.doxdb.schema.SchemaType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SchemaType.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> SchemaType </td></tr>
-		</table></td></tr>
-		</table>>, URL="./SchemaType.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.schema.ObjectFactory
-	c101 [label=<<table title="net.trajano.doxdb.schema.ObjectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ObjectFactory.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ObjectFactory </td></tr>
-		</table></td></tr>
-		</table>>, URL="./ObjectFactory.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.schema.IndexType
-	c102 [label=<<table title="net.trajano.doxdb.schema.IndexType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexType.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> IndexType </td></tr>
-		</table></td></tr>
-		</table>>, URL="./IndexType.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.schema.DoxType
-	c103 [label=<<table title="net.trajano.doxdb.schema.DoxType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxType.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxType </td></tr>
-		</table></td></tr>
-		</table>>, URL="./DoxType.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.schema.DoxPersistence
-	c104 [label=<<table title="net.trajano.doxdb.schema.DoxPersistence" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxPersistence.html">
+	c100 [label=<<table title="net.trajano.doxdb.schema.DoxPersistence" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxPersistence.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxPersistence </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxPersistence.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./DoxPersistence.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.schema.SchemaType
+	c101 [label=<<table title="net.trajano.doxdb.schema.SchemaType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SchemaType.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> SchemaType </td></tr>
+		</table></td></tr>
+		</table>>, URL="./SchemaType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.schema.DoxType
+	c102 [label=<<table title="net.trajano.doxdb.schema.DoxType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxType.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxType </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.schema.IndexType
+	c103 [label=<<table title="net.trajano.doxdb.schema.IndexType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexType.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> IndexType </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IndexType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.schema.ObjectFactory
+	c104 [label=<<table title="net.trajano.doxdb.schema.ObjectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ObjectFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ObjectFactory </td></tr>
+		</table></td></tr>
+		</table>>, URL="./ObjectFactory.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

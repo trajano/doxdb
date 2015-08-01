@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2012 - 2015 Trajano</copyright>
     <item>
-      <title>File: 20,
-             Errors: 0,
-             Warnings: 164,
+      <title>File: 26,
+             Errors: 1,
+             Warnings: 262,
              Infos: 0
       </title>
             <link>http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html</link>
@@ -46,27 +46,13 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.IndexView.java">net/trajano/doxdb/IndexView.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.schema.DoxPersistence.java">net/trajano/doxdb/schema/DoxPersistence.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  21
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.DoxSearch.java">net/trajano/doxdb/ext/DoxSearch.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
+                  17
                 </td>
                 <td>
                   0
@@ -74,30 +60,16 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.package-info.java">net/trajano/doxdb/package-info.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.schema.SchemaType.java">net/trajano/doxdb/schema/SchemaType.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  0
+                  20
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.CollectionAccessControl.java">net/trajano/doxdb/ext/CollectionAccessControl.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-                <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
@@ -130,41 +102,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.DefaultEventHandler.java">net/trajano/doxdb/ext/DefaultEventHandler.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.schema.DoxType.java">net/trajano/doxdb/schema/DoxType.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.DoxID.java">net/trajano/doxdb/DoxID.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.internal.package-info.java">net/trajano/doxdb/internal/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  37
                 </td>
                 <td>
                   0
@@ -179,34 +123,6 @@ under the License.
                 </td>
                 <td>
                   16
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.ConfigurationProvider.java">net/trajano/doxdb/ext/ConfigurationProvider.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.EventHandler.java">net/trajano/doxdb/ext/EventHandler.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
                 </td>
                 <td>
                   0
@@ -256,20 +172,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.jdbc.package-info.java">net/trajano/doxdb/jdbc/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.jdbc.JdbcDoxDAO.java">net/trajano/doxdb/jdbc/JdbcDoxDAO.java</a>
                 </td>
                 <td>
@@ -298,13 +200,181 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.SearchResult.java">net/trajano/doxdb/SearchResult.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.IndexView.java">net/trajano/doxdb/IndexView.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.DoxSearch.java">net/trajano/doxdb/ext/DoxSearch.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.package-info.java">net/trajano/doxdb/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.schema.ObjectFactory.java">net/trajano/doxdb/schema/ObjectFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.CollectionAccessControl.java">net/trajano/doxdb/ext/CollectionAccessControl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.DefaultEventHandler.java">net/trajano/doxdb/ext/DefaultEventHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.DoxID.java">net/trajano/doxdb/DoxID.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.schema.package-info.java">net/trajano/doxdb/schema/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.internal.package-info.java">net/trajano/doxdb/internal/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.ConfigurationProvider.java">net/trajano/doxdb/ext/ConfigurationProvider.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
                   4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.ext.EventHandler.java">net/trajano/doxdb/ext/EventHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.schema.IndexType.java">net/trajano/doxdb/schema/IndexType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.jdbc.package-info.java">net/trajano/doxdb/jdbc/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -319,6 +389,20 @@ under the License.
                 </td>
                 <td>
                   15
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-core//checkstyle.html#net.trajano.doxdb.SearchResult.java">net/trajano/doxdb/SearchResult.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
                 <td>
                   0

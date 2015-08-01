@@ -5,24 +5,24 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// net.trajano.doxdb.jdbc.JdbcDoxDAO
-	c464 [label=<<table title="net.trajano.doxdb.jdbc.JdbcDoxDAO" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./JdbcDoxDAO.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> JdbcDoxDAO </td></tr>
-		</table></td></tr>
-		</table>>, URL="./JdbcDoxDAO.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.jdbc.DoxDAO
-	c465 [label=<<table title="net.trajano.doxdb.jdbc.DoxDAO" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxDAO.html">
+	c456 [label=<<table title="net.trajano.doxdb.jdbc.DoxDAO" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxDAO.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DoxDAO </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxDAO.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./DoxDAO.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.jdbc.JdbcDoxDAO
+	c457 [label=<<table title="net.trajano.doxdb.jdbc.JdbcDoxDAO" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./JdbcDoxDAO.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> JdbcDoxDAO </td></tr>
+		</table></td></tr>
+		</table>>, URL="./JdbcDoxDAO.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.jdbc.JdbcDoxDAO implements net.trajano.doxdb.jdbc.DoxDAO
-	c465:p -> c464:p [dir=back,arrowtail=empty,style=dashed];
+	c456:p -> c457:p [dir=back,arrowtail=empty,style=dashed];
 }
 
