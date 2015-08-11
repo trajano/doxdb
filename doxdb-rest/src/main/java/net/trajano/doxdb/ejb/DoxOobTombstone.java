@@ -55,9 +55,9 @@ public class DoxOobTombstone {
     private Date deletedOn;
 
     @Column(nullable = false,
-        updatable = false,
+        columnDefinition = "CHAR(32)",
         length = DoxID.LENGTH)
-    private DoxID doxId;
+    private String doxId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -114,7 +114,7 @@ public class DoxOobTombstone {
 
     public DoxID getDoxId() {
 
-        return doxId;
+        return new DoxID(doxId);
     }
 
     public long getId() {
@@ -172,9 +172,17 @@ public class DoxOobTombstone {
         this.deletedOn = deletedOn;
     }
 
+    /**
+     * Sets the Dox ID value using a {@link DoxID}. This internally converts it
+     * to a string as a workaround when JPA converters are not working as
+     * expected.
+     *
+     * @param doxId
+     *            Dox ID
+     */
     public void setDoxId(final DoxID doxId) {
 
-        this.doxId = doxId;
+        this.doxId = doxId.toString();
     }
 
     public void setId(final long id) {

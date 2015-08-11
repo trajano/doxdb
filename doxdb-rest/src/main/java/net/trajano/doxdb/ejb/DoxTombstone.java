@@ -55,6 +55,7 @@ public class DoxTombstone {
 
     @Column(nullable = false,
         updatable = false,
+        columnDefinition = "CHAR(32)",
         length = DoxID.LENGTH)
     private String doxId;
 
