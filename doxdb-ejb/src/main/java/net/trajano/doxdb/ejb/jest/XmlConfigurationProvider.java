@@ -1,10 +1,12 @@
-package net.trajano.doxdb.ext;
+package net.trajano.doxdb.ejb.jest;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -14,6 +16,7 @@ import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
+import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.IndexType;
 
@@ -39,6 +42,8 @@ import net.trajano.doxdb.schema.IndexType;
  *
  * @author Archimedes Trajano
  */
+@Stateless
+@Remote(ConfigurationProvider.class)
 public class XmlConfigurationProvider implements
     ConfigurationProvider {
 
