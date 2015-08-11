@@ -3,6 +3,13 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1" metadata-complete="false">
 	<distributable />
+	<servlet>
+		<servlet-name>net.trajano.doxdb.rest.DoxRestApplication</servlet-name>
+	</servlet>
+	<servlet>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>net.trajano.doxdb.rest.DoxRestApplication</servlet-name>
 		<url-pattern>/V1/*</url-pattern>
