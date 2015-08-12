@@ -107,7 +107,7 @@ public class JestProvider {
             }
 
         } catch (final IOException e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
 
     }
