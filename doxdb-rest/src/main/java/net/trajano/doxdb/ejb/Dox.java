@@ -84,6 +84,7 @@ public class Dox {
 
     @OneToMany(mappedBy = "parentDox",
         targetEntity = DoxOob.class,
+        orphanRemoval = true,
         fetch = FetchType.LAZY)
     private Collection<DoxOob> oobs;
 
@@ -212,6 +213,14 @@ public class Dox {
         this.createdOn = createdOn;
     }
 
+    /**
+     * Sets the Dox ID value using a {@link DoxID}. This internally converts it
+     * to a string as a workaround when JPA converters are not working as
+     * expected.
+     *
+     * @param doxId
+     *            Dox ID
+     */
     public void setDoxId(final DoxID doxId) {
 
         this.doxId = doxId.toString();

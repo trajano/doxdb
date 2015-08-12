@@ -145,8 +145,7 @@ public class OobTest {
         final byte[] buffer1 = new byte[200];
         dao.readOobContent(d1, "ref", ByteBuffer.wrap(buffer1));
 
-        final byte[] buffer2 = new byte[200];
-        ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.xml"), buffer2);
+        final byte[] buffer2 = ResourceUtil.streamToBytes(ResourceUtil.getResourceAsStream("sample.xml"));
         Assert.assertArrayEquals(buffer1, buffer2);
 
         final int d1Version = dao.getVersion(d1);
@@ -184,6 +183,7 @@ public class OobTest {
         final byte[] oobBuffer1 = new byte[200];
         dao.readOobContent(d1, "ref", ByteBuffer.wrap(oobBuffer1));
         final byte[] oobBuffer2 = new byte[200];
+
         ByteStreams.readFully(ResourceUtil.getResourceAsStream("sample.bin"), oobBuffer2);
         Assert.assertArrayEquals(oobBuffer2, oobBuffer1);
 

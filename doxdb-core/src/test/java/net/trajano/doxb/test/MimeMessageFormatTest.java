@@ -11,8 +11,6 @@ import javax.ws.rs.core.MediaType;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.io.ByteStreams;
-
 import net.trajano.commons.testing.ResourceUtil;
 
 public class MimeMessageFormatTest {
@@ -43,7 +41,7 @@ public class MimeMessageFormatTest {
 
         final InputStream is = mimeMultipartr.getBodyPart(0)
             .getInputStream();
-        ByteStreams.copy(is, System.out);
+        System.out.println(new String(ResourceUtil.streamToBytes(is)));
 
         mimeMultipartr.getBodyPart(0)
             .writeTo(baos2);

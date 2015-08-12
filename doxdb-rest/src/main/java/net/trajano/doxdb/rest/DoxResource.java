@@ -7,9 +7,8 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -71,8 +70,7 @@ import net.trajano.doxdb.ejb.DoxLocal;
  * @author Archimedes
  */
 @Path("")
-@Stateless
-@LocalBean
+@ManagedBean
 public class DoxResource {
 
     @EJB
@@ -212,16 +210,6 @@ public class DoxResource {
         } else {
             return save(collection, idOrOp, content, version);
         }
-    }
-
-    @GET
-    @Path("asearch/{index}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String simpleSearch(@PathParam("index") final String index) {
-
-        dox.noop();
-        return index + " " + dox;
-
     }
 
     @GET

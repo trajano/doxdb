@@ -62,7 +62,8 @@ public class DoxOob {
 
     @ManyToOne(fetch = FetchType.LAZY,
         optional = false)
-    @JoinColumn(name = "parentId")
+    @JoinColumn(name = "parentId",
+        nullable = false)
     private Dox parentDox;
 
     public byte[] getContent() {
