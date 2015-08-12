@@ -3,8 +3,10 @@
 .checkstyle
 .classpath
 .factorypath
+.wdo-connections
 .fbExcludeFilterFile
 .idea
+.apt_generated/
 .metadata
 .pmd
 .pmdruleset.xml

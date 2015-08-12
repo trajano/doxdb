@@ -59,6 +59,13 @@ public class DoxBean implements
 
     private ConfigurationProvider configurationProvider;
 
+    /**
+     * Session context. It is injected here rather than
+     * {@link #setSessionContext(SessionContext)} as the WebSphere tools flag
+     * that using the setter is not valid incorrectly, but will still work in
+     * this fasion as well.
+     */
+    @Resource
     private SessionContext ctx;
 
     private transient Map<String, SchemaType> currentSchemaMap = new HashMap<>();
@@ -359,7 +366,6 @@ public class DoxBean implements
         this.migrator = migrator;
     }
 
-    @Resource
     public void setSessionContext(final SessionContext ctx) {
 
         this.ctx = ctx;
