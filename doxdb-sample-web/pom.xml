@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>org.webjars.bower</groupId>
-            <artifactId>angularjs</artifactId>
+            <artifactId>angular-resource</artifactId>
             <version>1.4.3</version>
         </dependency>
         <dependency>
