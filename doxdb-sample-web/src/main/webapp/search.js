@@ -5,6 +5,10 @@ angular.module('search', [
     var MyIndex = $resource('V1/search/myindex', null, {
         'search' : {
             'method' : 'GET'
+        },
+        'reindex' : {
+            'method' : 'OPTION',
+            'url' : 'V1/reindex'
         }
     });
 
@@ -12,6 +16,11 @@ angular.module('search', [
 
     search.query = '';
     search.result = {};
+    search.reindex = function() {
+
+        MyIndex.reindex();
+    };
+
     search.doSearch = function() {
 
         if (search.query) {

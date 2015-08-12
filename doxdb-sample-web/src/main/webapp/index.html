@@ -41,6 +41,7 @@
 				placeholder="Search query" x-ng-change="search.doSearch()">
 		</p>
 		<pre>{{search.result| json}}</pre>
+		<button x-ng-click="search.reindex()">reindex</button>
 	</div>
 </body>
 </html>
