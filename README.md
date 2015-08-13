@@ -21,7 +21,6 @@ Completed:
 Remaining:
 
    * Access control
-   * Remove hard coded elasticsearch URL.
    * OOB
    * Automatic Schema migration
    * Import/Export
@@ -29,6 +28,7 @@ Remaining:
    * Alternate search
    * Extra operations
    * Corrupted index repair
-   * Separate Lucene Jpa Directory implementation to it's own artifact.
    * More robust Angular JS sample
    * Off-line sync
+   * Event notification using WebSockets
+   * Migrate from JEST to JAX-RS Client
