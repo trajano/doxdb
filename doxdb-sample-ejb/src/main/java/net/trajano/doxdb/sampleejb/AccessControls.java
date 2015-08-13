@@ -1,7 +1,6 @@
 package net.trajano.doxdb.sampleejb;
 
 import java.io.IOException;
-import java.security.Principal;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -31,7 +30,7 @@ public class AccessControls implements
     @Override
     public byte[] buildAccessKey(final String collection,
         final String json,
-        final Principal principal) {
+        final String principal) {
 
         return "HELLO".getBytes();
     }

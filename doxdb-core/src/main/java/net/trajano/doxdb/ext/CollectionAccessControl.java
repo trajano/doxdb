@@ -1,7 +1,5 @@
 package net.trajano.doxdb.ext;
 
-import java.security.Principal;
-
 public interface CollectionAccessControl {
 
     /**
@@ -14,11 +12,11 @@ public interface CollectionAccessControl {
      * @param json
      *            data
      * @param principal
-     *            principal
+     *            principal name
      * @return
      */
     byte[] buildAccessKey(String collection,
         String json,
-        Principal principal);
+        String principal);
 
 }

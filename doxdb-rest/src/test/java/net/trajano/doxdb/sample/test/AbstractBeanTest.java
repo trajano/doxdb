@@ -4,7 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.logging.LogManager;
 
 import javax.ejb.SessionContext;
@@ -128,7 +127,7 @@ public class AbstractBeanTest {
             @Override
             public byte[] buildAccessKey(final String collection,
                 final String json,
-                final Principal principal) {
+                final String principal) {
 
                 return null;
             }
