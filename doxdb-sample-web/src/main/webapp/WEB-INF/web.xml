@@ -6,16 +6,9 @@
 	<servlet>
 		<servlet-name>net.trajano.doxdb.rest.DoxRestApplication</servlet-name>
 	</servlet>
-	<servlet>
-		<servlet-name>javax.ws.rs.core.Application</servlet-name>
-	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>net.trajano.doxdb.rest.DoxRestApplication</servlet-name>
 		<url-pattern>/V1/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>javax.ws.rs.core.Application</servlet-name>
-		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 </web-app>
