@@ -9,7 +9,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
@@ -33,7 +32,6 @@ import net.trajano.doxdb.schema.IndexType;
  * @author Archimedes
  */
 @Singleton
-@Startup
 @LocalBean
 public class JestProvider {
 
