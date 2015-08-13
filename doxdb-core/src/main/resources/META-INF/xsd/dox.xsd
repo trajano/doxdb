@@ -19,6 +19,16 @@
 				<element type="tns:IndexType" name="index" minOccurs="0"
 					maxOccurs="unbounded" />
 			</sequence>
+			<attribute name="elasticSearchUri" type="anyURI" use="optional"
+				default="http://localhost:9200">
+				<annotation>
+					<appinfo>
+						<jxb:property>
+							<jxb:javadoc>URI to the Elasticsearch server.</jxb:javadoc>
+						</jxb:property>
+					</appinfo>
+				</annotation>
+			</attribute>
 		</complexType>
 		<unique name="uniqueName">
 			<selector xpath="dox" />

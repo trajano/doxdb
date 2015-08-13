@@ -88,7 +88,7 @@ public class JestProvider {
     public void init() {
 
         final JestClientFactory factory = new JestClientFactory();
-        factory.setHttpClientConfig(new HttpClientConfig.Builder("http://localhost:9200")
+        factory.setHttpClientConfig(new HttpClientConfig.Builder(configurationProvider.getPersistenceConfig().getElasticSearchUri())
             .multiThreaded(true)
             .build());
         client = factory.getObject();
