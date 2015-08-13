@@ -9,7 +9,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
@@ -33,7 +32,6 @@ import net.trajano.doxdb.schema.IndexType;
  * @author Archimedes
  */
 @Singleton
-@Startup
 @LocalBean
 public class JestProvider {
 
@@ -88,7 +86,7 @@ public class JestProvider {
     public void init() {
 
         final JestClientFactory factory = new JestClientFactory();
-        factory.setHttpClientConfig(new HttpClientConfig.Builder("http://localhost:9200")
+        factory.setHttpClientConfig(new HttpClientConfig.Builder(configurationProvider.getPersistenceConfig().getElasticSearchUri())
             .multiThreaded(true)
             .build());
         client = factory.getObject();

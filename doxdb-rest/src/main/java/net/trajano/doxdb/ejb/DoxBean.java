@@ -110,7 +110,7 @@ public class DoxBean implements
 
         final DoxID doxId = DoxID.generate();
 
-        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal());
+        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());
 
         final Dox entity = new Dox();
         entity.setDoxId(doxId);
@@ -385,7 +385,7 @@ public class DoxBean implements
 
         final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
 
-        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal());
+        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());
 
         final Dox e = em.find(Dox.class, meta.getId());
         e.setLastUpdatedBy(ctx.getCallerPrincipal());
