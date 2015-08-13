@@ -1,10 +1,10 @@
 package net.trajano.doxdb;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * This represents a view of the data that will be stored in the index.
@@ -21,7 +21,7 @@ public class IndexView implements
 
     private String collection;
 
-    private final ConcurrentMap<String, Double> doubles = new ConcurrentHashMap<>();
+    private final Map<String, Double> doubles = new HashMap<>();
 
     /**
      * Associated DoxID that was used to populate the view.
@@ -36,7 +36,7 @@ public class IndexView implements
      */
     private String index;
 
-    private final ConcurrentMap<String, Long> longs = new ConcurrentHashMap<>();
+    private final Map<String, Long> longs = new HashMap<>();
 
     /**
      * Flag to indicate that the data should be masked. If the data is masked,
@@ -49,11 +49,15 @@ public class IndexView implements
      */
     private boolean remove;
 
-    private final ConcurrentMap<String, String> strings = new ConcurrentHashMap<>();
+    private final Map<String, String> strings = new HashMap<>();
 
     private final StringBuilder text = new StringBuilder();
 
-    private final ConcurrentMap<String, String> texts = new ConcurrentHashMap<>();
+    private final Map<String, String> texts = new HashMap<>();
+
+    public IndexView() {
+
+    }
 
     /**
      * Appends the contents of the specified text to the full text search
