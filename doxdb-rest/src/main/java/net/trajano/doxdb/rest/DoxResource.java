@@ -7,8 +7,8 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -70,7 +70,7 @@ import net.trajano.doxdb.ejb.DoxLocal;
  * @author Archimedes
  */
 @Path("")
-@ManagedBean
+@RequestScoped
 public class DoxResource {
 
     @EJB
