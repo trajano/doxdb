@@ -16,6 +16,7 @@ import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
@@ -52,6 +53,7 @@ import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.SchemaType;
 
 @Stateless
+@Dependent
 public class DoxBean implements
     DoxLocal {
 

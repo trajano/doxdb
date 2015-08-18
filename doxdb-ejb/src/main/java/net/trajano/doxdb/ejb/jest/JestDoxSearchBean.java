@@ -9,6 +9,7 @@ import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.PersistenceException;
@@ -33,6 +34,7 @@ import net.trajano.doxdb.schema.IndexType;
  */
 @Stateless
 @Remote(DoxSearch.class)
+@Dependent
 public class JestDoxSearchBean implements
     DoxSearch {
 
