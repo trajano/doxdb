@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -40,6 +41,7 @@ import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ejb.DoxLocal;
+import net.trajano.doxdb.ws.SessionManager;
 
 /**
  * This class is extended by clients to provide a list of objects that are
@@ -76,6 +78,9 @@ public class DoxResource {
     @EJB
     private DoxLocal dox;
 
+    @EJB
+    private SessionManager sessionManager;
+
     @Path("{collection}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -91,6 +96,7 @@ public class DoxResource {
         }
 
         final DoxMeta meta = dox.create(collection, bson);
+        sessionManager.sendMessage("CREATE", meta.getDoxId(), collection, meta.getLastUpdatedOn());
         return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
@@ -101,6 +107,7 @@ public class DoxResource {
         @QueryParam("v") final int version) {
 
         dox.delete(collection, doxid, version);
+        sessionManager.sendMessage("DELETE", doxid, collection, new Date());
         return Response.noContent().build();
     }
 
@@ -122,7 +129,6 @@ public class DoxResource {
         final String opName,
         final String content) {
 
-        System.out.println(collection + " " + opName + " SAVE");
         return Response.ok().entity(content).build();
     }
 
@@ -183,6 +189,7 @@ public class DoxResource {
         }
 
         final DoxMeta meta = dox.update(collection, new DoxID(id), bson, version);
+        sessionManager.sendMessage("UPDATE", meta.getDoxId(), collection, meta.getLastUpdatedOn());
         return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 

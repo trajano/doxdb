@@ -148,7 +148,7 @@ public class DoxBean implements
     }
 
     @Override
-    public void delete(final String collection,
+    public boolean delete(final String collection,
         final DoxID doxid,
         final int version) {
 
@@ -157,12 +157,16 @@ public class DoxBean implements
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
 
         final Dox toBeDeleted = em.find(Dox.class, meta.getId());
+        if (toBeDeleted == null) {
+            return false;
+        }
         final DoxTombstone tombstone = toBeDeleted.buildTombstone(ctx.getCallerPrincipal(), ts);
         em.persist(tombstone);
         em.remove(toBeDeleted);
 
         doxSearchBean.removeFromIndex(config.getName(), doxid);
         eventHandler.onRecordDelete(config.getName(), doxid);
+        return true;
 
     }
 

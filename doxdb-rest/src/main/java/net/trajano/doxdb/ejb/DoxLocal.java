@@ -26,7 +26,13 @@ public interface DoxLocal {
     DoxMeta create(String collectionName,
         BsonDocument contents);
 
-    void delete(String collection,
+    /**
+     * @param collection
+     * @param doxID
+     * @param version
+     * @return true if a record was deleted.
+     */
+    boolean delete(String collection,
         DoxID doxID,
         int version);
 
