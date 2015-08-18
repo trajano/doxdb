@@ -45,4 +45,35 @@ angular.module('doxdbApp', [
             });
         }
     };
+}).factory('echoSocket', function($window) {
+
+    var loc = $window.location;
+    var wsUri;
+    if (loc.protocol === "https:") {
+        wsUri = "wss:";
+    } else {
+        wsUri = "ws:";
+    }
+    wsUri += '//' + loc.host + loc.pathname.substring(0, loc.pathname.lastIndexOf('/')) + '/doxdb';
+
+    var webSocket = new WebSocket(wsUri);
+    $window.onbeforeunload = function() {
+
+        websocket.onclose = function() {
+
+        }; // disable onclose handler first
+        websocket.close();
+    };
+    return webSocket;
+}).controller('NotificationsController', function($resource, $scope, echoSocket) {
+
+    var notifications = this;
+    notifications.interactions = [];
+    echoSocket.onmessage = function(event) {
+        notifications.interactions.push({
+            message : angular.fromJson(event.data)
+        });
+        $scope.$apply();
+    };
+
 });

@@ -2,10 +2,8 @@
 <html lang="en" x-ng-app="doxdbApp">
 <head>
 <meta charset="UTF-8">
-<script
-	src="webjars/angular/1.4.3/angular.min.js"></script>
-<script
-	src="webjars/angular-resource/1.4.3/angular-resource.min.js"></script>
+<script src="webjars/angular/1.4.3/angular.min.js"></script>
+<script src="webjars/angular-resource/1.4.3/angular-resource.min.js"></script>
 <script src="angular-app.js"></script>
 <script src="search.js"></script>
 <link rel="stylesheet" href="styles.css">
@@ -42,6 +40,13 @@
 		</p>
 		<pre>{{search.result| json}}</pre>
 		<button x-ng-click="search.reindex()">reindex</button>
+	</div>
+	<div x-ng-controller="NotificationsController as notifications">
+
+		<h1>Notifications</h1>
+		<div x-ng-repeat="interaction in notifications.interactions">
+			<pre>{{interaction.message | json}}</pre>
+		</div>
 	</div>
 </body>
 </html>

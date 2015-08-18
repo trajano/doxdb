@@ -17,6 +17,7 @@ Completed:
    * Event handling
    * REST API
    * Angular JS sample
+   * Event notification using WebSockets
 
 Remaining:
 
@@ -30,5 +31,4 @@ Remaining:
    * Corrupted index repair
    * More robust Angular JS sample
    * Off-line sync
-   * Event notification using WebSockets
    * Migrate from JEST to JAX-RS Client
