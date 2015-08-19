@@ -8,8 +8,15 @@ public interface EventHandler {
         DoxID doxid,
         String json);
 
+    /**
+     * @param collection
+     * @param doxid
+     * @param json
+     *            JSON of the record that was deleted.
+     */
     void onRecordDelete(String collection,
-        DoxID doxid);
+        DoxID doxid,
+        String json);
 
     void onRecordRead(String collection,
         DoxID doxid,

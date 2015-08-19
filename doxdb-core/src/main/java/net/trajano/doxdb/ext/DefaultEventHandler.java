@@ -19,7 +19,8 @@ public class DefaultEventHandler implements
 
     @Override
     public void onRecordDelete(final String collection,
-        final DoxID doxid) {
+        final DoxID doxid,
+        final String json) {
 
     }
 

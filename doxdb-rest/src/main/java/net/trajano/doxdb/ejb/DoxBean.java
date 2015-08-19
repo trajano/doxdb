@@ -157,13 +157,16 @@ public class DoxBean implements
     }
 
     @Override
-    public boolean delete(final String collection,
+    public boolean delete(final String collectionName,
         final DoxID doxid,
         final int version) {
 
         final Date ts = new Date();
-        final DoxType config = doxen.get(collection);
+        final DoxType config = doxen.get(collectionName);
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
+
+        meta.getAccessKey();
+        // TODO check the security.
 
         final Dox toBeDeleted = em.find(Dox.class, meta.getId());
         if (toBeDeleted == null) {
@@ -173,8 +176,27 @@ public class DoxBean implements
         em.persist(tombstone);
         em.remove(toBeDeleted);
 
+        final SchemaType schema = currentSchemaMap.get(collectionName);
+
+        String contentJson;
+
+        if (meta.getSchemaVersion() != schema.getVersion()) {
+            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());
+            final BsonDocument document = BsonDocument.parse(contentJson);
+            meta.setSchemaVersion(schema.getVersion());
+            e.setSchemaVersion(schema.getVersion());
+            contentJson = document.toJson();
+            em.persist(e);
+        } else {
+            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC);
+            final BsonDocument document = e.getContent();
+            addMeta(document, e.getDoxId(), e.getVersion());
+            contentJson = document.toJson();
+        }
+
         doxSearchBean.removeFromIndex(config.getName(), doxid);
-        eventHandler.onRecordDelete(config.getName(), doxid);
+        eventHandler.onRecordDelete(config.getName(), doxid, contentJson);
         return true;
 
     }

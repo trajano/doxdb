@@ -64,9 +64,10 @@ public class AccessControls implements
 
     @Override
     public void onRecordDelete(final String collection,
-        final DoxID doxid) {
+        final DoxID doxid,
+        final String json) {
 
-        System.out.println("deleted " + collection + " " + doxid);
+        System.out.println("deleted " + collection + " " + doxid + " " + json);
 
     }
 
