@@ -39,6 +39,9 @@ public final class DoxPrincipal implements
         if (obj == null) {
             return false;
         }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
         final DoxPrincipal other = (DoxPrincipal) obj;
         return Objects.equals(other.principalName, principalName);
     }
