@@ -1,9 +1,14 @@
 package net.trajano.doxdb.ejb;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +54,7 @@ import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.ext.Migrator;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.DoxType;
+import net.trajano.doxdb.schema.ReadAllType;
 import net.trajano.doxdb.schema.SchemaType;
 
 @Stateless
@@ -259,20 +265,66 @@ public class DoxBean implements
     public String readAll(final String collectionName) {
 
         final DoxType config = doxen.get(collectionName);
-        if (!config.isReadAll()) {
+        if (config.getReadAll() == ReadAllType.FILE) {
+            try {
+                return readAllToFile(config.getName());
+            } catch (final IOException e) {
+                throw new PersistenceException(e);
+            }
+        } else if (config.getReadAll() == ReadAllType.MEMORY) {
+            return readAllToString(config.getName());
+        } else {
             throw new PersistenceException("Not supported");
         }
-        final SchemaType schema = currentSchemaMap.get(collectionName);
+
+    }
+
+    private String readAllToFile(final String schemaName) throws IOException {
+
+        final SchemaType schema = currentSchemaMap.get(schemaName);
+
+        final File f = File.createTempFile("doxdb", schemaName);
+        try (final Writer os = new OutputStreamWriter(new FileOutputStream(f), "UTF-8")) {
+            os.write('[');
+
+            final List<Dox> results = em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", schemaName).getResultList();
+            final Iterator<Dox> i = results.iterator();
+            while (i.hasNext()) {
+
+                final Dox result = i.next();
+                final boolean last = !i.hasNext();
+                result.getAccessKey();
+                // TODO check security
+                if (result.getSchemaVersion() != schema.getVersion()) {
+                    migrator.migrate(schemaName, result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());
+                    // queue migrate later?
+                } else {
+                    os.write(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());
+                    if (!last) {
+                        os.write(',');
+                    }
+                }
+
+            }
+            os.write(']');
+        }
+        return f.getCanonicalPath();
+
+    }
+
+    private String readAllToString(final String schemaName) {
+
+        final SchemaType schema = currentSchemaMap.get(schemaName);
 
         final StringBuilder b = new StringBuilder("[");
 
-        final List<Dox> results = em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", config.getName()).getResultList();
+        final List<Dox> results = em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", schemaName).getResultList();
         for (final Dox result : results) {
 
             result.getAccessKey();
             // TODO check security
             if (result.getSchemaVersion() != schema.getVersion()) {
-                migrator.migrate(config.getName(), result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());
+                migrator.migrate(schemaName, result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());
                 // queue migrate later?
             } else {
                 b.append(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());
@@ -286,6 +338,7 @@ public class DoxBean implements
             b.append(']');
         }
         return b.toString();
+
     }
 
     private DoxMeta readMetaAndLock(

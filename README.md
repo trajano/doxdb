@@ -18,6 +18,7 @@ Completed:
    * REST API
    * Angular JS sample
    * Event notification using WebSockets
+   * Allow for retrieving large collections
 
 Remaining:
 
@@ -32,5 +33,3 @@ Remaining:
    * More robust Angular JS sample
    * Off-line sync
    * Migrate from JEST to JAX-RS Client
-   * Allow for retrieving large collections
-

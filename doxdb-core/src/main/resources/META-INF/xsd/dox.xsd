@@ -61,12 +61,12 @@
 				</appinfo>
 			</annotation>
 		</attribute>
-		<attribute name="readAll" type="boolean" default="true">
+		<attribute name="readAll" type="tns:ReadAllType" default="memory">
 			<annotation>
 				<appinfo>
 					<jxb:property>
-						<jxb:javadoc>If true, this will allow access to the readAll method
-							for the collection. This is normally true for small collections.
+						<jxb:javadoc>If not "none", this will allow access to the readAll
+							method for the collection.
 						</jxb:javadoc>
 					</jxb:property>
 				</appinfo>
@@ -84,6 +84,13 @@
 			</annotation>
 		</attribute>
 	</complexType>
+	<simpleType name="ReadAllType">
+		<restriction base="token">
+			<enumeration value="memory"></enumeration>
+			<enumeration value="file"></enumeration>
+			<enumeration value="none"></enumeration>
+		</restriction>
+	</simpleType>
 	<complexType name="SchemaType">
 		<annotation>
 			<appinfo>

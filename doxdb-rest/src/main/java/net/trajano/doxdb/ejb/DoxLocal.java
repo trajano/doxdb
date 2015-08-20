@@ -47,10 +47,18 @@ public interface DoxLocal {
      * <p>
      * Builds a JSON array represented as a string containing the contents of
      * the collection. Each content entry is modified to have an "_id" and
-     * "_version" attribute as well. This is meant for small collections as the
-     * entire collection is loaded up into memory. Future releases may add a
-     * largeReadAll method that will write to a temporary file that the client
-     * would retrieve and delete later.
+     * "_version" attribute as well.
+     * </p>
+     * <p>
+     * For small collections, "memory" can be used to transmit the entire
+     * collection. In this mode, it will return a String containing the JSON
+     * array and can be indicated by checking if the first character is "[".
+     * </p>
+     * <p>
+     * For larger collection "file" should be used.In this mode, it will return
+     * a String containing the name of the temporary file that can be opened
+     * using a FileInputStream. The clients are expected to delete the file
+     * afterwards.
      * </p>
      * <p>
      * This is done to ensure the non-ASCII characters are sent correctly to the
@@ -60,7 +68,7 @@ public interface DoxLocal {
      *
      * @param collectionName
      *            collection name
-     * @return JSON string
+     * @return JSON string or file name
      */
     String readAll(String collectionName);
 

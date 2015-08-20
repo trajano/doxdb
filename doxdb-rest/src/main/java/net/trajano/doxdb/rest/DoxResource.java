@@ -1,5 +1,13 @@
 package net.trajano.doxdb.rest;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -19,11 +27,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
 import org.bson.BsonDocument;
@@ -130,8 +140,33 @@ public class DoxResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response readAll(@PathParam("collection") final String collection) {
 
-        // FIXME this is so yucky.
-        return Response.ok(dox.readAll(collection)).build();
+        final String readAll = dox.readAll(collection);
+        if (readAll.charAt(0) == '[') {
+            return Response.ok(readAll).build();
+        }
+
+        final StreamingOutput out = new StreamingOutput() {
+
+            @Override
+            public void write(final OutputStream os) throws IOException,
+                WebApplicationException {
+
+                try (Writer w = new OutputStreamWriter(os, "UTF-8")) {
+                    try (final Reader fis = new InputStreamReader(new FileInputStream(readAll), "UTF-8")) {
+                        int c = fis.read();
+                        while (c != -1) {
+                            w.write(c);
+                            c = fis.read();
+                        }
+                    }
+                } finally {
+                    new File(readAll).delete();
+                }
+
+            }
+        };
+        return Response.ok(out).encoding("UTF-8").build();
+
     }
 
     @OPTIONS
