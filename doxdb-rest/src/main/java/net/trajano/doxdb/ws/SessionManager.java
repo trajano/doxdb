@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
@@ -20,6 +21,7 @@ import net.trajano.doxdb.DoxID;
  * @author Archimedes Trajano
  */
 @Singleton
+@LocalBean
 public class SessionManager {
 
     private final Set<Session> sessions = Collections.newSetFromMap(new ConcurrentHashMap<Session, Boolean>());
