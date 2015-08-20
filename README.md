@@ -32,3 +32,5 @@ Remaining:
    * More robust Angular JS sample
    * Off-line sync
    * Migrate from JEST to JAX-RS Client
+   * Allow for retrieving large collections
+

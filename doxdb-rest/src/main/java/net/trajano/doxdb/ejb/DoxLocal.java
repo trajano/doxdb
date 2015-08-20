@@ -2,7 +2,6 @@ package net.trajano.doxdb.ejb;
 
 import javax.ejb.Local;
 
-import org.bson.BsonArray;
 import org.bson.BsonDocument;
 
 import net.trajano.doxdb.DoxID;
@@ -44,7 +43,26 @@ public interface DoxLocal {
     DoxMeta read(String collectionName,
         DoxID id);
 
-    BsonArray readAll(String collection);
+    /**
+     * <p>
+     * Builds a JSON array represented as a string containing the contents of
+     * the collection. Each content entry is modified to have an "_id" and
+     * "_version" attribute as well. This is meant for small collections as the
+     * entire collection is loaded up into memory. Future releases may add a
+     * largeReadAll method that will write to a temporary file that the client
+     * would retrieve and delete later.
+     * </p>
+     * <p>
+     * This is done to ensure the non-ASCII characters are sent correctly to the
+     * clients, passing JsonArray or BSON appears to lose the non-ASCII
+     * characters in transit.
+     * </p>
+     *
+     * @param collectionName
+     *            collection name
+     * @return JSON string
+     */
+    String readAll(String collectionName);
 
     void reindex();
 

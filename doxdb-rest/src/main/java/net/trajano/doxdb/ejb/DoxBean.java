@@ -25,7 +25,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.validation.ValidationException;
 
-import org.bson.BsonArray;
 import org.bson.BsonDocument;
 import org.bson.BsonInt32;
 import org.bson.BsonString;
@@ -257,7 +256,7 @@ public class DoxBean implements
     }
 
     @Override
-    public BsonArray readAll(final String collectionName) {
+    public String readAll(final String collectionName) {
 
         final DoxType config = doxen.get(collectionName);
         if (!config.isReadAll()) {
@@ -265,7 +264,7 @@ public class DoxBean implements
         }
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        final BsonArray all = new BsonArray();
+        final StringBuilder b = new StringBuilder("[");
 
         final List<Dox> results = em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", config.getName()).getResultList();
         for (final Dox result : results) {
@@ -276,11 +275,17 @@ public class DoxBean implements
                 migrator.migrate(config.getName(), result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());
                 // queue migrate later?
             } else {
-                all.add(addMeta(result.getContent(), result.getDoxId(), result.getVersion()));
+                b.append(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());
+                b.append(',');
             }
 
         }
-        return all;
+        if (b.length() > 1) {
+            b.replace(b.length() - 1, b.length(), "]");
+        } else {
+            b.append(']');
+        }
+        return b.toString();
     }
 
     private DoxMeta readMetaAndLock(
