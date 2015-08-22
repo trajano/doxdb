@@ -153,45 +153,45 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>         <strong class="jxr_keyword">final</strong> byte[] buffer1 = <strong class="jxr_keyword">new</strong> byte[200];
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>         dao.readOobContent(d1, <span class="jxr_string">"ref"</span>, ByteBuffer.wrap(buffer1));
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>         <strong class="jxr_keyword">final</strong> byte[] buffer2 = <strong class="jxr_keyword">new</strong> byte[200];
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>         ByteStreams.readFully(ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.xml"</span>), buffer2);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>         Assert.assertArrayEquals(buffer1, buffer2);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> d1Version = dao.getVersion(d1);
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>         Assert.assertTrue(d1Version &gt; version3);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>         dao.delete(d1, d1Version, <strong class="jxr_keyword">new</strong> DoxPrincipal(<span class="jxr_string">"PRINCE"</span>));
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>         c.commit();
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>     }
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>     @Test
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testExportImport() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>         <strong class="jxr_keyword">final</strong> DoxConfiguration doxConfiguration = <strong class="jxr_keyword">new</strong> DoxConfiguration();
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>         doxConfiguration.setTableName(<span class="jxr_string">"sample"</span>);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>         doxConfiguration.setHasOob(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>         <strong class="jxr_keyword">final</strong> JdbcDoxDAO dao = <strong class="jxr_keyword">new</strong> JdbcDoxDAO(c, doxConfiguration);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>         <strong class="jxr_keyword">final</strong> DoxID d1 = dao.create(ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.bin"</span>), 1, <strong class="jxr_keyword">new</strong> DoxPrincipal(<span class="jxr_string">"PRINCE"</span>));
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>         dao.attach(d1, <span class="jxr_string">"ref"</span>, ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.bin"</span>), dao.getVersion(d1), <strong class="jxr_keyword">new</strong> DoxPrincipal(<span class="jxr_string">"PRINSIPE"</span>));
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>         <strong class="jxr_keyword">final</strong> ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>         dao.exportDox(d1, baos);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a>         baos.close();
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>         dao.delete(d1, dao.getVersion(d1), <strong class="jxr_keyword">new</strong> DoxPrincipal(<span class="jxr_string">"PRINCE"</span>));
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>         dao.importDox(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(baos.toByteArray()), 1);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>         <strong class="jxr_keyword">final</strong> byte[] buffer1 = <strong class="jxr_keyword">new</strong> byte[200];
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>         dao.readContent(d1, ByteBuffer.wrap(buffer1));
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>         <strong class="jxr_keyword">final</strong> byte[] buffer2 = <strong class="jxr_keyword">new</strong> byte[200];
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>         ByteStreams.readFully(ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.bin"</span>), buffer2);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>         Assert.assertArrayEquals(buffer2, buffer1);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>         <strong class="jxr_keyword">final</strong> byte[] oobBuffer1 = <strong class="jxr_keyword">new</strong> byte[200];
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>         dao.readOobContent(d1, <span class="jxr_string">"ref"</span>, ByteBuffer.wrap(oobBuffer1));
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>         <strong class="jxr_keyword">final</strong> byte[] oobBuffer2 = <strong class="jxr_keyword">new</strong> byte[200];
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         <strong class="jxr_keyword">final</strong> byte[] buffer2 = ResourceUtil.streamToBytes(ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.xml"</span>));
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         Assert.assertArrayEquals(buffer1, buffer2);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> d1Version = dao.getVersion(d1);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         Assert.assertTrue(d1Version &gt; version3);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         dao.delete(d1, d1Version, <strong class="jxr_keyword">new</strong> DoxPrincipal(<span class="jxr_string">"PRINCE"</span>));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         c.commit();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>     }
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>     @Test
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testExportImport() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         <strong class="jxr_keyword">final</strong> DoxConfiguration doxConfiguration = <strong class="jxr_keyword">new</strong> DoxConfiguration();
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>         doxConfiguration.setTableName(<span class="jxr_string">"sample"</span>);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>         doxConfiguration.setHasOob(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>         <strong class="jxr_keyword">final</strong> JdbcDoxDAO dao = <strong class="jxr_keyword">new</strong> JdbcDoxDAO(c, doxConfiguration);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>         <strong class="jxr_keyword">final</strong> DoxID d1 = dao.create(ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.bin"</span>), 1, <strong class="jxr_keyword">new</strong> DoxPrincipal(<span class="jxr_string">"PRINCE"</span>));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>         dao.attach(d1, <span class="jxr_string">"ref"</span>, ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.bin"</span>), dao.getVersion(d1), <strong class="jxr_keyword">new</strong> DoxPrincipal(<span class="jxr_string">"PRINSIPE"</span>));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>         <strong class="jxr_keyword">final</strong> ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>         dao.exportDox(d1, baos);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         baos.close();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>         dao.delete(d1, dao.getVersion(d1), <strong class="jxr_keyword">new</strong> DoxPrincipal(<span class="jxr_string">"PRINCE"</span>));
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         dao.importDox(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(baos.toByteArray()), 1);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>         <strong class="jxr_keyword">final</strong> byte[] buffer1 = <strong class="jxr_keyword">new</strong> byte[200];
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>         dao.readContent(d1, ByteBuffer.wrap(buffer1));
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         <strong class="jxr_keyword">final</strong> byte[] buffer2 = <strong class="jxr_keyword">new</strong> byte[200];
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>         ByteStreams.readFully(ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.bin"</span>), buffer2);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>         Assert.assertArrayEquals(buffer2, buffer1);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">final</strong> byte[] oobBuffer1 = <strong class="jxr_keyword">new</strong> byte[200];
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>         dao.readOobContent(d1, <span class="jxr_string">"ref"</span>, ByteBuffer.wrap(oobBuffer1));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         <strong class="jxr_keyword">final</strong> byte[] oobBuffer2 = <strong class="jxr_keyword">new</strong> byte[200];
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>         ByteStreams.readFully(ResourceUtil.getResourceAsStream(<span class="jxr_string">"sample.bin"</span>), oobBuffer2);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>         Assert.assertArrayEquals(oobBuffer2, oobBuffer1);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
