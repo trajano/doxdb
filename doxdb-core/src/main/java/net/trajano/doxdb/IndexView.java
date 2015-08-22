@@ -64,7 +64,8 @@ public class IndexView implements
      * content.
      *
      * @param text
-     * @return
+     *            text
+     * @return <code>this</code>
      */
     public IndexView appendText(final String text) {
 
@@ -106,7 +107,7 @@ public class IndexView implements
     /**
      * The value will be stored in "_text" which will also be the default.
      *
-     * @return
+     * @return value of text
      */
     public String getText() {
 
@@ -185,8 +186,10 @@ public class IndexView implements
      * original text is stored in the index.
      *
      * @param name
+     *            field name
      * @param stringValue
-     * @return
+     *            string value
+     * @return <code>this</code>
      */
     public IndexView setString(final String name,
         final String stringValue) {
@@ -201,13 +204,15 @@ public class IndexView implements
      * index.
      *
      * @param name
-     * @param stringValue
-     * @return
+     *            field name
+     * @param textValue
+     *            text value
+     * @return <code>this</code>
      */
     public IndexView setText(final String name,
-        final String stringValue) {
+        final String textValue) {
 
-        texts.put(name, stringValue);
+        texts.put(name, textValue);
         return this;
 
     }

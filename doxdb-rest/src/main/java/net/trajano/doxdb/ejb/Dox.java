@@ -102,7 +102,11 @@ public class Dox {
     /**
      * Creates the tombstone entity instance for the record.
      *
-     * @return
+     * @param deletedBy
+     *            user who deleted the record
+     * @param deletedOn
+     *            when it was deleted
+     * @return tombstone data
      */
     public DoxTombstone buildTombstone(final Principal deletedBy,
         final Date deletedOn) {

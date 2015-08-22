@@ -57,7 +57,7 @@
                     <useCommonsLang3>true</useCommonsLang3>
                     <annotationStyle>jackson2</annotationStyle>
                     <targetPackage>net.trajano.doxdb.sample.json</targetPackage>
-                    <sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory>
+                    <sourceDirectory>${basedir}/src/main/resources/META-INF/schema</sourceDirectory>
                 </configuration>
             </plugin>
         </plugins>

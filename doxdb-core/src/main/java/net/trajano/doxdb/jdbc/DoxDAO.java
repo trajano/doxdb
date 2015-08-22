@@ -29,11 +29,6 @@ public interface DoxDAO {
     /**
      * Creates a record in the database. The contentVersion specifies the
      * version of the structure being used for storing.
-     *
-     * @param in
-     * @param contentVersion
-     * @param principal
-     * @return
      */
     DoxID create(InputStream in,
         int contentVersion,
@@ -50,25 +45,15 @@ public interface DoxDAO {
 
     /**
      * Writes the complete Dox record including OOB data to an output stream.
-     * The format is compatible for {@link #importDox(InputStream)}.
      *
      * @param doxID
      *            Dox ID
-     * @param os
-     * @throws IOException
      */
     void exportDox(DoxID doxID,
         OutputStream os) throws IOException;
 
     int getContentVersion(DoxID id);
 
-    /**
-     * Get version for optimistic locking for the Dox.
-     *
-     * @param id
-     *            Dox ID
-     * @return
-     */
     int getVersion(DoxID id);
 
     /**
@@ -88,7 +73,6 @@ public interface DoxDAO {
      * Reads content into a buffer. This does not return an {@link InputStream}
      * because the source would be closed.
      *
-     * @param doxId
      * @param buffer
      *            buffer to write the data to
      * @return size of data that was read
@@ -99,7 +83,6 @@ public interface DoxDAO {
     /**
      * Reads content into an output stream.
      *
-     * @param doxId
      * @param os
      *            output stream
      */
@@ -109,7 +92,6 @@ public interface DoxDAO {
     /**
      * Reads OOB content into a buffer.
      *
-     * @param doxId
      * @param reference
      *            OOB reference
      * @param buffer
@@ -123,7 +105,6 @@ public interface DoxDAO {
     /**
      * Reads content into an output stream.
      *
-     * @param doxId
      * @param reference
      *            OOB reference
      * @param os

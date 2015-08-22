@@ -29,8 +29,11 @@ public interface DoxLocal {
 
     /**
      * @param collection
+     *            collection
      * @param doxID
+     *            Dox ID
      * @param version
+     *            version
      * @return true if a record was deleted.
      */
     boolean delete(String collection,
@@ -40,7 +43,8 @@ public interface DoxLocal {
     /**
      * This retrieves the schema.
      *
-     * @param schemaName
+     * @param path
+     *            path to the schema file
      * @return JSON Schema stream
      */
     InputStream getSchema(String path);
@@ -77,10 +81,10 @@ public interface DoxLocal {
      * </p>
      *
      * @param schemaName
-     *            schemaName
+     *            schema name
      * @return JSON string or file name
      */
-    String readAll(String collectionName);
+    String readAll(String schemaName);
 
     void reindex();
 
@@ -97,14 +101,14 @@ public interface DoxLocal {
      * Creates a dox record into the database. This will allocate a "_id" value
      * for the record.
      *
-     * @param collectionName
-     *            collection name
+     * @param schemaName
+     *            schema name
      * @param contents
      *            dox contents as a BSON. The contents MUST be valid for the
      *            schema.
      * @return dox meta with contents with "_id" and "_version" set.
      */
-    DoxMeta update(String collection,
+    DoxMeta update(String schemaName,
         DoxID id,
         BsonDocument contents,
         int version);

@@ -53,32 +53,10 @@ import net.trajano.doxdb.ejb.DoxLocal;
 import net.trajano.doxdb.ws.SessionManager;
 
 /**
- * This class is extended by clients to provide a list of objects that are
- * allowed and allowed OOB references along with their schema.
- * <p>
- * Registration is done through a list of schemas provided by the
- * {@link #getRegisteredSchemaResources()} method. The DOXDB table that gets
- * created would be based on the the "$doxdb" object that is required in the
- * schema. In the future an alternate version of this provider will allow
- * passing in the contents of "$doxdb" only with a reference to a schema.
- * <p>
- * Given the following, there's no need for a "customized" WAR file for the REST
- * API. However, there still is a need actually... in case we want the web
- * resources in the same WAR... or perhaps we just have it as a separate web
- * module? Let's try separate web module first.
+ * This provides the REST API for DoxDB. The API is built to support AngularJS
+ * $resource natively.
  *
- * <pre>
- * GET search/{index}?q={query}
- * GET {collection}/{id : [A-Za-z0-9]{32} }
- * GET {collection}/{id : [A-Za-z0-9]{32} }/{oobname}
- * POST {collection}
- * POST {collection}/{id : [A-Za-z0-9]{32} }
- * POST {collection}/{id : [A-Za-z0-9]{32} }/{oobname}
- * POST {collection}/{operation : _[A-Za-z0-9]+}
- * DELETE {collection}/{id : [A-Za-z0-9]{32} }
- * </pre>
- *
- * @author Archimedes
+ * @author Archimedes Trajano
  */
 @Path("")
 @RequestScoped
@@ -138,7 +116,7 @@ public class DoxResource {
      * Returns the schema document. It does a check to make sure each path
      * segment contains a restricted set of characters.
      *
-     * @param segements
+     * @param segments
      *            path segments after the URL
      * @return the schema document.
      */

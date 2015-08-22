@@ -13,7 +13,7 @@ public interface CollectionAccessControl {
      *            data
      * @param principal
      *            principal name
-     * @return
+     * @return access key
      */
     byte[] buildAccessKey(String collection,
         String json,

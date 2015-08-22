@@ -748,11 +748,6 @@ public class JdbcDoxDAO implements
     /**
      * This will read the meta data for a record for locking. The version number
      * is not touched.
-     *
-     * @param id
-     * @param version
-     * @return
-     * @throws SQLException
      */
     private DoxMeta readMetaAndLock(final DoxID id,
         final int version) {
