@@ -1,5 +1,7 @@
 package net.trajano.doxdb.ejb;
 
+import java.io.InputStream;
+
 import javax.ejb.Local;
 
 import org.bson.BsonDocument;
@@ -36,6 +38,14 @@ public interface DoxLocal {
         int version);
 
     /**
+     * This retrieves the schema.
+     *
+     * @param schemaName
+     * @return JSON Schema stream
+     */
+    InputStream getSchema(String path);
+
+    /**
      * Does nothing, but calling it ensures that the EJB gets initialized.
      */
     void noop();
@@ -66,8 +76,8 @@ public interface DoxLocal {
      * characters in transit.
      * </p>
      *
-     * @param collectionName
-     *            collection name
+     * @param schemaName
+     *            schemaName
      * @return JSON string or file name
      */
     String readAll(String collectionName);

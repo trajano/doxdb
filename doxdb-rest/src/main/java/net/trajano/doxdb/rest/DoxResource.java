@@ -3,13 +3,16 @@ package net.trajano.doxdb.rest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URI;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.ejb.EJB;
@@ -21,6 +24,7 @@ import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -31,9 +35,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.StreamingOutput;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.bson.BsonDocument;
@@ -126,6 +132,54 @@ public class DoxResource {
         }
         final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
         return Response.ok().tag(entityTag).entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
+    }
+
+    /**
+     * Returns the schema document. It does a check to make sure each path
+     * segment contains a restricted set of characters.
+     *
+     * @param segements
+     *            path segments after the URL
+     * @return the schema document.
+     */
+    @GET
+    @Path("schema/{segments: .*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSchema(@PathParam("segments") final List<PathSegment> segments) {
+
+        final UriBuilder b = UriBuilder.fromUri("schema");
+        for (final PathSegment segment : segments) {
+            final String pathSegment = segment.getPath();
+            if (".".equals(pathSegment) || "..".equals(pathSegment) || pathSegment.endsWith(".") || !pathSegment.matches("^[-A-Za-z0-9_\\.]+$")) {
+                throw new WebApplicationException("invalid request");
+            }
+            b.path(pathSegment);
+        }
+        final URI relativize = UriBuilder.fromUri("schema").build().relativize(b.build());
+        if (relativize.isAbsolute()) {
+            throw new WebApplicationException("invalid request");
+        }
+
+        final StreamingOutput out = new StreamingOutput() {
+
+            @Override
+            public void write(final OutputStream os) throws IOException,
+                WebApplicationException {
+
+                try (InputStream fis = dox.getSchema(relativize.toASCIIString())) {
+                    if (fis == null) {
+                        throw new NotFoundException();
+                    }
+                    int c = fis.read();
+                    while (c != -1) {
+                        os.write(c);
+                        c = fis.read();
+                    }
+                }
+
+            }
+        };
+        return Response.ok(out).encoding("UTF-8").build();
     }
 
     private Response op(final String collection,

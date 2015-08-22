@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://doxdb.trajano.net/schema/ ../../../../../doxdb-core/src/main/resources/META-INF/xsd/dox.xsd"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<dox name="horse" oob="true">
-		<schema version="1" uri="/schema/horse.json" />
+		<schema version="1" location="/schema/horse.json" />
 	</dox>
 	<index name="myindex" mappedName="testIndex1" />
 	<index name="maskedindex" mappedName="testIndex2" />

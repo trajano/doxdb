@@ -3,6 +3,7 @@ package net.trajano.doxdb.ejb;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.sql.Timestamp;
@@ -204,6 +205,15 @@ public class DoxBean implements
         eventHandler.onRecordDelete(config.getName(), doxid, contentJson);
         return true;
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InputStream getSchema(final String path) {
+
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/schema/" + path);
     }
 
     /**
@@ -506,7 +516,7 @@ public class DoxBean implements
 
         try {
 
-            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getUri());
+            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getLocation());
             if (jsonSchema == null) {
                 final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
                     .setDefaultVersion(SchemaVersion.DRAFTV4)
@@ -515,8 +525,8 @@ public class DoxBean implements
                 jsonSchema = JsonSchemaFactory.newBuilder()
                     .setValidationConfiguration(cfg)
                     .freeze()
-                    .getJsonSchema(JsonLoader.fromResource(schema.getUri()));
-                jsonSchemaMap.putIfAbsent(schema.getUri(), jsonSchema);
+                    .getJsonSchema(JsonLoader.fromResource("/META-INF/schema/" + schema.getLocation()));
+                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);
             }
 
             final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));

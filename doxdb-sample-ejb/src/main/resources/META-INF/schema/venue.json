@@ -11,14 +11,17 @@
 		"language":{
 			"type":"string"
 		},
-		"ring":{
+		"rings":{
 			"type":"array",
 			"items": {
-				"ringNO": {
-					"type":"string"
-				},
-				"name":{
-					"type":"string"
+				"type": "object",
+				"properties":{
+					"ringNO": {
+						"type":"string"
+					},
+					"name":{
+						"type":"string"
+					}
 				}
 			}
 		}
