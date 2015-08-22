@@ -46,34 +46,6 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.JestProvider.java">net/trajano/doxdb/ejb/jest/JestProvider.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.SearchResult2.java">net/trajano/doxdb/ejb/jest/SearchResult2.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.package-info.java">net/trajano/doxdb/ejb/jest/package-info.java</a>
                 </td>
                 <td>
@@ -88,7 +60,35 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.JestProvider.java">net/trajano/doxdb/ejb/jest/JestProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.JestDoxSearchBean.java">net/trajano/doxdb/ejb/jest/JestDoxSearchBean.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.SearchResult2.java">net/trajano/doxdb/ejb/jest/SearchResult2.java</a>
                 </td>
                 <td>
                   0
