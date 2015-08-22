@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./AccessControls.html" title="net.trajano.doxdb.sampleejb.AccessControls" alt="" coords="211,118,323,143"/>
-<area shape="rect" id="node1" href="./AccessControls.html" title="&lt;TABLE&gt;" alt="" coords="201,107,334,155"/>
-<area shape="rect" id="node2_1" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/CollectionAccessControl.html" title="net.trajano.doxdb.ext.CollectionAccessControl" alt="" coords="16,11,180,53"/>
-<area shape="rect" id="node2" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/CollectionAccessControl.html" title="&lt;TABLE&gt;" alt="" coords="5,5,191,59"/>
-<area shape="rect" id="node3_2" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Migrator.html" title="net.trajano.doxdb.ext.Migrator" alt="" coords="225,11,309,53"/>
-<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Migrator.html" title="&lt;TABLE&gt;" alt="" coords="215,5,320,59"/>
-<area shape="rect" id="node4_3" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Indexer.html" title="net.trajano.doxdb.ext.Indexer" alt="" coords="355,11,439,53"/>
-<area shape="rect" id="node4" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Indexer.html" title="&lt;TABLE&gt;" alt="" coords="344,5,449,59"/>
+<area shape="rect" id="node1_0" href="./AccessControls.html" title="net.trajano.doxdb.sampleejb.AccessControls" alt="" coords="209,118,321,143"/>
+<area shape="rect" id="node1" href="./AccessControls.html" title="&lt;TABLE&gt;" alt="" coords="198,107,331,155"/>
+<area shape="rect" id="node2_1" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/CollectionAccessControl.html" title="net.trajano.doxdb.ext.CollectionAccessControl" alt="" coords="16,11,177,53"/>
+<area shape="rect" id="node2" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/CollectionAccessControl.html" title="&lt;TABLE&gt;" alt="" coords="5,5,188,59"/>
+<area shape="rect" id="node3_2" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Migrator.html" title="net.trajano.doxdb.ext.Migrator" alt="" coords="223,11,306,53"/>
+<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Migrator.html" title="&lt;TABLE&gt;" alt="" coords="213,5,317,59"/>
+<area shape="rect" id="node4_3" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Indexer.html" title="net.trajano.doxdb.ext.Indexer" alt="" coords="351,11,434,53"/>
+<area shape="rect" id="node4" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Indexer.html" title="&lt;TABLE&gt;" alt="" coords="341,5,445,59"/>
 </map>

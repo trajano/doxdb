@@ -1,4 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./AccessControls.html" title="net.trajano.doxdb.sampleejb.AccessControls" alt="" coords="16,17,128,42"/>
-<area shape="rect" id="node1" href="./AccessControls.html" title="&lt;TABLE&gt;" alt="" coords="5,5,139,53"/>
+<area shape="rect" id="node1_0" href="./MyEventHandler.html" title="net.trajano.doxdb.sampleejb.MyEventHandler" alt="" coords="16,17,129,42"/>
+<area shape="rect" id="node1" href="./MyEventHandler.html" title="&lt;TABLE&gt;" alt="" coords="5,5,140,53"/>
+<area shape="rect" id="node2_1" href="./MyConfigurationProvider.html" title="net.trajano.doxdb.sampleejb.MyConfigurationProvider" alt="" coords="175,17,333,42"/>
+<area shape="rect" id="node2" href="./MyConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="164,5,344,53"/>
+<area shape="rect" id="node3_2" href="./AccessControls.html" title="net.trajano.doxdb.sampleejb.AccessControls" alt="" coords="379,17,491,42"/>
+<area shape="rect" id="node3" href="./AccessControls.html" title="&lt;TABLE&gt;" alt="" coords="369,5,502,53"/>
 </map>
