@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-01T13:36:34.460">
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/Dox.java">
-<violation beginline="88" endline="88" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb.ejb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+<pmd version="5.0.5" timestamp="2015-08-22T00:38:16.829">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\Dox.java">
+<violation beginline="89" endline="89" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb.ejb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'oobs'.
 </violation>
-<violation beginline="125" endline="125" begincolumn="9" endcolumn="25" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="Dox" method="getAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
+<violation beginline="130" endline="130" begincolumn="9" endcolumn="25" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="Dox" method="getAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
 Returning 'accessKey' may expose an internal array.
 </violation>
-<violation beginline="191" endline="191" begincolumn="30" endcolumn="51" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="Dox" method="setAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
+<violation beginline="196" endline="196" begincolumn="30" endcolumn="51" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="Dox" method="setAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
 The user-supplied array 'accessKey' is stored directly.
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java">
-<violation beginline="64" endline="64" begincolumn="23" endcolumn="45" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxBean.java">
+<violation beginline="79" endline="79" begincolumn="23" endcolumn="45" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
 </violation>
-<violation beginline="66" endline="66" begincolumn="23" endcolumn="42" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+<violation beginline="81" endline="81" begincolumn="23" endcolumn="42" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
+</violation>
+<violation beginline="170" endline="170" begincolumn="9" endcolumn="34" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxBean" method="delete" variable="ts" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
+Avoid declaring a variable if it is unreferenced before a possible exit point.
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOob.java">
-<violation beginline="70" endline="70" begincolumn="9" endcolumn="23" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxOob" method="getContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOob.java">
+<violation beginline="71" endline="71" begincolumn="9" endcolumn="23" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxOob" method="getContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
 Returning 'content' may expose an internal array.
 </violation>
-<violation beginline="108" endline="108" begincolumn="28" endcolumn="47" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxOob" method="setContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
+<violation beginline="109" endline="109" begincolumn="28" endcolumn="47" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxOob" method="setContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
 The user-supplied array 'content' is stored directly.
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java">
 <violation beginline="92" endline="92" begincolumn="9" endcolumn="23" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxOobTombstone" method="getContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
 Returning 'content' may expose an internal array.
 </violation>
@@ -35,26 +38,15 @@ Returning 'content' may expose an internal array.
 The user-supplied array 'content' is stored directly.
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java">
-<violation beginline="86" endline="86" begincolumn="9" endcolumn="23" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxTombstone" method="getContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java">
+<violation beginline="87" endline="87" begincolumn="9" endcolumn="23" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxTombstone" method="getContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
 Returning 'content' may expose an internal array.
 </violation>
-<violation beginline="139" endline="139" begincolumn="28" endcolumn="47" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxTombstone" method="setContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
+<violation beginline="140" endline="140" begincolumn="28" endcolumn="47" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxTombstone" method="setContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
 The user-supplied array 'content' is stored directly.
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxResource.java">
-<violation beginline="90" endline="90" begincolumn="17" endcolumn="35" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="create" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
-This call to String.startsWith can be rewritten using String.charAt(0)
-</violation>
-<violation beginline="127" endline="127" begincolumn="9" endcolumn="26" rule="SystemPrintln" ruleset="Java Logging" package="net.trajano.doxdb.rest" class="DoxResource" method="op" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/logging-java.html#SystemPrintln" priority="2">
-System.out.print is used
-</violation>
-<violation beginline="210" endline="210" begincolumn="13" endcolumn="34" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="saveOrOp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
-This call to String.startsWith can be rewritten using String.charAt(0)
-</violation>
-</file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxRestApplication.java">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\rest\DoxRestApplication.java">
 <violation beginline="22" endline="22" begincolumn="9" endcolumn="26" rule="SystemPrintln" ruleset="Java Logging" package="net.trajano.doxdb.rest" class="DoxRestApplication" method="getClasses" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/logging-java.html#SystemPrintln" priority="2">
 System.out.print is used
 </violation>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxNotification.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ws</a> &gt; <span class="el_source">DoxNotification.java</span></div><h1>DoxNotification.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ws;
+
+import javax.ejb.EJB;
+import javax.enterprise.context.ApplicationScoped;
+import javax.websocket.CloseReason;
+import javax.websocket.EndpointConfig;
+import javax.websocket.OnClose;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+
+/**
+ * &lt;p&gt;
+ * Manages the notification connections for doxdb. This class does not handle
+ * any messages. As such the following method is not present although a future
+ * version may accept messages to &quot;filter&quot; out the notifications so they only
+ * get the ones they are interested in.
+ * &lt;/p&gt;
+ *
+ * &lt;pre&gt;
+ *
+ * &amp;#64;OnMessage
+ * public String handleMessage(final Session session,
+ *     final String message) {
+ *
+ *     return message;
+ * }
+ * &lt;/pre&gt;
+ *
+ * @author Archimedes Trajano
+ */
+@ApplicationScoped
+@ServerEndpoint(&quot;/doxdb&quot;)
+<span class="nc" id="L34">public class DoxNotification {</span>
+
+    @EJB
+    private SessionManager sessionManager;
+
+    @OnClose
+    public void closeSession(final Session session,
+        final CloseReason reason) {
+
+<span class="nc" id="L43">        sessionManager.unregister(session);</span>
+
+<span class="nc" id="L45">    }</span>
+
+    @OnOpen
+    public void openSession(final Session session,
+        final EndpointConfig endpointConfig) {
+
+<span class="nc" id="L51">        sessionManager.register(session);</span>
+
+<span class="nc" id="L53">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

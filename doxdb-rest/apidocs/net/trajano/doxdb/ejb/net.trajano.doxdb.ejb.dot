@@ -5,48 +5,48 @@
 #
 
 digraph G {
-	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
-	node [fontname="Helvetica",fontsize=10,shape=plaintext];
+	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
+	node [fontname="arial",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// net.trajano.doxdb.ejb.Dox
-	c0 [label=<<table title="net.trajano.doxdb.ejb.Dox" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Dox.html">
+	// net.trajano.doxdb.ejb.DoxTombstone
+	c0 [label=<<table title="net.trajano.doxdb.ejb.DoxTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxTombstone.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> Dox </td></tr>
+<tr><td align="center" balign="center"> DoxTombstone </td></tr>
 		</table></td></tr>
-		</table>>, URL="./Dox.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ejb.DoxBean
-	c1 [label=<<table title="net.trajano.doxdb.ejb.DoxBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxBean.html">
+		</table>>, URL="./DoxTombstone.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.ejb.DoxOobTombstone
+	c1 [label=<<table title="net.trajano.doxdb.ejb.DoxOobTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOobTombstone.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxBean </td></tr>
+<tr><td align="center" balign="center"> DoxOobTombstone </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./DoxOobTombstone.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.ejb.DoxOob
+	c2 [label=<<table title="net.trajano.doxdb.ejb.DoxOob" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOob.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxOob </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxOob.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxLocal
-	c2 [label=<<table title="net.trajano.doxdb.ejb.DoxLocal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLocal.html">
+	c3 [label=<<table title="net.trajano.doxdb.ejb.DoxLocal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLocal.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DoxLocal </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxLocal.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ejb.DoxTombstone
-	c3 [label=<<table title="net.trajano.doxdb.ejb.DoxTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxTombstone.html">
+		</table>>, URL="./DoxLocal.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.ejb.DoxBean
+	c4 [label=<<table title="net.trajano.doxdb.ejb.DoxBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxTombstone </td></tr>
+<tr><td align="center" balign="center"> DoxBean </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxTombstone.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ejb.DoxOobTombstone
-	c4 [label=<<table title="net.trajano.doxdb.ejb.DoxOobTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOobTombstone.html">
+		</table>>, URL="./DoxBean.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.ejb.Dox
+	c5 [label=<<table title="net.trajano.doxdb.ejb.Dox" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Dox.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxOobTombstone </td></tr>
+<tr><td align="center" balign="center"> Dox </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxOobTombstone.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ejb.DoxOob
-	c5 [label=<<table title="net.trajano.doxdb.ejb.DoxOob" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOob.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxOob </td></tr>
-		</table></td></tr>
-		</table>>, URL="./DoxOob.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./Dox.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.ejb.DoxBean implements net.trajano.doxdb.ejb.DoxLocal
-	c2:p -> c1:p [dir=back,arrowtail=empty,style=dashed];
+	c3:p -> c4:p [dir=back,arrowtail=empty,style=dashed];
 }
 

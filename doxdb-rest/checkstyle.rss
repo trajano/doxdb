@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2012 - 2015 Trajano</copyright>
     <item>
-      <title>File: 13,
+      <title>File: 15,
              Errors: 0,
-             Warnings: 110,
+             Warnings: 113,
              Infos: 0
       </title>
             <link>http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html</link>
@@ -60,27 +60,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.rest.EntityNotFoundMapper.java">net/trajano/doxdb/rest/EntityNotFoundMapper.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.rest.DoxResource.java">net/trajano/doxdb/rest/DoxResource.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxLocal.java">net/trajano/doxdb/ejb/DoxLocal.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  11
+                  12
                 </td>
                 <td>
                   0
@@ -88,13 +74,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxBean.java">net/trajano/doxdb/ejb/DoxBean.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ws.DoxNotification.java">net/trajano/doxdb/ws/DoxNotification.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  20
+                  4
                 </td>
                 <td>
                   0
@@ -102,13 +88,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxTombstone.java">net/trajano/doxdb/ejb/DoxTombstone.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.rest.DoxIDMapper.java">net/trajano/doxdb/rest/DoxIDMapper.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  14
+                  2
                 </td>
                 <td>
                   0
@@ -130,7 +116,21 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.rest.DoxResource.java">net/trajano/doxdb/rest/DoxResource.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxBean.java">net/trajano/doxdb/ejb/DoxBean.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxOobTombstone.java">net/trajano/doxdb/ejb/DoxOobTombstone.java</a>
                 </td>
                 <td>
                   0
@@ -158,20 +158,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.Dox.java">net/trajano/doxdb/ejb/Dox.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  20
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.rest.internal.package-info.java">net/trajano/doxdb/rest/internal/package-info.java</a>
                 </td>
                 <td>
@@ -186,13 +172,55 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxOobTombstone.java">net/trajano/doxdb/ejb/DoxOobTombstone.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.Dox.java">net/trajano/doxdb/ejb/Dox.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  14
+                  18
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxLocal.java">net/trajano/doxdb/ejb/DoxLocal.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.rest.EntityNotFoundMapper.java">net/trajano/doxdb/rest/EntityNotFoundMapper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxTombstone.java">net/trajano/doxdb/ejb/DoxTombstone.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
                 </td>
                 <td>
                   0
@@ -214,13 +242,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.rest.DoxIDMapper.java">net/trajano/doxdb/rest/DoxIDMapper.java</a>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ws.SessionManager.java">net/trajano/doxdb/ws/SessionManager.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  1
+                  6
                 </td>
                 <td>
                   0

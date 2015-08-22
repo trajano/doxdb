@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SessionManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ws</a> &gt; <span class="el_source">SessionManager.java</span></div><h1>SessionManager.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ws;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.Singleton;
+import javax.json.Json;
+import javax.websocket.Session;
+
+import net.trajano.doxdb.DoxID;
+
+/**
+ * type.
+ *
+ * @author Archimedes Trajano
+ */
+@Singleton
+<span class="nc" id="L23">public class SessionManager {</span>
+
+<span class="nc" id="L25">    private final Set&lt;Session&gt; sessions = Collections.newSetFromMap(new ConcurrentHashMap&lt;Session, Boolean&gt;());</span>
+
+    @Lock(LockType.WRITE)
+    public void register(final Session session) {
+
+<span class="nc" id="L30">        sessions.add(session);</span>
+<span class="nc" id="L31">    }</span>
+
+    @Lock(LockType.READ)
+    public void sendMessage(final String message) {
+
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        for (final Session session : sessions) {</span>
+            try {
+<span class="nc" id="L38">                session.getBasicRemote().sendText(message);</span>
+<span class="nc" id="L39">            } catch (final IOException e) {</span>
+                // ignore
+            }
+        }
+<span class="nc" id="L43">    }</span>
+
+    @Lock(LockType.READ)
+    public void sendMessage(final String operation,
+        final DoxID doxID,
+        final String collection,
+        final Date on) {
+
+<span class="nc" id="L51">        sendMessage(Json.createObjectBuilder().add(&quot;op&quot;, operation).add(&quot;id&quot;, doxID.toString()).add(&quot;collection&quot;, collection).add(&quot;ts&quot;, on.getTime()).build().toString());</span>
+
+<span class="nc" id="L53">    }</span>
+
+    @Lock(LockType.WRITE)
+    public void unregister(final Session session) {
+
+<span class="nc" id="L58">        sessions.remove(session);</span>
+<span class="nc" id="L59">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

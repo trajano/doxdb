@@ -55,9 +55,9 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
     private Date deletedOn;
 
     @Column(nullable = false,
-        updatable = false,
+        columnDefinition = &quot;CHAR(32)&quot;,
         length = DoxID.LENGTH)
-    private DoxID doxId;
+    private String doxId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -114,7 +114,7 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
 
     public DoxID getDoxId() {
 
-<span class="nc" id="L117">        return doxId;</span>
+<span class="nc" id="L117">        return new DoxID(doxId);</span>
     }
 
     public long getId() {
@@ -172,39 +172,47 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
 <span class="nc" id="L172">        this.deletedOn = deletedOn;</span>
 <span class="nc" id="L173">    }</span>
 
+    /**
+     * Sets the Dox ID value using a {@link DoxID}. This internally converts it
+     * to a string as a workaround when JPA converters are not working as
+     * expected.
+     *
+     * @param doxId
+     *            Dox ID
+     */
     public void setDoxId(final DoxID doxId) {
 
-<span class="nc" id="L177">        this.doxId = doxId;</span>
-<span class="nc" id="L178">    }</span>
+<span class="nc" id="L185">        this.doxId = doxId.toString();</span>
+<span class="nc" id="L186">    }</span>
 
     public void setId(final long id) {
 
-<span class="nc" id="L182">        this.id = id;</span>
-<span class="nc" id="L183">    }</span>
+<span class="nc" id="L190">        this.id = id;</span>
+<span class="nc" id="L191">    }</span>
 
     public void setLastUpdatedBy(final String lastUpdatedBy) {
 
-<span class="nc" id="L187">        this.lastUpdatedBy = lastUpdatedBy;</span>
-<span class="nc" id="L188">    }</span>
+<span class="nc" id="L195">        this.lastUpdatedBy = lastUpdatedBy;</span>
+<span class="nc" id="L196">    }</span>
 
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
-<span class="nc" id="L192">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="nc" id="L193">    }</span>
+<span class="nc" id="L200">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="nc" id="L201">    }</span>
 
     public void setName(final String name) {
 
-<span class="nc" id="L197">        this.name = name;</span>
-<span class="nc" id="L198">    }</span>
+<span class="nc" id="L205">        this.name = name;</span>
+<span class="nc" id="L206">    }</span>
 
     public void setSchemaName(final String schemaName) {
 
-<span class="nc" id="L202">        this.schemaName = schemaName;</span>
-<span class="nc" id="L203">    }</span>
+<span class="nc" id="L210">        this.schemaName = schemaName;</span>
+<span class="nc" id="L211">    }</span>
 
     public void setSchemaVersion(final int schemaVersion) {
 
-<span class="nc" id="L207">        this.schemaVersion = schemaVersion;</span>
-<span class="nc" id="L208">    }</span>
+<span class="nc" id="L215">        this.schemaVersion = schemaVersion;</span>
+<span class="nc" id="L216">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

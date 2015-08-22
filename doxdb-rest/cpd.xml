@@ -1,49 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
-   <duplication lines="33" tokens="134">
-      <file line="28"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
-      <file line="27"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
-      <codefragment><![CDATA[public class DoxOobTombstone {
+   <duplication lines="18" tokens="167">
+      <file line="185"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxBean.java"/>
+      <file line="248"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxBean.java"/>
+      <codefragment><![CDATA[        final SchemaType schema = currentSchemaMap.get(collectionName);
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.CONTENT_LENGTH)
-    private byte[] content;
+        String contentJson;
 
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.PRINCIPAL_LENGTH)
-    private String createdBy;
-
-    @Column(nullable = false,
-        updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn;
-
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.PRINCIPAL_LENGTH)
-    private String deletedBy;
-
-    @Column(nullable = false,
-        updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deletedOn;
-
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxID.LENGTH)
-    private DoxID doxId;]]></codefragment>
+        if (meta.getSchemaVersion() != schema.getVersion()) {
+            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());
+            final BsonDocument document = BsonDocument.parse(contentJson);
+            meta.setSchemaVersion(schema.getVersion());
+            e.setSchemaVersion(schema.getVersion());
+            contentJson = document.toJson();
+            em.persist(e);
+        } else {
+            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC);
+            final BsonDocument document = e.getContent();
+            addMeta(document, e.getDoxId(), e.getVersion());
+            contentJson = document.toJson();
+        }]]></codefragment>
    </duplication>
-   <duplication lines="40" tokens="110">
+   <duplication lines="66" tokens="162">
       <file line="138"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
-      <file line="127"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+      <file line="128"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
       <codefragment><![CDATA[    }
 
     public String getSchemaName() {
@@ -81,8 +66,131 @@
         this.deletedOn = deletedOn;
     }
 
+    /**
+     * Sets the Dox ID value using a {@link DoxID}. This internally converts it
+     * to a string as a workaround when JPA converters are not working as
+     * expected.
+     *
+     * @param doxId
+     *            Dox ID
+     */
     public void setDoxId(final DoxID doxId) {
 
-        this.doxId = doxId;]]></codefragment>
+        this.doxId = doxId.toString();
+    }
+
+    public void setId(final long id) {
+
+        this.id = id;
+    }
+
+    public void setLastUpdatedBy(final String lastUpdatedBy) {
+
+        this.lastUpdatedBy = lastUpdatedBy;
+    }
+
+    public void setLastUpdatedOn(final Date lastUpdatedOn) {
+
+        this.lastUpdatedOn = lastUpdatedOn;
+    }
+
+    public void setName(final String name) {]]></codefragment>
+   </duplication>
+   <duplication lines="30" tokens="123">
+      <file line="28"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+      <file line="27"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+      <codefragment><![CDATA[public class DoxOobTombstone {
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.CONTENT_LENGTH)
+    private byte[] content;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String createdBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdOn;
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String deletedBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedOn;
+
+    @Column(nullable = false,]]></codefragment>
+   </duplication>
+   <duplication lines="55" tokens="123">
+      <file line="81"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+      <file line="76"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+      <codefragment><![CDATA[    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.SCHEMA_NAME_LENGTH)
+    private String schemaName;
+
+    @Column(nullable = false,
+        updatable = false)
+    private int schemaVersion;
+
+    public byte[] getContent() {
+
+        return content;
+    }
+
+    public String getCreatedBy() {
+
+        return createdBy;
+    }
+
+    public Date getCreatedOn() {
+
+        return createdOn;
+    }
+
+    public String getDeletedBy() {
+
+        return deletedBy;
+    }
+
+    public Date getDeletedOn() {
+
+        return deletedOn;
+    }
+
+    public DoxID getDoxId() {
+
+        return new DoxID(doxId);
+    }
+
+    public long getId() {
+
+        return id;
+    }
+
+    public String getLastUpdatedBy() {
+
+        return lastUpdatedBy;
+    }
+
+    public Date getLastUpdatedOn() {
+
+        return lastUpdatedOn;
+    }
+
+    public String getName() {]]></codefragment>
    </duplication>
 </pmd-cpd>
