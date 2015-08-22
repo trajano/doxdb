@@ -1,5 +1,5 @@
 angular.module('doxdbApp', [
-    'ngResource', 'search'
+    'ngResource', 'search', 'schemaForm'
 ]).controller('DoxDbController', function($resource) {
 
     var Venue = $resource('V1/venue/:id?v=:version', {
@@ -9,6 +9,8 @@ angular.module('doxdbApp', [
 
     var doxdb = this;
 
+    doxdb.schema = $resource('V1/schema/venue.json').get();
+
     Venue.query({}, function(venues) {
 
         doxdb.venues = venues;
@@ -16,6 +18,13 @@ angular.module('doxdbApp', [
             doxdb.venue = venues[0];
         }
     });
+
+    doxdb.newVenue = function() {
+
+        doxdb.venue = {
+            "rings" : []
+        };
+    };
 
     doxdb.saveVenue = function() {
 
@@ -41,10 +50,31 @@ angular.module('doxdbApp', [
             toBeDeleted.$delete().then(function(venue) {
 
                 doxdb.venues.splice(doxdb.venues.indexOf(toBeDeleted), 1);
-                doxdb.venue = null;
+                doxdb.newVenue();
             });
         }
     };
+
+    doxdb.form = [
+        "*", {
+            type : "button",
+            title : "Save",
+            style : "btn-primary",
+            onClick : doxdb.saveVenue
+        }, {
+            type : "button",
+            title : "Delete",
+            style : "btn-danger",
+            onClick : doxdb.deleteVenue
+        }, {
+            type : "button",
+            title : "New",
+            style : "btn-default",
+            onClick : doxdb.newVenue
+        }
+
+    ];
+
 }).factory('echoSocket', function($window) {
 
     var loc = $window.location;
@@ -70,6 +100,7 @@ angular.module('doxdbApp', [
     var notifications = this;
     notifications.interactions = [];
     echoSocket.onmessage = function(event) {
+
         notifications.interactions.push({
             message : angular.fromJson(event.data)
         });

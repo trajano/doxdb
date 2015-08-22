@@ -9,13 +9,38 @@
     <artifactId>doxdb-sample-web</artifactId>
     <packaging>war</packaging>
     <properties>
+        <angularjs.version>1.4.3-1</angularjs.version>
+        <angular-schema-form.version>0.8.8-SNAPSHOT</angular-schema-form.version>
+        <bootstrap.version>3.3.5</bootstrap.version>
         <m2eclipse.wtp.contextRoot>/doxdb-sample</m2eclipse.wtp.contextRoot>
+        <objectpath.version>1.1.0</objectpath.version>
+        <tv4.version>1.0.15</tv4.version>
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>angularjs</artifactId>
+            <version>1.4.3-1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>angular-schema-form</artifactId>
+            <version>${angular-schema-form.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-resource</artifactId>
-            <version>1.4.3</version>
+            <artifactId>objectpath</artifactId>
+            <version>${objectpath.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>tv4</artifactId>
+            <version>${tv4.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -23,5 +48,19 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
-    <build/>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <webResource>
+                            <directory>src/main/webapp</directory>
+                            <filtering>true</filtering>
+                        </webResource>
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -2,22 +2,24 @@
 <html lang="en" x-ng-app="doxdbApp">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet"
-	href="webjars/bootstrap/${bootstrap.version}/css/bootstrap.min.css">
 <script src="webjars/angularjs/${angularjs.version}/angular.min.js"></script>
 <script
 	src="webjars/angularjs/${angularjs.version}/angular-resource.min.js"></script>
 <script
 	src="webjars/angularjs/${angularjs.version}/angular-sanitize.min.js"></script>
-<script src="webjars/tv4/${tv4.version}/tv4.js"></script>
-<script src="webjars/objectpath/${objectpath.version}/lib/ObjectPath.js"></script>
+<script src="webjars/tv4/${tv4.version}/tv4.min.js"></script>
+<script src="webjars/objectpath/${objectpath.version}/ObjectPath.js"></script>
 <script
 	src="webjars/angular-schema-form/${angular-schema-form.version}/schema-form.js"></script>
 <script
 	src="webjars/angular-schema-form/${angular-schema-form.version}/bootstrap-decorator.min.js"></script>
-
 <script src="angular-app.js"></script>
 <script src="search.js"></script>
+<script src="schema-form.js"></script>
+<link rel="stylesheet"
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="ng-cloak">
@@ -26,11 +28,14 @@
 		<h1>data entry</h1>
 		<select x-ng-options="item.name for item in doxdb.venues"
 			x-ng-model="doxdb.venue">
+			<option value="">--new--</option>
 		</select>
 
 		<form x-sf-schema="doxdb.schema" x-sf-form="doxdb.form"
 			x-sf-model="doxdb.venue">
 
+			<button x-ng-click="doxdb.saveVenue()">save</button>
+			<button x-ng-click="doxdb.deleteVenue()">delete</button>
 		</form>
 		<pre>{{doxdb.venue | json}}</pre>
 	</div>

@@ -178,27 +178,16 @@ public class DoxBean implements
         if (toBeDeleted == null) {
             return false;
         }
+        final BsonDocument contentBson = toBeDeleted.getContent();
         final DoxTombstone tombstone = toBeDeleted.buildTombstone(ctx.getCallerPrincipal(), ts);
         em.persist(tombstone);
         em.remove(toBeDeleted);
 
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        String contentJson;
-
+        String contentJson = contentBson.toJson();
         if (meta.getSchemaVersion() != schema.getVersion()) {
-            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());
-            final BsonDocument document = BsonDocument.parse(contentJson);
-            meta.setSchemaVersion(schema.getVersion());
-            e.setSchemaVersion(schema.getVersion());
-            contentJson = document.toJson();
-            em.persist(e);
-        } else {
-            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC);
-            final BsonDocument document = e.getContent();
-            addMeta(document, e.getDoxId(), e.getVersion());
-            contentJson = document.toJson();
+            contentJson = migrator.migrate(collectionName, meta.getSchemaVersion(), schema.getVersion(), contentJson);
         }
 
         doxSearchBean.removeFromIndex(config.getName(), doxid);
