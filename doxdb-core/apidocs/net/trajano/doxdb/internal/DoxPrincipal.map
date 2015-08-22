@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./DoxPrincipal.html" title="net.trajano.doxdb.internal.DoxPrincipal" alt="" coords="77,118,170,143"/>
-<area shape="rect" id="node1" href="./DoxPrincipal.html" title="&lt;TABLE&gt;" alt="" coords="66,107,181,155"/>
-<area shape="rect" id="node2_1" href="http://java.sun.com/j2se/1.4.2/docs/api/java/security/Principal.html" title="java.security.Principal" alt="" coords="16,11,100,53"/>
-<area shape="rect" id="node2" href="http://java.sun.com/j2se/1.4.2/docs/api/java/security/Principal.html" title="&lt;TABLE&gt;" alt="" coords="5,5,111,59"/>
-<area shape="rect" id="node3_2" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="java.io.Serializable" alt="" coords="145,11,232,53"/>
-<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="&lt;TABLE&gt;" alt="" coords="135,5,243,59"/>
+<area shape="rect" id="node1_0" href="./DoxPrincipal.html" title="net.trajano.doxdb.internal.DoxPrincipal" alt="" coords="77,118,169,143"/>
+<area shape="rect" id="node1" href="./DoxPrincipal.html" title="&lt;TABLE&gt;" alt="" coords="66,107,179,155"/>
+<area shape="rect" id="node2_1" href="http://java.sun.com/j2se/1.4.2/docs/api/java/security/Principal.html" title="java.security.Principal" alt="" coords="16,11,99,53"/>
+<area shape="rect" id="node2" href="http://java.sun.com/j2se/1.4.2/docs/api/java/security/Principal.html" title="&lt;TABLE&gt;" alt="" coords="5,5,109,59"/>
+<area shape="rect" id="node3_2" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="java.io.Serializable" alt="" coords="145,11,231,53"/>
+<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html" title="&lt;TABLE&gt;" alt="" coords="134,5,242,59"/>
 </map>

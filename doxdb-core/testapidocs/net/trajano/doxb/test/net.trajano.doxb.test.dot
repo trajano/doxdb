@@ -5,8 +5,8 @@
 #
 
 digraph G {
-	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
-	node [fontname="Helvetica",fontsize=10,shape=plaintext];
+	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
+	node [fontname="arial",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxb.test.PrincipalTest
@@ -14,36 +14,36 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PrincipalTest </td></tr>
 		</table></td></tr>
-		</table>>, URL="./PrincipalTest.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxb.test.JdbcTest
-	c1 [label=<<table title="net.trajano.doxb.test.JdbcTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JdbcTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> JdbcTest </td></tr>
-		</table></td></tr>
-		</table>>, URL="./JdbcTest.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxb.test.AbstractEntityTest
-	c2 [label=<<table title="net.trajano.doxb.test.AbstractEntityTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractEntityTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> AbstractEntityTest </td></tr>
-		</table></td></tr>
-		</table>>, URL="./AbstractEntityTest.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./PrincipalTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxb.test.OobTest
-	c3 [label=<<table title="net.trajano.doxb.test.OobTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OobTest.html">
+	c1 [label=<<table title="net.trajano.doxb.test.OobTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OobTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> OobTest </td></tr>
 		</table></td></tr>
-		</table>>, URL="./OobTest.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./OobTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxb.test.MimeMessageFormatTest
+	c2 [label=<<table title="net.trajano.doxb.test.MimeMessageFormatTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MimeMessageFormatTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> MimeMessageFormatTest </td></tr>
+		</table></td></tr>
+		</table>>, URL="./MimeMessageFormatTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxb.test.JdbcTest
+	c3 [label=<<table title="net.trajano.doxb.test.JdbcTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JdbcTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> JdbcTest </td></tr>
+		</table></td></tr>
+		</table>>, URL="./JdbcTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxb.test.IDTest
 	c4 [label=<<table title="net.trajano.doxb.test.IDTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IDTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IDTest </td></tr>
 		</table></td></tr>
-		</table>>, URL="./IDTest.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxb.test.MimeMessageFormatTest
-	c5 [label=<<table title="net.trajano.doxb.test.MimeMessageFormatTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MimeMessageFormatTest.html">
+		</table>>, URL="./IDTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxb.test.AbstractEntityTest
+	c5 [label=<<table title="net.trajano.doxb.test.AbstractEntityTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractEntityTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> MimeMessageFormatTest </td></tr>
+<tr><td align="center" balign="center"> AbstractEntityTest </td></tr>
 		</table></td></tr>
-		</table>>, URL="./MimeMessageFormatTest.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./AbstractEntityTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
 }
 

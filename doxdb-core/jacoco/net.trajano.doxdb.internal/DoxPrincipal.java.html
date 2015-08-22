@@ -39,26 +39,29 @@ public final class DoxPrincipal implements
 <span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (obj == null) {</span>
 <span class="nc" id="L40">            return false;</span>
         }
-<span class="fc" id="L42">        final DoxPrincipal other = (DoxPrincipal) obj;</span>
-<span class="fc" id="L43">        return Objects.equals(other.principalName, principalName);</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (this.getClass() != obj.getClass()) {</span>
+<span class="nc" id="L43">            return false;</span>
+        }
+<span class="fc" id="L45">        final DoxPrincipal other = (DoxPrincipal) obj;</span>
+<span class="fc" id="L46">        return Objects.equals(other.principalName, principalName);</span>
     }
 
     @Override
     public String getName() {
 
-<span class="fc" id="L49">        return principalName;</span>
+<span class="fc" id="L52">        return principalName;</span>
     }
 
     @Override
     public int hashCode() {
 
-<span class="fc" id="L55">        return principalName.hashCode();</span>
+<span class="fc" id="L58">        return principalName.hashCode();</span>
     }
 
     @Override
     public String toString() {
 
-<span class="nc" id="L61">        return principalName;</span>
+<span class="nc" id="L64">        return principalName;</span>
     }
 
 }

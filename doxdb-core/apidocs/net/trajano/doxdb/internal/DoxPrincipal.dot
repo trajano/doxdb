@@ -5,33 +5,33 @@
 #
 
 digraph G {
-	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
-	node [fontname="Helvetica",fontsize=10,shape=plaintext];
+	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
+	node [fontname="arial",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.internal.DoxPrincipal
-	c306 [label=<<table title="net.trajano.doxdb.internal.DoxPrincipal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxPrincipal.html">
+	c325 [label=<<table title="net.trajano.doxdb.internal.DoxPrincipal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxPrincipal.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxPrincipal </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxPrincipal.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./DoxPrincipal.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.internal.DoxPrincipal implements java.security.Principal
-	c320:p -> c306:p [dir=back,arrowtail=empty,style=dashed];
+	c335:p -> c325:p [dir=back,arrowtail=empty,style=dashed];
 	//net.trajano.doxdb.internal.DoxPrincipal implements java.io.Serializable
-	c321:p -> c306:p [dir=back,arrowtail=empty,style=dashed];
-	// java.security.Principal
-	c320 [label=<<table title="java.security.Principal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/security/Principal.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> Principal </td></tr>
-		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/security/Principal.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	c336:p -> c325:p [dir=back,arrowtail=empty,style=dashed];
 	// java.io.Serializable
-	c321 [label=<<table title="java.io.Serializable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html">
+	c336 [label=<<table title="java.io.Serializable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Serializable </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// java.security.Principal
+	c335 [label=<<table title="java.security.Principal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/security/Principal.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> Principal </td></tr>
+		</table></td></tr>
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/java/security/Principal.html", fontname="arial", fontcolor="black", fontsize=10.0];
 }
 

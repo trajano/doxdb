@@ -756,123 +756,118 @@
 <a class="jxr_linenumber" name="L748" href="#L748">748</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L749" href="#L749">749</a> <em class="jxr_javadoccomment">     * This will read the meta data for a record for locking. The version number</em>
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> <em class="jxr_javadoccomment">     * is not touched.</em>
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">     * @param id</em>
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">     * @param version</em>
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">     * @return</em>
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> <em class="jxr_javadoccomment">     * @throws SQLException</em>
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L757" href="#L757">757</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../net/trajano/doxdb/DoxMeta.html">DoxMeta</a> readMetaAndLock(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> id,
-<a class="jxr_linenumber" name="L758" href="#L758">758</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> version) {
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 
-<a class="jxr_linenumber" name="L760" href="#L760">760</a>         <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PreparedStatement s = c.prepareStatement(readForUpdateSql)) {
-<a class="jxr_linenumber" name="L761" href="#L761">761</a>             s.setString(1, id.toString());
-<a class="jxr_linenumber" name="L762" href="#L762">762</a>             s.setInt(2, version);
-<a class="jxr_linenumber" name="L763" href="#L763">763</a>             <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> ResultSet rs = s.executeQuery()) {
-<a class="jxr_linenumber" name="L764" href="#L764">764</a>                 <strong class="jxr_keyword">if</strong> (!rs.next()) {
-<a class="jxr_linenumber" name="L765" href="#L765">765</a>                     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> OptimisticLockException();
-<a class="jxr_linenumber" name="L766" href="#L766">766</a>                 }
-<a class="jxr_linenumber" name="L767" href="#L767">767</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxMeta.html">DoxMeta</a> meta = <strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/DoxMeta.html">DoxMeta</a>();
-<a class="jxr_linenumber" name="L768" href="#L768">768</a>                 meta.setId(rs.getLong(1));
-<a class="jxr_linenumber" name="L769" href="#L769">769</a>                 meta.setDoxId(<strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a>(rs.getString(2)));
-<a class="jxr_linenumber" name="L770" href="#L770">770</a>                 meta.setCreatedBy(<strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/internal/DoxPrincipal.html">DoxPrincipal</a>(rs.getString(3)));
-<a class="jxr_linenumber" name="L771" href="#L771">771</a>                 meta.setCreatedOn(rs.getTimestamp(4));
-<a class="jxr_linenumber" name="L772" href="#L772">772</a>                 meta.setLastUpdatedBy(<strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/internal/DoxPrincipal.html">DoxPrincipal</a>(rs.getString(5)));
-<a class="jxr_linenumber" name="L773" href="#L773">773</a>                 meta.setLastUpdatedOn(rs.getTimestamp(6));
-<a class="jxr_linenumber" name="L774" href="#L774">774</a>                 meta.setVersion(rs.getInt(7));
-<a class="jxr_linenumber" name="L775" href="#L775">775</a>                 meta.setSchemaVersion(rs.getInt(8));
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 
-<a class="jxr_linenumber" name="L777" href="#L777">777</a>                 <strong class="jxr_keyword">if</strong> (hasOob) {
-<a class="jxr_linenumber" name="L778" href="#L778">778</a>                     <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PreparedStatement os = c.prepareStatement(oobReadForUpdateSql)) {
-<a class="jxr_linenumber" name="L779" href="#L779">779</a>                         os.setLong(1, meta.getId());
-<a class="jxr_linenumber" name="L780" href="#L780">780</a>                         os.executeQuery()
-<a class="jxr_linenumber" name="L781" href="#L781">781</a>                             .close();
-<a class="jxr_linenumber" name="L782" href="#L782">782</a>                     }
-<a class="jxr_linenumber" name="L783" href="#L783">783</a>                 }
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 
-<a class="jxr_linenumber" name="L785" href="#L785">785</a>                 <strong class="jxr_keyword">return</strong> meta;
-<a class="jxr_linenumber" name="L786" href="#L786">786</a>             }
-<a class="jxr_linenumber" name="L787" href="#L787">787</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> SQLException e) {
-<a class="jxr_linenumber" name="L788" href="#L788">788</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
-<a class="jxr_linenumber" name="L789" href="#L789">789</a>         }
-<a class="jxr_linenumber" name="L790" href="#L790">790</a>     }
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L752" href="#L752">752</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../net/trajano/doxdb/DoxMeta.html">DoxMeta</a> readMetaAndLock(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> id,
+<a class="jxr_linenumber" name="L753" href="#L753">753</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> version) {
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 
+<a class="jxr_linenumber" name="L755" href="#L755">755</a>         <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PreparedStatement s = c.prepareStatement(readForUpdateSql)) {
+<a class="jxr_linenumber" name="L756" href="#L756">756</a>             s.setString(1, id.toString());
+<a class="jxr_linenumber" name="L757" href="#L757">757</a>             s.setInt(2, version);
+<a class="jxr_linenumber" name="L758" href="#L758">758</a>             <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> ResultSet rs = s.executeQuery()) {
+<a class="jxr_linenumber" name="L759" href="#L759">759</a>                 <strong class="jxr_keyword">if</strong> (!rs.next()) {
+<a class="jxr_linenumber" name="L760" href="#L760">760</a>                     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> OptimisticLockException();
+<a class="jxr_linenumber" name="L761" href="#L761">761</a>                 }
+<a class="jxr_linenumber" name="L762" href="#L762">762</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxMeta.html">DoxMeta</a> meta = <strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/DoxMeta.html">DoxMeta</a>();
+<a class="jxr_linenumber" name="L763" href="#L763">763</a>                 meta.setId(rs.getLong(1));
+<a class="jxr_linenumber" name="L764" href="#L764">764</a>                 meta.setDoxId(<strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a>(rs.getString(2)));
+<a class="jxr_linenumber" name="L765" href="#L765">765</a>                 meta.setCreatedBy(<strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/internal/DoxPrincipal.html">DoxPrincipal</a>(rs.getString(3)));
+<a class="jxr_linenumber" name="L766" href="#L766">766</a>                 meta.setCreatedOn(rs.getTimestamp(4));
+<a class="jxr_linenumber" name="L767" href="#L767">767</a>                 meta.setLastUpdatedBy(<strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/internal/DoxPrincipal.html">DoxPrincipal</a>(rs.getString(5)));
+<a class="jxr_linenumber" name="L768" href="#L768">768</a>                 meta.setLastUpdatedOn(rs.getTimestamp(6));
+<a class="jxr_linenumber" name="L769" href="#L769">769</a>                 meta.setVersion(rs.getInt(7));
+<a class="jxr_linenumber" name="L770" href="#L770">770</a>                 meta.setSchemaVersion(rs.getInt(8));
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 
+<a class="jxr_linenumber" name="L772" href="#L772">772</a>                 <strong class="jxr_keyword">if</strong> (hasOob) {
+<a class="jxr_linenumber" name="L773" href="#L773">773</a>                     <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PreparedStatement os = c.prepareStatement(oobReadForUpdateSql)) {
+<a class="jxr_linenumber" name="L774" href="#L774">774</a>                         os.setLong(1, meta.getId());
+<a class="jxr_linenumber" name="L775" href="#L775">775</a>                         os.executeQuery()
+<a class="jxr_linenumber" name="L776" href="#L776">776</a>                             .close();
+<a class="jxr_linenumber" name="L777" href="#L777">777</a>                     }
+<a class="jxr_linenumber" name="L778" href="#L778">778</a>                 }
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 
+<a class="jxr_linenumber" name="L780" href="#L780">780</a>                 <strong class="jxr_keyword">return</strong> meta;
+<a class="jxr_linenumber" name="L781" href="#L781">781</a>             }
+<a class="jxr_linenumber" name="L782" href="#L782">782</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> SQLException e) {
+<a class="jxr_linenumber" name="L783" href="#L783">783</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
+<a class="jxr_linenumber" name="L784" href="#L784">784</a>         }
+<a class="jxr_linenumber" name="L785" href="#L785">785</a>     }
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 
+<a class="jxr_linenumber" name="L787" href="#L787">787</a>     @Override
+<a class="jxr_linenumber" name="L788" href="#L788">788</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> readOobContent(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> doxId,
+<a class="jxr_linenumber" name="L789" href="#L789">789</a>         <strong class="jxr_keyword">final</strong> String reference,
+<a class="jxr_linenumber" name="L790" href="#L790">790</a>         <strong class="jxr_keyword">final</strong> ByteBuffer buffer) {
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 
-<a class="jxr_linenumber" name="L792" href="#L792">792</a>     @Override
-<a class="jxr_linenumber" name="L793" href="#L793">793</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> readOobContent(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> doxId,
-<a class="jxr_linenumber" name="L794" href="#L794">794</a>         <strong class="jxr_keyword">final</strong> String reference,
-<a class="jxr_linenumber" name="L795" href="#L795">795</a>         <strong class="jxr_keyword">final</strong> ByteBuffer buffer) {
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 
-<a class="jxr_linenumber" name="L797" href="#L797">797</a>         <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PreparedStatement s = c.prepareStatement(oobReadContentSql)) {
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 
-<a class="jxr_linenumber" name="L799" href="#L799">799</a>             s.setLong(1, readMeta(doxId).getId());
-<a class="jxr_linenumber" name="L800" href="#L800">800</a>             s.setString(2, reference);
-<a class="jxr_linenumber" name="L801" href="#L801">801</a>             <strong class="jxr_keyword">final</strong> ResultSet rs = s.executeQuery();
-<a class="jxr_linenumber" name="L802" href="#L802">802</a>             <strong class="jxr_keyword">if</strong> (!rs.next()) {
-<a class="jxr_linenumber" name="L803" href="#L803">803</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> EntityNotFoundException();
-<a class="jxr_linenumber" name="L804" href="#L804">804</a>             }
-<a class="jxr_linenumber" name="L805" href="#L805">805</a>             <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> InputStream ret = rs.getBinaryStream(1)) {
-<a class="jxr_linenumber" name="L806" href="#L806">806</a>                 <strong class="jxr_keyword">return</strong> readFully(ret, buffer.array());
-<a class="jxr_linenumber" name="L807" href="#L807">807</a>             }
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 
-<a class="jxr_linenumber" name="L809" href="#L809">809</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IOException
-<a class="jxr_linenumber" name="L810" href="#L810">810</a>             | SQLException e) {
-<a class="jxr_linenumber" name="L811" href="#L811">811</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
-<a class="jxr_linenumber" name="L812" href="#L812">812</a>         }
-<a class="jxr_linenumber" name="L813" href="#L813">813</a>     }
+<a class="jxr_linenumber" name="L792" href="#L792">792</a>         <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PreparedStatement s = c.prepareStatement(oobReadContentSql)) {
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 
+<a class="jxr_linenumber" name="L794" href="#L794">794</a>             s.setLong(1, readMeta(doxId).getId());
+<a class="jxr_linenumber" name="L795" href="#L795">795</a>             s.setString(2, reference);
+<a class="jxr_linenumber" name="L796" href="#L796">796</a>             <strong class="jxr_keyword">final</strong> ResultSet rs = s.executeQuery();
+<a class="jxr_linenumber" name="L797" href="#L797">797</a>             <strong class="jxr_keyword">if</strong> (!rs.next()) {
+<a class="jxr_linenumber" name="L798" href="#L798">798</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> EntityNotFoundException();
+<a class="jxr_linenumber" name="L799" href="#L799">799</a>             }
+<a class="jxr_linenumber" name="L800" href="#L800">800</a>             <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> InputStream ret = rs.getBinaryStream(1)) {
+<a class="jxr_linenumber" name="L801" href="#L801">801</a>                 <strong class="jxr_keyword">return</strong> readFully(ret, buffer.array());
+<a class="jxr_linenumber" name="L802" href="#L802">802</a>             }
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 
+<a class="jxr_linenumber" name="L804" href="#L804">804</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IOException
+<a class="jxr_linenumber" name="L805" href="#L805">805</a>             | SQLException e) {
+<a class="jxr_linenumber" name="L806" href="#L806">806</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
+<a class="jxr_linenumber" name="L807" href="#L807">807</a>         }
+<a class="jxr_linenumber" name="L808" href="#L808">808</a>     }
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 
+<a class="jxr_linenumber" name="L810" href="#L810">810</a>     @Override
+<a class="jxr_linenumber" name="L811" href="#L811">811</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> readOobContentToStream(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> doxId,
+<a class="jxr_linenumber" name="L812" href="#L812">812</a>         <strong class="jxr_keyword">final</strong> String reference,
+<a class="jxr_linenumber" name="L813" href="#L813">813</a>         <strong class="jxr_keyword">final</strong> OutputStream os) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 
-<a class="jxr_linenumber" name="L815" href="#L815">815</a>     @Override
-<a class="jxr_linenumber" name="L816" href="#L816">816</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> readOobContentToStream(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> doxId,
-<a class="jxr_linenumber" name="L817" href="#L817">817</a>         <strong class="jxr_keyword">final</strong> String reference,
-<a class="jxr_linenumber" name="L818" href="#L818">818</a>         <strong class="jxr_keyword">final</strong> OutputStream os) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> 
-<a class="jxr_linenumber" name="L820" href="#L820">820</a>         <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PreparedStatement s = c.prepareStatement(oobReadContentSql)) {
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 
-<a class="jxr_linenumber" name="L822" href="#L822">822</a>             s.setLong(1, readMeta(doxId).getId());
-<a class="jxr_linenumber" name="L823" href="#L823">823</a>             s.setString(2, reference);
-<a class="jxr_linenumber" name="L824" href="#L824">824</a>             <strong class="jxr_keyword">final</strong> ResultSet rs = s.executeQuery();
-<a class="jxr_linenumber" name="L825" href="#L825">825</a>             <strong class="jxr_keyword">if</strong> (!rs.next()) {
-<a class="jxr_linenumber" name="L826" href="#L826">826</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> EntityNotFoundException();
-<a class="jxr_linenumber" name="L827" href="#L827">827</a>             }
-<a class="jxr_linenumber" name="L828" href="#L828">828</a>             <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> InputStream ret = rs.getBinaryStream(1)) {
-<a class="jxr_linenumber" name="L829" href="#L829">829</a>                 <strong class="jxr_keyword">int</strong> c = ret.read();
-<a class="jxr_linenumber" name="L830" href="#L830">830</a>                 <strong class="jxr_keyword">while</strong> (c != -1) {
-<a class="jxr_linenumber" name="L831" href="#L831">831</a>                     os.write(c);
-<a class="jxr_linenumber" name="L832" href="#L832">832</a>                     c = ret.read();
-<a class="jxr_linenumber" name="L833" href="#L833">833</a>                 }
-<a class="jxr_linenumber" name="L834" href="#L834">834</a>             }
+<a class="jxr_linenumber" name="L815" href="#L815">815</a>         <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PreparedStatement s = c.prepareStatement(oobReadContentSql)) {
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
+<a class="jxr_linenumber" name="L817" href="#L817">817</a>             s.setLong(1, readMeta(doxId).getId());
+<a class="jxr_linenumber" name="L818" href="#L818">818</a>             s.setString(2, reference);
+<a class="jxr_linenumber" name="L819" href="#L819">819</a>             <strong class="jxr_keyword">final</strong> ResultSet rs = s.executeQuery();
+<a class="jxr_linenumber" name="L820" href="#L820">820</a>             <strong class="jxr_keyword">if</strong> (!rs.next()) {
+<a class="jxr_linenumber" name="L821" href="#L821">821</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> EntityNotFoundException();
+<a class="jxr_linenumber" name="L822" href="#L822">822</a>             }
+<a class="jxr_linenumber" name="L823" href="#L823">823</a>             <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> InputStream ret = rs.getBinaryStream(1)) {
+<a class="jxr_linenumber" name="L824" href="#L824">824</a>                 <strong class="jxr_keyword">int</strong> c = ret.read();
+<a class="jxr_linenumber" name="L825" href="#L825">825</a>                 <strong class="jxr_keyword">while</strong> (c != -1) {
+<a class="jxr_linenumber" name="L826" href="#L826">826</a>                     os.write(c);
+<a class="jxr_linenumber" name="L827" href="#L827">827</a>                     c = ret.read();
+<a class="jxr_linenumber" name="L828" href="#L828">828</a>                 }
+<a class="jxr_linenumber" name="L829" href="#L829">829</a>             }
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 
+<a class="jxr_linenumber" name="L831" href="#L831">831</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> SQLException e) {
+<a class="jxr_linenumber" name="L832" href="#L832">832</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
+<a class="jxr_linenumber" name="L833" href="#L833">833</a>         }
+<a class="jxr_linenumber" name="L834" href="#L834">834</a>     }
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 
-<a class="jxr_linenumber" name="L836" href="#L836">836</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> SQLException e) {
-<a class="jxr_linenumber" name="L837" href="#L837">837</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
-<a class="jxr_linenumber" name="L838" href="#L838">838</a>         }
-<a class="jxr_linenumber" name="L839" href="#L839">839</a>     }
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> 
-<a class="jxr_linenumber" name="L841" href="#L841">841</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L844" href="#L844">844</a>     @Override
-<a class="jxr_linenumber" name="L845" href="#L845">845</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> updateContent(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> doxId,
-<a class="jxr_linenumber" name="L846" href="#L846">846</a>         <strong class="jxr_keyword">final</strong> InputStream contentStream,
-<a class="jxr_linenumber" name="L847" href="#L847">847</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> contentVersion,
-<a class="jxr_linenumber" name="L848" href="#L848">848</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> version,
-<a class="jxr_linenumber" name="L849" href="#L849">849</a>         <strong class="jxr_keyword">final</strong> Principal principal) {
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> 
-<a class="jxr_linenumber" name="L851" href="#L851">851</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L852" href="#L852">852</a>             <strong class="jxr_keyword">final</strong> Timestamp ts = <strong class="jxr_keyword">new</strong> Timestamp(System.currentTimeMillis());
-<a class="jxr_linenumber" name="L853" href="#L853">853</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxMeta.html">DoxMeta</a> meta = readMetaAndLock(doxId, version);
-<a class="jxr_linenumber" name="L854" href="#L854">854</a>             <strong class="jxr_keyword">final</strong> PreparedStatement u = c.prepareStatement(updateSql);
-<a class="jxr_linenumber" name="L855" href="#L855">855</a>             u.setBinaryStream(1, contentStream);
-<a class="jxr_linenumber" name="L856" href="#L856">856</a>             u.setString(2, principal.getName());
-<a class="jxr_linenumber" name="L857" href="#L857">857</a>             u.setTimestamp(3, ts);
-<a class="jxr_linenumber" name="L858" href="#L858">858</a>             u.setInt(4, contentVersion);
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> 
-<a class="jxr_linenumber" name="L860" href="#L860">860</a>             u.setLong(5, meta.getId());
-<a class="jxr_linenumber" name="L861" href="#L861">861</a>             u.setInt(6, version + 1);
-<a class="jxr_linenumber" name="L862" href="#L862">862</a>             u.executeUpdate();
-<a class="jxr_linenumber" name="L863" href="#L863">863</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> SQLException e) {
-<a class="jxr_linenumber" name="L864" href="#L864">864</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
-<a class="jxr_linenumber" name="L865" href="#L865">865</a>         }
-<a class="jxr_linenumber" name="L866" href="#L866">866</a>     }
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> }
+<a class="jxr_linenumber" name="L836" href="#L836">836</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L839" href="#L839">839</a>     @Override
+<a class="jxr_linenumber" name="L840" href="#L840">840</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> updateContent(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> doxId,
+<a class="jxr_linenumber" name="L841" href="#L841">841</a>         <strong class="jxr_keyword">final</strong> InputStream contentStream,
+<a class="jxr_linenumber" name="L842" href="#L842">842</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> contentVersion,
+<a class="jxr_linenumber" name="L843" href="#L843">843</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> version,
+<a class="jxr_linenumber" name="L844" href="#L844">844</a>         <strong class="jxr_keyword">final</strong> Principal principal) {
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 
+<a class="jxr_linenumber" name="L846" href="#L846">846</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L847" href="#L847">847</a>             <strong class="jxr_keyword">final</strong> Timestamp ts = <strong class="jxr_keyword">new</strong> Timestamp(System.currentTimeMillis());
+<a class="jxr_linenumber" name="L848" href="#L848">848</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxMeta.html">DoxMeta</a> meta = readMetaAndLock(doxId, version);
+<a class="jxr_linenumber" name="L849" href="#L849">849</a>             <strong class="jxr_keyword">final</strong> PreparedStatement u = c.prepareStatement(updateSql);
+<a class="jxr_linenumber" name="L850" href="#L850">850</a>             u.setBinaryStream(1, contentStream);
+<a class="jxr_linenumber" name="L851" href="#L851">851</a>             u.setString(2, principal.getName());
+<a class="jxr_linenumber" name="L852" href="#L852">852</a>             u.setTimestamp(3, ts);
+<a class="jxr_linenumber" name="L853" href="#L853">853</a>             u.setInt(4, contentVersion);
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 
+<a class="jxr_linenumber" name="L855" href="#L855">855</a>             u.setLong(5, meta.getId());
+<a class="jxr_linenumber" name="L856" href="#L856">856</a>             u.setInt(6, version + 1);
+<a class="jxr_linenumber" name="L857" href="#L857">857</a>             u.executeUpdate();
+<a class="jxr_linenumber" name="L858" href="#L858">858</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> SQLException e) {
+<a class="jxr_linenumber" name="L859" href="#L859">859</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
+<a class="jxr_linenumber" name="L860" href="#L860">860</a>         }
+<a class="jxr_linenumber" name="L861" href="#L861">861</a>     }
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2012&#x2013;2015 <a href="http://www.trajano.net/">Trajano</a>. All rights reserved.</div>

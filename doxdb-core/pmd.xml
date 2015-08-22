@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-01T13:33:31.485">
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/src/main/java/net/trajano/doxdb/DoxID.java">
+<pmd version="5.0.5" timestamp="2015-08-22T00:29:24.213">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-core\src\main\java\net\trajano\doxdb\DoxID.java">
 <violation beginline="70" endline="74" begincolumn="9" endcolumn="9" rule="AvoidArrayLoops" ruleset="Optimization" package="net.trajano.doxdb" class="DoxID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#AvoidArrayLoops" priority="3">
 System.arraycopy is more efficient
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/src/main/java/net/trajano/doxdb/DoxMeta.java">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-core\src\main\java\net\trajano\doxdb\DoxMeta.java">
 <violation beginline="57" endline="57" begincolumn="9" endcolumn="30" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="DoxMeta" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
 The user-supplied array 'accessKey' is stored directly.
 </violation>
@@ -16,12 +16,7 @@ Returning 'accessKey' may expose an internal array.
 The user-supplied array 'accessKey' is stored directly.
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/src/main/java/net/trajano/doxdb/IndexView.java">
-<violation beginline="45" endline="45" begincolumn="21" endcolumn="34" rule="RedundantFieldInitializer" ruleset="Optimization" package="net.trajano.doxdb" class="IndexView" variable="masked" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#RedundantFieldInitializer" priority="3">
-Avoid using redundant field initializer for 'masked'
-</violation>
-</file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/src/main/java/net/trajano/doxdb/jdbc/DoxConfiguration.java">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-core\src\main\java\net\trajano\doxdb\jdbc\DoxConfiguration.java">
 <violation beginline="70" endline="70" begincolumn="28" endcolumn="39" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jdbc" class="DoxConfiguration" method="setLobSize" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'lobSize' is not assigned and could be declared final
 </violation>
@@ -29,15 +24,15 @@ Parameter 'lobSize' is not assigned and could be declared final
 Parameter 'size' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/src/main/java/net/trajano/doxdb/jdbc/DoxDAO.java">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-core\src\main\java\net\trajano\doxdb\jdbc\DoxDAO.java">
 <violation beginline="25" endline="25" begincolumn="21" endcolumn="22" rule="AvoidPrefixingMethodParameters" ruleset="Controversial" package="net.trajano.doxdb.jdbc" class="DoxDAO" method="attach" variable="in" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#AvoidPrefixingMethodParameters" priority="4">
 Avoid prefixing parameters by in, out or inOut. Uses Javadoc to document this behavior.
 </violation>
-<violation beginline="38" endline="38" begincolumn="30" endcolumn="31" rule="AvoidPrefixingMethodParameters" ruleset="Controversial" package="net.trajano.doxdb.jdbc" class="DoxDAO" method="create" variable="in" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#AvoidPrefixingMethodParameters" priority="4">
+<violation beginline="33" endline="33" begincolumn="30" endcolumn="31" rule="AvoidPrefixingMethodParameters" ruleset="Controversial" package="net.trajano.doxdb.jdbc" class="DoxDAO" method="create" variable="in" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#AvoidPrefixingMethodParameters" priority="4">
 Avoid prefixing parameters by in, out or inOut. Uses Javadoc to document this behavior.
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/src/main/java/net/trajano/doxdb/jdbc/JdbcDoxDAO.java">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-core\src\main\java\net\trajano\doxdb\jdbc\JdbcDoxDAO.java">
 <violation beginline="51" endline="51" begincolumn="5" endcolumn="42" rule="DefaultPackage" ruleset="Controversial" package="net.trajano.doxdb.jdbc" class="JdbcDoxDAO" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#DefaultPackage" priority="3">
 Use explicit scoping instead of the default package private level
 </violation>
@@ -55,44 +50,6 @@ Avoid empty finally blocks
 </violation>
 <violation beginline="581" endline="581" begincolumn="13" endcolumn="56" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.jdbc" class="JdbcDoxDAO" method="importDox" variable="mainBody" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
 Avoid declaring a variable if it is unreferenced before a possible exit point.
-</violation>
-</file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/target/generated-sources/xjc/net/trajano/doxdb/schema/DoxType.java">
-<violation beginline="130" endline="130" begincolumn="25" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
-</violation>
-<violation beginline="163" endline="163" begincolumn="25" endcolumn="40" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setSize" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
-</violation>
-<violation beginline="196" endline="196" begincolumn="24" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setOob" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
-</violation>
-<violation beginline="234" endline="234" begincolumn="28" endcolumn="40" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setReadAll" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
-</violation>
-<violation beginline="272" endline="272" begincolumn="28" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setOobSize" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
-</violation>
-</file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/target/generated-sources/xjc/net/trajano/doxdb/schema/IndexType.java">
-<violation beginline="76" endline="76" begincolumn="25" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="IndexType" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
-</violation>
-<violation beginline="106" endline="106" begincolumn="31" endcolumn="42" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="IndexType" method="setMappedName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
-</violation>
-</file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/target/generated-sources/xjc/net/trajano/doxdb/schema/ObjectFactory.java">
-<violation beginline="36" endline="37" begincolumn="12" endcolumn="5" rule="UnnecessaryConstructor" ruleset="Controversial" package="net.trajano.doxdb.schema" class="ObjectFactory" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UnnecessaryConstructor" priority="3">
-Avoid unnecessary constructors - the compiler will generate these for you
-</violation>
-</file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-core/target/generated-sources/xjc/net/trajano/doxdb/schema/SchemaType.java">
-<violation beginline="108" endline="108" begincolumn="28" endcolumn="40" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="SchemaType" method="setVersion" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
-</violation>
-<violation beginline="136" endline="136" begincolumn="24" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="SchemaType" method="setUri" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
-Parameter 'value' is not assigned and could be declared final
 </violation>
 </file>
 </pmd>

@@ -27,14 +27,14 @@ import net.trajano.doxdb.schema.IndexType;
  * &lt;/p&gt;
  *
  * &lt;pre&gt;
- * &amp;lt;enterprise-beans&gt;
- *   &amp;lt;session&gt;
- *     &amp;lt;ejb-name&gt;XmlConfigurationProvider&amp;lt;/ejb-name&gt;
- *     &amp;lt;business-local&gt;net.trajano.doxdb.spi.ConfigurationProvider&amp;lt;/business-local&gt;
- *     &amp;lt;ejb-class&gt;net.trajano.doxdb.spi.XmlConfigurationProvider&amp;lt;/ejb-class&gt;
- *     &amp;lt;session-type&gt;Stateless&amp;lt;/session-type&gt;
- *   &amp;lt;/session&gt;
- * &amp;lt;/enterprise-beans&gt;
+ * &amp;lt;enterprise-beans&amp;gt;
+ *   &amp;lt;session&amp;gt;
+ *     &amp;lt;ejb-name&amp;gt;XmlConfigurationProvider&amp;lt;/ejb-name&amp;gt;
+ *     &amp;lt;business-local&amp;gt;net.trajano.doxdb.spi.ConfigurationProvider&amp;lt;/business-local&amp;gt;
+ *     &amp;lt;ejb-class&amp;gt;net.trajano.doxdb.spi.XmlConfigurationProvider&amp;lt;/ejb-class&amp;gt;
+ *     &amp;lt;session-type&amp;gt;Stateless&amp;lt;/session-type&amp;gt;
+ *   &amp;lt;/session&amp;gt;
+ * &amp;lt;/enterprise-beans&amp;gt;
  * &lt;/pre&gt;
  *
  * @author Archimedes Trajano
@@ -56,12 +56,12 @@ public class XmlConfigurationProvider implements
 <span class="nc" id="L56">            indexMap = new ConcurrentHashMap&lt;&gt;(persistenceConfig.getIndex().size());</span>
 <span class="nc bnc" id="L57" title="All 2 branches missed.">            for (final IndexType indexType : persistenceConfig.getIndex()) {</span>
 <span class="nc bnc" id="L58" title="All 2 branches missed.">                indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());</span>
-<span class="nc" id="L59">            }</span>
+            }
 <span class="nc bnc" id="L60" title="All 8 branches missed.">        } catch (final IOException</span>
             | SAXException
-            | JAXBException e) {
+<span class="nc" id="L62">            | JAXBException e) {</span>
 <span class="nc" id="L63">            throw new ExceptionInInitializerError(e);</span>
-<span class="nc" id="L64">        }</span>
+        }
 <span class="nc" id="L65">    }</span>
 
     /**

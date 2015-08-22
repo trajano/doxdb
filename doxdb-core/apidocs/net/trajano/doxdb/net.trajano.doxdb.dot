@@ -5,33 +5,33 @@
 #
 
 digraph G {
-	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
-	node [fontname="Helvetica",fontsize=10,shape=plaintext];
+	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
+	node [fontname="arial",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// net.trajano.doxdb.DoxID
-	c0 [label=<<table title="net.trajano.doxdb.DoxID" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxID.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxID </td></tr>
-		</table></td></tr>
-		</table>>, URL="./DoxID.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.DoxMeta
-	c1 [label=<<table title="net.trajano.doxdb.DoxMeta" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxMeta.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxMeta </td></tr>
-		</table></td></tr>
-		</table>>, URL="./DoxMeta.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.SearchResult
-	c2 [label=<<table title="net.trajano.doxdb.SearchResult" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SearchResult.html">
+	c0 [label=<<table title="net.trajano.doxdb.SearchResult" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SearchResult.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SearchResult </td></tr>
 		</table></td></tr>
-		</table>>, URL="./SearchResult.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./SearchResult.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.IndexView
-	c3 [label=<<table title="net.trajano.doxdb.IndexView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexView.html">
+	c1 [label=<<table title="net.trajano.doxdb.IndexView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexView.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IndexView </td></tr>
 		</table></td></tr>
-		</table>>, URL="./IndexView.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./IndexView.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.DoxMeta
+	c2 [label=<<table title="net.trajano.doxdb.DoxMeta" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxMeta.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxMeta </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxMeta.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.DoxID
+	c3 [label=<<table title="net.trajano.doxdb.DoxID" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxID.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxID </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxID.html", fontname="arial", fontcolor="black", fontsize=10.0];
 }
 

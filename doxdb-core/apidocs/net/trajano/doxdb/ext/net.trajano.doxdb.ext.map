@@ -1,18 +1,18 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./XmlConfigurationProvider.html" title="net.trajano.doxdb.ext.XmlConfigurationProvider" alt="" coords="16,118,184,143"/>
-<area shape="rect" id="node1" href="./XmlConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="5,107,195,155"/>
-<area shape="rect" id="node2_1" href="./DoxSearch.html" title="net.trajano.doxdb.ext.DoxSearch" alt="" coords="217,11,301,53"/>
-<area shape="rect" id="node2" href="./DoxSearch.html" title="&lt;TABLE&gt;" alt="" coords="206,5,311,59"/>
-<area shape="rect" id="node3_2" href="./Indexer.html" title="net.trajano.doxdb.ext.Indexer" alt="" coords="346,11,430,53"/>
-<area shape="rect" id="node3" href="./Indexer.html" title="&lt;TABLE&gt;" alt="" coords="335,5,441,59"/>
-<area shape="rect" id="node4_3" href="./DefaultEventHandler.html" title="net.trajano.doxdb.ext.DefaultEventHandler" alt="" coords="455,118,595,143"/>
-<area shape="rect" id="node4" href="./DefaultEventHandler.html" title="&lt;TABLE&gt;" alt="" coords="445,107,606,155"/>
-<area shape="rect" id="node5_4" href="./EventHandler.html" title="net.trajano.doxdb.ext.EventHandler" alt="" coords="476,11,575,53"/>
-<area shape="rect" id="node5" href="./EventHandler.html" title="&lt;TABLE&gt;" alt="" coords="465,5,585,59"/>
-<area shape="rect" id="node6_5" href="./CollectionAccessControl.html" title="net.trajano.doxdb.ext.CollectionAccessControl" alt="" coords="621,11,785,53"/>
-<area shape="rect" id="node6" href="./CollectionAccessControl.html" title="&lt;TABLE&gt;" alt="" coords="610,5,795,59"/>
-<area shape="rect" id="node7_6" href="./ConfigurationProvider.html" title="net.trajano.doxdb.ext.ConfigurationProvider" alt="" coords="28,11,172,53"/>
-<area shape="rect" id="node7" href="./ConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="17,5,183,59"/>
-<area shape="rect" id="node8_7" href="./Migrator.html" title="net.trajano.doxdb.ext.Migrator" alt="" coords="830,11,914,53"/>
-<area shape="rect" id="node8" href="./Migrator.html" title="&lt;TABLE&gt;" alt="" coords="819,5,925,59"/>
+<area shape="rect" id="node1_0" href="./XmlConfigurationProvider.html" title="net.trajano.doxdb.ext.XmlConfigurationProvider" alt="" coords="16,118,177,143"/>
+<area shape="rect" id="node1" href="./XmlConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="5,107,188,155"/>
+<area shape="rect" id="node2_1" href="./Migrator.html" title="net.trajano.doxdb.ext.Migrator" alt="" coords="213,11,295,53"/>
+<area shape="rect" id="node2" href="./Migrator.html" title="&lt;TABLE&gt;" alt="" coords="202,5,306,59"/>
+<area shape="rect" id="node3_2" href="./Indexer.html" title="net.trajano.doxdb.ext.Indexer" alt="" coords="341,11,423,53"/>
+<area shape="rect" id="node3" href="./Indexer.html" title="&lt;TABLE&gt;" alt="" coords="330,5,434,59"/>
+<area shape="rect" id="node4_3" href="./EventHandler.html" title="net.trajano.doxdb.ext.EventHandler" alt="" coords="469,11,565,53"/>
+<area shape="rect" id="node4" href="./EventHandler.html" title="&lt;TABLE&gt;" alt="" coords="458,5,575,59"/>
+<area shape="rect" id="node6_4" href="./DefaultEventHandler.html" title="net.trajano.doxdb.ext.DefaultEventHandler" alt="" coords="449,118,585,143"/>
+<area shape="rect" id="node6" href="./DefaultEventHandler.html" title="&lt;TABLE&gt;" alt="" coords="438,107,595,155"/>
+<area shape="rect" id="node5_5" href="./DoxSearch.html" title="net.trajano.doxdb.ext.DoxSearch" alt="" coords="611,11,695,53"/>
+<area shape="rect" id="node5" href="./DoxSearch.html" title="&lt;TABLE&gt;" alt="" coords="600,5,705,59"/>
+<area shape="rect" id="node7_6" href="./ConfigurationProvider.html" title="net.trajano.doxdb.ext.ConfigurationProvider" alt="" coords="27,11,167,53"/>
+<area shape="rect" id="node7" href="./ConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="16,5,177,59"/>
+<area shape="rect" id="node8_7" href="./CollectionAccessControl.html" title="net.trajano.doxdb.ext.CollectionAccessControl" alt="" coords="740,11,901,53"/>
+<area shape="rect" id="node8" href="./CollectionAccessControl.html" title="&lt;TABLE&gt;" alt="" coords="729,5,912,59"/>
 </map>
