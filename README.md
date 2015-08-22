@@ -19,6 +19,7 @@ Completed:
    * Angular JS sample
    * Event notification using WebSockets
    * Allow for retrieving large collections
+   * Schema retrieval
 
 Remaining:
 
@@ -33,3 +34,6 @@ Remaining:
    * More robust Angular JS sample
    * Off-line sync
    * Migrate from JEST to JAX-RS Client
+   * Example with [Angular Schema Form][1]
+
+[1]: http://schemaform.io/
