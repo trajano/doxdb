@@ -1,8 +1,8 @@
 package net.trajano.doxdb.ejb.jest;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static javax.json.Json.createObjectBuilder;
+
+import java.math.BigDecimal;
 import java.util.Map.Entry;
 
 import javax.ejb.Asynchronous;
@@ -11,15 +11,16 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonNumber;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.persistence.PersistenceException;
+import javax.json.JsonString;
+import javax.json.JsonValue;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
-import io.searchbox.client.JestResult;
-import io.searchbox.core.Bulk;
-import io.searchbox.core.Delete;
-import io.searchbox.core.Index;
-import io.searchbox.core.Search;
-import io.searchbox.indices.DeleteIndex;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
@@ -60,33 +61,36 @@ public class JestDoxSearchBean implements
     @Asynchronous
     public void addToIndex(final IndexView... indexViews) {
 
-        final Bulk.Builder bulkBuilder = new Bulk.Builder();
-        for (final IndexView indexView : indexViews) {
+        final WebTarget target = jestProvider.getTarget().path("_bulk");
 
-            final Map<String, Object> map = new HashMap<>();
-            for (final Entry<String, Double> d : indexView.getDoubles()) {
-                map.put(d.getKey(), d.getValue());
-            }
-            for (final Entry<String, Long> d : indexView.getLongs()) {
-                map.put(d.getKey(), d.getValue());
+        final StringBuilder b = new StringBuilder();
+        for (final IndexView indexView : indexViews) {
+            b.append(
+                createObjectBuilder().add("index", createObjectBuilder()
+                    .add("_index", configurationProvider.getMappedIndex(indexView.getIndex()))
+                    .add("_type", indexView.getCollection())
+                    .add("_id", indexView.getDoxID().toString())).build().toString());
+            b.append("\n");
+
+            final JsonObjectBuilder sourceBuilder = createObjectBuilder();
+            for (final Entry<String, BigDecimal> d : indexView.getNumbers()) {
+                sourceBuilder.add(d.getKey(), d.getValue());
             }
             for (final Entry<String, String> d : indexView.getStrings()) {
-                map.put(d.getKey(), d.getValue());
+                sourceBuilder.add(d.getKey(), d.getValue());
             }
-            final Map<String, Object> metaMap = new HashMap<>();
+
+            final JsonObjectBuilder metaBuilder = createObjectBuilder();
             for (final Entry<String, String> d : indexView.getTexts()) {
-                metaMap.put(d.getKey(), d.getValue());
+                metaBuilder.add(d.getKey(), d.getValue());
             }
-            metaMap.put("_text", indexView.getText());
+            metaBuilder.add("_text", indexView.getText());
+            sourceBuilder.add("_", metaBuilder);
 
-            final Index index = new Index.Builder(map).index(configurationProvider.getMappedIndex(indexView.getIndex())).type(indexView.getCollection()).id(indexView.getDoxID().toString()).build();
-
-            bulkBuilder.addAction(index);
+            b.append(sourceBuilder.build().toString());
+            b.append("\n");
         }
-        final JestResult result = jestProvider.execute(bulkBuilder.build());
-        if (!result.isSucceeded()) {
-            throw new PersistenceException(result.getJsonString());
-        }
+        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);
 
     }
 
@@ -97,34 +101,42 @@ public class JestDoxSearchBean implements
     public void removeFromIndex(final String schemaName,
         final DoxID doxID) {
 
-        final Bulk.Builder bulkBuilder = new Bulk.Builder();
+        final WebTarget target = jestProvider.getTarget().path("_bulk");
+        final StringBuilder b = new StringBuilder();
+
         for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
 
-            final Delete del = new Delete.Builder(doxID.toString()).type(schemaName).index(configurationProvider.getMappedIndex(indexType.getName())).build();
-
-            bulkBuilder.addAction(del);
+            b.append(
+                createObjectBuilder().add("delete", createObjectBuilder()
+                    .add("_index", configurationProvider.getMappedIndex(indexType.getName()))
+                    .add("_type", schemaName)
+                    .add("_id", doxID.toString())).build().toString());
+            b.append("\n");
         }
-        jestProvider.execute(bulkBuilder.build());
+
+        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} Once the indices are removed, {@link JestProvider#init()}
+     * is called in order to recreate the mappings again.
      */
     @Override
     public void reset() {
 
-        jestProvider.execute(new DeleteIndex.Builder("_all").build());
+        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
 
+            final WebTarget target = jestProvider.getTarget().path(configurationProvider.getMappedIndex(indexType.getName()));
+            target.request(MediaType.APPLICATION_JSON).delete().readEntity(JsonObject.class);
+
+        }
+        jestProvider.init();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings({
-        "rawtypes",
-        "deprecation"
-    })
     public SearchResult search(final String index,
         final String queryString,
         final int limit,
@@ -140,27 +152,23 @@ public class JestDoxSearchBean implements
         final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add("query", queryString).add("default_operator", "and");
         final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add("simple_query_string", sqsBuilder);
         final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add("size", limit).add("query", qBuilder).add("from", from);
-        final String query = queryBuilder.build().toString();
 
-        final SearchResult2 esResults = new SearchResult2(jestProvider.execute(new Search.Builder(query).addIndex(index).build()));
-        result.setTotalHits(esResults.getTotal());
+        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
 
-        final List<Map> hits = esResults.getSourceAsObjectList(Map.class);
+        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
+        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
         result.setBottomDoc(Math.min(from + hits.size(), from + limit));
-        for (final Map hit : hits) {
+        for (final JsonValue hitValue : hits) {
             final IndexView iv = new IndexView();
-            for (final Object key : hit.keySet()) {
-                final Object value = hit.get(key);
-                if (JestResult.ES_METADATA_ID.equals(key)) {
-                    iv.setDoxID(new DoxID((String) value));
-                } else if (SearchResult2.ES_METADATA_TYPE.equals(key)) {
-                    iv.setCollection((String) value);
-                } else if (value instanceof Double) {
-                    iv.setDouble(key.toString(), (double) value);
-                } else if (value instanceof Long) {
-                    iv.setLong(key.toString(), (long) value);
-                } else if (value instanceof String) {
-                    iv.setString((String) key, (String) value);
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
                 }
             }
             result.addHit(iv);

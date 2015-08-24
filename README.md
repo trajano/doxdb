@@ -21,6 +21,7 @@ Completed:
    * Allow for retrieving large collections
    * Schema retrieval
    * Example with [Angular Schema Form][1]
+   * Migrate from JEST to JAX-RS Client
 
 Remaining:
 
@@ -32,8 +33,7 @@ Remaining:
    * Alternate search
    * Extra operations
    * Corrupted index repair
-   * More robust Angular JS sample
    * Off-line sync
-   * Migrate from JEST to JAX-RS Client
+   * Create a data dictionary and rename the methods and fields to correspond to the data dictionary.
 
 [1]: http://schemaform.io/

@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
 import java.util.Iterator;
@@ -270,10 +271,7 @@ public class DoxResource {
         for (final IndexView hit : results.getHits()) {
             final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
             final String id = hit.getDoxID().toString();
-            for (final Entry<String, Double> entry : hit.getDoubles()) {
-                hitBuilder.add(entry.getKey(), entry.getValue());
-            }
-            for (final Entry<String, Long> entry : hit.getLongs()) {
+            for (final Entry<String, BigDecimal> entry : hit.getNumbers()) {
                 hitBuilder.add(entry.getKey(), entry.getValue());
             }
             for (final Entry<String, String> entry : hit.getStrings()) {

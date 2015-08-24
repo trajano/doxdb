@@ -86,6 +86,9 @@ public interface DoxLocal {
      */
     String readAll(String schemaName);
 
+    /**
+     * Delete all the index data and reindex all the documents.
+     */
     void reindex();
 
     SearchResult search(String index,

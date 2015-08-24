@@ -1,6 +1,7 @@
 package net.trajano.doxdb;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,7 +10,7 @@ import java.util.Set;
 /**
  * This represents a view of the data that will be stored in the index.
  *
- * @author Archimedes
+ * @author Archimedes Trajano
  */
 public class IndexView implements
     Serializable {
@@ -20,8 +21,6 @@ public class IndexView implements
     private static final long serialVersionUID = -378816417510576056L;
 
     private String collection;
-
-    private final Map<String, Double> doubles = new HashMap<>();
 
     /**
      * Associated DoxID that was used to populate the view.
@@ -36,8 +35,6 @@ public class IndexView implements
      */
     private String index;
 
-    private final Map<String, Long> longs = new HashMap<>();
-
     /**
      * Flag to indicate that the data should be masked. If the data is masked,
      * the ID and URLs should not appear in the search results.
@@ -45,9 +42,9 @@ public class IndexView implements
     private boolean masked = false;
 
     /**
-     * If this is true, the entry will be removed from the index.
+     * Holds numeric data.
      */
-    private boolean remove;
+    private final Map<String, BigDecimal> numbers = new HashMap<>();
 
     private final Map<String, String> strings = new HashMap<>();
 
@@ -79,11 +76,6 @@ public class IndexView implements
         return collection;
     }
 
-    public Set<Entry<String, Double>> getDoubles() {
-
-        return doubles.entrySet();
-    }
-
     public DoxID getDoxID() {
 
         return doxID;
@@ -94,9 +86,9 @@ public class IndexView implements
         return index;
     }
 
-    public Set<Entry<String, Long>> getLongs() {
+    public Set<Entry<String, BigDecimal>> getNumbers() {
 
-        return longs.entrySet();
+        return numbers.entrySet();
     }
 
     public Set<Entry<String, String>> getStrings() {
@@ -124,26 +116,9 @@ public class IndexView implements
         return masked;
     }
 
-    /**
-     * Gets remove.
-     *
-     * @return the remove
-     */
-    public boolean isRemove() {
-
-        return remove;
-    }
-
     public void setCollection(final String collection) {
 
         this.collection = collection;
-    }
-
-    public IndexView setDouble(final String name,
-        final double value) {
-
-        doubles.put(name, value);
-        return this;
     }
 
     public void setDoxID(final DoxID doxId) {
@@ -158,27 +133,57 @@ public class IndexView implements
         return this;
     }
 
-    public IndexView setLong(final String name,
-        final long value) {
-
-        longs.put(name, value);
-        return this;
-    }
-
     public void setMasked(final boolean masked) {
 
         this.masked = masked;
     }
 
     /**
-     * Sets remove.
+     * Sets a number attribute.
      *
-     * @param remove
-     *            the remove to set
+     * @param name
+     *            name of the attribute field
+     * @param value
+     *            numeric value.
+     * @return <code>this</code>
      */
-    public void setRemove(final boolean remove) {
+    public IndexView setNumber(final String name,
+        final BigDecimal value) {
 
-        this.remove = remove;
+        numbers.put(name, value);
+        return this;
+    }
+
+    /**
+     * Sets a number attribute. Convenience to use <code>double</code>.
+     *
+     * @param name
+     *            name of the attribute field
+     * @param value
+     *            numeric value.
+     * @return <code>this</code>
+     */
+    public IndexView setNumber(final String name,
+        final double value) {
+
+        numbers.put(name, new BigDecimal(value));
+        return this;
+    }
+
+    /**
+     * Sets a number attribute. Convenience to use <code>long</code>.
+     *
+     * @param name
+     *            name of the attribute field
+     * @param value
+     *            numeric value.
+     * @return <code>this</code>
+     */
+    public IndexView setNumber(final String name,
+        final long value) {
+
+        numbers.put(name, new BigDecimal(value));
+        return this;
     }
 
     /**
