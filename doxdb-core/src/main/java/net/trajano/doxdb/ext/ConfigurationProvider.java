@@ -8,7 +8,8 @@ public interface ConfigurationProvider {
      * Gets the mapped index name for a logical name.
      *
      * @param name
-     * @return
+     *            logical name
+     * @return physical name
      */
     String getMappedIndex(String name);
 

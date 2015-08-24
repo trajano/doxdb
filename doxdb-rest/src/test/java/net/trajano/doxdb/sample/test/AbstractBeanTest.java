@@ -91,7 +91,7 @@ public class AbstractBeanTest {
                 final DoxType doxType = new DoxType();
                 doxType.setName("horse");
                 final SchemaType schema = new SchemaType();
-                schema.setUri("/schema/horse.json");
+                schema.setLocation("horse.json");
                 schema.setVersion(1);
                 doxType.getSchema().add(schema);
                 doxPersistence.getDox().add(doxType);

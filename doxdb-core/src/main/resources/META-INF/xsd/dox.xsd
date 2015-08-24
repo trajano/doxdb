@@ -95,8 +95,7 @@
 		<annotation>
 			<appinfo>
 				<jxb:class>
-					<jxb:javadoc>A schema definition.
-					</jxb:javadoc>
+					<jxb:javadoc>A schema definition.</jxb:javadoc>
 				</jxb:class>
 			</appinfo>
 		</annotation>
@@ -114,7 +113,21 @@
 				</appinfo>
 			</annotation>
 		</attribute>
-		<attribute name="uri" type="anyURI" use="required" />
+		<attribute name="location" use="required">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Location of the JSON schema. It is relative to the
+							"META-INF/schema" path. Using an absolute or ".." is not
+							supported and may yield unexpected results.
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+			<simpleType>
+				<restriction base="anyURI"></restriction>
+			</simpleType>
+		</attribute>
 	</complexType>
 	<complexType name="IndexType">
 		<attribute name="name" type="token" use="required">

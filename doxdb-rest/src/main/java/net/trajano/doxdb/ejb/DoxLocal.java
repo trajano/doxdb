@@ -1,5 +1,7 @@
 package net.trajano.doxdb.ejb;
 
+import java.io.InputStream;
+
 import javax.ejb.Local;
 
 import org.bson.BsonDocument;
@@ -27,13 +29,25 @@ public interface DoxLocal {
 
     /**
      * @param collection
+     *            collection
      * @param doxID
+     *            Dox ID
      * @param version
+     *            version
      * @return true if a record was deleted.
      */
     boolean delete(String collection,
         DoxID doxID,
         int version);
+
+    /**
+     * This retrieves the schema.
+     *
+     * @param path
+     *            path to the schema file
+     * @return JSON Schema stream
+     */
+    InputStream getSchema(String path);
 
     /**
      * Does nothing, but calling it ensures that the EJB gets initialized.
@@ -66,12 +80,15 @@ public interface DoxLocal {
      * characters in transit.
      * </p>
      *
-     * @param collectionName
-     *            collection name
+     * @param schemaName
+     *            schema name
      * @return JSON string or file name
      */
-    String readAll(String collectionName);
+    String readAll(String schemaName);
 
+    /**
+     * Delete all the index data and reindex all the documents.
+     */
     void reindex();
 
     SearchResult search(String index,
@@ -87,14 +104,14 @@ public interface DoxLocal {
      * Creates a dox record into the database. This will allocate a "_id" value
      * for the record.
      *
-     * @param collectionName
-     *            collection name
+     * @param schemaName
+     *            schema name
      * @param contents
      *            dox contents as a BSON. The contents MUST be valid for the
      *            schema.
      * @return dox meta with contents with "_id" and "_version" set.
      */
-    DoxMeta update(String collection,
+    DoxMeta update(String schemaName,
         DoxID id,
         BsonDocument contents,
         int version);

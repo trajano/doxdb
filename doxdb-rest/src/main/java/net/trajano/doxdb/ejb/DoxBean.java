@@ -3,6 +3,7 @@ package net.trajano.doxdb.ejb;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.sql.Timestamp;
@@ -177,33 +178,31 @@ public class DoxBean implements
         if (toBeDeleted == null) {
             return false;
         }
+        final BsonDocument contentBson = toBeDeleted.getContent();
         final DoxTombstone tombstone = toBeDeleted.buildTombstone(ctx.getCallerPrincipal(), ts);
         em.persist(tombstone);
         em.remove(toBeDeleted);
 
         final SchemaType schema = currentSchemaMap.get(collectionName);
 
-        String contentJson;
-
+        String contentJson = contentBson.toJson();
         if (meta.getSchemaVersion() != schema.getVersion()) {
-            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());
-            final BsonDocument document = BsonDocument.parse(contentJson);
-            meta.setSchemaVersion(schema.getVersion());
-            e.setSchemaVersion(schema.getVersion());
-            contentJson = document.toJson();
-            em.persist(e);
-        } else {
-            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC);
-            final BsonDocument document = e.getContent();
-            addMeta(document, e.getDoxId(), e.getVersion());
-            contentJson = document.toJson();
+            contentJson = migrator.migrate(collectionName, meta.getSchemaVersion(), schema.getVersion(), contentJson);
         }
 
         doxSearchBean.removeFromIndex(config.getName(), doxid);
         eventHandler.onRecordDelete(config.getName(), doxid, contentJson);
         return true;
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InputStream getSchema(final String path) {
+
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/schema/" + path);
     }
 
     /**
@@ -354,12 +353,14 @@ public class DoxBean implements
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Asynchronous
     public void reindex() {
 
         doxSearchBean.reset();
-
         // TODO this will do everything in one transaction which can kill the database.  What could be done is the
         // reindexing can be done in chunks and let an MDB do the process
         for (final DoxType config : doxen.values()) {
@@ -506,7 +507,7 @@ public class DoxBean implements
 
         try {
 
-            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getUri());
+            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getLocation());
             if (jsonSchema == null) {
                 final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
                     .setDefaultVersion(SchemaVersion.DRAFTV4)
@@ -515,8 +516,8 @@ public class DoxBean implements
                 jsonSchema = JsonSchemaFactory.newBuilder()
                     .setValidationConfiguration(cfg)
                     .freeze()
-                    .getJsonSchema(JsonLoader.fromResource(schema.getUri()));
-                jsonSchemaMap.putIfAbsent(schema.getUri(), jsonSchema);
+                    .getJsonSchema(JsonLoader.fromResource("/META-INF/schema/" + schema.getLocation()));
+                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);
             }
 
             final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));

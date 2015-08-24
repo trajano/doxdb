@@ -7,7 +7,7 @@ angular.module('search', [
             'method' : 'GET'
         },
         'reindex' : {
-            'method' : 'OPTION',
+            'method' : 'OPTIONS',
             'url' : 'V1/reindex'
         }
     });

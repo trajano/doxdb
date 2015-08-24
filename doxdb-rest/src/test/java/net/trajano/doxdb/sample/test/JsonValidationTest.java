@@ -22,7 +22,7 @@ public class JsonValidationTest {
         final JsonSchema schema = JsonSchemaFactory.newBuilder()
             .setValidationConfiguration(cfg)
             .freeze()
-            .getJsonSchema(JsonLoader.fromResource("/schema/horse.json"));
+            .getJsonSchema(JsonLoader.fromResource("/META-INF/schema/horse.json"));
 
         final ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\"}"));
         Assert.assertTrue(validate.toString(), validate.isSuccess());
@@ -39,7 +39,7 @@ public class JsonValidationTest {
         final JsonSchema schema = JsonSchemaFactory.newBuilder()
             .setValidationConfiguration(cfg)
             .freeze()
-            .getJsonSchema(JsonLoader.fromResource("/schema/horse.json"));
+            .getJsonSchema(JsonLoader.fromResource("/META-INF/schema/horse.json"));
 
         final ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\", \"_id\":\"mazui\" }"));
         Assert.assertTrue(validate.toString(), validate.isSuccess());
@@ -56,7 +56,7 @@ public class JsonValidationTest {
         final JsonSchema schema = JsonSchemaFactory.newBuilder()
             .setValidationConfiguration(cfg)
             .freeze()
-            .getJsonSchema(JsonLoader.fromResource("/schema/horse.json"));
+            .getJsonSchema(JsonLoader.fromResource("/META-INF/schema/horse.json"));
 
         final ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\", \"_XX\":\"mazui\" }"));
         Assert.assertFalse(validate.toString(), validate.isSuccess());

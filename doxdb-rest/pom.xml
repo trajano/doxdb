@@ -27,9 +27,14 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>bson</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.187</version>
+            <version>1.4.188</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

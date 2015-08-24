@@ -27,14 +27,14 @@ import net.trajano.doxdb.schema.IndexType;
  * </p>
  *
  * <pre>
- * &lt;enterprise-beans>
- *   &lt;session>
- *     &lt;ejb-name>XmlConfigurationProvider&lt;/ejb-name>
- *     &lt;business-local>net.trajano.doxdb.spi.ConfigurationProvider&lt;/business-local>
- *     &lt;ejb-class>net.trajano.doxdb.spi.XmlConfigurationProvider&lt;/ejb-class>
- *     &lt;session-type>Stateless&lt;/session-type>
- *   &lt;/session>
- * &lt;/enterprise-beans>
+ * &lt;enterprise-beans&gt;
+ *   &lt;session&gt;
+ *     &lt;ejb-name&gt;XmlConfigurationProvider&lt;/ejb-name&gt;
+ *     &lt;business-local&gt;net.trajano.doxdb.spi.ConfigurationProvider&lt;/business-local&gt;
+ *     &lt;ejb-class&gt;net.trajano.doxdb.spi.XmlConfigurationProvider&lt;/ejb-class&gt;
+ *     &lt;session-type&gt;Stateless&lt;/session-type&gt;
+ *   &lt;/session&gt;
+ * &lt;/enterprise-beans&gt;
  * </pre>
  *
  * @author Archimedes Trajano

@@ -10,7 +10,9 @@ public interface EventHandler {
 
     /**
      * @param collection
+     *            schema name
      * @param doxid
+     *            Dox ID
      * @param json
      *            JSON of the record that was deleted.
      */
