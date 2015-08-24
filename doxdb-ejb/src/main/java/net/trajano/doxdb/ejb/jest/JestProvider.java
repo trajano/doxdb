@@ -1,27 +1,19 @@
 package net.trajano.doxdb.ejb.jest;
 
-import java.io.IOException;
+import static javax.json.Json.createArrayBuilder;
+import static javax.json.Json.createObjectBuilder;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.ejb.Singleton;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.persistence.PersistenceException;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
-import io.searchbox.action.Action;
-import io.searchbox.client.JestClient;
-import io.searchbox.client.JestClientFactory;
-import io.searchbox.client.JestResult;
-import io.searchbox.client.config.HttpClientConfig;
-import io.searchbox.indices.CreateIndex;
-import io.searchbox.indices.DeleteIndex;
-import io.searchbox.indices.mapping.PutMapping;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.IndexType;
@@ -35,77 +27,37 @@ import net.trajano.doxdb.schema.IndexType;
 @LocalBean
 public class JestProvider {
 
-    private static final String MAPPING_CONFIG;
-
-    static {
-        final JsonArrayBuilder excludesBuilder = Json.createArrayBuilder().add("_.*");
-        final JsonObjectBuilder sourceBuilder = Json.createObjectBuilder().add("excludes", excludesBuilder);
-        final JsonObjectBuilder idBuilder = Json.createObjectBuilder().add("index", "not_analyzed").add("store", true);
-
-        MAPPING_CONFIG = Json.createObjectBuilder().add("_source", sourceBuilder).add("_id", idBuilder).build().toString();
-    }
-
-    /**
-     * Client managed by the singleton. This client already has its own
-     * connection pooling so there's no need to have it managed by the
-     * container.
-     */
-    private JestClient client;
-
     private ConfigurationProvider configurationProvider;
 
     /**
-     * This will be used to drop indexes created by this provider. This is used
-     * when doing testing.
+     * @return
      */
-    @Lock(LockType.WRITE)
-    public void dropIndexes() {
+    public WebTarget getTarget() {
 
-        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
-            execute(new DeleteIndex.Builder(configurationProvider.getMappedIndex(indexType.getName())).build());
-        }
+        return ClientBuilder.newClient().target(configurationProvider.getPersistenceConfig().getElasticSearchUri());
     }
 
-    @Lock(LockType.READ)
-    public <T extends JestResult> T execute(final Action<T> clientRequest) {
-
-        try {
-            return client.execute(clientRequest);
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
-        }
-    }
-
-    @Lock(LockType.READ)
-    public JestClient getClient() {
-
-        return client;
-    }
-
+    /**
+     * This builds the indices if needed.
+     */
     @PostConstruct
     public void init() {
 
-        final JestClientFactory factory = new JestClientFactory();
-        factory.setHttpClientConfig(new HttpClientConfig.Builder(configurationProvider.getPersistenceConfig().getElasticSearchUri())
-            .multiThreaded(true)
-            .build());
-        client = factory.getObject();
+        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
+            final String mappedName = configurationProvider.getMappedIndex(indexType.getName());
 
-        try {
-            for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {
-                final String mappedName = configurationProvider.getMappedIndex(indexType.getName());
-                client.execute(new CreateIndex.Builder(mappedName).build());
+            if (getTarget().path(mappedName).request().head().getStatus() == 404) {
+                final JsonObjectBuilder mappingBuilder = createObjectBuilder();
                 for (final DoxType doxType : configurationProvider.getPersistenceConfig().getDox()) {
-                    final PutMapping putMapping = new PutMapping.Builder(
-                        mappedName,
-                        doxType.getName(),
-                        MAPPING_CONFIG).build();
-                    client.execute(putMapping);
+                    mappingBuilder.add(doxType.getName(), createObjectBuilder()
+                        .add("_source", createObjectBuilder()
+                            .add("excludes", createArrayBuilder()
+                                .add("_")
+                                .add("_.*"))));
                 }
+                final JsonObject build = createObjectBuilder().add("mappings", mappingBuilder).build();
+                getTarget().path(mappedName).request(MediaType.APPLICATION_JSON).put(Entity.entity(build, MediaType.APPLICATION_JSON)).getEntity();
             }
-
-        } catch (final IOException e) {
-            throw new PersistenceException(e);
         }
 
     }
@@ -120,12 +72,6 @@ public class JestProvider {
     public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
 
         this.configurationProvider = configurationProvider;
-    }
-
-    @PreDestroy
-    public void shutdown() {
-
-        client.shutdownClient();
     }
 
 }

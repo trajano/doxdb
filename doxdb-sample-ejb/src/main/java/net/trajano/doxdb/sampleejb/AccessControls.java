@@ -73,8 +73,8 @@ public class AccessControls implements
                 indexView.appendText(json);
                 indexView.setString("collection", collection);
                 indexView.setString("name", venue.getName());
-                indexView.setLong("time", System.currentTimeMillis());
-                indexView.setDouble("float", 156.6 / System.currentTimeMillis());
+                indexView.setNumber("time", System.currentTimeMillis());
+                indexView.setNumber("float", 156.6 / System.currentTimeMillis());
                 indexView.setIndex("myindex");
 
                 final IndexView indexView2 = new IndexView();

@@ -353,12 +353,14 @@ public class DoxBean implements
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Asynchronous
     public void reindex() {
 
         doxSearchBean.reset();
-
         // TODO this will do everything in one transaction which can kill the database.  What could be done is the
         // reindexing can be done in chunks and let an MDB do the process
         for (final DoxType config : doxen.values()) {
