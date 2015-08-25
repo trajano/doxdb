@@ -28,7 +28,7 @@ public class DataLoader {
 
         for (final JsonValue item : collection) {
             final JsonObject record = (JsonObject) item;
-            final JsonObject jsonObject = Json.createObjectBuilder().add("name", record.get("last_name")).add("language", record.get("language")).build();
+            final JsonObject jsonObject = Json.createObjectBuilder().add("name", record.get("last_name")).add("language", record.get("language")).add("rings", Json.createArrayBuilder()).build();
 
             request.post(Entity.entity(jsonObject, MediaType.APPLICATION_JSON_TYPE));
         }
