@@ -1,6 +1,7 @@
 package net.trajano.doxdb.sample.web;
 
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
 /**
  * type.
@@ -8,6 +9,6 @@ import javax.ws.rs.ApplicationPath;
  * @author Archimedes Trajano
  */
 @ApplicationPath("api")
-public class RestApplication {
+public class RestApplication extends Application {
 
 }
