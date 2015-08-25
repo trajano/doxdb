@@ -1,7 +1,7 @@
 package net.trajano.doxdb.sample.test;
 
-import net.trajano.doxdb.sampleejb.MyConfigurationProvider;
-import net.trajano.doxdb.sampleejb.MyEventHandler;
+import net.trajano.doxdb.sample.ejb.MyConfigurationProvider;
+import net.trajano.doxdb.sample.ejb.MyEventHandler;
 
 /**
  * This tests instantiation of the My classes.
@@ -17,7 +17,7 @@ public class MyClassTest {
 
     public void testMyEventHandler() {
 
-        MyEventHandler eventHandler = new MyEventHandler();
+        final MyEventHandler eventHandler = new MyEventHandler();
         eventHandler.onRecordCreate("col", null, "");
         eventHandler.onRecordDelete("col", null, "");
         eventHandler.onRecordRead("col", null, "");

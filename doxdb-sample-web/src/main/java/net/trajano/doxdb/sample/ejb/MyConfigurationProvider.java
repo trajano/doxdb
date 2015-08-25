@@ -1,4 +1,4 @@
-package net.trajano.doxdb.sampleejb;
+package net.trajano.doxdb.sample.ejb;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
