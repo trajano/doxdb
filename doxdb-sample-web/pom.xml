@@ -10,7 +10,7 @@
     <packaging>war</packaging>
     <properties>
         <angularjs.version>1.4.3-1</angularjs.version>
-        <angular-schema-form.version>0.8.8-SNAPSHOT</angular-schema-form.version>
+        <angular-schema-form.version>0.8.8</angular-schema-form.version>
         <bootstrap.version>3.3.5</bootstrap.version>
         <m2eclipse.wtp.contextRoot>/doxdb-sample</m2eclipse.wtp.contextRoot>
         <objectpath.version>1.1.0</objectpath.version>
