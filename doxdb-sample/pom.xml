@@ -11,11 +11,6 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>doxdb-ejb</artifactId>
-            <type>ejb</type>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>doxdb-sample-ejb</artifactId>
             <type>ejb</type>
         </dependency>
@@ -47,10 +42,6 @@
                         <ejbModule>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>doxdb-sample-ejb</artifactId>
-                        </ejbModule>
-                        <ejbModule>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>doxdb-ejb</artifactId>
                         </ejbModule>
                         <webModule>
                             <groupId>${project.groupId}</groupId>

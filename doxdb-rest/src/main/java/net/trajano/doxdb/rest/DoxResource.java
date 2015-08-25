@@ -33,6 +33,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
@@ -198,7 +199,12 @@ public class DoxResource {
 
             }
         };
-        return Response.ok(out).encoding("UTF-8").build();
+        final CacheControl cc = new CacheControl();
+        cc.setNoCache(true);
+        cc.setMaxAge(-1);
+        cc.setMustRevalidate(true);
+
+        return Response.ok(out).cacheControl(cc).encoding("UTF-8").build();
 
     }
 
@@ -290,6 +296,10 @@ public class DoxResource {
             jsonBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
         }
         final JsonObject resultJson = jsonBuilder.build();
-        return Response.ok().entity(resultJson).build();
+        final CacheControl cc = new CacheControl();
+        cc.setNoCache(true);
+        cc.setMaxAge(-1);
+        cc.setMustRevalidate(true);
+        return Response.ok().cacheControl(cc).entity(resultJson).build();
     }
 }

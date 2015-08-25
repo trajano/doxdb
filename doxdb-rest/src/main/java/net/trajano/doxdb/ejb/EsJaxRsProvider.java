@@ -1,4 +1,4 @@
-package net.trajano.doxdb.ejb.jest;
+package net.trajano.doxdb.ejb;
 
 import static javax.json.Json.createArrayBuilder;
 import static javax.json.Json.createObjectBuilder;
@@ -25,7 +25,7 @@ import net.trajano.doxdb.schema.IndexType;
  */
 @Singleton
 @LocalBean
-public class JestProvider {
+public class EsJaxRsProvider {
 
     private ConfigurationProvider configurationProvider;
 
