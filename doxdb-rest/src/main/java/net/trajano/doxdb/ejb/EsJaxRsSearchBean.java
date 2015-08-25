@@ -1,4 +1,4 @@
-package net.trajano.doxdb.ejb.jest;
+package net.trajano.doxdb.ejb;
 
 import static javax.json.Json.createObjectBuilder;
 
@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.json.Json;
@@ -25,18 +24,16 @@ import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ext.ConfigurationProvider;
-import net.trajano.doxdb.ext.DoxSearch;
 import net.trajano.doxdb.schema.IndexType;
 
 /**
- * Handles JEST searches.
+ * Handles ElasticSearch via REST API.
  *
  * @author Archimedes
  */
 @Stateless
-@Remote(DoxSearch.class)
 @Dependent
-public class JestDoxSearchBean implements
+public class EsJaxRsSearchBean implements
     DoxSearch {
 
     /**
@@ -52,7 +49,7 @@ public class JestDoxSearchBean implements
 
     private ConfigurationProvider configurationProvider;
 
-    private transient JestProvider jestProvider;
+    private transient EsJaxRsProvider jestProvider;
 
     /**
      * {@inheritDoc}
@@ -118,7 +115,7 @@ public class JestDoxSearchBean implements
     }
 
     /**
-     * {@inheritDoc} Once the indices are removed, {@link JestProvider#init()}
+     * {@inheritDoc} Once the indices are removed, {@link EsJaxRsProvider#init()}
      * is called in order to recreate the mappings again.
      */
     @Override
@@ -197,7 +194,7 @@ public class JestDoxSearchBean implements
      *            the provider to set
      */
     @EJB
-    public void setJestProvider(final JestProvider provider) {
+    public void setJestProvider(final EsJaxRsProvider provider) {
 
         jestProvider = provider;
     }

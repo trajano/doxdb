@@ -25,10 +25,10 @@ import com.google.common.io.Resources;
 
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.ejb.DoxBean;
+import net.trajano.doxdb.ejb.DoxSearch;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.DefaultEventHandler;
-import net.trajano.doxdb.ext.DoxSearch;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.schema.DoxPersistence;
