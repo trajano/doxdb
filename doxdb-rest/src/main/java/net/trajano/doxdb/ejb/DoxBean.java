@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -284,7 +285,8 @@ public class DoxBean implements
         final SchemaType schema = currentSchemaMap.get(schemaName);
 
         final File f = File.createTempFile("doxdb", schemaName);
-        try (final Writer os = new OutputStreamWriter(new FileOutputStream(f), "UTF-8")) {
+
+        try (final Writer os = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(f)), "UTF-8")) {
             os.write('[');
 
             final List<Dox> results = em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", schemaName).getResultList();

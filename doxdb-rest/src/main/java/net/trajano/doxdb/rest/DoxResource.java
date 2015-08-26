@@ -1,14 +1,11 @@
 package net.trajano.doxdb.rest;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
@@ -194,28 +191,30 @@ public class DoxResource {
             return Response.ok(readAll).build();
         }
 
+        // The file is suffixed with the uncompressed size
+
+        final File file = new File(readAll);
+        final long uncompressedSize = file.length();
         final StreamingOutput out = new StreamingOutput() {
 
             @Override
             public void write(final OutputStream os) throws IOException,
                 WebApplicationException {
 
-                try (Writer w = new OutputStreamWriter(os, "UTF-8")) {
-                    try (final Reader fis = new InputStreamReader(new FileInputStream(readAll), "UTF-8")) {
-                        int c = fis.read();
-                        while (c != -1) {
-                            w.write(c);
-                            c = fis.read();
-                        }
+                try (final InputStream fis = new BufferedInputStream(new FileInputStream(file))) {
+                    int c = fis.read();
+                    while (c != -1) {
+                        os.write(c);
+                        c = fis.read();
                     }
                 } finally {
-                    new File(readAll).delete();
+                    file.delete();
                 }
-
             }
+
         };
 
-        return Response.ok(out).cacheControl(NO_CACHE).build();
+        return Response.ok(out).cacheControl(NO_CACHE).header("Content-Encoding", "gzip").header("Content-Length", uncompressedSize).build();
 
     }
 
