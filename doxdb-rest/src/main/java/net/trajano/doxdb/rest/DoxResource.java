@@ -64,6 +64,21 @@ import net.trajano.doxdb.ws.SessionManager;
 @RequestScoped
 public class DoxResource {
 
+    private static final CacheControl NO_CACHE;
+
+    /**
+     * <code>application/json</code> with the the UTF-8 character set. Needs to
+     * be a constant string in order to be used in annotations.
+     */
+    private static final String RESPONSE_TYPE = "application/json; charset=utf-8";
+
+    static {
+        NO_CACHE = new CacheControl();
+        NO_CACHE.setNoCache(true);
+        NO_CACHE.setMaxAge(-1);
+        NO_CACHE.setMustRevalidate(true);
+    }
+
     @EJB
     private DoxLocal dox;
 
@@ -73,7 +88,7 @@ public class DoxResource {
     @Path("{collection}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response create(@PathParam("collection") final String collection,
         final String json) {
 
@@ -86,7 +101,7 @@ public class DoxResource {
 
         final DoxMeta meta = dox.create(collection, bson);
         sessionManager.sendMessage("CREATE", meta.getDoxId(), collection, meta.getLastUpdatedOn());
-        return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
+        return Response.ok(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     @DELETE
@@ -102,7 +117,7 @@ public class DoxResource {
 
     @GET
     @Path("{collection}/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response get(@PathParam("collection") final String collection,
         @PathParam("id") final DoxID doxid) {
 
@@ -111,7 +126,7 @@ public class DoxResource {
             return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Dox not found").build();
         }
         final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
-        return Response.ok().tag(entityTag).entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
+        return Response.ok(meta.getContentJson()).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     /**
@@ -124,7 +139,7 @@ public class DoxResource {
      */
     @GET
     @Path("schema/{segments: .*}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response getSchema(@PathParam("segments") final List<PathSegment> segments) {
 
         final UriBuilder b = UriBuilder.fromUri("schema");
@@ -166,12 +181,12 @@ public class DoxResource {
         final String opName,
         final String content) {
 
-        return Response.ok().entity(content).build();
+        return Response.ok().type(RESPONSE_TYPE).entity(content).build();
     }
 
     @GET
     @Path("{collection}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response readAll(@PathParam("collection") final String collection) {
 
         final String readAll = dox.readAll(collection);
@@ -199,12 +214,8 @@ public class DoxResource {
 
             }
         };
-        final CacheControl cc = new CacheControl();
-        cc.setNoCache(true);
-        cc.setMaxAge(-1);
-        cc.setMustRevalidate(true);
 
-        return Response.ok(out).cacheControl(cc).encoding("UTF-8").build();
+        return Response.ok(out).cacheControl(NO_CACHE).build();
 
     }
 
@@ -234,7 +245,7 @@ public class DoxResource {
 
         final DoxMeta meta = dox.update(collection, new DoxID(id), bson, version);
         sessionManager.sendMessage("UPDATE", meta.getDoxId(), collection, meta.getLastUpdatedOn());
-        return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
+        return Response.ok(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     @POST
@@ -244,13 +255,13 @@ public class DoxResource {
         @PathParam("id") final DoxID id,
         @PathParam("oobname") final String oobname) {
 
-        return Response.ok().entity("OOB").build();
+        return Response.ok().type(RESPONSE_TYPE).entity("OOB").build();
     }
 
     @POST
     @Path("{collection}/{idOrOp}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response saveOrOp(@PathParam("collection") final String collection,
         @PathParam("idOrOp") final String idOrOp,
         @QueryParam("v") final int version,
@@ -265,7 +276,7 @@ public class DoxResource {
 
     @GET
     @Path("search/{index}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response simpleSearch(@PathParam("index") final String index,
         @QueryParam("q") final String queryString,
         @QueryParam("f") final Integer from,
@@ -296,10 +307,6 @@ public class DoxResource {
             jsonBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
         }
         final JsonObject resultJson = jsonBuilder.build();
-        final CacheControl cc = new CacheControl();
-        cc.setNoCache(true);
-        cc.setMaxAge(-1);
-        cc.setMustRevalidate(true);
-        return Response.ok().cacheControl(cc).entity(resultJson).build();
+        return Response.ok(resultJson).cacheControl(NO_CACHE).build();
     }
 }

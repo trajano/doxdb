@@ -1,5 +1,10 @@
 package net.trajano.doxdb.sample.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import javax.ws.rs.core.MediaType;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -42,7 +47,7 @@ public class JsonValidationTest {
             .getJsonSchema(JsonLoader.fromResource("/META-INF/schema/horse.json"));
 
         final ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\", \"_id\":\"mazui\" }"));
-        Assert.assertTrue(validate.toString(), validate.isSuccess());
+        assertTrue(validate.toString(), validate.isSuccess());
 
     }
 
@@ -61,5 +66,11 @@ public class JsonValidationTest {
         final ProcessingReport validate = schema.validate(JsonLoader.fromString("{\"name\":\"archie\", \"_XX\":\"mazui\" }"));
         Assert.assertFalse(validate.toString(), validate.isSuccess());
 
+    }
+
+    @Test
+    public void testMediaType() {
+
+        assertEquals("application/json; charset=utf-8", MediaType.APPLICATION_JSON_TYPE.withCharset("utf-8").toString());
     }
 }
