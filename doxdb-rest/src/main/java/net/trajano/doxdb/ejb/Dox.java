@@ -14,6 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Lob;
+import javax.persistence.LockModeType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -42,6 +45,19 @@ import net.trajano.doxdb.internal.DoxPrincipal;
         "doxId",
         "schemaName"
 }) )
+@NamedQueries({
+    @NamedQuery(name = "readMetaBySchemaNameDoxID",
+        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId",
+        lockMode = LockModeType.OPTIMISTIC),
+
+    @NamedQuery(name = "readForUpdateMetaBySchemaNameDoxIDVersion",
+        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId and e.version = :version",
+        lockMode = LockModeType.OPTIMISTIC_FORCE_INCREMENT),
+
+    @NamedQuery(name = "readAllBySchemaName",
+        query = "from Dox e where e.schemaName = :schemaName",
+        lockMode = LockModeType.OPTIMISTIC)
+})
 public class Dox {
 
     @Basic(fetch = FetchType.EAGER)
