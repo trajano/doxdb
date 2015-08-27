@@ -219,7 +219,7 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="fc bfc" id="L219" title="All 2 branches covered.">        for (final DoxType doxConfig : persistenceConfig.getDox()) {</span>
 <span class="fc" id="L220">            doxen.put(doxConfig.getName(), doxConfig);</span>
 <span class="fc" id="L221">            currentSchemaMap.put(doxConfig.getName(), doxConfig.getSchema().get(doxConfig.getSchema().size() - 1));</span>
-        }
+<span class="fc" id="L222">        }</span>
 <span class="fc" id="L223">    }</span>
 
     @Override
@@ -300,14 +300,14 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="nc bnc" id="L300" title="All 2 branches missed.">                if (result.getSchemaVersion() != schema.getVersion()) {</span>
 <span class="nc" id="L301">                    migrator.migrate(schemaName, result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());</span>
                     // queue migrate later?
-<span class="nc" id="L303">                } else {</span>
+                } else {
 <span class="nc" id="L304">                    os.write(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());</span>
 <span class="nc bnc" id="L305" title="All 2 branches missed.">                    if (!last) {</span>
 <span class="nc" id="L306">                        os.write(',');</span>
                     }
                 }
 
-            }
+<span class="nc" id="L310">            }</span>
 <span class="nc" id="L311">            os.write(']');</span>
 <span class="nc bnc" id="L312" title="All 8 branches missed.">        }</span>
 <span class="nc" id="L313">        return f.getCanonicalPath();</span>
@@ -328,15 +328,15 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="nc bnc" id="L328" title="All 2 branches missed.">            if (result.getSchemaVersion() != schema.getVersion()) {</span>
 <span class="nc" id="L329">                migrator.migrate(schemaName, result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());</span>
                 // queue migrate later?
-<span class="nc" id="L331">            } else {</span>
+            } else {
 <span class="nc" id="L332">                b.append(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());</span>
 <span class="nc" id="L333">                b.append(',');</span>
             }
 
-        }
+<span class="nc" id="L336">        }</span>
 <span class="nc bnc" id="L337" title="All 2 branches missed.">        if (b.length() &gt; 1) {</span>
 <span class="nc" id="L338">            b.replace(b.length() - 1, b.length(), &quot;]&quot;);</span>
-<span class="nc" id="L339">        } else {</span>
+        } else {
 <span class="nc" id="L340">            b.append(']');</span>
         }
 <span class="nc" id="L342">        return b.toString();</span>
@@ -380,10 +380,10 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="nc" id="L380">                    indexViews.add(indexView);</span>
                 }
 
-            }
+<span class="nc" id="L383">            }</span>
 <span class="nc" id="L384">            doxSearchBean.addToIndex(indexViews.toArray(new IndexView[0]));</span>
 
-        }
+<span class="nc" id="L386">        }</span>
 
 <span class="nc" id="L388">    }</span>
 
@@ -527,10 +527,10 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="fc bfc" id="L527" title="All 2 branches covered.">            if (!validate.isSuccess()) {</span>
 <span class="fc" id="L528">                throw new ValidationException(validate.toString());</span>
             }
-        } catch (ProcessingException
-<span class="nc" id="L531">            | IOException e) {</span>
+<span class="nc" id="L530">        } catch (ProcessingException</span>
+            | IOException e) {
 <span class="nc" id="L532">            throw new PersistenceException(e);</span>
-        }
+<span class="fc" id="L533">        }</span>
 <span class="fc" id="L534">    }</span>
 
 }
