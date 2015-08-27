@@ -1,6 +1,6 @@
 package net.trajano.doxdb.sample.ejb;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 
 import net.trajano.doxdb.ext.DefaultEventHandler;
@@ -11,7 +11,7 @@ import net.trajano.doxdb.ext.DefaultEventHandler;
  * @author Archimedes Trajano
  */
 @Stateless
-@Remote(net.trajano.doxdb.ext.EventHandler.class)
+@Local(net.trajano.doxdb.ext.EventHandler.class)
 public class MyEventHandler extends DefaultEventHandler {
 
 }

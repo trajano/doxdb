@@ -2,7 +2,7 @@ package net.trajano.doxdb.sample.ejb;
 
 import java.io.IOException;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;
 
@@ -17,7 +17,7 @@ import net.trajano.doxdb.sample.json.Horse.Gender;
 import net.trajano.doxdb.sample.json.Venue;
 
 @Stateless
-@Remote({
+@Local({
     CollectionAccessControl.class,
     Indexer.class,
     Migrator.class
