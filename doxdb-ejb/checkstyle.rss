@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2012 - 2015 Trajano</copyright>
     <item>
-      <title>File: 4,
+      <title>File: 2,
              Errors: 0,
-             Warnings: 13,
+             Warnings: 2,
              Infos: 0
       </title>
             <link>http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html</link>
@@ -46,6 +46,20 @@ under the License.
           <tbody>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.PlaceHolder.java">net/trajano/doxdb/ejb/jest/PlaceHolder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.package-info.java">net/trajano/doxdb/ejb/jest/package-info.java</a>
                 </td>
                 <td>
@@ -53,48 +67,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.JestProvider.java">net/trajano/doxdb/ejb/jest/JestProvider.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.JestDoxSearchBean.java">net/trajano/doxdb/ejb/jest/JestDoxSearchBean.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-ejb//checkstyle.html#net.trajano.doxdb.ejb.jest.SearchResult2.java">net/trajano/doxdb/ejb/jest/SearchResult2.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
                 </td>
                 <td>
                   0
