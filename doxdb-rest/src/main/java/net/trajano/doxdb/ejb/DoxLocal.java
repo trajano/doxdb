@@ -100,6 +100,12 @@ public interface DoxLocal {
         int limit,
         Integer fromDoc);
 
+    SearchResult searchWithSchemaName(String index,
+        String schemaName,
+        String queryString,
+        int limit,
+        Integer fromDoc);
+
     /**
      * Creates a dox record into the database. This will allocate a "_id" value
      * for the record.

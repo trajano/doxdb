@@ -404,6 +404,16 @@ public class DoxBean implements
         return doxSearchBean.search(index, queryString, limit, fromDoc);
     }
 
+    @Override
+    public SearchResult searchWithSchemaName(final String index,
+        final String schemaName,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+        return doxSearchBean.searchWithSchemaName(index, schemaName, queryString, limit, fromDoc);
+    }
+
     @EJB
     public void setCollectionAccessControl(final CollectionAccessControl collectionAccessControl) {
 

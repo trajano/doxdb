@@ -115,8 +115,9 @@ public class EsJaxRsSearchBean implements
     }
 
     /**
-     * {@inheritDoc} Once the indices are removed, {@link EsJaxRsProvider#init()}
-     * is called in order to recreate the mappings again.
+     * {@inheritDoc} Once the indices are removed,
+     * {@link EsJaxRsProvider#init()} is called in order to recreate the
+     * mappings again.
      */
     @Override
     public void reset() {
@@ -151,6 +152,55 @@ public class EsJaxRsSearchBean implements
         final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add("size", limit).add("query", qBuilder).add("from", from);
 
         final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
+
+        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
+        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        result.setBottomDoc(Math.min(from + hits.size(), from + limit));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SearchResult searchWithSchemaName(final String index,
+        final String schemaName,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+        int from = 0;
+        if (fromDoc != null) {
+            from = fromDoc;
+        }
+
+        final SearchResult result = new SearchResult();
+
+        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add("query", queryString).add("default_operator", "and");
+        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add("simple_query_string", sqsBuilder);
+        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder()
+            .add("size", limit)
+            .add("query", qBuilder)
+            .add("from", from);
+
+        final JsonObject results = jestProvider.getTarget().path(index).path(schemaName).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
 
         final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
         result.setTotalHits(results.getJsonObject("hits").getInt("total"));

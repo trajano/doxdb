@@ -308,4 +308,41 @@ public class DoxResource {
         final JsonObject resultJson = jsonBuilder.build();
         return Response.ok(resultJson).cacheControl(NO_CACHE).build();
     }
+
+    @GET
+    @Path("search/{index}/{schemaName}")
+    @Produces(RESPONSE_TYPE)
+    public Response simpleSearchWithSchemaName(@PathParam("index") final String index,
+        @PathParam("schemaName") final String schemaName,
+        @QueryParam("q") final String queryString,
+        @QueryParam("f") final Integer from,
+        @Context final UriInfo uriInfo) {
+
+        final SearchResult results = dox.searchWithSchemaName(index, schemaName, queryString, 50, from);
+        //results.get
+        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
+        for (final IndexView hit : results.getHits()) {
+            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
+            final String id = hit.getDoxID().toString();
+            for (final Entry<String, BigDecimal> entry : hit.getNumbers()) {
+                hitBuilder.add(entry.getKey(), entry.getValue());
+            }
+            for (final Entry<String, String> entry : hit.getStrings()) {
+                hitBuilder.add(entry.getKey(), entry.getValue());
+            }
+            hitBuilder.add("_collection", hit.getCollection());
+            if (!hit.isMasked()) {
+                hitBuilder.add("_id", id);
+                hitBuilder.add("_url", uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
+            }
+            hitsBuilder.add(hitBuilder);
+        }
+        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder);
+        if (results.getBottomDoc() != null) {
+            final String nextPage = uriInfo.getBaseUriBuilder().path("search").path(index).queryParam("q", queryString).queryParam("f", results.getBottomDoc()).build().toASCIIString();
+            jsonBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
+        }
+        final JsonObject resultJson = jsonBuilder.build();
+        return Response.ok(resultJson).cacheControl(NO_CACHE).build();
+    }
 }

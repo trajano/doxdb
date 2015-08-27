@@ -42,4 +42,10 @@ public interface DoxSearch {
         int limit,
         Integer fromDoc);
 
+    SearchResult searchWithSchemaName(String index,
+        String schemaName,
+        String queryString,
+        int limit,
+        Integer fromDoc);
+
 }
