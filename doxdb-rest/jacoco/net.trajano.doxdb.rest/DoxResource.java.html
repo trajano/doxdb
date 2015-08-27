@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxResource.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.rest</a> &gt; <span class="el_source">DoxResource.java</span></div><h1>DoxResource.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package net.trajano.doxdb.rest;</span>
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxResource.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.rest</a> &gt; <span class="el_source">DoxResource.java</span></div><h1>DoxResource.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.rest;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
 import java.util.Iterator;
@@ -32,6 +30,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
@@ -60,7 +59,22 @@ import net.trajano.doxdb.ws.SessionManager;
  */
 @Path(&quot;&quot;)
 @RequestScoped
-<span class="nc" id="L63">public class DoxResource {</span>
+<span class="nc" id="L62">public class DoxResource {</span>
+
+    private static final CacheControl NO_CACHE;
+
+    /**
+     * &lt;code&gt;application/json&lt;/code&gt; with the the UTF-8 character set. Needs to
+     * be a constant string in order to be used in annotations.
+     */
+    private static final String RESPONSE_TYPE = &quot;application/json; charset=utf-8&quot;;
+
+    static {
+<span class="nc" id="L73">        NO_CACHE = new CacheControl();</span>
+<span class="nc" id="L74">        NO_CACHE.setNoCache(true);</span>
+<span class="nc" id="L75">        NO_CACHE.setMaxAge(-1);</span>
+<span class="nc" id="L76">        NO_CACHE.setMustRevalidate(true);</span>
+<span class="nc" id="L77">    }</span>
 
     @EJB
     private DoxLocal dox;
@@ -71,20 +85,20 @@ import net.trajano.doxdb.ws.SessionManager;
     @Path(&quot;{collection}&quot;)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response create(@PathParam(&quot;collection&quot;) final String collection,
         final String json) {
 
-<span class="nc" id="L78">        final BsonDocument bson = BsonDocument.parse(json);</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        for (final String key : bson.keySet()) {</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">            if (key.startsWith(&quot;_&quot;)) {</span>
-<span class="nc" id="L81">                bson.remove(key);</span>
+<span class="nc" id="L92">        final BsonDocument bson = BsonDocument.parse(json);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        for (final String key : bson.keySet()) {</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (key.startsWith(&quot;_&quot;)) {</span>
+<span class="nc" id="L95">                bson.remove(key);</span>
             }
-        }
+<span class="nc" id="L97">        }</span>
 
-<span class="nc" id="L85">        final DoxMeta meta = dox.create(collection, bson);</span>
-<span class="nc" id="L86">        sessionManager.sendMessage(&quot;CREATE&quot;, meta.getDoxId(), collection, meta.getLastUpdatedOn());</span>
-<span class="nc" id="L87">        return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();</span>
+<span class="nc" id="L99">        final DoxMeta meta = dox.create(collection, bson);</span>
+<span class="nc" id="L100">        sessionManager.sendMessage(&quot;CREATE&quot;, meta.getDoxId(), collection, meta.getLastUpdatedOn());</span>
+<span class="nc" id="L101">        return Response.ok(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();</span>
     }
 
     @DELETE
@@ -93,23 +107,23 @@ import net.trajano.doxdb.ws.SessionManager;
         @PathParam(&quot;id&quot;) final DoxID doxid,
         @QueryParam(&quot;v&quot;) final int version) {
 
-<span class="nc" id="L96">        dox.delete(collection, doxid, version);</span>
-<span class="nc" id="L97">        sessionManager.sendMessage(&quot;DELETE&quot;, doxid, collection, new Date());</span>
-<span class="nc" id="L98">        return Response.noContent().build();</span>
+<span class="nc" id="L110">        dox.delete(collection, doxid, version);</span>
+<span class="nc" id="L111">        sessionManager.sendMessage(&quot;DELETE&quot;, doxid, collection, new Date());</span>
+<span class="nc" id="L112">        return Response.noContent().build();</span>
     }
 
     @GET
     @Path(&quot;{collection}/{id}&quot;)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response get(@PathParam(&quot;collection&quot;) final String collection,
         @PathParam(&quot;id&quot;) final DoxID doxid) {
 
-<span class="nc" id="L107">        final DoxMeta meta = dox.read(collection, doxid);</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (meta == null) {</span>
-<span class="nc" id="L109">            return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity(&quot;Dox not found&quot;).build();</span>
+<span class="nc" id="L121">        final DoxMeta meta = dox.read(collection, doxid);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (meta == null) {</span>
+<span class="nc" id="L123">            return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity(&quot;Dox not found&quot;).build();</span>
         }
-<span class="nc" id="L111">        final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));</span>
-<span class="nc" id="L112">        return Response.ok().tag(entityTag).entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();</span>
+<span class="nc" id="L125">        final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));</span>
+<span class="nc" id="L126">        return Response.ok(meta.getContentJson()).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();</span>
     }
 
     /**
@@ -122,82 +136,85 @@ import net.trajano.doxdb.ws.SessionManager;
      */
     @GET
     @Path(&quot;schema/{segments: .*}&quot;)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response getSchema(@PathParam(&quot;segments&quot;) final List&lt;PathSegment&gt; segments) {
 
-<span class="nc" id="L128">        final UriBuilder b = UriBuilder.fromUri(&quot;schema&quot;);</span>
-<span class="nc bnc" id="L129" title="All 2 branches missed.">        for (final PathSegment segment : segments) {</span>
-<span class="nc" id="L130">            final String pathSegment = segment.getPath();</span>
-<span class="nc bnc" id="L131" title="All 8 branches missed.">            if (&quot;.&quot;.equals(pathSegment) || &quot;..&quot;.equals(pathSegment) || pathSegment.endsWith(&quot;.&quot;) || !pathSegment.matches(&quot;^[-A-Za-z0-9_\\.]+$&quot;)) {</span>
-<span class="nc" id="L132">                throw new WebApplicationException(&quot;invalid request&quot;);</span>
+<span class="nc" id="L142">        final UriBuilder b = UriBuilder.fromUri(&quot;schema&quot;);</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        for (final PathSegment segment : segments) {</span>
+<span class="nc" id="L144">            final String pathSegment = segment.getPath();</span>
+<span class="nc bnc" id="L145" title="All 8 branches missed.">            if (&quot;.&quot;.equals(pathSegment) || &quot;..&quot;.equals(pathSegment) || pathSegment.endsWith(&quot;.&quot;) || !pathSegment.matches(&quot;^[-A-Za-z0-9_\\.]+$&quot;)) {</span>
+<span class="nc" id="L146">                throw new WebApplicationException(&quot;invalid request&quot;);</span>
             }
-<span class="nc" id="L134">            b.path(pathSegment);</span>
-        }
-<span class="nc" id="L136">        final URI relativize = UriBuilder.fromUri(&quot;schema&quot;).build().relativize(b.build());</span>
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (relativize.isAbsolute()) {</span>
-<span class="nc" id="L138">            throw new WebApplicationException(&quot;invalid request&quot;);</span>
+<span class="nc" id="L148">            b.path(pathSegment);</span>
+<span class="nc" id="L149">        }</span>
+<span class="nc" id="L150">        final URI relativize = UriBuilder.fromUri(&quot;schema&quot;).build().relativize(b.build());</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (relativize.isAbsolute()) {</span>
+<span class="nc" id="L152">            throw new WebApplicationException(&quot;invalid request&quot;);</span>
         }
 
-<span class="nc" id="L141">        final StreamingOutput out = new StreamingOutput() {</span>
+<span class="nc" id="L155">        final StreamingOutput out = new StreamingOutput() {</span>
 
             @Override
             public void write(final OutputStream os) throws IOException,
                 WebApplicationException {
 
-<span class="nc" id="L147">                try (InputStream fis = dox.getSchema(relativize.toASCIIString())) {</span>
-<span class="nc bnc" id="L148" title="All 2 branches missed.">                    if (fis == null) {</span>
-<span class="nc" id="L149">                        throw new NotFoundException();</span>
+<span class="nc" id="L161">                try (InputStream fis = dox.getSchema(relativize.toASCIIString())) {</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                    if (fis == null) {</span>
+<span class="nc" id="L163">                        throw new NotFoundException();</span>
                     }
-<span class="nc" id="L151">                    int c = fis.read();</span>
-<span class="nc bnc" id="L152" title="All 2 branches missed.">                    while (c != -1) {</span>
-<span class="nc" id="L153">                        os.write(c);</span>
-<span class="nc" id="L154">                        c = fis.read();</span>
+<span class="nc" id="L165">                    int c = fis.read();</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">                    while (c != -1) {</span>
+<span class="nc" id="L167">                        os.write(c);</span>
+<span class="nc" id="L168">                        c = fis.read();</span>
                     }
-<span class="nc bnc" id="L156" title="All 8 branches missed.">                }</span>
+<span class="nc bnc" id="L170" title="All 8 branches missed.">                }</span>
 
-<span class="nc" id="L158">            }</span>
+<span class="nc" id="L172">            }</span>
         };
-<span class="nc" id="L160">        return Response.ok(out).encoding(&quot;UTF-8&quot;).build();</span>
+<span class="nc" id="L174">        return Response.ok(out).encoding(&quot;UTF-8&quot;).build();</span>
     }
 
     private Response op(final String collection,
         final String opName,
         final String content) {
 
-<span class="nc" id="L167">        return Response.ok().entity(content).build();</span>
+<span class="nc" id="L181">        return Response.ok().type(RESPONSE_TYPE).entity(content).build();</span>
     }
 
     @GET
     @Path(&quot;{collection}&quot;)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response readAll(@PathParam(&quot;collection&quot;) final String collection) {
 
-<span class="nc" id="L175">        final String readAll = dox.readAll(collection);</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (readAll.charAt(0) == '[') {</span>
-<span class="nc" id="L177">            return Response.ok(readAll).build();</span>
+<span class="nc" id="L189">        final String readAll = dox.readAll(collection);</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        if (readAll.charAt(0) == '[') {</span>
+<span class="nc" id="L191">            return Response.ok(readAll).build();</span>
         }
 
-<span class="nc" id="L180">        final StreamingOutput out = new StreamingOutput() {</span>
+        // The file is suffixed with the uncompressed size
+
+<span class="nc" id="L196">        final File file = new File(readAll);</span>
+<span class="nc" id="L197">        final long uncompressedSize = file.length();</span>
+<span class="nc" id="L198">        final StreamingOutput out = new StreamingOutput() {</span>
 
             @Override
             public void write(final OutputStream os) throws IOException,
                 WebApplicationException {
 
-<span class="nc" id="L186">                try (Writer w = new OutputStreamWriter(os, &quot;UTF-8&quot;)) {</span>
-<span class="nc" id="L187">                    try (final Reader fis = new InputStreamReader(new FileInputStream(readAll), &quot;UTF-8&quot;)) {</span>
-<span class="nc" id="L188">                        int c = fis.read();</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">                        while (c != -1) {</span>
-<span class="nc" id="L190">                            w.write(c);</span>
-<span class="nc" id="L191">                            c = fis.read();</span>
-                        }
-<span class="nc bnc" id="L193" title="All 8 branches missed.">                    }</span>
-<span class="nc bnc" id="L194" title="All 8 branches missed.">                } finally {</span>
-<span class="nc" id="L195">                    new File(readAll).delete();</span>
-<span class="nc" id="L196">                }</span>
+<span class="nc" id="L204">                try (final InputStream fis = new BufferedInputStream(new FileInputStream(file))) {</span>
+<span class="nc" id="L205">                    int c = fis.read();</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                    while (c != -1) {</span>
+<span class="nc" id="L207">                        os.write(c);</span>
+<span class="nc" id="L208">                        c = fis.read();</span>
+                    }
+<span class="nc bnc" id="L210" title="All 8 branches missed.">                } finally {</span>
+<span class="nc" id="L211">                    file.delete();</span>
+<span class="nc" id="L212">                }</span>
+<span class="nc" id="L213">            }</span>
 
-<span class="nc" id="L198">            }</span>
         };
-<span class="nc" id="L200">        return Response.ok(out).encoding(&quot;UTF-8&quot;).build();</span>
+
+<span class="nc" id="L217">        return Response.ok(out).cacheControl(NO_CACHE).header(&quot;Content-Encoding&quot;, &quot;gzip&quot;).header(&quot;Content-Length&quot;, uncompressedSize).build();</span>
 
     }
 
@@ -206,8 +223,8 @@ import net.trajano.doxdb.ws.SessionManager;
     public Response reindex() {
 
         // TODO remove this later.
-<span class="nc" id="L209">        dox.reindex();</span>
-<span class="nc" id="L210">        return Response.noContent().build();</span>
+<span class="nc" id="L226">        dox.reindex();</span>
+<span class="nc" id="L227">        return Response.noContent().build();</span>
     }
 
     private Response save(final String collection,
@@ -215,19 +232,19 @@ import net.trajano.doxdb.ws.SessionManager;
         final String json,
         final int version) {
 
-<span class="nc" id="L218">        final BsonDocument bson = BsonDocument.parse(json);</span>
+<span class="nc" id="L235">        final BsonDocument bson = BsonDocument.parse(json);</span>
 
-<span class="nc" id="L220">        final Iterator&lt;Entry&lt;String, BsonValue&gt;&gt; iterator = bson.entrySet().iterator();</span>
-<span class="nc bnc" id="L221" title="All 2 branches missed.">        while (iterator.hasNext()) {</span>
-<span class="nc" id="L222">            final Entry&lt;String, BsonValue&gt; entry = iterator.next();</span>
-<span class="nc bnc" id="L223" title="All 2 branches missed.">            if (entry.getKey().startsWith(&quot;_&quot;)) {</span>
-<span class="nc" id="L224">                iterator.remove();</span>
+<span class="nc" id="L237">        final Iterator&lt;Entry&lt;String, BsonValue&gt;&gt; iterator = bson.entrySet().iterator();</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">        while (iterator.hasNext()) {</span>
+<span class="nc" id="L239">            final Entry&lt;String, BsonValue&gt; entry = iterator.next();</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">            if (entry.getKey().startsWith(&quot;_&quot;)) {</span>
+<span class="nc" id="L241">                iterator.remove();</span>
             }
-        }
+<span class="nc" id="L243">        }</span>
 
-<span class="nc" id="L228">        final DoxMeta meta = dox.update(collection, new DoxID(id), bson, version);</span>
-<span class="nc" id="L229">        sessionManager.sendMessage(&quot;UPDATE&quot;, meta.getDoxId(), collection, meta.getLastUpdatedOn());</span>
-<span class="nc" id="L230">        return Response.ok().entity(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();</span>
+<span class="nc" id="L245">        final DoxMeta meta = dox.update(collection, new DoxID(id), bson, version);</span>
+<span class="nc" id="L246">        sessionManager.sendMessage(&quot;UPDATE&quot;, meta.getDoxId(), collection, meta.getLastUpdatedOn());</span>
+<span class="nc" id="L247">        return Response.ok(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();</span>
     }
 
     @POST
@@ -237,62 +254,59 @@ import net.trajano.doxdb.ws.SessionManager;
         @PathParam(&quot;id&quot;) final DoxID id,
         @PathParam(&quot;oobname&quot;) final String oobname) {
 
-<span class="nc" id="L240">        return Response.ok().entity(&quot;OOB&quot;).build();</span>
+<span class="nc" id="L257">        return Response.ok().type(RESPONSE_TYPE).entity(&quot;OOB&quot;).build();</span>
     }
 
     @POST
     @Path(&quot;{collection}/{idOrOp}&quot;)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response saveOrOp(@PathParam(&quot;collection&quot;) final String collection,
         @PathParam(&quot;idOrOp&quot;) final String idOrOp,
         @QueryParam(&quot;v&quot;) final int version,
         final String content) {
 
-<span class="nc bnc" id="L252" title="All 2 branches missed.">        if (idOrOp.startsWith(&quot;_&quot;)) {</span>
-<span class="nc" id="L253">            return op(collection, idOrOp.substring(1), content);</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        if (idOrOp.startsWith(&quot;_&quot;)) {</span>
+<span class="nc" id="L270">            return op(collection, idOrOp.substring(1), content);</span>
         } else {
-<span class="nc" id="L255">            return save(collection, idOrOp, content, version);</span>
+<span class="nc" id="L272">            return save(collection, idOrOp, content, version);</span>
         }
     }
 
     @GET
     @Path(&quot;search/{index}&quot;)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
     public Response simpleSearch(@PathParam(&quot;index&quot;) final String index,
         @QueryParam(&quot;q&quot;) final String queryString,
         @QueryParam(&quot;f&quot;) final Integer from,
         @Context final UriInfo uriInfo) {
 
-<span class="nc" id="L267">        final SearchResult results = dox.search(index, queryString, 50, from);</span>
+<span class="nc" id="L284">        final SearchResult results = dox.search(index, queryString, 50, from);</span>
         //results.get
-<span class="nc" id="L269">        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();</span>
-<span class="nc bnc" id="L270" title="All 2 branches missed.">        for (final IndexView hit : results.getHits()) {</span>
-<span class="nc" id="L271">            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();</span>
-<span class="nc" id="L272">            final String id = hit.getDoxID().toString();</span>
-<span class="nc bnc" id="L273" title="All 2 branches missed.">            for (final Entry&lt;String, Double&gt; entry : hit.getDoubles()) {</span>
-<span class="nc" id="L274">                hitBuilder.add(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L286">        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">        for (final IndexView hit : results.getHits()) {</span>
+<span class="nc" id="L288">            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();</span>
+<span class="nc" id="L289">            final String id = hit.getDoxID().toString();</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">            for (final Entry&lt;String, BigDecimal&gt; entry : hit.getNumbers()) {</span>
+<span class="nc" id="L291">                hitBuilder.add(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L292">            }</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; entry : hit.getStrings()) {</span>
+<span class="nc" id="L294">                hitBuilder.add(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L295">            }</span>
+<span class="nc" id="L296">            hitBuilder.add(&quot;_collection&quot;, hit.getCollection());</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">            if (!hit.isMasked()) {</span>
+<span class="nc" id="L298">                hitBuilder.add(&quot;_id&quot;, id);</span>
+<span class="nc" id="L299">                hitBuilder.add(&quot;_url&quot;, uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());</span>
             }
-<span class="nc bnc" id="L276" title="All 2 branches missed.">            for (final Entry&lt;String, Long&gt; entry : hit.getLongs()) {</span>
-<span class="nc" id="L277">                hitBuilder.add(entry.getKey(), entry.getValue());</span>
-            }
-<span class="nc bnc" id="L279" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; entry : hit.getStrings()) {</span>
-<span class="nc" id="L280">                hitBuilder.add(entry.getKey(), entry.getValue());</span>
-            }
-<span class="nc" id="L282">            hitBuilder.add(&quot;_collection&quot;, hit.getCollection());</span>
-<span class="nc bnc" id="L283" title="All 2 branches missed.">            if (!hit.isMasked()) {</span>
-<span class="nc" id="L284">                hitBuilder.add(&quot;_id&quot;, id);</span>
-<span class="nc" id="L285">                hitBuilder.add(&quot;_url&quot;, uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());</span>
-            }
-<span class="nc" id="L287">            hitsBuilder.add(hitBuilder);</span>
+<span class="nc" id="L301">            hitsBuilder.add(hitBuilder);</span>
+<span class="nc" id="L302">        }</span>
+<span class="nc" id="L303">        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add(&quot;totalHits&quot;, results.getTotalHits()).add(&quot;hits&quot;, hitsBuilder);</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">        if (results.getBottomDoc() != null) {</span>
+<span class="nc" id="L305">            final String nextPage = uriInfo.getBaseUriBuilder().path(&quot;search&quot;).path(index).queryParam(&quot;q&quot;, queryString).queryParam(&quot;f&quot;, results.getBottomDoc()).build().toASCIIString();</span>
+<span class="nc" id="L306">            jsonBuilder.add(&quot;bottomDoc&quot;, results.getBottomDoc()).add(&quot;next&quot;, nextPage);</span>
         }
-<span class="nc" id="L289">        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add(&quot;totalHits&quot;, results.getTotalHits()).add(&quot;hits&quot;, hitsBuilder);</span>
-<span class="nc bnc" id="L290" title="All 2 branches missed.">        if (results.getBottomDoc() != null) {</span>
-<span class="nc" id="L291">            final String nextPage = uriInfo.getBaseUriBuilder().path(&quot;search&quot;).path(index).queryParam(&quot;q&quot;, queryString).queryParam(&quot;f&quot;, results.getBottomDoc()).build().toASCIIString();</span>
-<span class="nc" id="L292">            jsonBuilder.add(&quot;bottomDoc&quot;, results.getBottomDoc()).add(&quot;next&quot;, nextPage);</span>
-        }
-<span class="nc" id="L294">        final JsonObject resultJson = jsonBuilder.build();</span>
-<span class="nc" id="L295">        return Response.ok().entity(resultJson).build();</span>
+<span class="nc" id="L308">        final JsonObject resultJson = jsonBuilder.build();</span>
+<span class="nc" id="L309">        return Response.ok(resultJson).cacheControl(NO_CACHE).build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

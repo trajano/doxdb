@@ -1,14 +1,20 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./DoxTombstone.html" title="net.trajano.doxdb.ejb.DoxTombstone" alt="" coords="16,19,123,45"/>
-<area shape="rect" id="node1" href="./DoxTombstone.html" title="&lt;TABLE&gt;" alt="" coords="5,8,133,56"/>
-<area shape="rect" id="node2_1" href="./DoxOobTombstone.html" title="net.trajano.doxdb.ejb.DoxOobTombstone" alt="" coords="168,19,299,45"/>
-<area shape="rect" id="node2" href="./DoxOobTombstone.html" title="&lt;TABLE&gt;" alt="" coords="157,8,309,56"/>
-<area shape="rect" id="node3_2" href="./DoxOob.html" title="net.trajano.doxdb.ejb.DoxOob" alt="" coords="344,19,411,45"/>
-<area shape="rect" id="node3" href="./DoxOob.html" title="&lt;TABLE&gt;" alt="" coords="333,8,421,56"/>
-<area shape="rect" id="node4_3" href="./DoxLocal.html" title="net.trajano.doxdb.ejb.DoxLocal" alt="" coords="456,11,539,53"/>
-<area shape="rect" id="node4" href="./DoxLocal.html" title="&lt;TABLE&gt;" alt="" coords="445,5,549,59"/>
-<area shape="rect" id="node5_4" href="./DoxBean.html" title="net.trajano.doxdb.ejb.DoxBean" alt="" coords="461,118,533,143"/>
-<area shape="rect" id="node5" href="./DoxBean.html" title="&lt;TABLE&gt;" alt="" coords="451,107,544,155"/>
-<area shape="rect" id="node6_5" href="./Dox.html" title="net.trajano.doxdb.ejb.Dox" alt="" coords="588,19,631,45"/>
-<area shape="rect" id="node6" href="./Dox.html" title="&lt;TABLE&gt;" alt="" coords="573,8,645,56"/>
+<area shape="rect" id="node1_0" href="./EsJaxRsSearchBean.html" title="net.trajano.doxdb.ejb.EsJaxRsSearchBean" alt="" coords="16,118,159,143"/>
+<area shape="rect" id="node1" href="./EsJaxRsSearchBean.html" title="&lt;TABLE&gt;" alt="" coords="5,107,169,155"/>
+<area shape="rect" id="node2_1" href="./EsJaxRsProvider.html" title="net.trajano.doxdb.ejb.EsJaxRsProvider" alt="" coords="175,19,293,45"/>
+<area shape="rect" id="node2" href="./EsJaxRsProvider.html" title="&lt;TABLE&gt;" alt="" coords="165,8,303,56"/>
+<area shape="rect" id="node3_2" href="./DoxTombstone.html" title="net.trajano.doxdb.ejb.DoxTombstone" alt="" coords="338,19,445,45"/>
+<area shape="rect" id="node3" href="./DoxTombstone.html" title="&lt;TABLE&gt;" alt="" coords="327,8,455,56"/>
+<area shape="rect" id="node4_3" href="./DoxSearch.html" title="net.trajano.doxdb.ejb.DoxSearch" alt="" coords="45,11,129,53"/>
+<area shape="rect" id="node4" href="./DoxSearch.html" title="&lt;TABLE&gt;" alt="" coords="35,5,140,59"/>
+<area shape="rect" id="node5_4" href="./DoxOobTombstone.html" title="net.trajano.doxdb.ejb.DoxOobTombstone" alt="" coords="490,19,621,45"/>
+<area shape="rect" id="node5" href="./DoxOobTombstone.html" title="&lt;TABLE&gt;" alt="" coords="479,8,631,56"/>
+<area shape="rect" id="node6_5" href="./DoxOob.html" title="net.trajano.doxdb.ejb.DoxOob" alt="" coords="666,19,733,45"/>
+<area shape="rect" id="node6" href="./DoxOob.html" title="&lt;TABLE&gt;" alt="" coords="655,8,743,56"/>
+<area shape="rect" id="node7_6" href="./DoxLocal.html" title="net.trajano.doxdb.ejb.DoxLocal" alt="" coords="778,11,861,53"/>
+<area shape="rect" id="node7" href="./DoxLocal.html" title="&lt;TABLE&gt;" alt="" coords="767,5,871,59"/>
+<area shape="rect" id="node8_7" href="./DoxBean.html" title="net.trajano.doxdb.ejb.DoxBean" alt="" coords="783,118,855,143"/>
+<area shape="rect" id="node8" href="./DoxBean.html" title="&lt;TABLE&gt;" alt="" coords="773,107,866,155"/>
+<area shape="rect" id="node9_8" href="./Dox.html" title="net.trajano.doxdb.ejb.Dox" alt="" coords="910,19,953,45"/>
+<area shape="rect" id="node9" href="./Dox.html" title="&lt;TABLE&gt;" alt="" coords="895,8,967,56"/>
 </map>

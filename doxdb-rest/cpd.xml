@@ -1,29 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
-   <duplication lines="18" tokens="167">
-      <file line="185"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxBean.java"/>
-      <file line="248"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxBean.java"/>
-      <codefragment><![CDATA[        final SchemaType schema = currentSchemaMap.get(collectionName);
-
-        String contentJson;
-
-        if (meta.getSchemaVersion() != schema.getVersion()) {
-            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());
-            final BsonDocument document = BsonDocument.parse(contentJson);
-            meta.setSchemaVersion(schema.getVersion());
-            e.setSchemaVersion(schema.getVersion());
-            contentJson = document.toJson();
-            em.persist(e);
-        } else {
-            final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC);
-            final BsonDocument document = e.getContent();
-            addMeta(document, e.getDoxId(), e.getVersion());
-            contentJson = document.toJson();
-        }]]></codefragment>
-   </duplication>
    <duplication lines="66" tokens="162">
       <file line="138"
             path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>

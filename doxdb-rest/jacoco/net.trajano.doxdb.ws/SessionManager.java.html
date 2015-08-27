@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
@@ -20,27 +21,28 @@ import net.trajano.doxdb.DoxID;
  * @author Archimedes Trajano
  */
 @Singleton
-<span class="nc" id="L23">public class SessionManager {</span>
+@LocalBean
+<span class="nc" id="L25">public class SessionManager {</span>
 
-<span class="nc" id="L25">    private final Set&lt;Session&gt; sessions = Collections.newSetFromMap(new ConcurrentHashMap&lt;Session, Boolean&gt;());</span>
+<span class="nc" id="L27">    private final Set&lt;Session&gt; sessions = Collections.newSetFromMap(new ConcurrentHashMap&lt;Session, Boolean&gt;());</span>
 
     @Lock(LockType.WRITE)
     public void register(final Session session) {
 
-<span class="nc" id="L30">        sessions.add(session);</span>
-<span class="nc" id="L31">    }</span>
+<span class="nc" id="L32">        sessions.add(session);</span>
+<span class="nc" id="L33">    }</span>
 
     @Lock(LockType.READ)
     public void sendMessage(final String message) {
 
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        for (final Session session : sessions) {</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        for (final Session session : sessions) {</span>
             try {
-<span class="nc" id="L38">                session.getBasicRemote().sendText(message);</span>
-<span class="nc" id="L39">            } catch (final IOException e) {</span>
+<span class="nc" id="L40">                session.getBasicRemote().sendText(message);</span>
+<span class="nc" id="L41">            } catch (final IOException e) {</span>
                 // ignore
-            }
-        }
-<span class="nc" id="L43">    }</span>
+<span class="nc" id="L43">            }</span>
+<span class="nc" id="L44">        }</span>
+<span class="nc" id="L45">    }</span>
 
     @Lock(LockType.READ)
     public void sendMessage(final String operation,
@@ -48,15 +50,15 @@ import net.trajano.doxdb.DoxID;
         final String collection,
         final Date on) {
 
-<span class="nc" id="L51">        sendMessage(Json.createObjectBuilder().add(&quot;op&quot;, operation).add(&quot;id&quot;, doxID.toString()).add(&quot;collection&quot;, collection).add(&quot;ts&quot;, on.getTime()).build().toString());</span>
+<span class="nc" id="L53">        sendMessage(Json.createObjectBuilder().add(&quot;op&quot;, operation).add(&quot;id&quot;, doxID.toString()).add(&quot;collection&quot;, collection).add(&quot;ts&quot;, on.getTime()).build().toString());</span>
 
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L55">    }</span>
 
     @Lock(LockType.WRITE)
     public void unregister(final Session session) {
 
-<span class="nc" id="L58">        sessions.remove(session);</span>
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L60">        sessions.remove(session);</span>
+<span class="nc" id="L61">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

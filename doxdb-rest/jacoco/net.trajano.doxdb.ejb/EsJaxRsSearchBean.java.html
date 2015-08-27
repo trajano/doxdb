@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EsJaxRsSearchBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ejb</a> &gt; <span class="el_source">EsJaxRsSearchBean.java</span></div><h1>EsJaxRsSearchBean.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ejb;
+
+import static javax.json.Json.createObjectBuilder;
+
+import java.math.BigDecimal;
+import java.util.Map.Entry;
+
+import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonNumber;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonString;
+import javax.json.JsonValue;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.IndexView;
+import net.trajano.doxdb.SearchResult;
+import net.trajano.doxdb.ext.ConfigurationProvider;
+import net.trajano.doxdb.schema.IndexType;
+
+/**
+ * Handles ElasticSearch via REST API.
+ *
+ * @author Archimedes
+ */
+@Stateless
+@Dependent
+<span class="nc" id="L36">public class EsJaxRsSearchBean implements</span>
+    DoxSearch {
+
+    /**
+     * Create a unique ID for the search index record.
+     *
+     * @param view
+     * @return
+     */
+    public static String uid(final IndexView view) {
+
+<span class="nc" id="L47">        return view.getIndex() + &quot;\t&quot; + view.getCollection() + &quot;\t&quot; + view.getDoxID();</span>
+    }
+
+    private ConfigurationProvider configurationProvider;
+
+    private transient EsJaxRsProvider jestProvider;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Asynchronous
+    public void addToIndex(final IndexView... indexViews) {
+
+<span class="nc" id="L61">        final WebTarget target = jestProvider.getTarget().path(&quot;_bulk&quot;);</span>
+
+<span class="nc" id="L63">        final StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        for (final IndexView indexView : indexViews) {</span>
+<span class="nc" id="L65">            b.append(</span>
+<span class="nc" id="L66">                createObjectBuilder().add(&quot;index&quot;, createObjectBuilder()</span>
+<span class="nc" id="L67">                    .add(&quot;_index&quot;, configurationProvider.getMappedIndex(indexView.getIndex()))</span>
+<span class="nc" id="L68">                    .add(&quot;_type&quot;, indexView.getCollection())</span>
+<span class="nc" id="L69">                    .add(&quot;_id&quot;, indexView.getDoxID().toString())).build().toString());</span>
+<span class="nc" id="L70">            b.append(&quot;\n&quot;);</span>
+
+<span class="nc" id="L72">            final JsonObjectBuilder sourceBuilder = createObjectBuilder();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            for (final Entry&lt;String, BigDecimal&gt; d : indexView.getNumbers()) {</span>
+<span class="nc" id="L74">                sourceBuilder.add(d.getKey(), d.getValue());</span>
+<span class="nc" id="L75">            }</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; d : indexView.getStrings()) {</span>
+<span class="nc" id="L77">                sourceBuilder.add(d.getKey(), d.getValue());</span>
+<span class="nc" id="L78">            }</span>
+
+<span class="nc" id="L80">            final JsonObjectBuilder metaBuilder = createObjectBuilder();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; d : indexView.getTexts()) {</span>
+<span class="nc" id="L82">                metaBuilder.add(d.getKey(), d.getValue());</span>
+<span class="nc" id="L83">            }</span>
+<span class="nc" id="L84">            metaBuilder.add(&quot;_text&quot;, indexView.getText());</span>
+<span class="nc" id="L85">            sourceBuilder.add(&quot;_&quot;, metaBuilder);</span>
+
+<span class="nc" id="L87">            b.append(sourceBuilder.build().toString());</span>
+<span class="nc" id="L88">            b.append(&quot;\n&quot;);</span>
+        }
+<span class="nc" id="L90">        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);</span>
+
+<span class="nc" id="L92">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeFromIndex(final String schemaName,
+        final DoxID doxID) {
+
+<span class="nc" id="L101">        final WebTarget target = jestProvider.getTarget().path(&quot;_bulk&quot;);</span>
+<span class="nc" id="L102">        final StringBuilder b = new StringBuilder();</span>
+
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {</span>
+
+<span class="nc" id="L106">            b.append(</span>
+<span class="nc" id="L107">                createObjectBuilder().add(&quot;delete&quot;, createObjectBuilder()</span>
+<span class="nc" id="L108">                    .add(&quot;_index&quot;, configurationProvider.getMappedIndex(indexType.getName()))</span>
+<span class="nc" id="L109">                    .add(&quot;_type&quot;, schemaName)</span>
+<span class="nc" id="L110">                    .add(&quot;_id&quot;, doxID.toString())).build().toString());</span>
+<span class="nc" id="L111">            b.append(&quot;\n&quot;);</span>
+<span class="nc" id="L112">        }</span>
+
+<span class="nc" id="L114">        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);</span>
+<span class="nc" id="L115">    }</span>
+
+    /**
+     * {@inheritDoc} Once the indices are removed, {@link EsJaxRsProvider#init()}
+     * is called in order to recreate the mappings again.
+     */
+    @Override
+    public void reset() {
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {</span>
+
+<span class="nc" id="L126">            final WebTarget target = jestProvider.getTarget().path(configurationProvider.getMappedIndex(indexType.getName()));</span>
+<span class="nc" id="L127">            target.request(MediaType.APPLICATION_JSON).delete().readEntity(JsonObject.class);</span>
+
+<span class="nc" id="L129">        }</span>
+<span class="nc" id="L130">        jestProvider.init();</span>
+<span class="nc" id="L131">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SearchResult search(final String index,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+<span class="nc" id="L142">        int from = 0;</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if (fromDoc != null) {</span>
+<span class="nc" id="L144">            from = fromDoc;</span>
+        }
+
+<span class="nc" id="L147">        final SearchResult result = new SearchResult();</span>
+
+<span class="nc" id="L149">        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add(&quot;query&quot;, queryString).add(&quot;default_operator&quot;, &quot;and&quot;);</span>
+<span class="nc" id="L150">        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add(&quot;simple_query_string&quot;, sqsBuilder);</span>
+<span class="nc" id="L151">        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add(&quot;size&quot;, limit).add(&quot;query&quot;, qBuilder).add(&quot;from&quot;, from);</span>
+
+<span class="nc" id="L153">        final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</span>
+
+<span class="nc" id="L155">        final JsonArray hits = results.getJsonObject(&quot;hits&quot;).getJsonArray(&quot;hits&quot;);</span>
+<span class="nc" id="L156">        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));</span>
+<span class="nc" id="L157">        result.setBottomDoc(Math.min(from + hits.size(), from + limit));</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        for (final JsonValue hitValue : hits) {</span>
+<span class="nc" id="L159">            final IndexView iv = new IndexView();</span>
+<span class="nc" id="L160">            final JsonObject hit = (JsonObject) hitValue;</span>
+<span class="nc" id="L161">            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));</span>
+<span class="nc" id="L162">            iv.setCollection(hit.getString(&quot;_type&quot;));</span>
+
+<span class="nc bnc" id="L164" title="All 2 branches missed.">            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                if (entry.getValue() instanceof JsonNumber) {</span>
+<span class="nc" id="L166">                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                } else if (entry.getValue() instanceof JsonString) {</span>
+<span class="nc" id="L168">                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());</span>
+                }
+<span class="nc" id="L170">            }</span>
+<span class="nc" id="L171">            result.addHit(iv);</span>
+<span class="nc" id="L172">        }</span>
+
+<span class="nc" id="L174">        return result;</span>
+
+    }
+
+    /**
+     * Sets configurationProvider.
+     *
+     * @param configurationProvider
+     *            the configurationProvider to set
+     */
+    @EJB
+    public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
+
+<span class="nc" id="L187">        this.configurationProvider = configurationProvider;</span>
+<span class="nc" id="L188">    }</span>
+
+    /**
+     * Sets provider.
+     *
+     * @param provider
+     *            the provider to set
+     */
+    @EJB
+    public void setJestProvider(final EsJaxRsProvider provider) {
+
+<span class="nc" id="L199">        jestProvider = provider;</span>
+<span class="nc" id="L200">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
