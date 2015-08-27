@@ -1,6 +1,6 @@
 {
 	"$schema":"http://json-schema.org/draft-04/schema#",
-	"id":"http://sample.trajano.net/country.json#",
+	"id":"resource://sample.trajano.net/country.json#",
 	"type":"string",
 	"title":"Country",
 	"enum":[
