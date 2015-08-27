@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-27T00:00:53.012">
+<pmd version="5.0.5" timestamp="2015-08-27T00:03:54.633">
 <file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\Dox.java">
 <violation beginline="105" endline="105" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb.ejb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'oobs'.
