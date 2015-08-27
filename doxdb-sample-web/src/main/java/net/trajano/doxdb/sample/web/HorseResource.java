@@ -1,5 +1,6 @@
 package net.trajano.doxdb.sample.web;
 
+import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.persistence.EntityManager;
@@ -9,6 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import net.trajano.doxdb.ejb.DoxLocal;
+
 /**
  * type.
  *
@@ -16,6 +19,9 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("horse")
 public class HorseResource {
+
+    @EJB
+    private DoxLocal dox;
 
     @PersistenceContext
     private EntityManager em;
@@ -27,6 +33,6 @@ public class HorseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public JsonArray getHorses() {
 
-        return Json.createArrayBuilder().add("hello").add("world").add(em.toString()).build();
+        return Json.createArrayBuilder().add("hello").add("world").add(em.toString()).add(dox.toString()).build();
     }
 }
