@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" x-ng-app="doxdbApp">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet"
+	href="webjars/bootstrap/${bootstrap.version}/css/bootstrap.min.css">
+<script src="webjars/angularjs/${angularjs.version}/angular.min.js"></script>
+<script
+	src="webjars/angularjs/${angularjs.version}/angular-resource.min.js"></script>
+<script
+	src="webjars/angularjs/${angularjs.version}/angular-sanitize.min.js"></script>
+<script src="webjars/tv4/${tv4.version}/tv4.js"></script>
+<script src="webjars/objectpath/${objectpath.version}/lib/ObjectPath.js"></script>
+<script
+	src="webjars/angular-schema-form/${angular-schema-form.version}/schema-form.js"></script>
+<script
+	src="webjars/angular-schema-form/${angular-schema-form.version}/bootstrap-decorator.min.js"></script>
+
+<script src="angular-app.js"></script>
+<script src="search.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="ng-cloak">
+	<div x-ng-controller="DoxDbController as doxdb">
+
+		<h1>data entry</h1>
+		<select x-ng-options="item.name for item in doxdb.venues"
+			x-ng-model="doxdb.venue">
+		</select>
+
+		<form x-sf-schema="doxdb.schema" x-sf-form="doxdb.form"
+			x-sf-model="doxdb.venue">
+
+		</form>
+		<pre>{{doxdb.venue | json}}</pre>
+	</div>
+	<div x-ng-controller="SearchController as search">
+
+		<h1>search</h1>
+		<p>
+			<input type="search" x-ng-model="search.query" size="30"
+				placeholder="Search query" x-ng-change="search.doSearch()">
+		</p>
+		<pre>{{search.result| json}}</pre>
+		<button x-ng-click="search.reindex()">reindex</button>
+	</div>
+	<div x-ng-controller="NotificationsController as notifications">
+
+		<h1>Notifications</h1>
+		<div x-ng-repeat="interaction in notifications.interactions">
+			<pre>{{interaction.message | json}}</pre>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dependencies>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>${project.groupId}</groupId>
+		<artifactId>doxdb-core</artifactId>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.5.4</version>
+	</dependency>
+	<dependency attr="__text">
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+</dependencies>
