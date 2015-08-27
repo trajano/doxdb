@@ -19,9 +19,9 @@ under the License.
 -->
 <rss version="0.91">
   <channel>
-    <title>doxdb-core - Checkstyle report</title>
+    <title>DoxDB Core API - Checkstyle report</title>
     <link>http://site.trajano.net/trajano/doxdb/doxdb-core/</link>
-    <description>doxdb-core - Checkstyle report</description>
+    <description>DoxDB Core API - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2012 - 2015 Trajano</copyright>
     <item>

@@ -1,16 +1,16 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-doxdb-core,net.trajano.doxdb,SearchResult,33,0,0,0,11,0,7,0,7,0
-doxdb-core,net.trajano.doxdb,DoxID,0,160,0,16,0,38,0,15,0,7
-doxdb-core,net.trajano.doxdb,DoxMeta,137,0,0,0,51,0,25,0,25,0
-doxdb-core,net.trajano.doxdb,IndexView,126,0,0,0,36,0,19,0,19,0
-doxdb-core,net.trajano.doxdb.ext,DefaultEventHandler,7,0,0,0,5,0,5,0,5,0
-doxdb-core,net.trajano.doxdb.ext,XmlConfigurationProvider,141,0,14,0,19,0,10,0,3,0
-doxdb-core,net.trajano.doxdb.jdbc,JdbcDoxDAO,4228,0,488,0,457,0,266,0,22,0
-doxdb-core,net.trajano.doxdb.jdbc,DoxConfiguration,56,0,0,0,22,0,12,0,12,0
-doxdb-core,net.trajano.doxdb.schema,DoxType,131,0,24,0,37,0,32,0,20,0
-doxdb-core,net.trajano.doxdb.schema,SchemaType,57,0,10,0,15,0,15,0,10,0
-doxdb-core,net.trajano.doxdb.schema,DoxPersistence,74,0,16,0,19,0,18,0,10,0
-doxdb-core,net.trajano.doxdb.schema,IndexType,31,0,4,0,9,0,9,0,7,0
-doxdb-core,net.trajano.doxdb.schema,ReadAllType,97,0,4,0,16,0,8,0,6,0
-doxdb-core,net.trajano.doxdb.schema,ObjectFactory,19,0,0,0,6,0,5,0,5,0
-doxdb-core,net.trajano.doxdb.internal,DoxPrincipal,9,39,3,3,4,13,4,5,1,5
+DoxDB Core API,net.trajano.doxdb,SearchResult,33,0,0,0,11,0,7,0,7,0
+DoxDB Core API,net.trajano.doxdb,DoxID,0,160,0,16,0,38,0,15,0,7
+DoxDB Core API,net.trajano.doxdb,DoxMeta,137,0,0,0,51,0,25,0,25,0
+DoxDB Core API,net.trajano.doxdb,IndexView,126,0,0,0,36,0,19,0,19,0
+DoxDB Core API,net.trajano.doxdb.ext,DefaultEventHandler,7,0,0,0,5,0,5,0,5,0
+DoxDB Core API,net.trajano.doxdb.ext,XmlConfigurationProvider,141,0,14,0,19,0,10,0,3,0
+DoxDB Core API,net.trajano.doxdb.jdbc,JdbcDoxDAO,4228,0,488,0,457,0,266,0,22,0
+DoxDB Core API,net.trajano.doxdb.jdbc,DoxConfiguration,56,0,0,0,22,0,12,0,12,0
+DoxDB Core API,net.trajano.doxdb.schema,DoxType,131,0,24,0,37,0,32,0,20,0
+DoxDB Core API,net.trajano.doxdb.schema,SchemaType,57,0,10,0,15,0,15,0,10,0
+DoxDB Core API,net.trajano.doxdb.schema,DoxPersistence,74,0,16,0,19,0,18,0,10,0
+DoxDB Core API,net.trajano.doxdb.schema,IndexType,31,0,4,0,9,0,9,0,7,0
+DoxDB Core API,net.trajano.doxdb.schema,ReadAllType,85,0,4,0,12,0,8,0,6,0
+DoxDB Core API,net.trajano.doxdb.schema,ObjectFactory,19,0,0,0,6,0,5,0,5,0
+DoxDB Core API,net.trajano.doxdb.internal,DoxPrincipal,9,39,3,3,4,13,4,5,1,5
