@@ -74,9 +74,9 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              .put(<span class="jxr_string">"javax.persistence.jdbc.driver"</span>, <span class="jxr_string">"org.apache.derby.jdbc.EmbeddedDriver"</span>)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>              .put(<span class="jxr_string">"javax.persistence.schema-generation.database.action"</span>, <span class="jxr_string">"create"</span>)
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>              .put(<span class="jxr_string">"javax.persistence.jdbc.url"</span>, <span class="jxr_string">"jdbc:h2:file:"</span> + testFolder.newFile().getAbsolutePath())
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>              .put(<span class="jxr_string">"eclipselink.logging.logger"</span>, <span class="jxr_string">"JavaLogger"</span>)
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>              .put(<span class="jxr_string">"eclipselink.logging.level.sql"</span>, <span class="jxr_string">"fine"</span>)
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>              .put(<span class="jxr_string">"eclipselink.logging.parameters"</span>, <span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              <em class="jxr_comment">//            .put("eclipselink.logging.logger", "JavaLogger")</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>              <em class="jxr_comment">//            .put("eclipselink.logging.level.sql", "fine")</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              <em class="jxr_comment">//            .put("eclipselink.logging.parameters", "true")</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>              .build());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          em = emf.createEntityManager();
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          tx = em.getTransaction();
