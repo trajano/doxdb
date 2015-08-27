@@ -1,0 +1,106 @@
+DoxDB Sample Web Application
+============================
+
+This is a sample web application that uses [DoxDB][].
+
+### Required Java EE components
+
+For DoxDB to work, the dependency is required to enable access to the
+REST API and JPA entities. 
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>doxdb-rest</artifactId>
+      <groupId>${project.version}</groupId>
+    </dependency>
+    
+In addition `src/main/META-INF/persistence.xml` is required
+and must contain a reference to the `doxdb-rest.jar` and
+`net.trajano.doxdb.DoxMeta` class.  
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      version="2.1">
+      <persistence-unit name="default">
+        <jar-file>lib/doxdb-rest-${project.version}.jar</jar-file>
+        <class>net.trajano.doxdb.DoxMeta</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+	  </persistence-unit>
+    </persistence>
+
+### Enable JAX-RS endpoint
+
+To set up the JAX-RS endpoint, a `src/main/webapp/WEB-INF/web.xml`
+file is required to have the `<servlet>` and `<servlet-mapping>` to
+`net.trajano.doxdb.rest.DoxRestApplication`.  In this example
+`/V1/*` is the root application path, but it can be customized for your
+application branding requirements.
+
+    <web-app>
+	   <servlet>
+		   <servlet-name>net.trajano.doxdb.rest.DoxRestApplication</servlet-name>
+       </servlet>
+
+       <servlet-mapping>
+		  <servlet-name>net.trajano.doxdb.rest.DoxRestApplication</servlet-name>
+    	  <url-pattern>/V1/*</url-pattern>
+       </servlet-mapping>
+    </web-app> 
+
+### Required entity beans
+
+The following interfaces need to be implemented as `@Local` `@Stateless` EJBs 
+in your application. 
+
+* net.trajano.doxdb.ext.CollectionAccessControl
+* net.trajano.doxdb.ext.ConfigurationProvider
+* net.trajano.doxdb.ext.EventHandler
+* net.trajano.doxdb.ext.Indexer
+* net.trajano.doxdb.ext.Migrator
+
+### dox.xml
+
+`META-INF/dox.xml` provides a way of describing your DoxDB instance through
+XML.  To use the `META-INF/dox.xml` file extend 
+`net.trajano.doxdb.ext.XmlConfigurationProvider` which implements
+`net.trajano.doxdb.ext.ConfigurationProvider` as a  `@Local` `@Stateless` EJB
+with no overrides.
+
+    @Stateless
+    @Local(net.trajano.doxdb.ext.ConfigurationProvider.class)
+    public class MyConfigurationProvider extends XmlConfigurationProvider {
+    }
+ 
+### Changing the schema or table mappings
+
+This can be done by adding a `src/main/resources/META-INF/orm.xml` and defining the new
+schema or entity table mappings there.
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+            http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+      version="2.1">
+      <persistence-unit-metadata>
+        <persistence-unit-defaults>
+          <schema>schema21</schema>
+        </persistence-unit-defaults>
+      </persistence-unit-metadata>
+      <entity class="net.trajano.doxdb.ejb.DoxTombstone">
+        <table name="Tombstone2" />
+	  </entity>
+    </entity-mappings>
+
+
+### Extra things
+
+The sample provides:
+
+* an Angular JS app that uses angular-schema-form to build the UI from 
+  the JSON schema.
+* an extra REST API that does nothing except prove that it can co-exist
+  with `dox-rest`
+
+[DoxDB]: http://site.trajano.net/doxdb/

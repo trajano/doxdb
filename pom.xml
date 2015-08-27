@@ -10,8 +10,8 @@
     <artifactId>doxdb</artifactId>
     <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>doxdb</name>
-    <description>A data framework to allow storing of structured data using JDBC.</description>
+    <name>DoxDB</name>
+    <description>A data framework to allow storing of structured data using JPA.</description>
     <modules>
         <module>doxdb-core</module>
         <module>doxdb-ejb</module>

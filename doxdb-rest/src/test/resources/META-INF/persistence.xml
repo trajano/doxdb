@@ -5,10 +5,10 @@
 	version="2.1">
 	<persistence-unit name="default">
 		<class>net.trajano.doxdb.DoxMeta</class>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>
-		<properties><!-- 
-			<property name="javax.persistence.schema-generation.database.action"
-				value="drop-and-create" /> -->
-		</properties>
+		<class>net.trajano.doxdb.ejb.Dox</class>
+		<class>net.trajano.doxdb.ejb.DoxTombstone</class>
+		<class>net.trajano.doxdb.ejb.DoxOob</class>
+		<class>net.trajano.doxdb.ejb.DoxOobTombstone</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
 </persistence>

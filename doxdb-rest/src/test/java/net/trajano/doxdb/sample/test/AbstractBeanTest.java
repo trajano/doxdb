@@ -66,9 +66,9 @@ public class AbstractBeanTest {
             .put("javax.persistence.jdbc.driver", "org.apache.derby.jdbc.EmbeddedDriver")
             .put("javax.persistence.schema-generation.database.action", "create")
             .put("javax.persistence.jdbc.url", "jdbc:h2:file:" + testFolder.newFile().getAbsolutePath())
-            .put("eclipselink.logging.logger", "JavaLogger")
-            .put("eclipselink.logging.level.sql", "fine")
-            .put("eclipselink.logging.parameters", "true")
+            //            .put("eclipselink.logging.logger", "JavaLogger")
+            //            .put("eclipselink.logging.level.sql", "fine")
+            //            .put("eclipselink.logging.parameters", "true")
             .build());
         em = emf.createEntityManager();
         tx = em.getTransaction();
