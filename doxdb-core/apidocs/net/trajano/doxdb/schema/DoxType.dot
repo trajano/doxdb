@@ -10,15 +10,15 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.schema.DoxType
-	c379 [label=<<table title="net.trajano.doxdb.schema.DoxType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxType.html">
+	c341 [label=<<table title="net.trajano.doxdb.schema.DoxType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxType </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxType.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.schema.DoxType implements java.io.Serializable
-	c381:p -> c379:p [dir=back,arrowtail=empty,style=dashed];
+	c343:p -> c341:p [dir=back,arrowtail=empty,style=dashed];
 	// java.io.Serializable
-	c381 [label=<<table title="java.io.Serializable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html">
+	c343 [label=<<table title="java.io.Serializable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Serializable </td></tr>

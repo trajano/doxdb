@@ -1,4 +1,4 @@
--classpath 'C:/Program Files (x86)/Git/p/doxdb/doxdb-core/target/classes;C:/Users/Archimedes/.m2/repository/com/sun/mail/javax.mail/1.5.0/javax.mail-1.5.0.jar;C:/Users/Archimedes/.m2/repository/javax/javaee-api/7.0/javaee-api-7.0.jar;C:/Users/Archimedes/.m2/repository/org/mongodb/bson/3.0.3/bson-3.0.3.jar;C:/Users/Archimedes/.m2/repository/javax/activation/activation/1.1/activation-1.1.jar;c:/Program Files/Java/jdk8/jre/../lib/tools.jar'
+-classpath 'C:/Program Files (x86)/Git/p/doxdb/doxdb-core/target/classes;C:/Users/Archimedes/.m2/repository/com/sun/mail/javax.mail/1.5.0/javax.mail-1.5.0.jar;C:/Users/Archimedes/.m2/repository/javax/javaee-api/7.0/javaee-api-7.0.jar;C:/Users/Archimedes/.m2/repository/javax/activation/activation/1.1/activation-1.1.jar;c:/Program Files/Java/jdk8/jre/../lib/tools.jar'
  -doclet
 'org.umlgraph.doclet.UmlGraphDoc'
 -docletpath

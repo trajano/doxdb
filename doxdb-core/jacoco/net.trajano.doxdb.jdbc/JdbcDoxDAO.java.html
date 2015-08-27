@@ -93,8 +93,8 @@ public class JdbcDoxDAO implements
 
     private final String updateVersionSql;
 
-<span class="nc" id="L96">    public JdbcDoxDAO(final Connection c,</span>
-        final DoxConfiguration configuration) {
+    public JdbcDoxDAO(final Connection c,
+<span class="nc" id="L97">        final DoxConfiguration configuration) {</span>
 
 <span class="nc" id="L99">        this.c = c;</span>
 <span class="nc" id="L100">        tableName = configuration.getTableName()</span>
@@ -137,13 +137,13 @@ public class JdbcDoxDAO implements
 <span class="nc" id="L137">            oobCopyToTombstoneSql = String.format(&quot;insert into %1$s (CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, DELETEDBY, DELETEDON) select CONTENT, DOXID, REFERENCE, CREATEDBY, CREATEDON, LASTUPDATEDBY, LASTUPDATEDON, ?, ? from %2$s where parentid = ? and reference = ?&quot;, oobTombstoneTableName, oobTableName);</span>
 
 <span class="nc bnc" id="L139" title="All 2 branches missed.">            for (final String sql : new String[] {</span>
-<span class="nc" id="L140">                insertSql,</span>
-<span class="nc" id="L141">                readSql,</span>
-<span class="nc" id="L142">                readContentSql,</span>
-<span class="nc" id="L143">                updateSql,</span>
-<span class="nc" id="L144">                updateVersionSql,</span>
-<span class="nc" id="L145">                deleteSql,</span>
-<span class="nc" id="L146">                readForUpdateSql</span>
+                insertSql,
+                readSql,
+                readContentSql,
+                updateSql,
+                updateVersionSql,
+                deleteSql,
+                readForUpdateSql
             }) {
 <span class="nc" id="L148">                c.prepareStatement(sql)</span>
 <span class="nc" id="L149">                    .close();</span>
@@ -151,18 +151,18 @@ public class JdbcDoxDAO implements
 
 <span class="nc bnc" id="L152" title="All 2 branches missed.">            if (hasOob) {</span>
 <span class="nc bnc" id="L153" title="All 2 branches missed.">                for (final String sql : new String[] {</span>
-<span class="nc" id="L154">                    oobReadAllSql,</span>
-<span class="nc" id="L155">                    oobInsertSql,</span>
-<span class="nc" id="L156">                    oobReadSql,</span>
-<span class="nc" id="L157">                    oobReadContentSql,</span>
-<span class="nc" id="L158">                    oobUpdateSql,</span>
-<span class="nc" id="L159">                    oobDeleteSql,</span>
-<span class="nc" id="L160">                    oobReadForUpdateSql,</span>
-<span class="nc" id="L161">                    oobCheckSql,</span>
-<span class="nc" id="L162">                    oobTombstoneDeleteSql,</span>
-<span class="nc" id="L163">                    oobCopyAllToTombstoneSql,</span>
-<span class="nc" id="L164">                    oobDeleteAllSql,</span>
-<span class="nc" id="L165">                    oobCopyToTombstoneSql</span>
+                    oobReadAllSql,
+                    oobInsertSql,
+                    oobReadSql,
+                    oobReadContentSql,
+                    oobUpdateSql,
+                    oobDeleteSql,
+                    oobReadForUpdateSql,
+                    oobCheckSql,
+                    oobTombstoneDeleteSql,
+                    oobCopyAllToTombstoneSql,
+                    oobDeleteAllSql,
+                    oobCopyToTombstoneSql
                 }) {
 <span class="nc" id="L167">                    c.prepareStatement(sql)</span>
 <span class="nc" id="L168">                        .close();</span>
@@ -171,7 +171,7 @@ public class JdbcDoxDAO implements
 
 <span class="nc" id="L172">        } catch (final SQLException e) {</span>
 <span class="nc" id="L173">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L174">        }</span>
 <span class="nc" id="L175">    }</span>
 
     public JdbcDoxDAO(final Connection c,
@@ -225,10 +225,10 @@ public class JdbcDoxDAO implements
 <span class="nc" id="L225">                        return;</span>
 <span class="nc bnc" id="L226" title="All 8 branches missed.">                    }</span>
                 }
-<span class="nc bnc" id="L228" title="All 10 branches missed.">            }</span>
-<span class="nc bnc" id="L229" title="All 10 branches missed.">        } catch (final SQLException e) {</span>
+<span class="nc bnc" id="L228" title="All 12 branches missed.">            }</span>
+<span class="nc bnc" id="L229" title="All 12 branches missed.">        } catch (final SQLException e) {</span>
 <span class="nc" id="L230">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L231">        }</span>
 
         // Delete any tombstone data if one exists
 <span class="nc" id="L234">        try (final PreparedStatement checkTombStone = c.prepareStatement(oobTombstoneDeleteSql)) {</span>
@@ -237,7 +237,7 @@ public class JdbcDoxDAO implements
 <span class="nc" id="L237">            checkTombStone.executeUpdate();</span>
 <span class="nc bnc" id="L238" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
 <span class="nc" id="L239">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L240">        }</span>
 
         // Insert a new OOB record
 <span class="nc" id="L243">        try (final PreparedStatement s = c.prepareStatement(oobInsertSql, Statement.RETURN_GENERATED_KEYS)) {</span>
@@ -255,7 +255,7 @@ public class JdbcDoxDAO implements
 <span class="nc" id="L255">            incrementVersionNumber(meta.getId(), version);</span>
 <span class="nc bnc" id="L256" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
 <span class="nc" id="L257">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L258">        }</span>
 
 <span class="nc" id="L260">    }</span>
 
@@ -366,7 +366,7 @@ public class JdbcDoxDAO implements
             }
 <span class="nc bnc" id="L367" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
 <span class="nc" id="L368">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L369">        }</span>
 
 <span class="nc" id="L371">    }</span>
 
@@ -407,7 +407,7 @@ public class JdbcDoxDAO implements
 <span class="nc bnc" id="L407" title="All 8 branches missed.">            }</span>
 <span class="nc" id="L408">        } catch (final SQLException e) {</span>
 <span class="nc" id="L409">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L410">        }</span>
 <span class="nc" id="L411">    }</span>
 
     /**
@@ -481,7 +481,7 @@ public class JdbcDoxDAO implements
 <span class="nc bnc" id="L481" title="All 8 branches missed.">            }</span>
 <span class="nc" id="L482">        } catch (final SQLException e) {</span>
 <span class="nc" id="L483">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L484">        }</span>
 
 <span class="nc" id="L486">    }</span>
 
@@ -541,18 +541,18 @@ public class JdbcDoxDAO implements
 <span class="nc" id="L541">                            mimeBodyPart.setHeader(&quot;Content-Length&quot;, String.valueOf(contentBlob.length()));</span>
 <span class="nc" id="L542">                            mimeBodyPart.setFileName(rs.getString(2));</span>
 <span class="nc" id="L543">                            mimeMultipart.addBodyPart(mimeBodyPart);</span>
-                        }
+<span class="nc" id="L544">                        }</span>
 <span class="nc bnc" id="L545" title="All 8 branches missed.">                    }</span>
 <span class="nc bnc" id="L546" title="All 8 branches missed.">                }</span>
             }
 <span class="nc" id="L548">            mimeMultipart.writeTo(os);</span>
 
 <span class="nc" id="L550">        } catch (final MessagingException</span>
-<span class="nc" id="L551">            | SQLException e) {</span>
+            | SQLException e) {
 <span class="nc" id="L552">            throw new PersistenceException(e);</span>
-        } finally {
+<span class="nc" id="L553">        } finally {</span>
 
-        }
+<span class="nc" id="L555">        }</span>
 <span class="nc" id="L556">    }</span>
 
     @Override
@@ -639,9 +639,9 @@ public class JdbcDoxDAO implements
 
 <span class="nc" id="L640">        } catch (MessagingException</span>
             | SQLException
-<span class="nc" id="L642">            | IOException e) {</span>
+            | IOException e) {
 <span class="nc" id="L643">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L644">        }</span>
 
 <span class="nc" id="L646">    }</span>
 
@@ -671,7 +671,7 @@ public class JdbcDoxDAO implements
 <span class="nc bnc" id="L671" title="All 8 branches missed.">                }</span>
 <span class="nc bnc" id="L672" title="All 8 branches missed.">            }</span>
 <span class="nc bnc" id="L673" title="All 8 branches missed.">        } catch (final IOException</span>
-<span class="nc" id="L674">            | SQLException e) {</span>
+            | SQLException e) {
 <span class="nc" id="L675">            throw new PersistenceException(e);</span>
         }
     }
@@ -696,7 +696,7 @@ public class JdbcDoxDAO implements
 <span class="nc bnc" id="L696" title="All 8 branches missed.">            }</span>
 <span class="nc bnc" id="L697" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
 <span class="nc" id="L698">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L699">        }</span>
 <span class="nc" id="L700">    }</span>
 
     /**
@@ -802,7 +802,7 @@ public class JdbcDoxDAO implements
 <span class="nc bnc" id="L802" title="All 8 branches missed.">            }</span>
 
 <span class="nc bnc" id="L804" title="All 8 branches missed.">        } catch (final IOException</span>
-<span class="nc" id="L805">            | SQLException e) {</span>
+            | SQLException e) {
 <span class="nc" id="L806">            throw new PersistenceException(e);</span>
         }
     }
@@ -830,7 +830,7 @@ public class JdbcDoxDAO implements
 
 <span class="nc bnc" id="L831" title="All 8 branches missed.">        } catch (final SQLException e) {</span>
 <span class="nc" id="L832">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L833">        }</span>
 <span class="nc" id="L834">    }</span>
 
     /**
@@ -857,7 +857,7 @@ public class JdbcDoxDAO implements
 <span class="nc" id="L857">            u.executeUpdate();</span>
 <span class="nc" id="L858">        } catch (final SQLException e) {</span>
 <span class="nc" id="L859">            throw new PersistenceException(e);</span>
-        }
+<span class="nc" id="L860">        }</span>
 <span class="nc" id="L861">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

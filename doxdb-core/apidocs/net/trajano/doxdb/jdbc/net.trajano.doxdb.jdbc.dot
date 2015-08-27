@@ -10,25 +10,25 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.jdbc.JdbcDoxDAO
-	c79 [label=<<table title="net.trajano.doxdb.jdbc.JdbcDoxDAO" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JdbcDoxDAO.html">
+	c75 [label=<<table title="net.trajano.doxdb.jdbc.JdbcDoxDAO" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JdbcDoxDAO.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> JdbcDoxDAO </td></tr>
 		</table></td></tr>
 		</table>>, URL="./JdbcDoxDAO.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.jdbc.DoxDAO
-	c80 [label=<<table title="net.trajano.doxdb.jdbc.DoxDAO" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxDAO.html">
+	c76 [label=<<table title="net.trajano.doxdb.jdbc.DoxDAO" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxDAO.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DoxDAO </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxDAO.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.jdbc.DoxConfiguration
-	c81 [label=<<table title="net.trajano.doxdb.jdbc.DoxConfiguration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxConfiguration.html">
+	c77 [label=<<table title="net.trajano.doxdb.jdbc.DoxConfiguration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxConfiguration.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxConfiguration </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxConfiguration.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.jdbc.JdbcDoxDAO implements net.trajano.doxdb.jdbc.DoxDAO
-	c80:p -> c79:p [dir=back,arrowtail=empty,style=dashed];
+	c76:p -> c75:p [dir=back,arrowtail=empty,style=dashed];
 }
 

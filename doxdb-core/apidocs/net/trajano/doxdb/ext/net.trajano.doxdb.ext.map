@@ -7,12 +7,10 @@
 <area shape="rect" id="node3" href="./Indexer.html" title="&lt;TABLE&gt;" alt="" coords="330,5,434,59"/>
 <area shape="rect" id="node4_3" href="./EventHandler.html" title="net.trajano.doxdb.ext.EventHandler" alt="" coords="469,11,565,53"/>
 <area shape="rect" id="node4" href="./EventHandler.html" title="&lt;TABLE&gt;" alt="" coords="458,5,575,59"/>
-<area shape="rect" id="node6_4" href="./DefaultEventHandler.html" title="net.trajano.doxdb.ext.DefaultEventHandler" alt="" coords="449,118,585,143"/>
-<area shape="rect" id="node6" href="./DefaultEventHandler.html" title="&lt;TABLE&gt;" alt="" coords="438,107,595,155"/>
-<area shape="rect" id="node5_5" href="./DoxSearch.html" title="net.trajano.doxdb.ext.DoxSearch" alt="" coords="611,11,695,53"/>
-<area shape="rect" id="node5" href="./DoxSearch.html" title="&lt;TABLE&gt;" alt="" coords="600,5,705,59"/>
-<area shape="rect" id="node7_6" href="./ConfigurationProvider.html" title="net.trajano.doxdb.ext.ConfigurationProvider" alt="" coords="27,11,167,53"/>
-<area shape="rect" id="node7" href="./ConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="16,5,177,59"/>
-<area shape="rect" id="node8_7" href="./CollectionAccessControl.html" title="net.trajano.doxdb.ext.CollectionAccessControl" alt="" coords="740,11,901,53"/>
-<area shape="rect" id="node8" href="./CollectionAccessControl.html" title="&lt;TABLE&gt;" alt="" coords="729,5,912,59"/>
+<area shape="rect" id="node5_4" href="./DefaultEventHandler.html" title="net.trajano.doxdb.ext.DefaultEventHandler" alt="" coords="449,118,585,143"/>
+<area shape="rect" id="node5" href="./DefaultEventHandler.html" title="&lt;TABLE&gt;" alt="" coords="438,107,595,155"/>
+<area shape="rect" id="node6_5" href="./ConfigurationProvider.html" title="net.trajano.doxdb.ext.ConfigurationProvider" alt="" coords="27,11,167,53"/>
+<area shape="rect" id="node6" href="./ConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="16,5,177,59"/>
+<area shape="rect" id="node7_6" href="./CollectionAccessControl.html" title="net.trajano.doxdb.ext.CollectionAccessControl" alt="" coords="611,11,772,53"/>
+<area shape="rect" id="node7" href="./CollectionAccessControl.html" title="&lt;TABLE&gt;" alt="" coords="600,5,783,59"/>
 </map>

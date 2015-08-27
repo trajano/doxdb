@@ -56,12 +56,12 @@ public class XmlConfigurationProvider implements
 <span class="nc" id="L56">            indexMap = new ConcurrentHashMap&lt;&gt;(persistenceConfig.getIndex().size());</span>
 <span class="nc bnc" id="L57" title="All 2 branches missed.">            for (final IndexType indexType : persistenceConfig.getIndex()) {</span>
 <span class="nc bnc" id="L58" title="All 2 branches missed.">                indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());</span>
-            }
+<span class="nc" id="L59">            }</span>
 <span class="nc bnc" id="L60" title="All 8 branches missed.">        } catch (final IOException</span>
             | SAXException
-<span class="nc" id="L62">            | JAXBException e) {</span>
+            | JAXBException e) {
 <span class="nc" id="L63">            throw new ExceptionInInitializerError(e);</span>
-        }
+<span class="nc" id="L64">        }</span>
 <span class="nc" id="L65">    }</span>
 
     /**
