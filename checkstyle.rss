@@ -19,9 +19,9 @@ under the License.
 -->
 <rss version="0.91">
   <channel>
-    <title>doxdb - Checkstyle report</title>
+    <title>DoxDB - Checkstyle report</title>
     <link>http://site.trajano.net/trajano/doxdb/</link>
-    <description>doxdb - Checkstyle report</description>
+    <description>DoxDB - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2012 - 2015 Trajano</copyright>
     <item>
