@@ -1,7 +1,8 @@
-DoxDB Sample Web Application
-============================
+DoxDB REST API
+==============
 
-This is a sample web application that uses [DoxDB][].
+This module provides the REST API and its implementation as a web fragment
+for [DoxDB][].
 
 ### Required Java EE components
 
@@ -28,6 +29,11 @@ and must contain a reference to the `doxdb-rest.jar` and
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 	  </persistence-unit>
     </persistence>
+
+### Search
+
+[ElasticSearch][] is needed in order to provide search capabilities to
+[DoxDB][]
 
 ### Enable JAX-RS endpoint
 
@@ -93,14 +99,5 @@ schema or entity table mappings there.
 	  </entity>
     </entity-mappings>
 
-
-### Extra things
-
-The sample provides:
-
-* an Angular JS app that uses angular-schema-form to build the UI from 
-  the JSON schema.
-* an extra REST API that does nothing except prove that it can co-exist
-  with `dox-rest`
-
 [DoxDB]: http://site.trajano.net/doxdb/
+[ElasticSearch]: https://www.elastic.co/products/elasticsearch

@@ -7,6 +7,8 @@
         <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>doxdb-rest</artifactId>
+    <name>DoxDB REST API</name>
+    <description>This module provides the REST API and its implementation as a web fragment.</description>
     <properties>
         <m2e.jpa.activation>false</m2e.jpa.activation>
     </properties>

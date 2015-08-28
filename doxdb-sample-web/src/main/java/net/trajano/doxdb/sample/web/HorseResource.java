@@ -33,6 +33,7 @@ public class HorseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public JsonArray getHorses() {
 
+        dox.noop();
         return Json.createArrayBuilder().add("hello").add("world").add(em.toString()).add(dox.toString()).build();
     }
 }
