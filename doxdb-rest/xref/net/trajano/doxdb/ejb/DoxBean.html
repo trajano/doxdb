@@ -412,136 +412,146 @@
 <a class="jxr_linenumber" name="L404" href="#L404">404</a>         <strong class="jxr_keyword">return</strong> doxSearchBean.search(index, queryString, limit, fromDoc);
 <a class="jxr_linenumber" name="L405" href="#L405">405</a>     }
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>     @EJB
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCollectionAccessControl(<strong class="jxr_keyword">final</strong> CollectionAccessControl collectionAccessControl) {
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>         <strong class="jxr_keyword">this</strong>.collectionAccessControl = collectionAccessControl;
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>     }
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>     @EJB
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setConfigurationProvider(<strong class="jxr_keyword">final</strong> ConfigurationProvider configurationProvider) {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>         <strong class="jxr_keyword">this</strong>.configurationProvider = configurationProvider;
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>     }
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>     @EJB
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDoxSearchBean(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/ejb/DoxSearch.html">DoxSearch</a> doxSearchBean) {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>         <strong class="jxr_keyword">this</strong>.doxSearchBean = doxSearchBean;
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>     }
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">     * Injects the {@link EntityManager}.</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">     * @param em</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">     *            entity manager</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>     @PersistenceContext
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEntityManager(<strong class="jxr_keyword">final</strong> EntityManager em) {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>         <strong class="jxr_keyword">this</strong>.em = em;
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>     }
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>     @EJB
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEventHandler(<strong class="jxr_keyword">final</strong> EventHandler eventHandler) {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>         <strong class="jxr_keyword">this</strong>.eventHandler = eventHandler;
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>     }
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>     @EJB
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setIndexer(<strong class="jxr_keyword">final</strong> Indexer indexer) {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>         <strong class="jxr_keyword">this</strong>.indexer = indexer;
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>     }
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>     @EJB
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMigrator(<strong class="jxr_keyword">final</strong> Migrator migrator) {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>         <strong class="jxr_keyword">this</strong>.migrator = migrator;
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>     }
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSessionContext(<strong class="jxr_keyword">final</strong> SessionContext ctx) {
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>         <strong class="jxr_keyword">this</strong>.ctx = ctx;
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>     }
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>     @Override
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>     <strong class="jxr_keyword">public</strong> DoxMeta update(<strong class="jxr_keyword">final</strong> String collectionName,
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>         <strong class="jxr_keyword">final</strong> DoxID doxid,
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>         <strong class="jxr_keyword">final</strong> BsonDocument bson,
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> version) {
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>         <strong class="jxr_keyword">final</strong> Timestamp ts = <strong class="jxr_keyword">new</strong> Timestamp(System.currentTimeMillis());
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>         <strong class="jxr_keyword">final</strong> DoxType config = doxen.get(collectionName);
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>         <strong class="jxr_keyword">final</strong> SchemaType schema = currentSchemaMap.get(collectionName);
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>         <strong class="jxr_keyword">final</strong> String inputJson = bson.toJson();
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>         validate(schema, inputJson);
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>         <strong class="jxr_keyword">final</strong> DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>         meta.incrementVersion();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>     @Override
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>     <strong class="jxr_keyword">public</strong> SearchResult searchWithSchemaName(<strong class="jxr_keyword">final</strong> String index,
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>         <strong class="jxr_keyword">final</strong> String schemaName,
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>         <strong class="jxr_keyword">final</strong> String queryString,
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> limit,
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>         <strong class="jxr_keyword">final</strong> Integer fromDoc) {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>         <strong class="jxr_keyword">return</strong> doxSearchBean.searchWithSchemaName(index, schemaName, queryString, limit, fromDoc);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     }
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>     @EJB
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCollectionAccessControl(<strong class="jxr_keyword">final</strong> CollectionAccessControl collectionAccessControl) {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">this</strong>.collectionAccessControl = collectionAccessControl;
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     }
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>     @EJB
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setConfigurationProvider(<strong class="jxr_keyword">final</strong> ConfigurationProvider configurationProvider) {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>         <strong class="jxr_keyword">this</strong>.configurationProvider = configurationProvider;
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>     }
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>     @EJB
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDoxSearchBean(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/ejb/DoxSearch.html">DoxSearch</a> doxSearchBean) {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>         <strong class="jxr_keyword">this</strong>.doxSearchBean = doxSearchBean;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     }
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">     * Injects the {@link EntityManager}.</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">     * @param em</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">     *            entity manager</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>     @PersistenceContext
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEntityManager(<strong class="jxr_keyword">final</strong> EntityManager em) {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>         <strong class="jxr_keyword">this</strong>.em = em;
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>     }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>     @EJB
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEventHandler(<strong class="jxr_keyword">final</strong> EventHandler eventHandler) {
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>         <strong class="jxr_keyword">this</strong>.eventHandler = eventHandler;
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>     }
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>     @EJB
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setIndexer(<strong class="jxr_keyword">final</strong> Indexer indexer) {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>         <strong class="jxr_keyword">this</strong>.indexer = indexer;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>     }
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>     @EJB
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMigrator(<strong class="jxr_keyword">final</strong> Migrator migrator) {
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>         <strong class="jxr_keyword">this</strong>.migrator = migrator;
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>     }
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSessionContext(<strong class="jxr_keyword">final</strong> SessionContext ctx) {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>         <strong class="jxr_keyword">this</strong>.ctx = ctx;
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>     }
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>     @Override
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>     <strong class="jxr_keyword">public</strong> DoxMeta update(<strong class="jxr_keyword">final</strong> String collectionName,
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>         <strong class="jxr_keyword">final</strong> DoxID doxid,
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>         <strong class="jxr_keyword">final</strong> BsonDocument bson,
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> version) {
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>         meta.getAccessKey();
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>         <em class="jxr_comment">// TODO check the security.</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>         <strong class="jxr_keyword">final</strong> IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>         <strong class="jxr_keyword">final</strong> byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>         <strong class="jxr_keyword">final</strong> Timestamp ts = <strong class="jxr_keyword">new</strong> Timestamp(System.currentTimeMillis());
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>         <strong class="jxr_keyword">final</strong> DoxType config = doxen.get(collectionName);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>         <strong class="jxr_keyword">final</strong> SchemaType schema = currentSchemaMap.get(collectionName);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>         <strong class="jxr_keyword">final</strong> String inputJson = bson.toJson();
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>         validate(schema, inputJson);
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/ejb/Dox.html">Dox</a> e = em.find(Dox.<strong class="jxr_keyword">class</strong>, meta.getId());
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>         e.setLastUpdatedBy(ctx.getCallerPrincipal());
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>         e.setLastUpdatedOn(ts);
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>         e.setContent(bson);
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>         e.setAccessKey(accessKey);
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>         em.persist(e);
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>         em.flush();
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>         em.refresh(e);
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> IndexView indexView : indexViews) {
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>             indexView.setCollection(config.getName());
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>             indexView.setDoxID(doxid);
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>         }
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>         doxSearchBean.addToIndex(indexViews);
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>         eventHandler.onRecordUpdate(config.getName(), doxid, e.getJsonContent());
-<a class="jxr_linenumber" name="L502" href="#L502">502</a>         addMeta(bson, doxid, e.getVersion());
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>         meta.setContentJson(bson.toJson());
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>         <strong class="jxr_keyword">return</strong> meta;
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>     }
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
-<a class="jxr_linenumber" name="L508" href="#L508">508</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validate(<strong class="jxr_keyword">final</strong> SchemaType schema,
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>         <strong class="jxr_keyword">final</strong> String json) {
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>         <strong class="jxr_keyword">final</strong> DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>         meta.incrementVersion();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>         meta.getAccessKey();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>         <em class="jxr_comment">// TODO check the security.</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>         <strong class="jxr_keyword">final</strong> IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>         <strong class="jxr_keyword">final</strong> byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/ejb/Dox.html">Dox</a> e = em.find(Dox.<strong class="jxr_keyword">class</strong>, meta.getId());
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>         e.setLastUpdatedBy(ctx.getCallerPrincipal());
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>         e.setLastUpdatedOn(ts);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>         e.setContent(bson);
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>         e.setAccessKey(accessKey);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>         em.persist(e);
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>         em.flush();
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>         em.refresh(e);
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> IndexView indexView : indexViews) {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>             indexView.setCollection(config.getName());
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>             indexView.setDoxID(doxid);
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>         }
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>         doxSearchBean.addToIndex(indexViews);
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 
-<a class="jxr_linenumber" name="L511" href="#L511">511</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 
-<a class="jxr_linenumber" name="L513" href="#L513">513</a>             JsonSchema jsonSchema = jsonSchemaMap.get(schema.getLocation());
-<a class="jxr_linenumber" name="L514" href="#L514">514</a>             <strong class="jxr_keyword">if</strong> (jsonSchema == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>                 <strong class="jxr_keyword">final</strong> ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>                     .setDefaultVersion(SchemaVersion.DRAFTV4)
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>                     .freeze();
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>                 jsonSchema = JsonSchemaFactory.newBuilder()
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>                     .setValidationConfiguration(cfg)
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>                     .freeze()
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>                     .getJsonSchema(JsonLoader.fromResource(<span class="jxr_string">"/META-INF/schema/"</span> + schema.getLocation()));
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>                 jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>             }
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>             <strong class="jxr_keyword">final</strong> ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));
-<a class="jxr_linenumber" name="L527" href="#L527">527</a>             <strong class="jxr_keyword">if</strong> (!validate.isSuccess()) {
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ValidationException(validate.toString());
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>             }
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>         } <strong class="jxr_keyword">catch</strong> (ProcessingException
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>             | IOException e) {
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>         }
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>     }
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>         eventHandler.onRecordUpdate(config.getName(), doxid, e.getJsonContent());
+<a class="jxr_linenumber" name="L512" href="#L512">512</a>         addMeta(bson, doxid, e.getVersion());
+<a class="jxr_linenumber" name="L513" href="#L513">513</a>         meta.setContentJson(bson.toJson());
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>         <strong class="jxr_keyword">return</strong> meta;
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>     }
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validate(<strong class="jxr_keyword">final</strong> SchemaType schema,
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>         <strong class="jxr_keyword">final</strong> String json) {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>             JsonSchema jsonSchema = jsonSchemaMap.get(schema.getLocation());
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>             <strong class="jxr_keyword">if</strong> (jsonSchema == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>                 <strong class="jxr_keyword">final</strong> ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>                     .setDefaultVersion(SchemaVersion.DRAFTV4)
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>                     .freeze();
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>                 jsonSchema = JsonSchemaFactory.newBuilder()
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>                     .setValidationConfiguration(cfg)
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>                     .freeze()
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>                     .getJsonSchema(JsonLoader.fromResource(<span class="jxr_string">"/META-INF/schema/"</span> + schema.getLocation()));
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>                 jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>             }
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> }
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>             <strong class="jxr_keyword">final</strong> ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>             <strong class="jxr_keyword">if</strong> (!validate.isSuccess()) {
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ValidationException(validate.toString());
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>             }
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>         } <strong class="jxr_keyword">catch</strong> (ProcessingException
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>             | IOException e) {
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> PersistenceException(e);
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>         }
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>     }
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2012&#x2013;2015 <a href="http://www.trajano.net/">Trajano</a>. All rights reserved.</div>

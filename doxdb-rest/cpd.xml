@@ -1,5 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
+   <duplication lines="27" tokens="322">
+      <file line="284"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\rest\DoxResource.java"/>
+      <file line="321"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\rest\DoxResource.java"/>
+      <codefragment><![CDATA[        final SearchResult results = dox.search(index, queryString, 50, from);
+        //results.get
+        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
+        for (final IndexView hit : results.getHits()) {
+            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
+            final String id = hit.getDoxID().toString();
+            for (final Entry<String, BigDecimal> entry : hit.getNumbers()) {
+                hitBuilder.add(entry.getKey(), entry.getValue());
+            }
+            for (final Entry<String, String> entry : hit.getStrings()) {
+                hitBuilder.add(entry.getKey(), entry.getValue());
+            }
+            hitBuilder.add("_collection", hit.getCollection());
+            if (!hit.isMasked()) {
+                hitBuilder.add("_id", id);
+                hitBuilder.add("_url", uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
+            }
+            hitsBuilder.add(hitBuilder);
+        }
+        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder);
+        if (results.getBottomDoc() != null) {
+            final String nextPage = uriInfo.getBaseUriBuilder().path("search").path(index).queryParam("q", queryString).queryParam("f", results.getBottomDoc()).build().toASCIIString();
+            jsonBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
+        }
+        final JsonObject resultJson = jsonBuilder.build();
+        return Response.ok(resultJson).cacheControl(NO_CACHE).build();
+    }]]></codefragment>
+   </duplication>
+   <duplication lines="29" tokens="251">
+      <file line="154"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\EsJaxRsSearchBean.java"/>
+      <file line="203"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
+
+        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
+        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        result.setBottomDoc(Math.min(from + hits.size(), from + limit));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override]]></codefragment>
+   </duplication>
    <duplication lines="66" tokens="162">
       <file line="138"
             path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
@@ -168,5 +236,28 @@
     }
 
     public String getName() {]]></codefragment>
+   </duplication>
+   <duplication lines="17" tokens="123">
+      <file line="138"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\EsJaxRsSearchBean.java"/>
+      <file line="184"
+            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[    public SearchResult search(final String index,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+        int from = 0;
+        if (fromDoc != null) {
+            from = fromDoc;
+        }
+
+        final SearchResult result = new SearchResult();
+
+        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add("query", queryString).add("default_operator", "and");
+        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add("simple_query_string", sqsBuilder);
+        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add("size", limit).add("query", qBuilder).add("from", from);
+
+        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);]]></codefragment>
    </duplication>
 </pmd-cpd>

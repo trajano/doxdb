@@ -1,18 +1,18 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-doxdb-rest,net.trajano.doxdb.ejb.internal,DoxLength,3,0,0,0,1,0,1,0,1,0
-doxdb-rest,net.trajano.doxdb.ws,DoxNotification,13,0,0,0,5,0,3,0,3,0
-doxdb-rest,net.trajano.doxdb.ws,SessionManager,60,0,2,0,14,0,6,0,5,0
-doxdb-rest,net.trajano.doxdb.ejb,DoxOob,56,3,0,0,24,1,16,1,16,1
-doxdb-rest,net.trajano.doxdb.ejb,Dox,103,105,0,0,27,31,11,14,11,14
-doxdb-rest,net.trajano.doxdb.ejb,DoxOobTombstone,88,3,0,0,36,1,24,1,24,1
-doxdb-rest,net.trajano.doxdb.ejb,EsJaxRsSearchBean,457,0,22,0,75,0,19,0,8,0
-doxdb-rest,net.trajano.doxdb.ejb,DoxBean,700,367,42,8,120,85,35,15,12,13
-doxdb-rest,net.trajano.doxdb.ejb,DoxTombstone,81,3,0,0,33,1,22,1,22,1
-doxdb-rest,net.trajano.doxdb.ejb,EsJaxRsProvider,99,0,6,0,19,0,7,0,4,0
-doxdb-rest,net.trajano.doxdb.rest,OptimisticLockingMapper,11,0,0,0,2,0,2,0,2,0
-doxdb-rest,net.trajano.doxdb.rest,DoxResource,481,0,36,0,81,0,31,0,13,0
-doxdb-rest,net.trajano.doxdb.rest,DoxIDMapper,11,0,0,0,3,0,3,0,3,0
-doxdb-rest,net.trajano.doxdb.rest,EntityNotFoundMapper,11,0,0,0,2,0,2,0,2,0
-doxdb-rest,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},83,0,10,0,10,0,7,0,2,0
-doxdb-rest,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},76,0,12,0,10,0,8,0,2,0
-doxdb-rest,net.trajano.doxdb.rest,DoxRestApplication,26,0,0,0,2,0,2,0,2,0
+DoxDB REST API,net.trajano.doxdb.ejb.internal,DoxLength,3,0,0,0,1,0,1,0,1,0
+DoxDB REST API,net.trajano.doxdb.ws,DoxNotification,13,0,0,0,5,0,3,0,3,0
+DoxDB REST API,net.trajano.doxdb.ws,SessionManager,60,0,2,0,14,0,6,0,5,0
+DoxDB REST API,net.trajano.doxdb.ejb,DoxOob,56,3,0,0,24,1,16,1,16,1
+DoxDB REST API,net.trajano.doxdb.ejb,Dox,103,105,0,0,27,31,11,14,11,14
+DoxDB REST API,net.trajano.doxdb.ejb,DoxOobTombstone,88,3,0,0,36,1,24,1,24,1
+DoxDB REST API,net.trajano.doxdb.ejb,EsJaxRsSearchBean,619,0,32,0,94,0,25,0,9,0
+DoxDB REST API,net.trajano.doxdb.ejb,DoxBean,698,367,42,8,120,83,36,15,13,13
+DoxDB REST API,net.trajano.doxdb.ejb,DoxTombstone,81,3,0,0,33,1,22,1,22,1
+DoxDB REST API,net.trajano.doxdb.ejb,EsJaxRsProvider,99,0,6,0,19,0,7,0,4,0
+DoxDB REST API,net.trajano.doxdb.rest,OptimisticLockingMapper,11,0,0,0,2,0,2,0,2,0
+DoxDB REST API,net.trajano.doxdb.rest,DoxResource,644,0,46,0,95,0,37,0,14,0
+DoxDB REST API,net.trajano.doxdb.rest,DoxIDMapper,11,0,0,0,3,0,3,0,3,0
+DoxDB REST API,net.trajano.doxdb.rest,EntityNotFoundMapper,11,0,0,0,2,0,2,0,2,0
+DoxDB REST API,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},73,0,10,0,11,0,7,0,2,0
+DoxDB REST API,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},67,0,12,0,11,0,8,0,2,0
+DoxDB REST API,net.trajano.doxdb.rest,DoxRestApplication,26,0,0,0,2,0,2,0,2,0

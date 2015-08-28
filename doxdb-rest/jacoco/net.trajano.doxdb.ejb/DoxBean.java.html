@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">doxdb-rest</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ejb</a> &gt; <span class="el_source">DoxBean.java</span></div><h1>DoxBean.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ejb;
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DoxDB REST API</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ejb</a> &gt; <span class="el_source">DoxBean.java</span></div><h1>DoxBean.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ejb;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -219,7 +219,7 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="fc bfc" id="L219" title="All 2 branches covered.">        for (final DoxType doxConfig : persistenceConfig.getDox()) {</span>
 <span class="fc" id="L220">            doxen.put(doxConfig.getName(), doxConfig);</span>
 <span class="fc" id="L221">            currentSchemaMap.put(doxConfig.getName(), doxConfig.getSchema().get(doxConfig.getSchema().size() - 1));</span>
-<span class="fc" id="L222">        }</span>
+        }
 <span class="fc" id="L223">    }</span>
 
     @Override
@@ -300,14 +300,14 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="nc bnc" id="L300" title="All 2 branches missed.">                if (result.getSchemaVersion() != schema.getVersion()) {</span>
 <span class="nc" id="L301">                    migrator.migrate(schemaName, result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());</span>
                     // queue migrate later?
-                } else {
+<span class="nc" id="L303">                } else {</span>
 <span class="nc" id="L304">                    os.write(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());</span>
 <span class="nc bnc" id="L305" title="All 2 branches missed.">                    if (!last) {</span>
 <span class="nc" id="L306">                        os.write(',');</span>
                     }
                 }
 
-<span class="nc" id="L310">            }</span>
+            }
 <span class="nc" id="L311">            os.write(']');</span>
 <span class="nc bnc" id="L312" title="All 8 branches missed.">        }</span>
 <span class="nc" id="L313">        return f.getCanonicalPath();</span>
@@ -328,15 +328,15 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="nc bnc" id="L328" title="All 2 branches missed.">            if (result.getSchemaVersion() != schema.getVersion()) {</span>
 <span class="nc" id="L329">                migrator.migrate(schemaName, result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());</span>
                 // queue migrate later?
-            } else {
+<span class="nc" id="L331">            } else {</span>
 <span class="nc" id="L332">                b.append(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());</span>
 <span class="nc" id="L333">                b.append(',');</span>
             }
 
-<span class="nc" id="L336">        }</span>
+        }
 <span class="nc bnc" id="L337" title="All 2 branches missed.">        if (b.length() &gt; 1) {</span>
 <span class="nc" id="L338">            b.replace(b.length() - 1, b.length(), &quot;]&quot;);</span>
-        } else {
+<span class="nc" id="L339">        } else {</span>
 <span class="nc" id="L340">            b.append(']');</span>
         }
 <span class="nc" id="L342">        return b.toString();</span>
@@ -380,10 +380,10 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="nc" id="L380">                    indexViews.add(indexView);</span>
                 }
 
-<span class="nc" id="L383">            }</span>
+            }
 <span class="nc" id="L384">            doxSearchBean.addToIndex(indexViews.toArray(new IndexView[0]));</span>
 
-<span class="nc" id="L386">        }</span>
+        }
 
 <span class="nc" id="L388">    }</span>
 
@@ -404,23 +404,33 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="nc" id="L404">        return doxSearchBean.search(index, queryString, limit, fromDoc);</span>
     }
 
+    @Override
+    public SearchResult searchWithSchemaName(final String index,
+        final String schemaName,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+<span class="nc" id="L414">        return doxSearchBean.searchWithSchemaName(index, schemaName, queryString, limit, fromDoc);</span>
+    }
+
     @EJB
     public void setCollectionAccessControl(final CollectionAccessControl collectionAccessControl) {
 
-<span class="fc" id="L410">        this.collectionAccessControl = collectionAccessControl;</span>
-<span class="fc" id="L411">    }</span>
+<span class="fc" id="L420">        this.collectionAccessControl = collectionAccessControl;</span>
+<span class="fc" id="L421">    }</span>
 
     @EJB
     public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
 
-<span class="fc" id="L416">        this.configurationProvider = configurationProvider;</span>
-<span class="fc" id="L417">    }</span>
+<span class="fc" id="L426">        this.configurationProvider = configurationProvider;</span>
+<span class="fc" id="L427">    }</span>
 
     @EJB
     public void setDoxSearchBean(final DoxSearch doxSearchBean) {
 
-<span class="fc" id="L422">        this.doxSearchBean = doxSearchBean;</span>
-<span class="fc" id="L423">    }</span>
+<span class="fc" id="L432">        this.doxSearchBean = doxSearchBean;</span>
+<span class="fc" id="L433">    }</span>
 
     /**
      * Injects the {@link EntityManager}.
@@ -431,31 +441,31 @@ import net.trajano.doxdb.schema.SchemaType;
     @PersistenceContext
     public void setEntityManager(final EntityManager em) {
 
-<span class="fc" id="L434">        this.em = em;</span>
-<span class="fc" id="L435">    }</span>
+<span class="fc" id="L444">        this.em = em;</span>
+<span class="fc" id="L445">    }</span>
 
     @EJB
     public void setEventHandler(final EventHandler eventHandler) {
 
-<span class="fc" id="L440">        this.eventHandler = eventHandler;</span>
-<span class="fc" id="L441">    }</span>
+<span class="fc" id="L450">        this.eventHandler = eventHandler;</span>
+<span class="fc" id="L451">    }</span>
 
     @EJB
     public void setIndexer(final Indexer indexer) {
 
-<span class="fc" id="L446">        this.indexer = indexer;</span>
-<span class="fc" id="L447">    }</span>
+<span class="fc" id="L456">        this.indexer = indexer;</span>
+<span class="fc" id="L457">    }</span>
 
     @EJB
     public void setMigrator(final Migrator migrator) {
 
-<span class="nc" id="L452">        this.migrator = migrator;</span>
-<span class="nc" id="L453">    }</span>
+<span class="nc" id="L462">        this.migrator = migrator;</span>
+<span class="nc" id="L463">    }</span>
 
     public void setSessionContext(final SessionContext ctx) {
 
-<span class="fc" id="L457">        this.ctx = ctx;</span>
-<span class="fc" id="L458">    }</span>
+<span class="fc" id="L467">        this.ctx = ctx;</span>
+<span class="fc" id="L468">    }</span>
 
     /**
      * {@inheritDoc}
@@ -466,42 +476,42 @@ import net.trajano.doxdb.schema.SchemaType;
         final BsonDocument bson,
         final int version) {
 
-<span class="nc" id="L469">        final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
-<span class="nc" id="L470">        final DoxType config = doxen.get(collectionName);</span>
-<span class="nc" id="L471">        final SchemaType schema = currentSchemaMap.get(collectionName);</span>
+<span class="nc" id="L479">        final Timestamp ts = new Timestamp(System.currentTimeMillis());</span>
+<span class="nc" id="L480">        final DoxType config = doxen.get(collectionName);</span>
+<span class="nc" id="L481">        final SchemaType schema = currentSchemaMap.get(collectionName);</span>
 
-<span class="nc" id="L473">        final String inputJson = bson.toJson();</span>
-<span class="nc" id="L474">        validate(schema, inputJson);</span>
+<span class="nc" id="L483">        final String inputJson = bson.toJson();</span>
+<span class="nc" id="L484">        validate(schema, inputJson);</span>
 
-<span class="nc" id="L476">        final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);</span>
-<span class="nc" id="L477">        meta.incrementVersion();</span>
+<span class="nc" id="L486">        final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);</span>
+<span class="nc" id="L487">        meta.incrementVersion();</span>
 
-<span class="nc" id="L479">        meta.getAccessKey();</span>
+<span class="nc" id="L489">        meta.getAccessKey();</span>
         // TODO check the security.
 
-<span class="nc" id="L482">        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);</span>
+<span class="nc" id="L492">        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);</span>
 
-<span class="nc" id="L484">        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());</span>
+<span class="nc" id="L494">        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());</span>
 
-<span class="nc" id="L486">        final Dox e = em.find(Dox.class, meta.getId());</span>
-<span class="nc" id="L487">        e.setLastUpdatedBy(ctx.getCallerPrincipal());</span>
-<span class="nc" id="L488">        e.setLastUpdatedOn(ts);</span>
-<span class="nc" id="L489">        e.setContent(bson);</span>
-<span class="nc" id="L490">        e.setAccessKey(accessKey);</span>
-<span class="nc" id="L491">        em.persist(e);</span>
-<span class="nc" id="L492">        em.flush();</span>
-<span class="nc" id="L493">        em.refresh(e);</span>
+<span class="nc" id="L496">        final Dox e = em.find(Dox.class, meta.getId());</span>
+<span class="nc" id="L497">        e.setLastUpdatedBy(ctx.getCallerPrincipal());</span>
+<span class="nc" id="L498">        e.setLastUpdatedOn(ts);</span>
+<span class="nc" id="L499">        e.setContent(bson);</span>
+<span class="nc" id="L500">        e.setAccessKey(accessKey);</span>
+<span class="nc" id="L501">        em.persist(e);</span>
+<span class="nc" id="L502">        em.flush();</span>
+<span class="nc" id="L503">        em.refresh(e);</span>
 
-<span class="nc bnc" id="L495" title="All 2 branches missed.">        for (final IndexView indexView : indexViews) {</span>
-<span class="nc" id="L496">            indexView.setCollection(config.getName());</span>
-<span class="nc" id="L497">            indexView.setDoxID(doxid);</span>
+<span class="nc bnc" id="L505" title="All 2 branches missed.">        for (final IndexView indexView : indexViews) {</span>
+<span class="nc" id="L506">            indexView.setCollection(config.getName());</span>
+<span class="nc" id="L507">            indexView.setDoxID(doxid);</span>
         }
-<span class="nc" id="L499">        doxSearchBean.addToIndex(indexViews);</span>
+<span class="nc" id="L509">        doxSearchBean.addToIndex(indexViews);</span>
 
-<span class="nc" id="L501">        eventHandler.onRecordUpdate(config.getName(), doxid, e.getJsonContent());</span>
-<span class="nc" id="L502">        addMeta(bson, doxid, e.getVersion());</span>
-<span class="nc" id="L503">        meta.setContentJson(bson.toJson());</span>
-<span class="nc" id="L504">        return meta;</span>
+<span class="nc" id="L511">        eventHandler.onRecordUpdate(config.getName(), doxid, e.getJsonContent());</span>
+<span class="nc" id="L512">        addMeta(bson, doxid, e.getVersion());</span>
+<span class="nc" id="L513">        meta.setContentJson(bson.toJson());</span>
+<span class="nc" id="L514">        return meta;</span>
 
     }
 
@@ -510,28 +520,28 @@ import net.trajano.doxdb.schema.SchemaType;
 
         try {
 
-<span class="fc" id="L513">            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getLocation());</span>
-<span class="pc bpc" id="L514" title="1 of 2 branches missed.">            if (jsonSchema == null) {</span>
-<span class="fc" id="L515">                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()</span>
-<span class="fc" id="L516">                    .setDefaultVersion(SchemaVersion.DRAFTV4)</span>
-<span class="fc" id="L517">                    .freeze();</span>
+<span class="fc" id="L523">            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getLocation());</span>
+<span class="pc bpc" id="L524" title="1 of 2 branches missed.">            if (jsonSchema == null) {</span>
+<span class="fc" id="L525">                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()</span>
+<span class="fc" id="L526">                    .setDefaultVersion(SchemaVersion.DRAFTV4)</span>
+<span class="fc" id="L527">                    .freeze();</span>
 
-<span class="fc" id="L519">                jsonSchema = JsonSchemaFactory.newBuilder()</span>
-<span class="fc" id="L520">                    .setValidationConfiguration(cfg)</span>
-<span class="fc" id="L521">                    .freeze()</span>
-<span class="fc" id="L522">                    .getJsonSchema(JsonLoader.fromResource(&quot;/META-INF/schema/&quot; + schema.getLocation()));</span>
-<span class="fc" id="L523">                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);</span>
+<span class="fc" id="L529">                jsonSchema = JsonSchemaFactory.newBuilder()</span>
+<span class="fc" id="L530">                    .setValidationConfiguration(cfg)</span>
+<span class="fc" id="L531">                    .freeze()</span>
+<span class="fc" id="L532">                    .getJsonSchema(JsonLoader.fromResource(&quot;/META-INF/schema/&quot; + schema.getLocation()));</span>
+<span class="fc" id="L533">                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);</span>
             }
 
-<span class="fc" id="L526">            final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));</span>
-<span class="fc bfc" id="L527" title="All 2 branches covered.">            if (!validate.isSuccess()) {</span>
-<span class="fc" id="L528">                throw new ValidationException(validate.toString());</span>
+<span class="fc" id="L536">            final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));</span>
+<span class="fc bfc" id="L537" title="All 2 branches covered.">            if (!validate.isSuccess()) {</span>
+<span class="fc" id="L538">                throw new ValidationException(validate.toString());</span>
             }
-<span class="nc" id="L530">        } catch (ProcessingException</span>
-            | IOException e) {
-<span class="nc" id="L532">            throw new PersistenceException(e);</span>
-<span class="fc" id="L533">        }</span>
-<span class="fc" id="L534">    }</span>
+        } catch (ProcessingException
+<span class="nc" id="L541">            | IOException e) {</span>
+<span class="nc" id="L542">            throw new PersistenceException(e);</span>
+        }
+<span class="fc" id="L544">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
