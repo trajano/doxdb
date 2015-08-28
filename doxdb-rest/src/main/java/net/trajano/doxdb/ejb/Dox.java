@@ -56,7 +56,7 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 
     @NamedQuery(name = "readAllBySchemaName",
         query = "from Dox e where e.schemaName = :schemaName",
-        lockMode = LockModeType.OPTIMISTIC)
+        lockMode = LockModeType.NONE)
 })
 public class Dox {
 
