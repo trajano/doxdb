@@ -1,17 +1,12 @@
 angular.module('doxdbApp', [
-    'ngResource', 'search', 'schemaForm'
-]).controller('DoxDbController', function($resource) {
-
-    var Venue = $resource('V1/venue/:id?v=:version', {
-        id : '@_id',
-        version : '@_version'
-    });
+    'ngResource', 'search', 'schemaForm', 'doxdb'
+]).controller('DoxDbController', function($resource, DoxDBvenue) {
 
     var doxdb = this;
 
     doxdb.schema = $resource('V1/schema/venue.json').get();
 
-    Venue.query({}, function(venues) {
+    DoxDBvenue.query({}, function(venues) {
 
         doxdb.venues = venues;
         if (venues.length > 0) {
@@ -30,7 +25,7 @@ angular.module('doxdbApp', [
 
         if (!doxdb.venue._id) {
 
-            new Venue(doxdb.venue).$save().then(function(venue) {
+            new DoxDBvenue(doxdb.venue).$save().then(function(venue) {
 
                 doxdb.venue = venue;
                 doxdb.venues.push(venue);
@@ -89,7 +84,7 @@ angular.module('doxdbApp', [
     var webSocket = new WebSocket(wsUri);
     $window.onbeforeunload = function() {
 
-    	webSocket.onclose = function() {
+        webSocket.onclose = function() {
 
         }; // disable onclose handler first
         webSocket.close();

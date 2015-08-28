@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
@@ -49,6 +50,7 @@ import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ejb.DoxLocal;
+import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.ws.SessionManager;
 
 /**
@@ -124,6 +126,36 @@ public class DoxResource {
         }
         final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
         return Response.ok(meta.getContentJson()).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();
+    }
+
+    @GET
+    @Path("module.js")
+    @Produces("application/javascript")
+    public Response getAngularModule(final @Context UriInfo uriInfo) {
+
+        final StreamingOutput out = new StreamingOutput() {
+
+            @Override
+            public void write(final OutputStream os) throws IOException,
+                WebApplicationException {
+
+                try (final PrintStream w = new PrintStream(os)) {
+                    w.println("\"use strict\";");
+                    w.print("(function() {");
+                    w.print("angular.module('doxdb',['ngResource'])");
+                    for (final DoxType doxType : dox.getConfiguration().getDox()) {
+                        final String name = doxType.getName();
+                        w.print(".factory('DoxDB" + name + "', ['$resource',function(r) {");
+                        final String uri = uriInfo.getBaseUriBuilder().path(name).build() + "/:id?v=:version";
+                        w.print("return r('" + uri + "',{'id':'@_id','version':'@_version'});");
+                        w.print("}])");
+                    }
+                    w.print(";})();");
+                }
+            }
+        };
+
+        return Response.ok(out).tag(dox.toString()).build();
     }
 
     /**

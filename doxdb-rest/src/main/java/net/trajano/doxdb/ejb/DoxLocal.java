@@ -9,6 +9,7 @@ import org.bson.BsonDocument;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.SearchResult;
+import net.trajano.doxdb.schema.DoxPersistence;
 
 @Local
 public interface DoxLocal {
@@ -39,6 +40,8 @@ public interface DoxLocal {
     boolean delete(String collection,
         DoxID doxID,
         int version);
+
+    DoxPersistence getConfiguration();
 
     /**
      * This retrieves the schema.

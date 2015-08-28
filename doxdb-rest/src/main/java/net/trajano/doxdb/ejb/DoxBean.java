@@ -59,6 +59,12 @@ import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.ReadAllType;
 import net.trajano.doxdb.schema.SchemaType;
 
+/**
+ * Implements the DoxDB persistence operations. An EJB is used to take advantage
+ * of transaction management that is provided by EJBs.
+ *
+ * @author Archimedes Trajano
+ */
 @Stateless
 @Dependent
 @LocalBean
@@ -196,6 +202,12 @@ public class DoxBean implements
         eventHandler.onRecordDelete(config.getName(), doxid, contentJson);
         return true;
 
+    }
+
+    @Override
+    public DoxPersistence getConfiguration() {
+
+        return configurationProvider.getPersistenceConfig();
     }
 
     /**
