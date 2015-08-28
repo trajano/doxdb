@@ -14,10 +14,8 @@
     <description>A data framework to allow storing of structured data using JPA.</description>
     <modules>
         <module>doxdb-core</module>
-        <module>doxdb-ejb</module>
         <module>doxdb-rest</module>
         <module>doxdb-sample</module>
-        <module>doxdb-sample-ejb</module>
         <module>doxdb-sample-web</module>
     </modules>
     <scm>
