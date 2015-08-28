@@ -13,7 +13,6 @@
     <name>DoxDB</name>
     <description>A data framework to allow storing of structured data using JPA.</description>
     <modules>
-        <module>doxdb-core</module>
         <module>doxdb-rest</module>
         <module>doxdb-sample</module>
         <module>doxdb-sample-web</module>
@@ -39,25 +38,8 @@
         <dependencies>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>doxdb-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>doxdb-ejb</artifactId>
-                <version>${project.version}</version>
-                <type>ejb</type>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>doxdb-rest</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>doxdb-sample-ejb</artifactId>
-                <version>${project.version}</version>
-                <type>ejb</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>

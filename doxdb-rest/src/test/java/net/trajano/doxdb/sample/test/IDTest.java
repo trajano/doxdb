@@ -1,4 +1,4 @@
-package net.trajano.doxb.test;
+package net.trajano.doxdb.sample.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
