@@ -20,7 +20,7 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>DoxDB Sample Web Application - Checkstyle report</title>
-    <link>http://site.trajano.net/trajano/doxdb/doxdb-sample-web/</link>
+    <link>http://site.trajano.net/doxb/doxdb-sample-web/</link>
     <description>DoxDB Sample Web Application - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2012 - 2015 Trajano</copyright>
@@ -30,9 +30,9 @@ under the License.
              Warnings: 6,
              Infos: 0
       </title>
-            <link>http://site.trajano.net/trajano/doxdb/doxdb-sample-web//checkstyle.html</link>
+            <link>http://site.trajano.net/doxb/doxdb-sample-web//checkstyle.html</link>
       <description>
-        <p>Click <a href="http://site.trajano.net/trajano/doxdb/doxdb-sample-web//checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://site.trajano.net/doxb/doxdb-sample-web//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.ejb.AccessControls.java">net/trajano/doxdb/sample/ejb/AccessControls.java</a>
+                  <a href="http://site.trajano.net/doxb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.ejb.AccessControls.java">net/trajano/doxdb/sample/ejb/AccessControls.java</a>
                 </td>
                 <td>
                   0
@@ -60,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.ejb.MyEventHandler.java">net/trajano/doxdb/sample/ejb/MyEventHandler.java</a>
+                  <a href="http://site.trajano.net/doxb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.ejb.MyEventHandler.java">net/trajano/doxdb/sample/ejb/MyEventHandler.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.web.RestApplication.java">net/trajano/doxdb/sample/web/RestApplication.java</a>
+                  <a href="http://site.trajano.net/doxb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.web.RestApplication.java">net/trajano/doxdb/sample/web/RestApplication.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.ejb.MyConfigurationProvider.java">net/trajano/doxdb/sample/ejb/MyConfigurationProvider.java</a>
+                  <a href="http://site.trajano.net/doxb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.ejb.MyConfigurationProvider.java">net/trajano/doxdb/sample/ejb/MyConfigurationProvider.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.web.package-info.java">net/trajano/doxdb/sample/web/package-info.java</a>
+                  <a href="http://site.trajano.net/doxb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.web.package-info.java">net/trajano/doxdb/sample/web/package-info.java</a>
                 </td>
                 <td>
                   0
@@ -116,7 +116,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/trajano/doxdb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.web.HorseResource.java">net/trajano/doxdb/sample/web/HorseResource.java</a>
+                  <a href="http://site.trajano.net/doxb/doxdb-sample-web//checkstyle.html#net.trajano.doxdb.sample.web.HorseResource.java">net/trajano/doxdb/sample/web/HorseResource.java</a>
                 </td>
                 <td>
                   0
