@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-28T20:36:46.488">
+<pmd version="5.0.5" timestamp="2015-08-28T23:32:28.599">
 <file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\DoxID.java">
 <violation beginline="70" endline="74" begincolumn="9" endcolumn="9" rule="AvoidArrayLoops" ruleset="Optimization" package="net.trajano.doxdb" class="DoxID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#AvoidArrayLoops" priority="3">
 System.arraycopy is more efficient
