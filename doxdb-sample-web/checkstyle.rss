@@ -19,9 +19,9 @@ under the License.
 -->
 <rss version="0.91">
   <channel>
-    <title>doxdb Sample Web Application - Checkstyle report</title>
+    <title>DoxDB Sample Web Application - Checkstyle report</title>
     <link>http://site.trajano.net/trajano/doxdb/doxdb-sample-web/</link>
-    <description>doxdb Sample Web Application - Checkstyle report</description>
+    <description>DoxDB Sample Web Application - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2012 - 2015 Trajano</copyright>
     <item>
