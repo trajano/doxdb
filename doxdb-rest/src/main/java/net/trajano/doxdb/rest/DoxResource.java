@@ -141,11 +141,11 @@ public class DoxResource {
 
                 try (final PrintStream w = new PrintStream(os)) {
                     w.println("\"use strict\";");
-                    w.print("(function() {");
+                    w.print("(function(){");
                     w.print("angular.module('doxdb',['ngResource'])");
                     for (final DoxType doxType : dox.getConfiguration().getDox()) {
                         final String name = doxType.getName();
-                        w.print(".factory('DoxDB" + name + "', ['$resource',function(r) {");
+                        w.print(".factory('DoxDB" + name + "', ['$resource',function(r){");
                         final String uri = uriInfo.getBaseUriBuilder().path(name).build() + "/:id?v=:version";
                         w.print("return r('" + uri + "',{'id':'@_id','version':'@_version'});");
                         w.print("}])");
@@ -305,16 +305,20 @@ public class DoxResource {
         }
     }
 
-    @GET
-    @Path("search/{index}")
-    @Produces(RESPONSE_TYPE)
-    public Response simpleSearch(@PathParam("index") final String index,
-        @QueryParam("q") final String queryString,
-        @QueryParam("f") final Integer from,
-        @Context final UriInfo uriInfo) {
+    /**
+     * This builds the search result object except for the link to the next
+     * page.
+     *
+     * @param uriInfo
+     *            context to build the URI
+     * @param results
+     *            the search results from the EJB
+     * @return JSON Object builder
+     */
+    private JsonObjectBuilder searchResultBuilder(final UriInfo uriInfo,
+        final SearchResult results) {
 
-        final SearchResult results = dox.search(index, queryString, 50, from);
-        //results.get
+        final JsonObjectBuilder jsonBuilder;
         final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
         for (final IndexView hit : results.getHits()) {
             final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
@@ -332,12 +336,25 @@ public class DoxResource {
             }
             hitsBuilder.add(hitBuilder);
         }
-        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder);
+        jsonBuilder = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder);
+        return jsonBuilder;
+    }
+
+    @GET
+    @Path("search/{index}")
+    @Produces(RESPONSE_TYPE)
+    public Response simpleSearch(@PathParam("index") final String index,
+        @QueryParam("q") final String queryString,
+        @QueryParam("f") final Integer from,
+        @Context final UriInfo uriInfo) {
+
+        final SearchResult results = dox.search(index, queryString, 50, from);
+        final JsonObjectBuilder resultBuilder = searchResultBuilder(uriInfo, results);
         if (results.getBottomDoc() != null) {
             final String nextPage = uriInfo.getBaseUriBuilder().path("search").path(index).queryParam("q", queryString).queryParam("f", results.getBottomDoc()).build().toASCIIString();
-            jsonBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
+            resultBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
         }
-        final JsonObject resultJson = jsonBuilder.build();
+        final JsonObject resultJson = resultBuilder.build();
         return Response.ok(resultJson).cacheControl(NO_CACHE).build();
     }
 
@@ -351,30 +368,12 @@ public class DoxResource {
         @Context final UriInfo uriInfo) {
 
         final SearchResult results = dox.searchWithSchemaName(index, schemaName, queryString, 50, from);
-        //results.get
-        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
-        for (final IndexView hit : results.getHits()) {
-            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
-            final String id = hit.getDoxID().toString();
-            for (final Entry<String, BigDecimal> entry : hit.getNumbers()) {
-                hitBuilder.add(entry.getKey(), entry.getValue());
-            }
-            for (final Entry<String, String> entry : hit.getStrings()) {
-                hitBuilder.add(entry.getKey(), entry.getValue());
-            }
-            hitBuilder.add("_collection", hit.getCollection());
-            if (!hit.isMasked()) {
-                hitBuilder.add("_id", id);
-                hitBuilder.add("_url", uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
-            }
-            hitsBuilder.add(hitBuilder);
-        }
-        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder);
+        final JsonObjectBuilder resultBuilder = searchResultBuilder(uriInfo, results);
         if (results.getBottomDoc() != null) {
-            final String nextPage = uriInfo.getBaseUriBuilder().path("search").path(index).queryParam("q", queryString).queryParam("f", results.getBottomDoc()).build().toASCIIString();
-            jsonBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
+            final String nextPage = uriInfo.getBaseUriBuilder().path("search").path(index).path(schemaName).queryParam("q", queryString).queryParam("f", results.getBottomDoc()).build().toASCIIString();
+            resultBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
         }
-        final JsonObject resultJson = jsonBuilder.build();
+        final JsonObject resultJson = resultBuilder.build();
         return Response.ok(resultJson).cacheControl(NO_CACHE).build();
     }
 }
