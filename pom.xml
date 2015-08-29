@@ -12,6 +12,12 @@
     <packaging>pom</packaging>
     <name>DoxDB</name>
     <description>A data framework to allow storing of structured data using JPA.</description>
+    <url>http://site.trajano.net/doxdb/</url>
+    <inceptionYear>2015</inceptionYear>
+    <organization>
+        <name>Trajano</name>
+        <url>http://www.trajano.net/</url>
+    </organization>
     <modules>
         <module>doxdb-rest</module>
         <module>doxdb-sample</module>
@@ -20,7 +26,6 @@
     <scm>
         <connection>scm:git:https://github.com/trajano/${project.artifactId}</connection>
         <developerConnection>scm:git:ssh://git@github.com/trajano/${project.artifactId}.git</developerConnection>
-        <tag>doxdb-1.0.0</tag>
         <url>http://github.com/trajano/${project.artifactId}</url>
     </scm>
     <distributionManagement>

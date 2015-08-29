@@ -8,6 +8,12 @@
     </parent>
     <artifactId>doxdb-sample</artifactId>
     <packaging>ear</packaging>
+    <name>DoxDB Sample Application</name>
+    <description>Sample EAR containing the Sample Web Application</description>
+    <scm>
+        <connection>scm:git:ssh://git@github.com/trajano/doxdb-sample.git</connection>
+        <url>https://github.com/trajano/doxdb/doxdb-sample</url>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -44,4 +50,18 @@
             </plugin>
         </plugins>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

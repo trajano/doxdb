@@ -1,4 +1,4 @@
-doxdb
+DoxDB
 =====
 
 > TL;DR : MongoDB on SQL
@@ -23,6 +23,8 @@ Completed:
    * Schema retrieval
    * Example with [Angular Schema Form][1]
    * Migrate from JEST to JAX-RS Client
+   * AngularJS Module Generation
+   * Change database schema
 
 Remaining:
 
@@ -37,8 +39,6 @@ Remaining:
    * Data anonymization
    * Create a data dictionary and rename the methods and fields
      to correspond to the data dictionary.
-   * Change schema (trying to determine how please answer 
-     [my StackOverflow question][2] if you have suggestions).
 
 Out of scope:
 
