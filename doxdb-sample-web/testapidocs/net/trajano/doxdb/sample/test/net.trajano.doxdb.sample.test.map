@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./MyClassTest.html" title="net.trajano.doxdb.sample.test.MyClassTest" alt="" coords="16,17,112,42"/>
-<area shape="rect" id="node1" href="./MyClassTest.html" title="&lt;TABLE&gt;" alt="" coords="5,5,123,53"/>
-<area shape="rect" id="node2_1" href="./JsonBindingTest.html" title="net.trajano.doxdb.sample.test.JsonBindingTest" alt="" coords="157,17,272,42"/>
-<area shape="rect" id="node2" href="./JsonBindingTest.html" title="&lt;TABLE&gt;" alt="" coords="147,5,283,53"/>
-<area shape="rect" id="node3_2" href="./DataLoader.html" title="net.trajano.doxdb.sample.test.DataLoader" alt="" coords="317,17,403,42"/>
-<area shape="rect" id="node3" href="./DataLoader.html" title="&lt;TABLE&gt;" alt="" coords="307,5,413,53"/>
-<area shape="rect" id="node4_3" href="./AbstractEntityTest.html" title="net.trajano.doxdb.sample.test.AbstractEntityTest" alt="" coords="448,17,576,42"/>
-<area shape="rect" id="node4" href="./AbstractEntityTest.html" title="&lt;TABLE&gt;" alt="" coords="437,5,587,53"/>
+<area shape="rect" id="node1_0" href="./JsonBindingTest.html" title="net.trajano.doxdb.sample.test.JsonBindingTest" alt="" coords="16,17,132,42"/>
+<area shape="rect" id="node1" href="./JsonBindingTest.html" title="&lt;TABLE&gt;" alt="" coords="5,5,143,53"/>
+<area shape="rect" id="node2_1" href="./MyClassTest.html" title="net.trajano.doxdb.sample.test.MyClassTest" alt="" coords="177,17,275,42"/>
+<area shape="rect" id="node2" href="./MyClassTest.html" title="&lt;TABLE&gt;" alt="" coords="167,5,285,53"/>
+<area shape="rect" id="node3_2" href="./AbstractEntityTest.html" title="net.trajano.doxdb.sample.test.AbstractEntityTest" alt="" coords="319,17,447,42"/>
+<area shape="rect" id="node3" href="./AbstractEntityTest.html" title="&lt;TABLE&gt;" alt="" coords="309,5,458,53"/>
+<area shape="rect" id="node4_3" href="./DataLoader.html" title="net.trajano.doxdb.sample.test.DataLoader" alt="" coords="493,17,580,42"/>
+<area shape="rect" id="node4" href="./DataLoader.html" title="&lt;TABLE&gt;" alt="" coords="483,5,591,53"/>
 </map>

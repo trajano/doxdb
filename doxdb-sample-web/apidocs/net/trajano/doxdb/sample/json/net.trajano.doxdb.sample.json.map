@@ -1,12 +1,12 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./Venue.html" title="net.trajano.doxdb.sample.json.Venue" alt="" coords="16,19,72,45"/>
-<area shape="rect" id="node1" href="./Venue.html" title="&lt;TABLE&gt;" alt="" coords="5,8,83,56"/>
-<area shape="rect" id="node2_1" href="./Ring.html" title="net.trajano.doxdb.sample.json.Ring" alt="" coords="120,19,165,45"/>
-<area shape="rect" id="node2" href="./Ring.html" title="&lt;TABLE&gt;" alt="" coords="107,8,179,56"/>
-<area shape="rect" id="node3_2" href="./Horse.html" title="net.trajano.doxdb.sample.json.Horse" alt="" coords="213,19,267,45"/>
-<area shape="rect" id="node3" href="./Horse.html" title="&lt;TABLE&gt;" alt="" coords="203,8,277,56"/>
-<area shape="rect" id="node4_3" href="./Horse.Gender.html" title="net.trajano.doxdb.sample.json.Horse.Gender" alt="" coords="312,11,416,53"/>
-<area shape="rect" id="node4" href="./Horse.Gender.html" title="&lt;TABLE&gt;" alt="" coords="301,5,427,59"/>
-<area shape="rect" id="node5_4" href="./Country.html" title="net.trajano.doxdb.sample.json.Country" alt="" coords="461,11,565,53"/>
-<area shape="rect" id="node5" href="./Country.html" title="&lt;TABLE&gt;" alt="" coords="451,5,576,59"/>
+<area shape="rect" id="node1_0" href="./Horse.html" title="net.trajano.doxdb.sample.json.Horse" alt="" coords="16,19,71,45"/>
+<area shape="rect" id="node1" href="./Horse.html" title="&lt;TABLE&gt;" alt="" coords="5,8,81,56"/>
+<area shape="rect" id="node2_1" href="./Horse.Gender.html" title="net.trajano.doxdb.sample.json.Horse.Gender" alt="" coords="117,11,221,53"/>
+<area shape="rect" id="node2" href="./Horse.Gender.html" title="&lt;TABLE&gt;" alt="" coords="106,5,231,59"/>
+<area shape="rect" id="node3_2" href="./Venue.html" title="net.trajano.doxdb.sample.json.Venue" alt="" coords="266,19,322,45"/>
+<area shape="rect" id="node3" href="./Venue.html" title="&lt;TABLE&gt;" alt="" coords="255,8,333,56"/>
+<area shape="rect" id="node4_3" href="./Ring.html" title="net.trajano.doxdb.sample.json.Ring" alt="" coords="369,19,416,45"/>
+<area shape="rect" id="node4" href="./Ring.html" title="&lt;TABLE&gt;" alt="" coords="357,8,429,56"/>
+<area shape="rect" id="node5_4" href="./Country.html" title="net.trajano.doxdb.sample.json.Country" alt="" coords="463,11,567,53"/>
+<area shape="rect" id="node5" href="./Country.html" title="&lt;TABLE&gt;" alt="" coords="453,5,578,59"/>
 </map>

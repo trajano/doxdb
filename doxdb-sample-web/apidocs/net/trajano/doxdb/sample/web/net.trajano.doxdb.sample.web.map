@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./RestApplication.html" title="net.trajano.doxdb.sample.web.RestApplication" alt="" coords="16,17,127,42"/>
-<area shape="rect" id="node1" href="./RestApplication.html" title="&lt;TABLE&gt;" alt="" coords="5,5,137,53"/>
-<area shape="rect" id="node2_1" href="./HorseResource.html" title="net.trajano.doxdb.sample.web.HorseResource" alt="" coords="172,17,280,42"/>
-<area shape="rect" id="node2" href="./HorseResource.html" title="&lt;TABLE&gt;" alt="" coords="161,5,291,53"/>
+<area shape="rect" id="node1_0" href="./HorseResource.html" title="net.trajano.doxdb.sample.web.HorseResource" alt="" coords="16,17,127,42"/>
+<area shape="rect" id="node1" href="./HorseResource.html" title="&lt;TABLE&gt;" alt="" coords="5,5,137,53"/>
+<area shape="rect" id="node2_1" href="./RestApplication.html" title="net.trajano.doxdb.sample.web.RestApplication" alt="" coords="173,17,285,42"/>
+<area shape="rect" id="node2" href="./RestApplication.html" title="&lt;TABLE&gt;" alt="" coords="162,5,295,53"/>
 </map>

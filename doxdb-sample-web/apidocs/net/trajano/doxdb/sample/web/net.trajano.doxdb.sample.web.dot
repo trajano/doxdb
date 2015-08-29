@@ -5,21 +5,21 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// net.trajano.doxdb.sample.web.RestApplication
-	c13 [label=<<table title="net.trajano.doxdb.sample.web.RestApplication" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RestApplication.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> RestApplication </td></tr>
-		</table></td></tr>
-		</table>>, URL="./RestApplication.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.sample.web.HorseResource
-	c14 [label=<<table title="net.trajano.doxdb.sample.web.HorseResource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./HorseResource.html">
+	c0 [label=<<table title="net.trajano.doxdb.sample.web.HorseResource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./HorseResource.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> HorseResource </td></tr>
 		</table></td></tr>
-		</table>>, URL="./HorseResource.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./HorseResource.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.sample.web.RestApplication
+	c1 [label=<<table title="net.trajano.doxdb.sample.web.RestApplication" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RestApplication.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> RestApplication </td></tr>
+		</table></td></tr>
+		</table>>, URL="./RestApplication.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 
