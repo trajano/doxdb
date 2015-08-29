@@ -46,19 +46,34 @@ import net.trajano.doxdb.internal.DoxPrincipal;
         "schemaName"
 }) )
 @NamedQueries({
-    @NamedQuery(name = "readMetaBySchemaNameDoxID",
+    @NamedQuery(name = Dox.READ_META_BY_SCHEMA_NAME_DOX_ID,
         query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId",
         lockMode = LockModeType.OPTIMISTIC),
 
-    @NamedQuery(name = "readForUpdateMetaBySchemaNameDoxIDVersion",
+    @NamedQuery(name = Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION,
         query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId and e.version = :version",
         lockMode = LockModeType.OPTIMISTIC_FORCE_INCREMENT),
 
-    @NamedQuery(name = "readAllBySchemaName",
+    @NamedQuery(name = Dox.READ_ALL_BY_SCHEMA_NAME,
         query = "from Dox e where e.schemaName = :schemaName",
         lockMode = LockModeType.NONE)
 })
 public class Dox {
+
+    /**
+     * Named query {@value #READ_ALL_BY_SCHEMA_NAME};
+     */
+    public static final String READ_ALL_BY_SCHEMA_NAME = "readAllBySchemaName";
+
+    /**
+     * Named query {@value #READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION};
+     */
+    public static final String READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION = "readForUpdateMetaBySchemaNameDoxIDVersion";
+
+    /**
+     * Named query {@value #READ_META_BY_SCHEMA_NAME_DOX_ID};
+     */
+    public static final String READ_META_BY_SCHEMA_NAME_DOX_ID = "readMetaBySchemaNameDoxID";
 
     @Basic(fetch = FetchType.EAGER)
     @Column(nullable = true,

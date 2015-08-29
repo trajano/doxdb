@@ -20,6 +20,7 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
+import com.github.fge.jsonschema.main.JsonSchema;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 
@@ -74,6 +75,27 @@ public class AbstractBeanTest {
         tx = em.getTransaction();
 
         final ConfigurationProvider configurationProvider = new ConfigurationProvider() {
+
+            @Override
+            public SchemaType getCollectionSchema(final String schemaName) {
+
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public JsonSchema getContentSchema(final String location) {
+
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public DoxType getDox(final String schemaName) {
+
+                // TODO Auto-generated method stub
+                return null;
+            }
 
             @Override
             public String getMappedIndex(final String name) {
@@ -135,8 +157,6 @@ public class AbstractBeanTest {
         bean.setEventHandler(new DefaultEventHandler());
         bean.setConfigurationProvider(configurationProvider);
         bean.setDoxSearchBean(doxSearchBean);
-
-        bean.init();
 
     }
 

@@ -2,9 +2,13 @@ package net.trajano.doxdb.ext;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.persistence.PersistenceException;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -14,8 +18,17 @@ import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
+import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonschema.SchemaVersion;
+import com.github.fge.jsonschema.cfg.ValidationConfiguration;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.main.JsonSchema;
+import com.github.fge.jsonschema.main.JsonSchemaFactory;
+
 import net.trajano.doxdb.schema.DoxPersistence;
+import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.IndexType;
+import net.trajano.doxdb.schema.SchemaType;
 
 /**
  * <p>
@@ -39,10 +52,17 @@ import net.trajano.doxdb.schema.IndexType;
  *
  * @author Archimedes Trajano
  */
+@Lock(LockType.READ)
 public class XmlConfigurationProvider implements
     ConfigurationProvider {
 
+    private final Map<String, SchemaType> currentSchemaMap = new HashMap<>();
+
+    private final Map<String, DoxType> doxen = new HashMap<>();
+
     private final Map<String, String> indexMap;
+
+    private final ConcurrentMap<String, JsonSchema> jsonSchemaMap = new ConcurrentHashMap<>();
 
     private final DoxPersistence persistenceConfig;
 
@@ -57,11 +77,57 @@ public class XmlConfigurationProvider implements
             for (final IndexType indexType : persistenceConfig.getIndex()) {
                 indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());
             }
+
+            for (final DoxType doxConfig : persistenceConfig.getDox()) {
+                doxen.put(doxConfig.getName(), doxConfig);
+                final SchemaType schema = doxConfig.getSchema().get(doxConfig.getSchema().size() - 1);
+                currentSchemaMap.put(doxConfig.getName(), schema);
+                //= jsonSchemaMap.get(schema.getLocation());
+                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+                    .setDefaultVersion(SchemaVersion.DRAFTV4)
+                    .freeze();
+
+                final JsonSchema jsonSchema = JsonSchemaFactory.newBuilder()
+                    .setValidationConfiguration(cfg)
+                    .freeze()
+                    .getJsonSchema(JsonLoader.fromResource("/META-INF/schema/" + schema.getLocation()));
+                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);
+
+            }
+
         } catch (final IOException
             | SAXException
-            | JAXBException e) {
+            | JAXBException
+            | ProcessingException e) {
             throw new ExceptionInInitializerError(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SchemaType getCollectionSchema(final String schemaName) {
+
+        return currentSchemaMap.get(schemaName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonSchema getContentSchema(final String location) {
+
+        return jsonSchemaMap.get(location);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DoxType getDox(final String schemaName) {
+
+        return doxen.get(schemaName);
     }
 
     /**

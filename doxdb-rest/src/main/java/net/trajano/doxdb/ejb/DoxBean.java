@@ -8,16 +8,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.zip.GZIPOutputStream;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
@@ -38,12 +33,9 @@ import org.bson.BsonInt32;
 import org.bson.BsonString;
 
 import com.github.fge.jackson.JsonLoader;
-import com.github.fge.jsonschema.SchemaVersion;
-import com.github.fge.jsonschema.cfg.ValidationConfiguration;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
-import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
@@ -84,10 +76,6 @@ public class DoxBean implements
     @Resource
     private SessionContext ctx;
 
-    private transient Map<String, SchemaType> currentSchemaMap = new HashMap<>();
-
-    private transient Map<String, DoxType> doxen = new HashMap<>();
-
     private DoxSearch doxSearchBean;
 
     private EntityManager em;
@@ -96,11 +84,7 @@ public class DoxBean implements
 
     private Indexer indexer;
 
-    private transient ConcurrentMap<String, JsonSchema> jsonSchemaMap = new ConcurrentHashMap<>();
-
     private Migrator migrator;
-
-    private transient DoxPersistence persistenceConfig;
 
     /**
      * Adds the meta fields to the BSON document that is being returned.
@@ -125,8 +109,8 @@ public class DoxBean implements
         final BsonDocument bson) {
 
         final Date ts = new Date();
-        final DoxType config = doxen.get(schemaName);
-        final SchemaType schema = currentSchemaMap.get(schemaName);
+        final DoxType config = configurationProvider.getDox(schemaName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
 
         final String inputJson = bson.toJson();
         validate(schema, inputJson);
@@ -176,7 +160,7 @@ public class DoxBean implements
         final int version) {
 
         final Date ts = new Date();
-        final DoxType config = doxen.get(collectionName);
+        final DoxType config = configurationProvider.getDox(collectionName);
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
 
         meta.getAccessKey();
@@ -191,7 +175,7 @@ public class DoxBean implements
         em.persist(tombstone);
         em.remove(toBeDeleted);
 
-        final SchemaType schema = currentSchemaMap.get(collectionName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         String contentJson = contentBson.toJson();
         if (meta.getSchemaVersion() != schema.getVersion()) {
@@ -219,21 +203,6 @@ public class DoxBean implements
         return Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/schema/" + path);
     }
 
-    /**
-     * This will initialize the EJB and prepare the statements used by the
-     * framework. It will create the tables as needed.
-     */
-    @PostConstruct
-    public void init() {
-
-        persistenceConfig = configurationProvider.getPersistenceConfig();
-
-        for (final DoxType doxConfig : persistenceConfig.getDox()) {
-            doxen.put(doxConfig.getName(), doxConfig);
-            currentSchemaMap.put(doxConfig.getName(), doxConfig.getSchema().get(doxConfig.getSchema().size() - 1));
-        }
-    }
-
     @Override
     public void noop() {
 
@@ -243,10 +212,10 @@ public class DoxBean implements
     public DoxMeta read(final String collectionName,
         final DoxID doxid) {
 
-        final DoxType config = doxen.get(collectionName);
-        final SchemaType schema = currentSchemaMap.get(collectionName);
+        final DoxType config = configurationProvider.getDox(collectionName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
-        final DoxMeta meta = em.createNamedQuery("readMetaBySchemaNameDoxID", DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("schemaName", config.getName()).getSingleResult();
+        final DoxMeta meta = em.createNamedQuery(Dox.READ_META_BY_SCHEMA_NAME_DOX_ID, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("schemaName", config.getName()).getSingleResult();
 
         meta.getAccessKey();
         // TODO check the security.
@@ -277,7 +246,7 @@ public class DoxBean implements
     @Override
     public String readAll(final String collectionName) {
 
-        final DoxType config = doxen.get(collectionName);
+        final DoxType config = configurationProvider.getDox(collectionName);
         if (config.getReadAll() == ReadAllType.FILE) {
             try {
                 return readAllToFile(config.getName());
@@ -294,14 +263,14 @@ public class DoxBean implements
 
     private String readAllToFile(final String schemaName) throws IOException {
 
-        final SchemaType schema = currentSchemaMap.get(schemaName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
 
         final File f = File.createTempFile("doxdb", schemaName);
 
         try (final Writer os = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(f)), "UTF-8")) {
             os.write('[');
 
-            final List<Dox> results = em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", schemaName).getResultList();
+            final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("schemaName", schemaName).getResultList();
             final Iterator<Dox> i = results.iterator();
             while (i.hasNext()) {
 
@@ -328,11 +297,11 @@ public class DoxBean implements
 
     private String readAllToString(final String schemaName) {
 
-        final SchemaType schema = currentSchemaMap.get(schemaName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
 
         final StringBuilder b = new StringBuilder("[");
 
-        final List<Dox> results = em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", schemaName).getResultList();
+        final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("schemaName", schemaName).getResultList();
         for (final Dox result : results) {
 
             result.getAccessKey();
@@ -361,7 +330,7 @@ public class DoxBean implements
         final int version) {
 
         try {
-            return em.createNamedQuery("readForUpdateMetaBySchemaNameDoxIDVersion", DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("schemaName", schemaName).setParameter("version", version).getSingleResult();
+            return em.createNamedQuery(Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("schemaName", schemaName).setParameter("version", version).getSingleResult();
 
         } catch (final NoResultException e) {
             throw new OptimisticLockException(e);
@@ -378,10 +347,10 @@ public class DoxBean implements
         doxSearchBean.reset();
         // TODO this will do everything in one transaction which can kill the database.  What could be done is the
         // reindexing can be done in chunks and let an MDB do the process
-        for (final DoxType config : doxen.values()) {
+        for (final DoxType config : configurationProvider.getPersistenceConfig().getDox()) {
 
             final List<IndexView> indexViews = new LinkedList<>();
-            for (final Dox e : em.createNamedQuery("readAllBySchemaName", Dox.class).setParameter("schemaName", config.getName()).getResultList()) {
+            for (final Dox e : em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("schemaName", config.getName()).getResultList()) {
 
                 // TODO later
                 //                rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
@@ -489,8 +458,8 @@ public class DoxBean implements
         final int version) {
 
         final Timestamp ts = new Timestamp(System.currentTimeMillis());
-        final DoxType config = doxen.get(collectionName);
-        final SchemaType schema = currentSchemaMap.get(collectionName);
+        final DoxType config = configurationProvider.getDox(collectionName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         final String inputJson = bson.toJson();
         validate(schema, inputJson);
@@ -527,23 +496,20 @@ public class DoxBean implements
 
     }
 
+    /**
+     * Performs JSON validation using a schema
+     *
+     * @param schema
+     *            schema
+     * @param json
+     *            json to validate.
+     */
     private void validate(final SchemaType schema,
         final String json) {
 
         try {
 
-            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getLocation());
-            if (jsonSchema == null) {
-                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
-                    .setDefaultVersion(SchemaVersion.DRAFTV4)
-                    .freeze();
-
-                jsonSchema = JsonSchemaFactory.newBuilder()
-                    .setValidationConfiguration(cfg)
-                    .freeze()
-                    .getJsonSchema(JsonLoader.fromResource("/META-INF/schema/" + schema.getLocation()));
-                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);
-            }
+            final JsonSchema jsonSchema = configurationProvider.getContentSchema(schema.getLocation());
 
             final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));
             if (!validate.isSuccess()) {
