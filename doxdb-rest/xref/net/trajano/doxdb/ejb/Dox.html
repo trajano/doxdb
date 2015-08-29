@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      @NamedQuery(name = <span class="jxr_string">"readAllBySchemaName"</span>,
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>          query = <span class="jxr_string">"from Dox e where e.schemaName = :schemaName"</span>,
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>          lockMode = LockModeType.OPTIMISTIC)
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          lockMode = LockModeType.NONE)
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  })
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../net/trajano/doxdb/ejb/Dox.html">Dox</a> {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>     <strong class="jxr_keyword">public</strong> Principal getCreatedBy() {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DoxPrincipal(createdBy);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/internal/DoxPrincipal.html">DoxPrincipal</a>(createdBy);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>     }
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>     <strong class="jxr_keyword">public</strong> Date getCreatedOn() {
@@ -173,9 +173,9 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a>         <strong class="jxr_keyword">return</strong> createdOn;
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>     }
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>     <strong class="jxr_keyword">public</strong> DoxID getDoxId() {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> getDoxId() {
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DoxID(doxId);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a>(doxId);
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>     }
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getId() {
@@ -194,7 +194,7 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>     <strong class="jxr_keyword">public</strong> Principal getLastUpdatedBy() {
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DoxPrincipal(lastUpdatedBy);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../net/trajano/doxdb/internal/DoxPrincipal.html">DoxPrincipal</a>(lastUpdatedBy);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>     }
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">public</strong> Date getLastUpdatedOn() {
@@ -249,7 +249,7 @@
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">     * @param doxId</em>
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">     *            Dox ID</em>
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDoxId(<strong class="jxr_keyword">final</strong> DoxID doxId) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDoxId(<strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/DoxID.html">DoxID</a> doxId) {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 
 <a class="jxr_linenumber" name="L246" href="#L246">246</a>         <strong class="jxr_keyword">this</strong>.doxId = doxId.toString();
 <a class="jxr_linenumber" name="L247" href="#L247">247</a>     }

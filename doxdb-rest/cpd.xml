@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
    <duplication lines="27" tokens="322">
-      <file line="284"
+      <file line="316"
             path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\rest\DoxResource.java"/>
-      <file line="321"
+      <file line="353"
             path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\rest\DoxResource.java"/>
       <codefragment><![CDATA[        final SearchResult results = dox.search(index, queryString, 50, from);
         //results.get

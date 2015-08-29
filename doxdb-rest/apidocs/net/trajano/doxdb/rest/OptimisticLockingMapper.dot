@@ -10,15 +10,15 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.rest.OptimisticLockingMapper
-	c356 [label=<<table title="net.trajano.doxdb.rest.OptimisticLockingMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./OptimisticLockingMapper.html">
+	c1368 [label=<<table title="net.trajano.doxdb.rest.OptimisticLockingMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./OptimisticLockingMapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> OptimisticLockingMapper </td></tr>
 		</table></td></tr>
 		</table>>, URL="./OptimisticLockingMapper.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.rest.OptimisticLockingMapper implements javax.ws.rs.ext.ExceptionMapper<E extends java.lang.Throwable>
-	c363:p -> c356:p [dir=back,arrowtail=empty,style=dashed];
+	c1381:p -> c1368:p [dir=back,arrowtail=empty,style=dashed];
 	// javax.ws.rs.ext.ExceptionMapper<E extends java.lang.Throwable>
-	c363 [label=<<table title="javax.ws.rs.ext.ExceptionMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ExceptionMapper.html">
+	c1381 [label=<<table title="javax.ws.rs.ext.ExceptionMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ExceptionMapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ExceptionMapper&lt;E extends Throwable&gt; </td></tr>

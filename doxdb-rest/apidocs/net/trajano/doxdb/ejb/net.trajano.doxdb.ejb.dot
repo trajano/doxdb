@@ -10,64 +10,64 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.ejb.EsJaxRsSearchBean
-	c0 [label=<<table title="net.trajano.doxdb.ejb.EsJaxRsSearchBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EsJaxRsSearchBean.html">
+	c39 [label=<<table title="net.trajano.doxdb.ejb.EsJaxRsSearchBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EsJaxRsSearchBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EsJaxRsSearchBean </td></tr>
 		</table></td></tr>
 		</table>>, URL="./EsJaxRsSearchBean.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.EsJaxRsProvider
-	c1 [label=<<table title="net.trajano.doxdb.ejb.EsJaxRsProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EsJaxRsProvider.html">
+	c40 [label=<<table title="net.trajano.doxdb.ejb.EsJaxRsProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EsJaxRsProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EsJaxRsProvider </td></tr>
 		</table></td></tr>
 		</table>>, URL="./EsJaxRsProvider.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxTombstone
-	c2 [label=<<table title="net.trajano.doxdb.ejb.DoxTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxTombstone.html">
+	c41 [label=<<table title="net.trajano.doxdb.ejb.DoxTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxTombstone.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxTombstone </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxTombstone.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxSearch
-	c3 [label=<<table title="net.trajano.doxdb.ejb.DoxSearch" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxSearch.html">
+	c42 [label=<<table title="net.trajano.doxdb.ejb.DoxSearch" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxSearch.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DoxSearch </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxSearch.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxOobTombstone
-	c4 [label=<<table title="net.trajano.doxdb.ejb.DoxOobTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOobTombstone.html">
+	c43 [label=<<table title="net.trajano.doxdb.ejb.DoxOobTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOobTombstone.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxOobTombstone </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxOobTombstone.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxOob
-	c5 [label=<<table title="net.trajano.doxdb.ejb.DoxOob" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOob.html">
+	c44 [label=<<table title="net.trajano.doxdb.ejb.DoxOob" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOob.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxOob </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxOob.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxLocal
-	c6 [label=<<table title="net.trajano.doxdb.ejb.DoxLocal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLocal.html">
+	c45 [label=<<table title="net.trajano.doxdb.ejb.DoxLocal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLocal.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DoxLocal </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxLocal.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxBean
-	c7 [label=<<table title="net.trajano.doxdb.ejb.DoxBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxBean.html">
+	c46 [label=<<table title="net.trajano.doxdb.ejb.DoxBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxBean </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxBean.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.Dox
-	c8 [label=<<table title="net.trajano.doxdb.ejb.Dox" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Dox.html">
+	c47 [label=<<table title="net.trajano.doxdb.ejb.Dox" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Dox.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Dox </td></tr>
 		</table></td></tr>
 		</table>>, URL="./Dox.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.ejb.EsJaxRsSearchBean implements net.trajano.doxdb.ejb.DoxSearch
-	c3:p -> c0:p [dir=back,arrowtail=empty,style=dashed];
+	c42:p -> c39:p [dir=back,arrowtail=empty,style=dashed];
 	//net.trajano.doxdb.ejb.DoxBean implements net.trajano.doxdb.ejb.DoxLocal
-	c6:p -> c7:p [dir=back,arrowtail=empty,style=dashed];
+	c45:p -> c46:p [dir=back,arrowtail=empty,style=dashed];
 }
 

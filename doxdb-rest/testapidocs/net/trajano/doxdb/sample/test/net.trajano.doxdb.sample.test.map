@@ -1,10 +1,14 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./JsonValidationTest.html" title="net.trajano.doxdb.sample.test.JsonValidationTest" alt="" coords="16,17,144,42"/>
-<area shape="rect" id="node1" href="./JsonValidationTest.html" title="&lt;TABLE&gt;" alt="" coords="5,5,155,53"/>
-<area shape="rect" id="node2_1" href="./DoxBeanTest.html" title="net.trajano.doxdb.sample.test.DoxBeanTest" alt="" coords="203,113,301,138"/>
-<area shape="rect" id="node2" href="./DoxBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="193,101,311,149"/>
-<area shape="rect" id="node3_2" href="./AccessControls.html" title="net.trajano.doxdb.sample.test.AccessControls" alt="" coords="360,17,472,42"/>
-<area shape="rect" id="node3" href="./AccessControls.html" title="&lt;TABLE&gt;" alt="" coords="349,5,483,53"/>
-<area shape="rect" id="node4_3" href="./AbstractBeanTest.html" title="net.trajano.doxdb.sample.test.AbstractBeanTest" alt="" coords="190,17,314,42"/>
-<area shape="rect" id="node4" href="./AbstractBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="179,5,325,53"/>
+<area shape="rect" id="node1_0" href="./PrincipalTest.html" title="net.trajano.doxdb.sample.test.PrincipalTest" alt="" coords="16,17,111,42"/>
+<area shape="rect" id="node1" href="./PrincipalTest.html" title="&lt;TABLE&gt;" alt="" coords="5,5,121,53"/>
+<area shape="rect" id="node2_1" href="./JsonValidationTest.html" title="net.trajano.doxdb.sample.test.JsonValidationTest" alt="" coords="157,17,285,42"/>
+<area shape="rect" id="node2" href="./JsonValidationTest.html" title="&lt;TABLE&gt;" alt="" coords="146,5,295,53"/>
+<area shape="rect" id="node3_2" href="./IDTest.html" title="net.trajano.doxdb.sample.test.IDTest" alt="" coords="330,17,386,42"/>
+<area shape="rect" id="node3" href="./IDTest.html" title="&lt;TABLE&gt;" alt="" coords="319,5,397,53"/>
+<area shape="rect" id="node4_3" href="./DoxBeanTest.html" title="net.trajano.doxdb.sample.test.DoxBeanTest" alt="" coords="445,113,543,138"/>
+<area shape="rect" id="node4" href="./DoxBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="435,101,553,149"/>
+<area shape="rect" id="node5_4" href="./AccessControls.html" title="net.trajano.doxdb.sample.test.AccessControls" alt="" coords="602,17,714,42"/>
+<area shape="rect" id="node5" href="./AccessControls.html" title="&lt;TABLE&gt;" alt="" coords="591,5,725,53"/>
+<area shape="rect" id="node6_5" href="./AbstractBeanTest.html" title="net.trajano.doxdb.sample.test.AbstractBeanTest" alt="" coords="432,17,556,42"/>
+<area shape="rect" id="node6" href="./AbstractBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="421,5,567,53"/>
 </map>

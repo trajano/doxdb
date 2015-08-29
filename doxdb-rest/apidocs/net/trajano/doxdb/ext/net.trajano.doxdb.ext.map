@@ -1,0 +1,16 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./XmlConfigurationProvider.html" title="net.trajano.doxdb.ext.XmlConfigurationProvider" alt="" coords="16,118,177,143"/>
+<area shape="rect" id="node1" href="./XmlConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="5,107,188,155"/>
+<area shape="rect" id="node2_1" href="./Migrator.html" title="net.trajano.doxdb.ext.Migrator" alt="" coords="213,11,295,53"/>
+<area shape="rect" id="node2" href="./Migrator.html" title="&lt;TABLE&gt;" alt="" coords="202,5,306,59"/>
+<area shape="rect" id="node3_2" href="./Indexer.html" title="net.trajano.doxdb.ext.Indexer" alt="" coords="341,11,423,53"/>
+<area shape="rect" id="node3" href="./Indexer.html" title="&lt;TABLE&gt;" alt="" coords="330,5,434,59"/>
+<area shape="rect" id="node4_3" href="./EventHandler.html" title="net.trajano.doxdb.ext.EventHandler" alt="" coords="469,11,565,53"/>
+<area shape="rect" id="node4" href="./EventHandler.html" title="&lt;TABLE&gt;" alt="" coords="458,5,575,59"/>
+<area shape="rect" id="node5_4" href="./DefaultEventHandler.html" title="net.trajano.doxdb.ext.DefaultEventHandler" alt="" coords="449,118,585,143"/>
+<area shape="rect" id="node5" href="./DefaultEventHandler.html" title="&lt;TABLE&gt;" alt="" coords="438,107,595,155"/>
+<area shape="rect" id="node6_5" href="./ConfigurationProvider.html" title="net.trajano.doxdb.ext.ConfigurationProvider" alt="" coords="27,11,167,53"/>
+<area shape="rect" id="node6" href="./ConfigurationProvider.html" title="&lt;TABLE&gt;" alt="" coords="16,5,177,59"/>
+<area shape="rect" id="node7_6" href="./CollectionAccessControl.html" title="net.trajano.doxdb.ext.CollectionAccessControl" alt="" coords="611,11,772,53"/>
+<area shape="rect" id="node7" href="./CollectionAccessControl.html" title="&lt;TABLE&gt;" alt="" coords="600,5,783,59"/>
+</map>

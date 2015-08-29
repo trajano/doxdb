@@ -72,15 +72,15 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc" id="L72">            final JsonObjectBuilder sourceBuilder = createObjectBuilder();</span>
 <span class="nc bnc" id="L73" title="All 2 branches missed.">            for (final Entry&lt;String, BigDecimal&gt; d : indexView.getNumbers()) {</span>
 <span class="nc" id="L74">                sourceBuilder.add(d.getKey(), d.getValue());</span>
-            }
+<span class="nc" id="L75">            }</span>
 <span class="nc bnc" id="L76" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; d : indexView.getStrings()) {</span>
 <span class="nc" id="L77">                sourceBuilder.add(d.getKey(), d.getValue());</span>
-            }
+<span class="nc" id="L78">            }</span>
 
 <span class="nc" id="L80">            final JsonObjectBuilder metaBuilder = createObjectBuilder();</span>
 <span class="nc bnc" id="L81" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; d : indexView.getTexts()) {</span>
 <span class="nc" id="L82">                metaBuilder.add(d.getKey(), d.getValue());</span>
-            }
+<span class="nc" id="L83">            }</span>
 <span class="nc" id="L84">            metaBuilder.add(&quot;_text&quot;, indexView.getText());</span>
 <span class="nc" id="L85">            sourceBuilder.add(&quot;_&quot;, metaBuilder);</span>
 
@@ -109,7 +109,7 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc" id="L109">                    .add(&quot;_type&quot;, schemaName)</span>
 <span class="nc" id="L110">                    .add(&quot;_id&quot;, doxID.toString())).build().toString());</span>
 <span class="nc" id="L111">            b.append(&quot;\n&quot;);</span>
-        }
+<span class="nc" id="L112">        }</span>
 
 <span class="nc" id="L114">        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);</span>
 <span class="nc" id="L115">    }</span>
@@ -127,7 +127,7 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc" id="L127">            final WebTarget target = jestProvider.getTarget().path(configurationProvider.getMappedIndex(indexType.getName()));</span>
 <span class="nc" id="L128">            target.request(MediaType.APPLICATION_JSON).delete().readEntity(JsonObject.class);</span>
 
-        }
+<span class="nc" id="L130">        }</span>
 <span class="nc" id="L131">        jestProvider.init();</span>
 <span class="nc" id="L132">    }</span>
 
@@ -168,9 +168,9 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc bnc" id="L168" title="All 2 branches missed.">                } else if (entry.getValue() instanceof JsonString) {</span>
 <span class="nc" id="L169">                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());</span>
                 }
-            }
+<span class="nc" id="L171">            }</span>
 <span class="nc" id="L172">            result.addHit(iv);</span>
-        }
+<span class="nc" id="L173">        }</span>
 
 <span class="nc" id="L175">        return result;</span>
 
@@ -217,9 +217,9 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc bnc" id="L217" title="All 2 branches missed.">                } else if (entry.getValue() instanceof JsonString) {</span>
 <span class="nc" id="L218">                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());</span>
                 }
-            }
+<span class="nc" id="L220">            }</span>
 <span class="nc" id="L221">            result.addHit(iv);</span>
-        }
+<span class="nc" id="L222">        }</span>
 
 <span class="nc" id="L224">        return result;</span>
 

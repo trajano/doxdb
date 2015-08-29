@@ -9,31 +9,43 @@ digraph G {
 	node [fontname="arial",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// net.trajano.doxdb.sample.test.PrincipalTest
+	c0 [label=<<table title="net.trajano.doxdb.sample.test.PrincipalTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PrincipalTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> PrincipalTest </td></tr>
+		</table></td></tr>
+		</table>>, URL="./PrincipalTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.sample.test.JsonValidationTest
-	c0 [label=<<table title="net.trajano.doxdb.sample.test.JsonValidationTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JsonValidationTest.html">
+	c1 [label=<<table title="net.trajano.doxdb.sample.test.JsonValidationTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./JsonValidationTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> JsonValidationTest </td></tr>
 		</table></td></tr>
 		</table>>, URL="./JsonValidationTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.sample.test.IDTest
+	c2 [label=<<table title="net.trajano.doxdb.sample.test.IDTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IDTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> IDTest </td></tr>
+		</table></td></tr>
+		</table>>, URL="./IDTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.sample.test.DoxBeanTest
-	c1 [label=<<table title="net.trajano.doxdb.sample.test.DoxBeanTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxBeanTest.html">
+	c3 [label=<<table title="net.trajano.doxdb.sample.test.DoxBeanTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxBeanTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxBeanTest </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxBeanTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.sample.test.AccessControls
-	c2 [label=<<table title="net.trajano.doxdb.sample.test.AccessControls" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AccessControls.html">
+	c4 [label=<<table title="net.trajano.doxdb.sample.test.AccessControls" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AccessControls.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AccessControls </td></tr>
 		</table></td></tr>
 		</table>>, URL="./AccessControls.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.sample.test.AbstractBeanTest
-	c3 [label=<<table title="net.trajano.doxdb.sample.test.AbstractBeanTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractBeanTest.html">
+	c5 [label=<<table title="net.trajano.doxdb.sample.test.AbstractBeanTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractBeanTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AbstractBeanTest </td></tr>
 		</table></td></tr>
 		</table>>, URL="./AbstractBeanTest.html", fontname="arial", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.sample.test.DoxBeanTest extends net.trajano.doxdb.sample.test.AbstractBeanTest
-	c3:p -> c1:p [dir=back,arrowtail=empty];
+	c5:p -> c3:p [dir=back,arrowtail=empty];
 }
 

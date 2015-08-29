@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>IndexView.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DoxDB REST API</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb</a> &gt; <span class="el_source">IndexView.java</span></div><h1>IndexView.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+/**
+ * This represents a view of the data that will be stored in the index.
+ *
+ * @author Archimedes Trajano
+ */
+public class IndexView implements
+    Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = -378816417510576056L;
+
+    private String collection;
+
+    /**
+     * Associated DoxID that was used to populate the view.
+     */
+    private DoxID doxID;
+
+    /**
+     * Defines the index that will store this data view. The purpose is to allow
+     * multiple indices to co-exist and prevent accidental views from another
+     * index. Underneath it all it is still one table. The value will be stored
+     * in &quot;_index&quot; field.
+     */
+    private String index;
+
+    /**
+     * Flag to indicate that the data should be masked. If the data is masked,
+     * the ID and URLs should not appear in the search results.
+     */
+<span class="nc" id="L42">    private boolean masked = false;</span>
+
+    /**
+     * Holds numeric data.
+     */
+<span class="nc" id="L47">    private final Map&lt;String, BigDecimal&gt; numbers = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L49">    private final Map&lt;String, String&gt; strings = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L51">    private final StringBuilder text = new StringBuilder();</span>
+
+<span class="nc" id="L53">    private final Map&lt;String, String&gt; texts = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L55">    public IndexView() {</span>
+
+<span class="nc" id="L57">    }</span>
+
+    /**
+     * Appends the contents of the specified text to the full text search
+     * content.
+     *
+     * @param text
+     *            text
+     * @return &lt;code&gt;this&lt;/code&gt;
+     */
+    public IndexView appendText(final String text) {
+
+<span class="nc" id="L69">        this.text.append(text)</span>
+<span class="nc" id="L70">            .append('\n');</span>
+<span class="nc" id="L71">        return this;</span>
+    }
+
+    public String getCollection() {
+
+<span class="nc" id="L76">        return collection;</span>
+    }
+
+    public DoxID getDoxID() {
+
+<span class="nc" id="L81">        return doxID;</span>
+    }
+
+    public String getIndex() {
+
+<span class="nc" id="L86">        return index;</span>
+    }
+
+    public Set&lt;Entry&lt;String, BigDecimal&gt;&gt; getNumbers() {
+
+<span class="nc" id="L91">        return numbers.entrySet();</span>
+    }
+
+    public Set&lt;Entry&lt;String, String&gt;&gt; getStrings() {
+
+<span class="nc" id="L96">        return strings.entrySet();</span>
+    }
+
+    /**
+     * The value will be stored in &quot;_text&quot; which will also be the default.
+     *
+     * @return value of text
+     */
+    public String getText() {
+
+<span class="nc" id="L106">        return text.toString();</span>
+    }
+
+    public Set&lt;Entry&lt;String, String&gt;&gt; getTexts() {
+
+<span class="nc" id="L111">        return texts.entrySet();</span>
+    }
+
+    public boolean isMasked() {
+
+<span class="nc" id="L116">        return masked;</span>
+    }
+
+    public void setCollection(final String collection) {
+
+<span class="nc" id="L121">        this.collection = collection;</span>
+<span class="nc" id="L122">    }</span>
+
+    public void setDoxID(final DoxID doxId) {
+
+<span class="nc" id="L126">        doxID = doxId;</span>
+
+<span class="nc" id="L128">    }</span>
+
+    public IndexView setIndex(final String index) {
+
+<span class="nc" id="L132">        this.index = index;</span>
+<span class="nc" id="L133">        return this;</span>
+    }
+
+    public void setMasked(final boolean masked) {
+
+<span class="nc" id="L138">        this.masked = masked;</span>
+<span class="nc" id="L139">    }</span>
+
+    /**
+     * Sets a number attribute.
+     *
+     * @param name
+     *            name of the attribute field
+     * @param value
+     *            numeric value.
+     * @return &lt;code&gt;this&lt;/code&gt;
+     */
+    public IndexView setNumber(final String name,
+        final BigDecimal value) {
+
+<span class="nc" id="L153">        numbers.put(name, value);</span>
+<span class="nc" id="L154">        return this;</span>
+    }
+
+    /**
+     * Sets a number attribute. Convenience to use &lt;code&gt;double&lt;/code&gt;.
+     *
+     * @param name
+     *            name of the attribute field
+     * @param value
+     *            numeric value.
+     * @return &lt;code&gt;this&lt;/code&gt;
+     */
+    public IndexView setNumber(final String name,
+        final double value) {
+
+<span class="nc" id="L169">        numbers.put(name, new BigDecimal(value));</span>
+<span class="nc" id="L170">        return this;</span>
+    }
+
+    /**
+     * Sets a number attribute. Convenience to use &lt;code&gt;long&lt;/code&gt;.
+     *
+     * @param name
+     *            name of the attribute field
+     * @param value
+     *            numeric value.
+     * @return &lt;code&gt;this&lt;/code&gt;
+     */
+    public IndexView setNumber(final String name,
+        final long value) {
+
+<span class="nc" id="L185">        numbers.put(name, new BigDecimal(value));</span>
+<span class="nc" id="L186">        return this;</span>
+    }
+
+    /**
+     * Strings are not broken up into tokens and must be exact match. The
+     * original text is stored in the index.
+     *
+     * @param name
+     *            field name
+     * @param stringValue
+     *            string value
+     * @return &lt;code&gt;this&lt;/code&gt;
+     */
+    public IndexView setString(final String name,
+        final String stringValue) {
+
+<span class="nc" id="L202">        strings.put(name, stringValue);</span>
+<span class="nc" id="L203">        return this;</span>
+
+    }
+
+    /**
+     * Text are broken up into tokens. The original text is not stored in the
+     * index.
+     *
+     * @param name
+     *            field name
+     * @param textValue
+     *            text value
+     * @return &lt;code&gt;this&lt;/code&gt;
+     */
+    public IndexView setText(final String name,
+        final String textValue) {
+
+<span class="nc" id="L220">        texts.put(name, textValue);</span>
+<span class="nc" id="L221">        return this;</span>
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

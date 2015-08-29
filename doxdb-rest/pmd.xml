@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-28T10:07:18.765">
+<pmd version="5.0.5" timestamp="2015-08-28T20:36:46.488">
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\DoxID.java">
+<violation beginline="70" endline="74" begincolumn="9" endcolumn="9" rule="AvoidArrayLoops" ruleset="Optimization" package="net.trajano.doxdb" class="DoxID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#AvoidArrayLoops" priority="3">
+System.arraycopy is more efficient
+</violation>
+</file>
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\DoxMeta.java">
+<violation beginline="57" endline="57" begincolumn="9" endcolumn="30" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="DoxMeta" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
+The user-supplied array 'accessKey' is stored directly.
+</violation>
+<violation beginline="75" endline="75" begincolumn="9" endcolumn="25" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="DoxMeta" method="getAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
+Returning 'accessKey' may expose an internal array.
+</violation>
+<violation beginline="142" endline="142" begincolumn="30" endcolumn="51" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="DoxMeta" method="setAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
+The user-supplied array 'accessKey' is stored directly.
+</violation>
+</file>
 <file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\Dox.java">
 <violation beginline="105" endline="105" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb.ejb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'oobs'.
@@ -12,13 +28,13 @@ The user-supplied array 'accessKey' is stored directly.
 </violation>
 </file>
 <file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxBean.java">
-<violation beginline="81" endline="81" begincolumn="23" endcolumn="45" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+<violation beginline="87" endline="87" begincolumn="23" endcolumn="45" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
 </violation>
-<violation beginline="83" endline="83" begincolumn="23" endcolumn="42" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+<violation beginline="89" endline="89" begincolumn="23" endcolumn="42" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
 </violation>
-<violation beginline="172" endline="172" begincolumn="9" endcolumn="34" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxBean" method="delete" variable="ts" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
+<violation beginline="178" endline="178" begincolumn="9" endcolumn="34" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxBean" method="delete" variable="ts" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
 Avoid declaring a variable if it is unreferenced before a possible exit point.
 </violation>
 </file>

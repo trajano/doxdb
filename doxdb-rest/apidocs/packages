@@ -1,5 +1,9 @@
+net.trajano.doxdb
 net.trajano.doxdb.ejb
 net.trajano.doxdb.ejb.internal
+net.trajano.doxdb.ext
+net.trajano.doxdb.internal
 net.trajano.doxdb.rest
 net.trajano.doxdb.rest.internal
 net.trajano.doxdb.ws
+net.trajano.doxdb.schema
