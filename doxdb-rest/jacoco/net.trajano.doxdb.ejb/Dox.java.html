@@ -149,7 +149,7 @@ import net.trajano.doxdb.internal.DoxPrincipal;
     public BsonDocument getContent() {
 
 <span class="fc" id="L151">        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()</span>
-<span class="fc" id="L152">            .build());</span>
+            .build());
 <span class="fc" id="L153">        decoded.put(&quot;_id&quot;, new BsonString(doxId.toString()));</span>
 <span class="fc" id="L154">        decoded.put(&quot;_version&quot;, new BsonInt32(version));</span>
 <span class="fc" id="L155">        return decoded;</span>
@@ -178,7 +178,7 @@ import net.trajano.doxdb.internal.DoxPrincipal;
     public String getJsonContent() {
 
 <span class="nc" id="L180">        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()</span>
-<span class="nc" id="L181">            .build());</span>
+            .build());
 <span class="nc" id="L182">        decoded.remove(&quot;_id&quot;);</span>
 <span class="nc" id="L183">        decoded.remove(&quot;_version&quot;);</span>
 <span class="nc" id="L184">        return decoded.toJson();</span>
@@ -218,7 +218,7 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 
 <span class="fc" id="L219">        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();</span>
 <span class="fc" id="L220">        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), bson, EncoderContext.builder()</span>
-<span class="fc" id="L221">            .build());</span>
+            .build());
 <span class="fc" id="L222">        content = basicOutputBuffer.toByteArray();</span>
 <span class="fc" id="L223">    }</span>
 

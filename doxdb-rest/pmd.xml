@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-29T00:38:55.511">
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\DoxID.java">
+<pmd version="5.0.5" timestamp="2015-08-29T02:00:16.463">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxID.java">
 <violation beginline="70" endline="74" begincolumn="9" endcolumn="9" rule="AvoidArrayLoops" ruleset="Optimization" package="net.trajano.doxdb" class="DoxID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#AvoidArrayLoops" priority="3">
 System.arraycopy is more efficient
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\DoxMeta.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxMeta.java">
 <violation beginline="57" endline="57" begincolumn="9" endcolumn="30" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="DoxMeta" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
 The user-supplied array 'accessKey' is stored directly.
 </violation>
@@ -16,7 +16,24 @@ Returning 'accessKey' may expose an internal array.
 The user-supplied array 'accessKey' is stored directly.
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\Dox.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/IndexView.java">
+<violation beginline="42" endline="42" begincolumn="21" endcolumn="34" rule="RedundantFieldInitializer" ruleset="Optimization" package="net.trajano.doxdb" class="IndexView" variable="masked" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#RedundantFieldInitializer" priority="3">
+Avoid using redundant field initializer for 'masked'
+</violation>
+<violation beginline="47" endline="47" begincolumn="19" endcolumn="41" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb" class="IndexView" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
+</violation>
+<violation beginline="49" endline="49" begincolumn="19" endcolumn="37" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb" class="IndexView" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
+</violation>
+<violation beginline="53" endline="53" begincolumn="19" endcolumn="37" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb" class="IndexView" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
+</violation>
+<violation beginline="55" endline="57" begincolumn="12" endcolumn="5" rule="UnnecessaryConstructor" ruleset="Controversial" package="net.trajano.doxdb" class="IndexView" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UnnecessaryConstructor" priority="3">
+Avoid unnecessary constructors - the compiler will generate these for you
+</violation>
+</file>
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/Dox.java">
 <violation beginline="105" endline="105" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb.ejb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'oobs'.
 </violation>
@@ -27,7 +44,7 @@ Returning 'accessKey' may expose an internal array.
 The user-supplied array 'accessKey' is stored directly.
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxBean.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java">
 <violation beginline="87" endline="87" begincolumn="23" endcolumn="45" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ejb" class="DoxBean" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
 </violation>
@@ -38,7 +55,7 @@ If you run in Java5 or newer and have concurrent access, you should use the Conc
 Avoid declaring a variable if it is unreferenced before a possible exit point.
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOob.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOob.java">
 <violation beginline="71" endline="71" begincolumn="9" endcolumn="23" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxOob" method="getContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
 Returning 'content' may expose an internal array.
 </violation>
@@ -46,7 +63,7 @@ Returning 'content' may expose an internal array.
 The user-supplied array 'content' is stored directly.
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java">
 <violation beginline="92" endline="92" begincolumn="9" endcolumn="23" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxOobTombstone" method="getContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
 Returning 'content' may expose an internal array.
 </violation>
@@ -54,7 +71,7 @@ Returning 'content' may expose an internal array.
 The user-supplied array 'content' is stored directly.
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java">
 <violation beginline="87" endline="87" begincolumn="9" endcolumn="23" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxTombstone" method="getContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
 Returning 'content' may expose an internal array.
 </violation>
@@ -62,12 +79,46 @@ Returning 'content' may expose an internal array.
 The user-supplied array 'content' is stored directly.
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\DoxPersistence.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java">
+<violation beginline="150" endline="150" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
+</violation>
+<violation beginline="151" endline="151" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
+</violation>
+<violation beginline="152" endline="152" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
+</violation>
+<violation beginline="196" endline="196" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
+</violation>
+<violation beginline="197" endline="197" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
+</violation>
+<violation beginline="198" endline="198" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
+</violation>
+</file>
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxResource.java">
+<violation beginline="96" endline="96" begincolumn="17" endcolumn="35" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="create" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
+This call to String.startsWith can be rewritten using String.charAt(0)
+</violation>
+<violation beginline="209" endline="209" begincolumn="38" endcolumn="47" rule="UnusedFormalParameter" ruleset="Unused Code" package="net.trajano.doxdb.rest" class="DoxResource" method="op" variable="collection" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'collection'.
+</violation>
+<violation beginline="210" endline="210" begincolumn="22" endcolumn="27" rule="UnusedFormalParameter" ruleset="Unused Code" package="net.trajano.doxdb.rest" class="DoxResource" method="op" variable="opName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'opName'.
+</violation>
+<violation beginline="301" endline="301" begincolumn="13" endcolumn="34" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="saveOrOp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
+This call to String.startsWith can be rewritten using String.charAt(0)
+</violation>
+</file>
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/target/generated-sources/xjc/net/trajano/doxdb/schema/DoxPersistence.java">
 <violation beginline="160" endline="160" begincolumn="37" endcolumn="48" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxPersistence" method="setElasticSearchUri" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'value' is not assigned and could be declared final
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\DoxType.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/target/generated-sources/xjc/net/trajano/doxdb/schema/DoxType.java">
 <violation beginline="130" endline="130" begincolumn="25" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'value' is not assigned and could be declared final
 </violation>
@@ -84,7 +135,7 @@ Parameter 'value' is not assigned and could be declared final
 Parameter 'value' is not assigned and could be declared final
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\IndexType.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/target/generated-sources/xjc/net/trajano/doxdb/schema/IndexType.java">
 <violation beginline="76" endline="76" begincolumn="25" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="IndexType" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'value' is not assigned and could be declared final
 </violation>
@@ -92,12 +143,12 @@ Parameter 'value' is not assigned and could be declared final
 Parameter 'value' is not assigned and could be declared final
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\ObjectFactory.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/target/generated-sources/xjc/net/trajano/doxdb/schema/ObjectFactory.java">
 <violation beginline="36" endline="37" begincolumn="12" endcolumn="5" rule="UnnecessaryConstructor" ruleset="Controversial" package="net.trajano.doxdb.schema" class="ObjectFactory" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UnnecessaryConstructor" priority="3">
 Avoid unnecessary constructors - the compiler will generate these for you
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\ReadAllType.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/target/generated-sources/xjc/net/trajano/doxdb/schema/ReadAllType.java">
 <violation beginline="44" endline="44" begincolumn="17" endcolumn="24" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'v' is not assigned and could be declared final
 </violation>
@@ -108,7 +159,7 @@ Parameter 'v' is not assigned and could be declared final
 Local variable 'c' could be declared final
 </violation>
 </file>
-<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\SchemaType.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/target/generated-sources/xjc/net/trajano/doxdb/schema/SchemaType.java">
 <violation beginline="106" endline="106" begincolumn="28" endcolumn="40" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="SchemaType" method="setVersion" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'value' is not assigned and could be declared final
 </violation>

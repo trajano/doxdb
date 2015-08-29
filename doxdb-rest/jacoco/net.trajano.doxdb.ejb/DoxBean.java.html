@@ -535,13 +535,13 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="fc" id="L535">            JsonSchema jsonSchema = jsonSchemaMap.get(schema.getLocation());</span>
 <span class="pc bpc" id="L536" title="1 of 2 branches missed.">            if (jsonSchema == null) {</span>
 <span class="fc" id="L537">                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()</span>
-<span class="fc" id="L538">                    .setDefaultVersion(SchemaVersion.DRAFTV4)</span>
-<span class="fc" id="L539">                    .freeze();</span>
+                    .setDefaultVersion(SchemaVersion.DRAFTV4)
+                    .freeze();
 
 <span class="fc" id="L541">                jsonSchema = JsonSchemaFactory.newBuilder()</span>
-<span class="fc" id="L542">                    .setValidationConfiguration(cfg)</span>
-<span class="fc" id="L543">                    .freeze()</span>
-<span class="fc" id="L544">                    .getJsonSchema(JsonLoader.fromResource(&quot;/META-INF/schema/&quot; + schema.getLocation()));</span>
+                    .setValidationConfiguration(cfg)
+                    .freeze()
+                    .getJsonSchema(JsonLoader.fromResource(&quot;/META-INF/schema/&quot; + schema.getLocation()));
 <span class="fc" id="L545">                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);</span>
             }
 

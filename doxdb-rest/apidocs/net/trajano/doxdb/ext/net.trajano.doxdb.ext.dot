@@ -5,60 +5,60 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.ext.XmlConfigurationProvider
-	c119 [label=<<table title="net.trajano.doxdb.ext.XmlConfigurationProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./XmlConfigurationProvider.html">
+	c232 [label=<<table title="net.trajano.doxdb.ext.XmlConfigurationProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./XmlConfigurationProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> XmlConfigurationProvider </td></tr>
 		</table></td></tr>
-		</table>>, URL="./XmlConfigurationProvider.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ext.Migrator
-	c120 [label=<<table title="net.trajano.doxdb.ext.Migrator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Migrator.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> Migrator </td></tr>
-		</table></td></tr>
-		</table>>, URL="./Migrator.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./XmlConfigurationProvider.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ext.Indexer
-	c121 [label=<<table title="net.trajano.doxdb.ext.Indexer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Indexer.html">
+	c233 [label=<<table title="net.trajano.doxdb.ext.Indexer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Indexer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Indexer </td></tr>
 		</table></td></tr>
-		</table>>, URL="./Indexer.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./Indexer.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.ext.DefaultEventHandler
+	c234 [label=<<table title="net.trajano.doxdb.ext.DefaultEventHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DefaultEventHandler.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DefaultEventHandler </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DefaultEventHandler.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ext.EventHandler
-	c122 [label=<<table title="net.trajano.doxdb.ext.EventHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventHandler.html">
+	c235 [label=<<table title="net.trajano.doxdb.ext.EventHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventHandler.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> EventHandler </td></tr>
 		</table></td></tr>
-		</table>>, URL="./EventHandler.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ext.DefaultEventHandler
-	c123 [label=<<table title="net.trajano.doxdb.ext.DefaultEventHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DefaultEventHandler.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DefaultEventHandler </td></tr>
-		</table></td></tr>
-		</table>>, URL="./DefaultEventHandler.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ext.ConfigurationProvider
-	c124 [label=<<table title="net.trajano.doxdb.ext.ConfigurationProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConfigurationProvider.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> ConfigurationProvider </td></tr>
-		</table></td></tr>
-		</table>>, URL="./ConfigurationProvider.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./EventHandler.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ext.CollectionAccessControl
-	c125 [label=<<table title="net.trajano.doxdb.ext.CollectionAccessControl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CollectionAccessControl.html">
+	c236 [label=<<table title="net.trajano.doxdb.ext.CollectionAccessControl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CollectionAccessControl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> CollectionAccessControl </td></tr>
 		</table></td></tr>
-		</table>>, URL="./CollectionAccessControl.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./CollectionAccessControl.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.ext.ConfigurationProvider
+	c237 [label=<<table title="net.trajano.doxdb.ext.ConfigurationProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConfigurationProvider.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> ConfigurationProvider </td></tr>
+		</table></td></tr>
+		</table>>, URL="./ConfigurationProvider.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.ext.Migrator
+	c238 [label=<<table title="net.trajano.doxdb.ext.Migrator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Migrator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> Migrator </td></tr>
+		</table></td></tr>
+		</table>>, URL="./Migrator.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.ext.XmlConfigurationProvider implements net.trajano.doxdb.ext.ConfigurationProvider
-	c124:p -> c119:p [dir=back,arrowtail=empty,style=dashed];
+	c237:p -> c232:p [dir=back,arrowtail=empty,style=dashed];
 	//net.trajano.doxdb.ext.DefaultEventHandler implements net.trajano.doxdb.ext.EventHandler
-	c122:p -> c123:p [dir=back,arrowtail=empty,style=dashed];
+	c235:p -> c234:p [dir=back,arrowtail=empty,style=dashed];
 }
 

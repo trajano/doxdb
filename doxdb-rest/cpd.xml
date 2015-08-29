@@ -2,9 +2,9 @@
 <pmd-cpd>
    <duplication lines="27" tokens="322">
       <file line="316"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\rest\DoxResource.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxResource.java"/>
       <file line="353"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\rest\DoxResource.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxResource.java"/>
       <codefragment><![CDATA[        final SearchResult results = dox.search(index, queryString, 50, from);
         //results.get
         final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
@@ -35,9 +35,9 @@
    </duplication>
    <duplication lines="29" tokens="251">
       <file line="154"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="203"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
 
         final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
@@ -70,9 +70,9 @@
    </duplication>
    <duplication lines="66" tokens="162">
       <file line="138"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
       <file line="128"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
       <codefragment><![CDATA[    }
 
     public String getSchemaName() {
@@ -142,9 +142,9 @@
    </duplication>
    <duplication lines="30" tokens="123">
       <file line="28"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
       <file line="27"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
       <codefragment><![CDATA[public class DoxOobTombstone {
 
     @Lob
@@ -178,9 +178,9 @@
    </duplication>
    <duplication lines="55" tokens="123">
       <file line="81"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxOobTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
       <file line="76"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\DoxTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
       <codefragment><![CDATA[    @Column(nullable = false,
         updatable = false,
         length = DoxLength.SCHEMA_NAME_LENGTH)
@@ -239,9 +239,9 @@
    </duplication>
    <duplication lines="17" tokens="123">
       <file line="138"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="184"
-            path="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\ejb\EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[    public SearchResult search(final String index,
         final String queryString,
         final int limit,

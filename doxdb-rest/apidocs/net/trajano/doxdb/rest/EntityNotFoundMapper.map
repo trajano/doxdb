@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./EntityNotFoundMapper.html" title="net.trajano.doxdb.rest.EntityNotFoundMapper" alt="" coords="69,118,221,143"/>
-<area shape="rect" id="node1" href="./EntityNotFoundMapper.html" title="&lt;TABLE&gt;" alt="" coords="58,107,231,155"/>
-<area shape="rect" id="node2_1" href="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ExceptionMapper.html" title="javax.ws.rs.ext.ExceptionMapper" alt="" coords="16,11,273,53"/>
-<area shape="rect" id="node2" href="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ExceptionMapper.html" title="&lt;TABLE&gt;" alt="" coords="5,5,284,59"/>
+<area shape="rect" id="node1_0" href="./EntityNotFoundMapper.html" title="net.trajano.doxdb.rest.EntityNotFoundMapper" alt="" coords="69,118,223,143"/>
+<area shape="rect" id="node1" href="./EntityNotFoundMapper.html" title="&lt;TABLE&gt;" alt="" coords="59,107,233,155"/>
+<area shape="rect" id="node2_1" href="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ExceptionMapper.html" title="javax.ws.rs.ext.ExceptionMapper" alt="" coords="16,11,276,53"/>
+<area shape="rect" id="node2" href="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ExceptionMapper.html" title="&lt;TABLE&gt;" alt="" coords="5,5,287,59"/>
 </map>

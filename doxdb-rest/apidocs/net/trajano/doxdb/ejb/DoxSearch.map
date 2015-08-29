@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./EsJaxRsSearchBean.html" title="net.trajano.doxdb.ejb.EsJaxRsSearchBean" alt="" coords="16,118,159,143"/>
-<area shape="rect" id="node1" href="./EsJaxRsSearchBean.html" title="&lt;TABLE&gt;" alt="" coords="5,107,169,155"/>
-<area shape="rect" id="node2_1" href="./DoxSearch.html" title="net.trajano.doxdb.ejb.DoxSearch" alt="" coords="45,11,129,53"/>
-<area shape="rect" id="node2" href="./DoxSearch.html" title="&lt;TABLE&gt;" alt="" coords="35,5,140,59"/>
+<area shape="rect" id="node1_0" href="./DoxSearch.html" title="net.trajano.doxdb.ejb.DoxSearch" alt="" coords="46,11,130,53"/>
+<area shape="rect" id="node1" href="./DoxSearch.html" title="&lt;TABLE&gt;" alt="" coords="35,5,141,59"/>
+<area shape="rect" id="node2_1" href="./EsJaxRsSearchBean.html" title="net.trajano.doxdb.ejb.EsJaxRsSearchBean" alt="" coords="16,118,160,143"/>
+<area shape="rect" id="node2" href="./EsJaxRsSearchBean.html" title="&lt;TABLE&gt;" alt="" coords="5,107,171,155"/>
 </map>

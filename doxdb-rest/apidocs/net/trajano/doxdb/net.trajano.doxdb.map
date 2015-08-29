@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./SearchResult.html" title="net.trajano.doxdb.SearchResult" alt="" coords="16,17,113,42"/>
-<area shape="rect" id="node1" href="./SearchResult.html" title="&lt;TABLE&gt;" alt="" coords="5,5,124,53"/>
-<area shape="rect" id="node2_1" href="./IndexView.html" title="net.trajano.doxdb.IndexView" alt="" coords="159,17,237,42"/>
-<area shape="rect" id="node2" href="./IndexView.html" title="&lt;TABLE&gt;" alt="" coords="148,5,248,53"/>
-<area shape="rect" id="node3_2" href="./DoxMeta.html" title="net.trajano.doxdb.DoxMeta" alt="" coords="283,17,355,42"/>
-<area shape="rect" id="node3" href="./DoxMeta.html" title="&lt;TABLE&gt;" alt="" coords="273,5,366,53"/>
-<area shape="rect" id="node4_3" href="./DoxID.html" title="net.trajano.doxdb.DoxID" alt="" coords="401,17,456,42"/>
-<area shape="rect" id="node4" href="./DoxID.html" title="&lt;TABLE&gt;" alt="" coords="391,5,467,53"/>
+<area shape="rect" id="node1_0" href="./DoxID.html" title="net.trajano.doxdb.DoxID" alt="" coords="16,17,73,42"/>
+<area shape="rect" id="node1" href="./DoxID.html" title="&lt;TABLE&gt;" alt="" coords="5,5,84,53"/>
+<area shape="rect" id="node2_1" href="./DoxMeta.html" title="net.trajano.doxdb.DoxMeta" alt="" coords="119,17,191,42"/>
+<area shape="rect" id="node2" href="./DoxMeta.html" title="&lt;TABLE&gt;" alt="" coords="109,5,202,53"/>
+<area shape="rect" id="node3_2" href="./SearchResult.html" title="net.trajano.doxdb.SearchResult" alt="" coords="237,17,335,42"/>
+<area shape="rect" id="node3" href="./SearchResult.html" title="&lt;TABLE&gt;" alt="" coords="226,5,346,53"/>
+<area shape="rect" id="node4_3" href="./IndexView.html" title="net.trajano.doxdb.IndexView" alt="" coords="381,17,461,42"/>
+<area shape="rect" id="node4" href="./IndexView.html" title="&lt;TABLE&gt;" alt="" coords="370,5,471,53"/>
 </map>

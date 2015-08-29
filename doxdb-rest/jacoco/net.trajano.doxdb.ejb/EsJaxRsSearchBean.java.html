@@ -63,10 +63,10 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc" id="L63">        final StringBuilder b = new StringBuilder();</span>
 <span class="nc bnc" id="L64" title="All 2 branches missed.">        for (final IndexView indexView : indexViews) {</span>
 <span class="nc" id="L65">            b.append(</span>
-<span class="nc" id="L66">                createObjectBuilder().add(&quot;index&quot;, createObjectBuilder()</span>
-<span class="nc" id="L67">                    .add(&quot;_index&quot;, configurationProvider.getMappedIndex(indexView.getIndex()))</span>
-<span class="nc" id="L68">                    .add(&quot;_type&quot;, indexView.getCollection())</span>
-<span class="nc" id="L69">                    .add(&quot;_id&quot;, indexView.getDoxID().toString())).build().toString());</span>
+                createObjectBuilder().add(&quot;index&quot;, createObjectBuilder()
+                    .add(&quot;_index&quot;, configurationProvider.getMappedIndex(indexView.getIndex()))
+                    .add(&quot;_type&quot;, indexView.getCollection())
+                    .add(&quot;_id&quot;, indexView.getDoxID().toString())).build().toString());
 <span class="nc" id="L70">            b.append(&quot;\n&quot;);</span>
 
 <span class="nc" id="L72">            final JsonObjectBuilder sourceBuilder = createObjectBuilder();</span>
@@ -104,10 +104,10 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc bnc" id="L104" title="All 2 branches missed.">        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {</span>
 
 <span class="nc" id="L106">            b.append(</span>
-<span class="nc" id="L107">                createObjectBuilder().add(&quot;delete&quot;, createObjectBuilder()</span>
-<span class="nc" id="L108">                    .add(&quot;_index&quot;, configurationProvider.getMappedIndex(indexType.getName()))</span>
-<span class="nc" id="L109">                    .add(&quot;_type&quot;, schemaName)</span>
-<span class="nc" id="L110">                    .add(&quot;_id&quot;, doxID.toString())).build().toString());</span>
+                createObjectBuilder().add(&quot;delete&quot;, createObjectBuilder()
+                    .add(&quot;_index&quot;, configurationProvider.getMappedIndex(indexType.getName()))
+                    .add(&quot;_type&quot;, schemaName)
+                    .add(&quot;_id&quot;, doxID.toString())).build().toString());
 <span class="nc" id="L111">            b.append(&quot;\n&quot;);</span>
 <span class="nc" id="L112">        }</span>
 
@@ -196,9 +196,9 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc" id="L196">        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add(&quot;query&quot;, queryString).add(&quot;default_operator&quot;, &quot;and&quot;);</span>
 <span class="nc" id="L197">        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add(&quot;simple_query_string&quot;, sqsBuilder);</span>
 <span class="nc" id="L198">        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder()</span>
-<span class="nc" id="L199">            .add(&quot;size&quot;, limit)</span>
-<span class="nc" id="L200">            .add(&quot;query&quot;, qBuilder)</span>
-<span class="nc" id="L201">            .add(&quot;from&quot;, from);</span>
+            .add(&quot;size&quot;, limit)
+            .add(&quot;query&quot;, qBuilder)
+            .add(&quot;from&quot;, from);
 
 <span class="nc" id="L203">        final JsonObject results = jestProvider.getTarget().path(index).path(schemaName).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</span>
 

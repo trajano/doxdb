@@ -5,24 +5,24 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.rest.DoxIDMapper
-	c557 [label=<<table title="net.trajano.doxdb.rest.DoxIDMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxIDMapper.html">
+	c548 [label=<<table title="net.trajano.doxdb.rest.DoxIDMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxIDMapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxIDMapper </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxIDMapper.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./DoxIDMapper.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.rest.DoxIDMapper implements javax.ws.rs.ext.ParamConverter<T>
-	c566:p -> c557:p [dir=back,arrowtail=empty,style=dashed];
+	c566:p -> c548:p [dir=back,arrowtail=empty,style=dashed];
 	// javax.ws.rs.ext.ParamConverter<T>
 	c566 [label=<<table title="javax.ws.rs.ext.ParamConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ParamConverter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ParamConverter&lt;T&gt; </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ParamConverter.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/javax/ws/rs/ext/ParamConverter.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

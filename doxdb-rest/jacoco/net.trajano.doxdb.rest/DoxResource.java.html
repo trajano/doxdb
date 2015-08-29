@@ -143,8 +143,8 @@ import net.trajano.doxdb.ws.SessionManager;
 <span class="nc" id="L143">                    w.println(&quot;\&quot;use strict\&quot;;&quot;);</span>
 <span class="nc" id="L144">                    w.print(&quot;(function() {&quot;);</span>
 <span class="nc" id="L145">                    w.print(&quot;angular.module('doxdb',['ngResource'])&quot;);</span>
-<span class="nc bnc" id="L146" title="All 2 branches missed.">                    for (final DoxType dox : dox.getConfiguration().getDox()) {</span>
-<span class="nc" id="L147">                        final String name = dox.getName();</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                    for (final DoxType doxType : dox.getConfiguration().getDox()) {</span>
+<span class="nc" id="L147">                        final String name = doxType.getName();</span>
 <span class="nc" id="L148">                        w.print(&quot;.factory('DoxDB&quot; + name + &quot;', ['$resource',function(r) {&quot;);</span>
 <span class="nc" id="L149">                        final String uri = uriInfo.getBaseUriBuilder().path(name).build() + &quot;/:id?v=:version&quot;;</span>
 <span class="nc" id="L150">                        w.print(&quot;return r('&quot; + uri + &quot;',{ 'id':'@_id','version':'@_version' });&quot;);</span>

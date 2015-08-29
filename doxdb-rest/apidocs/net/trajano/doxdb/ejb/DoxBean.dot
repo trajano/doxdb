@@ -5,24 +5,24 @@
 #
 
 digraph G {
-	edge [fontname="arial",fontsize=10,labelfontname="arial",labelfontsize=10];
-	node [fontname="arial",fontsize=10,shape=plaintext];
+	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
+	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// net.trajano.doxdb.ejb.DoxBean
+	c468 [label=<<table title="net.trajano.doxdb.ejb.DoxBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxBean.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxBean </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxLocal
 	c470 [label=<<table title="net.trajano.doxdb.ejb.DoxLocal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLocal.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DoxLocal </td></tr>
 		</table></td></tr>
-		</table>>, URL="./DoxLocal.html", fontname="arial", fontcolor="black", fontsize=10.0];
-	// net.trajano.doxdb.ejb.DoxBean
-	c471 [label=<<table title="net.trajano.doxdb.ejb.DoxBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxBean.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DoxBean </td></tr>
-		</table></td></tr>
-		</table>>, URL="./DoxBean.html", fontname="arial", fontcolor="black", fontsize=10.0];
+		</table>>, URL="./DoxLocal.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.ejb.DoxBean implements net.trajano.doxdb.ejb.DoxLocal
-	c470:p -> c471:p [dir=back,arrowtail=empty,style=dashed];
+	c470:p -> c468:p [dir=back,arrowtail=empty,style=dashed];
 }
 
