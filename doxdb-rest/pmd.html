@@ -122,13 +122,13 @@
 <th>Line</th></tr>
 <tr class="b">
 <td>Avoid unused private fields such as 'oobs'.</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L105">105</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L120">120</a></td></tr>
 <tr class="a">
 <td>Returning 'accessKey' may expose an internal array.</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L146">146</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L161">161</a></td></tr>
 <tr class="b">
 <td>The user-supplied array 'accessKey' is stored directly.</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L212">212</a></td></tr></table></div>
+<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L227">227</a></td></tr></table></div>
 <div class="section">
 <h3><a name="nettrajanodoxdbejbDoxBean.java"></a>net/trajano/doxdb/ejb/DoxBean.java</h3>
 <table border="0" class="bodyTable">
@@ -136,14 +136,8 @@
 <th>Violation</th>
 <th>Line</th></tr>
 <tr class="b">
-<td>If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L87">87</a></td></tr>
-<tr class="a">
-<td>If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L89">89</a></td></tr>
-<tr class="b">
 <td>Avoid declaring a variable if it is unreferenced before a possible exit point.</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L178">178</a></td></tr></table></div>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L162">162</a></td></tr></table></div>
 <div class="section">
 <h3><a name="nettrajanodoxdbejbDoxOob.java"></a>net/trajano/doxdb/ejb/DoxOob.java</h3>
 <table border="0" class="bodyTable">
@@ -205,99 +199,111 @@
 <td>Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'</td>
 <td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L198">198</a></td></tr></table></div>
 <div class="section">
-<h3><a name="nettrajanodoxdbrestDoxResource.java"></a>net/trajano/doxdb/rest/DoxResource.java</h3>
+<h3><a name="nettrajanodoxdbextXmlConfigurationProvider.java"></a>net/trajano/doxdb/ext/XmlConfigurationProvider.java</h3>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Violation</th>
 <th>Line</th></tr>
 <tr class="b">
+<td>If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation</td>
+<td><a href="./xref/net/trajano/doxdb/ext/XmlConfigurationProvider.html#L59">59</a></td></tr>
+<tr class="a">
+<td>If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation</td>
+<td><a href="./xref/net/trajano/doxdb/ext/XmlConfigurationProvider.html#L61">61</a></td></tr></table></div>
+<div class="section">
+<h3><a name="nettrajanodoxdbrestDoxResource.java"></a>net/trajano/doxdb/rest/DoxResource.java</h3>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>Violation</th>
+<th>Line</th></tr>
+<tr class="a">
 <td>This call to String.startsWith can be rewritten using String.charAt(0)</td>
 <td><a href="./xref/net/trajano/doxdb/rest/DoxResource.html#L96">96</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>Avoid unused method parameters such as 'collection'.</td>
 <td><a href="./xref/net/trajano/doxdb/rest/DoxResource.html#L209">209</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>Avoid unused method parameters such as 'opName'.</td>
 <td><a href="./xref/net/trajano/doxdb/rest/DoxResource.html#L210">210</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>This call to String.startsWith can be rewritten using String.charAt(0)</td>
 <td><a href="./xref/net/trajano/doxdb/rest/DoxResource.html#L301">301</a></td></tr></table></div>
 <div class="section">
 <h3><a name="nettrajanodoxdbschemaDoxPersistence.java"></a>net/trajano/doxdb/schema/DoxPersistence.java</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Violation</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>Parameter 'value' is not assigned and could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/DoxPersistence.html#L160">160</a></td></tr></table></div>
 <div class="section">
 <h3><a name="nettrajanodoxdbschemaDoxType.java"></a>net/trajano/doxdb/schema/DoxType.java</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Violation</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>Parameter 'value' is not assigned and could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/DoxType.html#L130">130</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>Parameter 'value' is not assigned and could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/DoxType.html#L163">163</a></td></tr>
-<tr class="a">
-<td>Parameter 'value' is not assigned and could be declared final</td>
-<td><a href="./xref/net/trajano/doxdb/schema/DoxType.html#L196">196</a></td></tr>
 <tr class="b">
 <td>Parameter 'value' is not assigned and could be declared final</td>
-<td><a href="./xref/net/trajano/doxdb/schema/DoxType.html#L234">234</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/schema/DoxType.html#L196">196</a></td></tr>
 <tr class="a">
+<td>Parameter 'value' is not assigned and could be declared final</td>
+<td><a href="./xref/net/trajano/doxdb/schema/DoxType.html#L234">234</a></td></tr>
+<tr class="b">
 <td>Parameter 'value' is not assigned and could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/DoxType.html#L268">268</a></td></tr></table></div>
 <div class="section">
 <h3><a name="nettrajanodoxdbschemaIndexType.java"></a>net/trajano/doxdb/schema/IndexType.java</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Violation</th>
 <th>Line</th></tr>
-<tr class="a">
+<tr class="b">
 <td>Parameter 'value' is not assigned and could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/IndexType.html#L76">76</a></td></tr>
-<tr class="b">
+<tr class="a">
 <td>Parameter 'value' is not assigned and could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/IndexType.html#L106">106</a></td></tr></table></div>
 <div class="section">
 <h3><a name="nettrajanodoxdbschemaObjectFactory.java"></a>net/trajano/doxdb/schema/ObjectFactory.java</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Violation</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>Avoid unnecessary constructors - the compiler will generate these for you</td>
 <td><a href="./xref/net/trajano/doxdb/schema/ObjectFactory.html#L36">36</a>&#x2013;<a href="./xref/net/trajano/doxdb/schema/ObjectFactory.html#L37">37</a></td></tr></table></div>
 <div class="section">
 <h3><a name="nettrajanodoxdbschemaReadAllType.java"></a>net/trajano/doxdb/schema/ReadAllType.java</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Violation</th>
 <th>Line</th></tr>
-<tr class="b">
-<td>Parameter 'v' is not assigned and could be declared final</td>
-<td><a href="./xref/net/trajano/doxdb/schema/ReadAllType.html#L44">44</a></td></tr>
 <tr class="a">
 <td>Parameter 'v' is not assigned and could be declared final</td>
-<td><a href="./xref/net/trajano/doxdb/schema/ReadAllType.html#L52">52</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/schema/ReadAllType.html#L44">44</a></td></tr>
 <tr class="b">
+<td>Parameter 'v' is not assigned and could be declared final</td>
+<td><a href="./xref/net/trajano/doxdb/schema/ReadAllType.html#L52">52</a></td></tr>
+<tr class="a">
 <td>Local variable 'c' could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/ReadAllType.html#L53">53</a></td></tr></table></div>
 <div class="section">
 <h3><a name="nettrajanodoxdbschemaSchemaType.java"></a>net/trajano/doxdb/schema/SchemaType.java</h3>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>Violation</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>Parameter 'value' is not assigned and could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/SchemaType.html#L106">106</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>Parameter 'value' is not assigned and could be declared final</td>
 <td><a href="./xref/net/trajano/doxdb/schema/SchemaType.html#L137">137</a></td></tr></table></div></div>
 	      </div>

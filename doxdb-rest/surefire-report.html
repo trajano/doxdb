@@ -96,11 +96,11 @@ function toggleDisplay(elementId) {
 <th>Time</th></tr>
 <tr class="b">
 <td>13</td>
+<td>2</td>
 <td>0</td>
 <td>0</td>
-<td>0</td>
-<td>100%</td>
-<td>8.991</td></tr></table><br />
+<td>84.615%</td>
+<td>8.321</td></tr></table><br />
 <p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div>
 <div class="section">
 <h2><a name="Package_List"></a>Package List</h2><a name="Package_List"></a>
@@ -117,11 +117,11 @@ function toggleDisplay(elementId) {
 <tr class="b">
 <td><a href="#net.trajano.doxdb.sample.test">net.trajano.doxdb.sample.test</a></td>
 <td>13</td>
+<td>2</td>
 <td>0</td>
 <td>0</td>
-<td>0</td>
-<td>100%</td>
-<td>8.991</td></tr></table><br />
+<td>84.615%</td>
+<td>8.321</td></tr></table><br />
 <p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p>
 <div class="section">
 <h3><a name="net.trajano.doxdb.sample.test"></a>net.trajano.doxdb.sample.test</h3><a name="net.trajano.doxdb.sample.test"></a>
@@ -152,16 +152,16 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.008</td></tr>
+<td>0.047</td></tr>
 <tr class="b">
-<td><a href="#net.trajano.doxdb.sample.testDoxBeanTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
+<td><a href="#net.trajano.doxdb.sample.testDoxBeanTest"><img src="images/icon_error_sml.gif" alt="" /></a></td>
 <td><a href="#net.trajano.doxdb.sample.testDoxBeanTest">DoxBeanTest</a></td>
+<td>2</td>
 <td>2</td>
 <td>0</td>
 <td>0</td>
-<td>0</td>
-<td>100%</td>
-<td>8.611</td></tr>
+<td>0%</td>
+<td>6.556</td></tr>
 <tr class="a">
 <td><a href="#net.trajano.doxdb.sample.testJsonValidationTest"><img src="images/icon_success_sml.gif" alt="" /></a></td>
 <td><a href="#net.trajano.doxdb.sample.testJsonValidationTest">JsonValidationTest</a></td>
@@ -170,7 +170,7 @@ function toggleDisplay(elementId) {
 <td>0</td>
 <td>0</td>
 <td>100%</td>
-<td>0.372</td></tr></table></div><br /></div>
+<td>1.718</td></tr></table></div><br /></div>
 <div class="section">
 <h2><a name="Test_Cases"></a>Test Cases</h2><a name="Test_Cases"></a>
 <p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p>
@@ -191,7 +191,7 @@ function toggleDisplay(elementId) {
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>testEqualsHashCodeToStringUtility</td>
-<td>0.008</td></tr>
+<td>0.037</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>testEqualsHashCodeToString</td>
@@ -203,7 +203,7 @@ function toggleDisplay(elementId) {
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>testInvalidCharacter</td>
-<td>0</td></tr>
+<td>0.01</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>testInvalidLength</td>
@@ -212,32 +212,80 @@ function toggleDisplay(elementId) {
 <h3><a name="DoxBeanTest"></a>DoxBeanTest</h3><a name="net.trajano.doxdb.sample.testDoxBeanTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>testCrud</td>
-<td>8.455</td></tr>
+<td><a href="#net.trajano.doxdb.sample.test.DoxBeanTest.testCrud"><img src="images/icon_error_sml.gif" alt="" /></a></td>
+<td><a href="#net.trajano.doxdb.sample.test.DoxBeanTest.testCrud">testCrud</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;net.trajano.doxdb.sample.test.DoxBeanTest.testCrud&apos;);"><span style="display:inline;" id="net.trajano.doxdb.sample.test.DoxBeanTest.testCrudoff"> + </span><span style="display:none;" id="net.trajano.doxdb.sample.test.DoxBeanTest.testCrudon"> - </span>[ Detail ]</a></div></td>
+<td>6.428</td></tr>
 <tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>testFailValidation</td>
-<td>0.156</td></tr></table></div>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr class="a">
+<td></td>
+<td>
+<div id="net.trajano.doxdb.sample.test.DoxBeanTest.testCruderror" style="display:none;">
+<div>
+<pre>java.lang.NullPointerException: nullat net.trajano.doxdb.ejb.DoxBean.validate(DoxBean.java:512)at net.trajano.doxdb.ejb.DoxBean.create(DoxBean.java:116)at net.trajano.doxdb.sample.test.DoxBeanTest.testCrud(DoxBeanTest.java:20)</pre></div></div></td>
+<td></td></tr>
+<tr class="b">
+<td><a href="#net.trajano.doxdb.sample.test.DoxBeanTest.testFailValidation"><img src="images/icon_error_sml.gif" alt="" /></a></td>
+<td><a href="#net.trajano.doxdb.sample.test.DoxBeanTest.testFailValidation">testFailValidation</a>
+<div class="detailToggle" style="display:inline"><a href="javascript:toggleDisplay(&apos;net.trajano.doxdb.sample.test.DoxBeanTest.testFailValidation&apos;);"><span style="display:inline;" id="net.trajano.doxdb.sample.test.DoxBeanTest.testFailValidationoff"> + </span><span style="display:none;" id="net.trajano.doxdb.sample.test.DoxBeanTest.testFailValidationon"> - </span>[ Detail ]</a></div></td>
+<td>0.128</td></tr>
+<tr class="a">
+<td></td>
+<td>Unexpected exception, expected&lt;javax.validation.ValidationException&gt; but was&lt;java.lang.NullPointerException&gt;</td>
+<td></td></tr>
+<tr class="b">
+<td></td>
+<td>
+<div id="net.trajano.doxdb.sample.test.DoxBeanTest.testFailValidationerror" style="display:none;">
+<div>
+<pre>java.lang.Exception: Unexpected exception, expected&lt;javax.validation.ValidationException&gt; but was&lt;java.lang.NullPointerException&gt;at net.trajano.doxdb.ejb.DoxBean.validate(DoxBean.java:512)at net.trajano.doxdb.ejb.DoxBean.create(DoxBean.java:116)at net.trajano.doxdb.sample.test.DoxBeanTest.testFailValidation(DoxBeanTest.java:35)</pre></div></div></td>
+<td></td></tr></table></div>
 <div class="section">
 <h3><a name="JsonValidationTest"></a>JsonValidationTest</h3><a name="net.trajano.doxdb.sample.testJsonValidationTest"></a>
 <table border="1" class="bodyTable">
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>testMediaType</td>
-<td>0.316</td></tr>
+<td>0.33</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>testJson</td>
-<td>0.018</td></tr>
+<td>1.345</td></tr>
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>testJsonWithExtra</td>
-<td>0.019</td></tr>
+<td>0.024</td></tr>
 <tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>testJsonWithBadExtra</td>
 <td>0.019</td></tr></table></div><br /></div>
+<div class="section">
+<h2><a name="Failure_Details"></a>Failure Details</h2><a name="Failure_Details"></a>
+<p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br />
+<table border="1" class="bodyTable">
+<tr class="a">
+<td><img src="images/icon_error_sml.gif" alt="" /></td>
+<td><a name="net.trajano.doxdb.sample.test.DoxBeanTest.testCrud"></a>testCrud</td></tr>
+<tr class="b">
+<td></td>
+<td>java.lang.NullPointerException:</td></tr>            
+<tr class="a">
+<td></td>
+<td>
+<div id="testCruderror"><a href="./xref-test/net/trajano/doxdb/sample/test/DoxBeanTest.html#20">net.trajano.doxdb.sample.test.DoxBeanTest:20</a></div></td></tr>
+<tr class="b">
+<td><img src="images/icon_error_sml.gif" alt="" /></td>
+<td><a name="net.trajano.doxdb.sample.test.DoxBeanTest.testFailValidation"></a>testFailValidation</td></tr>
+<tr class="a">
+<td></td>
+<td>java.lang.Exception: Unexpected exception, expected&lt;javax.validation.ValidationException&gt; but was&lt;java.lang.NullPointerException&gt;</td></tr>            
+<tr class="b">
+<td></td>
+<td>
+<div id="testFailValidationerror"><a href="./xref-test/net/trajano/doxdb/sample/test/DoxBeanTest.html#35">net.trajano.doxdb.sample.test.DoxBeanTest:35</a></div></td></tr></table><br /></div>
 	      </div>
 	    </article>
 	  </div>
