@@ -147,7 +147,7 @@ import net.trajano.doxdb.ws.SessionManager;
 <span class="nc" id="L147">                        final String name = doxType.getName();</span>
 <span class="nc" id="L148">                        w.print(&quot;.factory('DoxDB&quot; + name + &quot;', ['$resource',function(r){&quot;);</span>
 <span class="nc" id="L149">                        final String uri = uriInfo.getBaseUriBuilder().path(name).build() + &quot;/:id?v=:version&quot;;</span>
-<span class="nc" id="L150">                        w.print(&quot;return r('&quot; + uri + &quot;',{'id':'@_id','version':'@_version });&quot;);</span>
+<span class="nc" id="L150">                        w.print(&quot;return r('&quot; + uri + &quot;',{'id':'@_id','version':'@_version'});&quot;);</span>
 <span class="nc" id="L151">                        w.print(&quot;}])&quot;);</span>
 <span class="nc" id="L152">                    }</span>
 <span class="nc" id="L153">                    w.print(&quot;;})();&quot;);</span>
