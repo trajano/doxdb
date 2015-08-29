@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-28T23:57:58.267">
+<pmd version="5.0.5" timestamp="2015-08-29T00:38:55.511">
 <file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\src\main\java\net\trajano\doxdb\DoxID.java">
 <violation beginline="70" endline="74" begincolumn="9" endcolumn="9" rule="AvoidArrayLoops" ruleset="Optimization" package="net.trajano.doxdb" class="DoxID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#AvoidArrayLoops" priority="3">
 System.arraycopy is more efficient
@@ -60,6 +60,60 @@ Returning 'content' may expose an internal array.
 </violation>
 <violation beginline="140" endline="140" begincolumn="28" endcolumn="47" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb.ejb" class="DoxTombstone" method="setContent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
 The user-supplied array 'content' is stored directly.
+</violation>
+</file>
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\DoxPersistence.java">
+<violation beginline="160" endline="160" begincolumn="37" endcolumn="48" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxPersistence" method="setElasticSearchUri" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+</file>
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\DoxType.java">
+<violation beginline="130" endline="130" begincolumn="25" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+<violation beginline="163" endline="163" begincolumn="25" endcolumn="40" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setSize" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+<violation beginline="196" endline="196" begincolumn="24" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setOob" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+<violation beginline="234" endline="234" begincolumn="28" endcolumn="44" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setReadAll" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+<violation beginline="268" endline="268" begincolumn="28" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxType" method="setOobSize" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+</file>
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\IndexType.java">
+<violation beginline="76" endline="76" begincolumn="25" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="IndexType" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+<violation beginline="106" endline="106" begincolumn="31" endcolumn="42" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="IndexType" method="setMappedName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+</file>
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\ObjectFactory.java">
+<violation beginline="36" endline="37" begincolumn="12" endcolumn="5" rule="UnnecessaryConstructor" ruleset="Controversial" package="net.trajano.doxdb.schema" class="ObjectFactory" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UnnecessaryConstructor" priority="3">
+Avoid unnecessary constructors - the compiler will generate these for you
+</violation>
+</file>
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\ReadAllType.java">
+<violation beginline="44" endline="44" begincolumn="17" endcolumn="24" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'v' is not assigned and could be declared final
+</violation>
+<violation beginline="52" endline="52" begincolumn="41" endcolumn="48" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" method="fromValue" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'v' is not assigned and could be declared final
+</violation>
+<violation beginline="53" endline="53" begincolumn="14" endcolumn="26" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" method="fromValue" variable="c" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+Local variable 'c' could be declared final
+</violation>
+</file>
+<file name="C:\Program Files (x86)\Git\p\doxdb\doxdb-rest\target\generated-sources\xjc\net\trajano\doxdb\schema\SchemaType.java">
+<violation beginline="106" endline="106" begincolumn="28" endcolumn="40" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="SchemaType" method="setVersion" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+<violation beginline="137" endline="137" begincolumn="29" endcolumn="40" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="SchemaType" method="setLocation" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
 </violation>
 </file>
 </pmd>

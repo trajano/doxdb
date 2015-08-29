@@ -8,4 +8,4 @@
 -private
 -quiet
 -sourcepath
-'C:/Program Files (x86)/Git/p/doxdb/doxdb-rest/src/test/java'
+'C:/Program Files (x86)/Git/p/doxdb/doxdb-rest/src/test/java;C:/Program Files (x86)/Git/p/doxdb/doxdb-rest/target/generated-test-sources/test-annotations'
