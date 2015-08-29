@@ -74,45 +74,6 @@
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
-<td>net/trajano/doxdb/rest/DoxResource.java</td>
-<td><a href="./xref/net/trajano/doxdb/rest/DoxResource.html#L316">316</a></td></tr>
-<tr class="a">
-<td>net/trajano/doxdb/rest/DoxResource.java</td>
-<td><a href="./xref/net/trajano/doxdb/rest/DoxResource.html#L353">353</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>        final SearchResult results = dox.search(index, queryString, 50, from);
-        //results.get
-        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
-        for (final IndexView hit : results.getHits()) {
-            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
-            final String id = hit.getDoxID().toString();
-            for (final Entry&lt;String, BigDecimal&gt; entry : hit.getNumbers()) {
-                hitBuilder.add(entry.getKey(), entry.getValue());
-            }
-            for (final Entry&lt;String, String&gt; entry : hit.getStrings()) {
-                hitBuilder.add(entry.getKey(), entry.getValue());
-            }
-            hitBuilder.add(&quot;_collection&quot;, hit.getCollection());
-            if (!hit.isMasked()) {
-                hitBuilder.add(&quot;_id&quot;, id);
-                hitBuilder.add(&quot;_url&quot;, uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
-            }
-            hitsBuilder.add(hitBuilder);
-        }
-        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add(&quot;totalHits&quot;, results.getTotalHits()).add(&quot;hits&quot;, hitsBuilder);
-        if (results.getBottomDoc() != null) {
-            final String nextPage = uriInfo.getBaseUriBuilder().path(&quot;search&quot;).path(index).queryParam(&quot;q&quot;, queryString).queryParam(&quot;f&quot;, results.getBottomDoc()).build().toASCIIString();
-            jsonBuilder.add(&quot;bottomDoc&quot;, results.getBottomDoc()).add(&quot;next&quot;, nextPage);
-        }
-        final JsonObject resultJson = jsonBuilder.build();
-        return Response.ok(resultJson).cacheControl(NO_CACHE).build();
-    }</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
 <td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L154">154</a></td></tr>
 <tr class="a">

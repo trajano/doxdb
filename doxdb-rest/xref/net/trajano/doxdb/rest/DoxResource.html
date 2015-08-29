@@ -149,13 +149,13 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>                 <strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">final</strong> PrintStream w = <strong class="jxr_keyword">new</strong> PrintStream(os)) {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>                     w.println(<span class="jxr_string">"\&quot;use strict\&quot;;"</span>);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>                     w.print(<span class="jxr_string">"(function() {"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>                     w.print(<span class="jxr_string">"(function(){"</span>);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>                     w.print(<span class="jxr_string">"angular.module('doxdb',['ngResource'])"</span>);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> DoxType doxType : dox.getConfiguration().getDox()) {
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>                         <strong class="jxr_keyword">final</strong> String name = doxType.getName();
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>                         w.print(<span class="jxr_string">".factory('DoxDB"</span> + name + <span class="jxr_string">"', ['$resource',function(r) {"</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>                         w.print(<span class="jxr_string">".factory('DoxDB"</span> + name + <span class="jxr_string">"', ['$resource',function(r){"</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a>                         <strong class="jxr_keyword">final</strong> String uri = uriInfo.getBaseUriBuilder().path(name).build() + <span class="jxr_string">"/:id?v=:version"</span>;
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>                         w.print(<span class="jxr_string">"return r('"</span> + uri + <span class="jxr_string">"',{ 'id':'@_id','version':'@_version' });"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>                         w.print(<span class="jxr_string">"return r('"</span> + uri + <span class="jxr_string">"',{'id':'@_id','version':'@_version });"</span>);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a>                         w.print(<span class="jxr_string">"}])"</span>);
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>                     }
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>                     w.print(<span class="jxr_string">";})();"</span>);
@@ -313,79 +313,78 @@
 <a class="jxr_linenumber" name="L305" href="#L305">305</a>         }
 <a class="jxr_linenumber" name="L306" href="#L306">306</a>     }
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>     @GET
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>     @Path(<span class="jxr_string">"search/{index}"</span>)
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>     @Produces(RESPONSE_TYPE)
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>     <strong class="jxr_keyword">public</strong> Response simpleSearch(@PathParam(<span class="jxr_string">"index"</span>) <strong class="jxr_keyword">final</strong> String index,
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>         @QueryParam(<span class="jxr_string">"q"</span>) <strong class="jxr_keyword">final</strong> String queryString,
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>         @QueryParam(<span class="jxr_string">"f"</span>) <strong class="jxr_keyword">final</strong> Integer from,
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>         @Context <strong class="jxr_keyword">final</strong> UriInfo uriInfo) {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/SearchResult.html">SearchResult</a> results = dox.search(index, queryString, 50, from);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>         <em class="jxr_comment">//results.get</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>         <strong class="jxr_keyword">final</strong> JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> IndexView hit : results.getHits()) {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>             <strong class="jxr_keyword">final</strong> JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>             <strong class="jxr_keyword">final</strong> String id = hit.getDoxID().toString();
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Entry&lt;String, BigDecimal&gt; entry : hit.getNumbers()) {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>                 hitBuilder.add(entry.getKey(), entry.getValue());
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>             }
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Entry&lt;String, String&gt; entry : hit.getStrings()) {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>                 hitBuilder.add(entry.getKey(), entry.getValue());
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>             }
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>             hitBuilder.add(<span class="jxr_string">"_collection"</span>, hit.getCollection());
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>             <strong class="jxr_keyword">if</strong> (!hit.isMasked()) {
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>                 hitBuilder.add(<span class="jxr_string">"_id"</span>, id);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>                 hitBuilder.add(<span class="jxr_string">"_url"</span>, uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>             }
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>             hitsBuilder.add(hitBuilder);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>         }
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>         <strong class="jxr_keyword">final</strong> JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add(<span class="jxr_string">"totalHits"</span>, results.getTotalHits()).add(<span class="jxr_string">"hits"</span>, hitsBuilder);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>         <strong class="jxr_keyword">if</strong> (results.getBottomDoc() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>             <strong class="jxr_keyword">final</strong> String nextPage = uriInfo.getBaseUriBuilder().path(<span class="jxr_string">"search"</span>).path(index).queryParam(<span class="jxr_string">"q"</span>, queryString).queryParam(<span class="jxr_string">"f"</span>, results.getBottomDoc()).build().toASCIIString();
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>             jsonBuilder.add(<span class="jxr_string">"bottomDoc"</span>, results.getBottomDoc()).add(<span class="jxr_string">"next"</span>, nextPage);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>         }
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <strong class="jxr_keyword">final</strong> JsonObject resultJson = jsonBuilder.build();
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>         <strong class="jxr_keyword">return</strong> Response.ok(resultJson).cacheControl(NO_CACHE).build();
-<a class="jxr_linenumber" name="L342" href="#L342">342</a>     }
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
-<a class="jxr_linenumber" name="L344" href="#L344">344</a>     @GET
-<a class="jxr_linenumber" name="L345" href="#L345">345</a>     @Path(<span class="jxr_string">"search/{index}/{schemaName}"</span>)
-<a class="jxr_linenumber" name="L346" href="#L346">346</a>     @Produces(RESPONSE_TYPE)
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     <strong class="jxr_keyword">public</strong> Response simpleSearchWithSchemaName(@PathParam(<span class="jxr_string">"index"</span>) <strong class="jxr_keyword">final</strong> String index,
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>         @PathParam(<span class="jxr_string">"schemaName"</span>) <strong class="jxr_keyword">final</strong> String schemaName,
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>         @QueryParam(<span class="jxr_string">"q"</span>) <strong class="jxr_keyword">final</strong> String queryString,
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>         @QueryParam(<span class="jxr_string">"f"</span>) <strong class="jxr_keyword">final</strong> Integer from,
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>         @Context <strong class="jxr_keyword">final</strong> UriInfo uriInfo) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/SearchResult.html">SearchResult</a> results = dox.searchWithSchemaName(index, schemaName, queryString, 50, from);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>         <em class="jxr_comment">//results.get</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>         <strong class="jxr_keyword">final</strong> JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> IndexView hit : results.getHits()) {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>             <strong class="jxr_keyword">final</strong> JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>             <strong class="jxr_keyword">final</strong> String id = hit.getDoxID().toString();
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Entry&lt;String, BigDecimal&gt; entry : hit.getNumbers()) {
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>                 hitBuilder.add(entry.getKey(), entry.getValue());
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>             }
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Entry&lt;String, String&gt; entry : hit.getStrings()) {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>                 hitBuilder.add(entry.getKey(), entry.getValue());
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>             }
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>             hitBuilder.add(<span class="jxr_string">"_collection"</span>, hit.getCollection());
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>             <strong class="jxr_keyword">if</strong> (!hit.isMasked()) {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>                 hitBuilder.add(<span class="jxr_string">"_id"</span>, id);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>                 hitBuilder.add(<span class="jxr_string">"_url"</span>, uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>             }
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>             hitsBuilder.add(hitBuilder);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>         }
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>         <strong class="jxr_keyword">final</strong> JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add(<span class="jxr_string">"totalHits"</span>, results.getTotalHits()).add(<span class="jxr_string">"hits"</span>, hitsBuilder);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>         <strong class="jxr_keyword">if</strong> (results.getBottomDoc() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>             <strong class="jxr_keyword">final</strong> String nextPage = uriInfo.getBaseUriBuilder().path(<span class="jxr_string">"search"</span>).path(index).queryParam(<span class="jxr_string">"q"</span>, queryString).queryParam(<span class="jxr_string">"f"</span>, results.getBottomDoc()).build().toASCIIString();
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>             jsonBuilder.add(<span class="jxr_string">"bottomDoc"</span>, results.getBottomDoc()).add(<span class="jxr_string">"next"</span>, nextPage);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>         }
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>         <strong class="jxr_keyword">final</strong> JsonObject resultJson = jsonBuilder.build();
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>         <strong class="jxr_keyword">return</strong> Response.ok(resultJson).cacheControl(NO_CACHE).build();
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>     }
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> }
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">     * This builds the search result object except for the link to the next</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">     * page.</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">     * @param uriInfo</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">     *            context to build the URI</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">     * @param results</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">     *            the search results from the EJB</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">     * @return JSON Object builder</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>     <strong class="jxr_keyword">private</strong> JsonObjectBuilder searchResultBuilder(<strong class="jxr_keyword">final</strong> UriInfo uriInfo,
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/SearchResult.html">SearchResult</a> results) {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>         <strong class="jxr_keyword">final</strong> JsonObjectBuilder jsonBuilder;
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>         <strong class="jxr_keyword">final</strong> JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> IndexView hit : results.getHits()) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>             <strong class="jxr_keyword">final</strong> JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>             <strong class="jxr_keyword">final</strong> String id = hit.getDoxID().toString();
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Entry&lt;String, BigDecimal&gt; entry : hit.getNumbers()) {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>                 hitBuilder.add(entry.getKey(), entry.getValue());
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>             }
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Entry&lt;String, String&gt; entry : hit.getStrings()) {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>                 hitBuilder.add(entry.getKey(), entry.getValue());
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>             }
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>             hitBuilder.add(<span class="jxr_string">"_collection"</span>, hit.getCollection());
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>             <strong class="jxr_keyword">if</strong> (!hit.isMasked()) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>                 hitBuilder.add(<span class="jxr_string">"_id"</span>, id);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>                 hitBuilder.add(<span class="jxr_string">"_url"</span>, uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>             }
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>             hitsBuilder.add(hitBuilder);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>         }
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>         jsonBuilder = Json.createObjectBuilder().add(<span class="jxr_string">"totalHits"</span>, results.getTotalHits()).add(<span class="jxr_string">"hits"</span>, hitsBuilder);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>         <strong class="jxr_keyword">return</strong> jsonBuilder;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>     }
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>     @GET
+<a class="jxr_linenumber" name="L344" href="#L344">344</a>     @Path(<span class="jxr_string">"search/{index}"</span>)
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>     @Produces(RESPONSE_TYPE)
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>     <strong class="jxr_keyword">public</strong> Response simpleSearch(@PathParam(<span class="jxr_string">"index"</span>) <strong class="jxr_keyword">final</strong> String index,
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>         @QueryParam(<span class="jxr_string">"q"</span>) <strong class="jxr_keyword">final</strong> String queryString,
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>         @QueryParam(<span class="jxr_string">"f"</span>) <strong class="jxr_keyword">final</strong> Integer from,
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>         @Context <strong class="jxr_keyword">final</strong> UriInfo uriInfo) {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/SearchResult.html">SearchResult</a> results = dox.search(index, queryString, 50, from);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>         <strong class="jxr_keyword">final</strong> JsonObjectBuilder resultBuilder = searchResultBuilder(uriInfo, results);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>         <strong class="jxr_keyword">if</strong> (results.getBottomDoc() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>             <strong class="jxr_keyword">final</strong> String nextPage = uriInfo.getBaseUriBuilder().path(<span class="jxr_string">"search"</span>).path(index).queryParam(<span class="jxr_string">"q"</span>, queryString).queryParam(<span class="jxr_string">"f"</span>, results.getBottomDoc()).build().toASCIIString();
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>             resultBuilder.add(<span class="jxr_string">"bottomDoc"</span>, results.getBottomDoc()).add(<span class="jxr_string">"next"</span>, nextPage);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>         }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>         <strong class="jxr_keyword">final</strong> JsonObject resultJson = resultBuilder.build();
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>         <strong class="jxr_keyword">return</strong> Response.ok(resultJson).cacheControl(NO_CACHE).build();
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>     }
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>     @GET
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>     @Path(<span class="jxr_string">"search/{index}/{schemaName}"</span>)
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>     @Produces(RESPONSE_TYPE)
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>     <strong class="jxr_keyword">public</strong> Response simpleSearchWithSchemaName(@PathParam(<span class="jxr_string">"index"</span>) <strong class="jxr_keyword">final</strong> String index,
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>         @PathParam(<span class="jxr_string">"schemaName"</span>) <strong class="jxr_keyword">final</strong> String schemaName,
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>         @QueryParam(<span class="jxr_string">"q"</span>) <strong class="jxr_keyword">final</strong> String queryString,
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>         @QueryParam(<span class="jxr_string">"f"</span>) <strong class="jxr_keyword">final</strong> Integer from,
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>         @Context <strong class="jxr_keyword">final</strong> UriInfo uriInfo) {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../net/trajano/doxdb/SearchResult.html">SearchResult</a> results = dox.searchWithSchemaName(index, schemaName, queryString, 50, from);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>         <strong class="jxr_keyword">final</strong> JsonObjectBuilder resultBuilder = searchResultBuilder(uriInfo, results);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>         <strong class="jxr_keyword">if</strong> (results.getBottomDoc() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>             <strong class="jxr_keyword">final</strong> String nextPage = uriInfo.getBaseUriBuilder().path(<span class="jxr_string">"search"</span>).path(index).path(schemaName).queryParam(<span class="jxr_string">"q"</span>, queryString).queryParam(<span class="jxr_string">"f"</span>, results.getBottomDoc()).build().toASCIIString();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>             resultBuilder.add(<span class="jxr_string">"bottomDoc"</span>, results.getBottomDoc()).add(<span class="jxr_string">"next"</span>, nextPage);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>         }
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>         <strong class="jxr_keyword">final</strong> JsonObject resultJson = resultBuilder.build();
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>         <strong class="jxr_keyword">return</strong> Response.ok(resultJson).cacheControl(NO_CACHE).build();
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>     }
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2015 <a href="http://www.trajano.net/">Trajano</a>. All rights reserved.</div>

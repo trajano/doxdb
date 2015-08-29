@@ -1,38 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
-   <duplication lines="27" tokens="322">
-      <file line="316"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxResource.java"/>
-      <file line="353"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxResource.java"/>
-      <codefragment><![CDATA[        final SearchResult results = dox.search(index, queryString, 50, from);
-        //results.get
-        final JsonArrayBuilder hitsBuilder = Json.createArrayBuilder();
-        for (final IndexView hit : results.getHits()) {
-            final JsonObjectBuilder hitBuilder = Json.createObjectBuilder();
-            final String id = hit.getDoxID().toString();
-            for (final Entry<String, BigDecimal> entry : hit.getNumbers()) {
-                hitBuilder.add(entry.getKey(), entry.getValue());
-            }
-            for (final Entry<String, String> entry : hit.getStrings()) {
-                hitBuilder.add(entry.getKey(), entry.getValue());
-            }
-            hitBuilder.add("_collection", hit.getCollection());
-            if (!hit.isMasked()) {
-                hitBuilder.add("_id", id);
-                hitBuilder.add("_url", uriInfo.getBaseUriBuilder().path(hit.getCollection()).path(id).build().toString());
-            }
-            hitsBuilder.add(hitBuilder);
-        }
-        final JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add("totalHits", results.getTotalHits()).add("hits", hitsBuilder);
-        if (results.getBottomDoc() != null) {
-            final String nextPage = uriInfo.getBaseUriBuilder().path("search").path(index).queryParam("q", queryString).queryParam("f", results.getBottomDoc()).build().toASCIIString();
-            jsonBuilder.add("bottomDoc", results.getBottomDoc()).add("next", nextPage);
-        }
-        final JsonObject resultJson = jsonBuilder.build();
-        return Response.ok(resultJson).cacheControl(NO_CACHE).build();
-    }]]></codefragment>
-   </duplication>
    <duplication lines="29" tokens="251">
       <file line="154"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
