@@ -15,7 +15,7 @@ DoxDB REST API,net.trajano.doxdb.rest,DoxIDMapper,11,0,0,0,3,0,3,0,3,0
 DoxDB REST API,net.trajano.doxdb.rest,DoxRestApplication,26,0,0,0,2,0,2,0,2,0
 DoxDB REST API,net.trajano.doxdb.rest,OptimisticLockingMapper,11,0,0,0,2,0,2,0,2,0
 DoxDB REST API,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},127,0,10,0,15,0,7,0,2,0
-DoxDB REST API,net.trajano.doxdb.rest,DoxResource,568,0,38,0,92,0,35,0,16,0
+DoxDB REST API,net.trajano.doxdb.rest,DoxResource,603,0,38,0,102,0,35,0,16,0
 DoxDB REST API,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},76,0,12,0,10,0,8,0,2,0
 DoxDB REST API,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},83,0,10,0,10,0,7,0,2,0
 DoxDB REST API,net.trajano.doxdb,IndexView,126,0,0,0,35,0,19,0,19,0

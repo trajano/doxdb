@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 40,
              Errors: 1,
-             Warnings: 304,
+             Warnings: 303,
              Infos: 0
       </title>
             <link>http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html</link>
@@ -192,7 +192,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  17
+                  16
                 </td>
                 <td>
                   0

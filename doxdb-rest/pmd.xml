@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-29T04:51:08.445">
+<pmd version="5.0.5" timestamp="2015-08-30T14:35:00.989">
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxID.java">
 <violation beginline="70" endline="74" begincolumn="9" endcolumn="9" rule="AvoidArrayLoops" ruleset="Optimization" package="net.trajano.doxdb" class="DoxID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#AvoidArrayLoops" priority="3">
 System.arraycopy is more efficient
@@ -102,16 +102,16 @@ If you run in Java5 or newer and have concurrent access, you should use the Conc
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxResource.java">
-<violation beginline="96" endline="96" begincolumn="17" endcolumn="35" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="create" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
+<violation beginline="116" endline="116" begincolumn="17" endcolumn="35" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="create" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
 This call to String.startsWith can be rewritten using String.charAt(0)
 </violation>
-<violation beginline="209" endline="209" begincolumn="38" endcolumn="47" rule="UnusedFormalParameter" ruleset="Unused Code" package="net.trajano.doxdb.rest" class="DoxResource" method="op" variable="collection" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedFormalParameter" priority="3">
+<violation beginline="229" endline="229" begincolumn="38" endcolumn="47" rule="UnusedFormalParameter" ruleset="Unused Code" package="net.trajano.doxdb.rest" class="DoxResource" method="op" variable="collection" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused method parameters such as 'collection'.
 </violation>
-<violation beginline="210" endline="210" begincolumn="22" endcolumn="27" rule="UnusedFormalParameter" ruleset="Unused Code" package="net.trajano.doxdb.rest" class="DoxResource" method="op" variable="opName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedFormalParameter" priority="3">
+<violation beginline="230" endline="230" begincolumn="22" endcolumn="27" rule="UnusedFormalParameter" ruleset="Unused Code" package="net.trajano.doxdb.rest" class="DoxResource" method="op" variable="opName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused method parameters such as 'opName'.
 </violation>
-<violation beginline="301" endline="301" begincolumn="13" endcolumn="34" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="saveOrOp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
+<violation beginline="321" endline="321" begincolumn="13" endcolumn="34" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="saveOrOp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
 This call to String.startsWith can be rewritten using String.charAt(0)
 </violation>
 </file>
