@@ -63,7 +63,16 @@ import net.trajano.doxdb.ws.SessionManager;
 @RequestScoped
 public class DoxResource {
 
+    /**
+     * Cache control when the data should not be cached.
+     */
     private static final CacheControl NO_CACHE;
+
+    /**
+     * Cache control when the data can be cached. However, it should still not
+     * be persisted on disk
+     */
+    private static final CacheControl OK_CACHE;
 
     /**
      * <code>application/json</code> with the the UTF-8 character set. Needs to
@@ -74,8 +83,19 @@ public class DoxResource {
     static {
         NO_CACHE = new CacheControl();
         NO_CACHE.setNoCache(true);
+        NO_CACHE.setNoStore(true);
         NO_CACHE.setMaxAge(-1);
+        NO_CACHE.setProxyRevalidate(true);
+        NO_CACHE.setSMaxAge(-1);
         NO_CACHE.setMustRevalidate(true);
+
+        OK_CACHE = new CacheControl();
+        OK_CACHE.setNoCache(false);
+        OK_CACHE.setNoStore(true);
+        OK_CACHE.setMaxAge(3600);
+        OK_CACHE.setProxyRevalidate(true);
+        OK_CACHE.setSMaxAge(-1);
+        OK_CACHE.setMustRevalidate(true);
     }
 
     @EJB
@@ -125,7 +145,7 @@ public class DoxResource {
             return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Dox not found").build();
         }
         final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
-        return Response.ok(meta.getContentJson()).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();
+        return Response.ok(meta.getContentJson()).cacheControl(OK_CACHE).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     @GET
@@ -155,7 +175,7 @@ public class DoxResource {
             }
         };
 
-        return Response.ok(out).tag(dox.toString()).build();
+        return Response.ok(out).cacheControl(OK_CACHE).tag(dox.toString()).build();
     }
 
     /**
