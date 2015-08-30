@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.json.Json;
@@ -33,6 +34,7 @@ import net.trajano.doxdb.schema.IndexType;
  */
 @Stateless
 @Dependent
+@LocalBean
 public class EsJaxRsSearchBean implements
     DoxSearch {
 

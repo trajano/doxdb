@@ -1,4 +1,4 @@
-package net.trajano.doxdb.ejb;
+package net.trajano.doxdb;
 
 import java.nio.ByteBuffer;
 import java.security.Principal;
@@ -34,7 +34,6 @@ import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.bson.io.BasicOutputBuffer;
 
-import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.ejb.internal.DoxLength;
 import net.trajano.doxdb.internal.DoxPrincipal;
 

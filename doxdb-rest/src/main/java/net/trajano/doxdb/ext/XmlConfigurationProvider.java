@@ -52,7 +52,6 @@ import net.trajano.doxdb.schema.SchemaType;
  *
  * @author Archimedes Trajano
  */
-@Lock(LockType.READ)
 public class XmlConfigurationProvider implements
     ConfigurationProvider {
 
@@ -107,6 +106,7 @@ public class XmlConfigurationProvider implements
      * {@inheritDoc}
      */
     @Override
+    @Lock(LockType.READ)
     public SchemaType getCollectionSchema(final String schemaName) {
 
         return currentSchemaMap.get(schemaName);
@@ -116,6 +116,7 @@ public class XmlConfigurationProvider implements
      * {@inheritDoc}
      */
     @Override
+    @Lock(LockType.READ)
     public JsonSchema getContentSchema(final String location) {
 
         return jsonSchemaMap.get(location);
@@ -125,6 +126,7 @@ public class XmlConfigurationProvider implements
      * {@inheritDoc}
      */
     @Override
+    @Lock(LockType.READ)
     public DoxType getDox(final String schemaName) {
 
         return doxen.get(schemaName);
@@ -134,6 +136,7 @@ public class XmlConfigurationProvider implements
      * {@inheritDoc}
      */
     @Override
+    @Lock(LockType.READ)
     public String getMappedIndex(final String name) {
 
         final String mappedName = indexMap.get(name);
@@ -144,6 +147,7 @@ public class XmlConfigurationProvider implements
     }
 
     @Override
+    @Lock(LockType.READ)
     public DoxPersistence getPersistenceConfig() {
 
         return persistenceConfig;

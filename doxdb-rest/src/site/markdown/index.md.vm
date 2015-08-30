@@ -15,17 +15,21 @@ REST API and JPA entities.
       <groupId>${project.version}</groupId>
     </dependency>
     
-In addition `src/main/META-INF/persistence.xml` is required
-and must contain a reference to the `doxdb-rest.jar` and
-`net.trajano.doxdb.DoxMeta` class.  
+In addition `src/main/META-INF/persistence.xml` and the DoxDB JPA entity
+classes.  Though `jar-file` can also be used, it can cause problems with
+some IDEs specifically Eclipse, by avoiding it we avoid the errors
+associated with it and be able to enable JPA support on the IDE.  
 
     <?xml version="1.0" encoding="UTF-8"?>
     <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       version="2.1">
       <persistence-unit name="default">
-        <jar-file>lib/doxdb-rest-${project.version}.jar</jar-file>
+        <class>net.trajano.doxdb.Dox</class>
         <class>net.trajano.doxdb.DoxMeta</class>
+        <class>net.trajano.doxdb.DoxOob</class>
+        <class>net.trajano.doxdb.DoxOobTombstone</class>
+        <class>net.trajano.doxdb.DoxTombstone</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 	  </persistence-unit>
     </persistence>

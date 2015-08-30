@@ -1,4 +1,4 @@
-package net.trajano.doxdb.ejb;
+package net.trajano.doxdb;
 
 import java.util.Date;
 
@@ -15,17 +15,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.ejb.internal.DoxLength;
 
 @Entity
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = {
         "doxId",
-        "schemaName",
-        "name"
+        "schemaName"
 }) )
-public class DoxOobTombstone {
+public class DoxTombstone {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -55,6 +53,7 @@ public class DoxOobTombstone {
     private Date deletedOn;
 
     @Column(nullable = false,
+        updatable = false,
         columnDefinition = "CHAR(32)",
         length = DoxID.LENGTH)
     private String doxId;
@@ -72,11 +71,6 @@ public class DoxOobTombstone {
         updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
-
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.OOB_NAME_LENGTH)
-    private String name;
 
     @Column(nullable = false,
         updatable = false,
@@ -132,11 +126,6 @@ public class DoxOobTombstone {
         return lastUpdatedOn;
     }
 
-    public String getName() {
-
-        return name;
-    }
-
     public String getSchemaName() {
 
         return schemaName;
@@ -172,14 +161,6 @@ public class DoxOobTombstone {
         this.deletedOn = deletedOn;
     }
 
-    /**
-     * Sets the Dox ID value using a {@link DoxID}. This internally converts it
-     * to a string as a workaround when JPA converters are not working as
-     * expected.
-     *
-     * @param doxId
-     *            Dox ID
-     */
     public void setDoxId(final DoxID doxId) {
 
         this.doxId = doxId.toString();
@@ -198,11 +179,6 @@ public class DoxOobTombstone {
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
         this.lastUpdatedOn = lastUpdatedOn;
-    }
-
-    public void setName(final String name) {
-
-        this.name = name;
     }
 
     public void setSchemaName(final String schemaName) {

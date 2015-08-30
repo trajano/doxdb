@@ -4,8 +4,11 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
 	version="2.1">
 	<persistence-unit name="default">
-		<jar-file>lib/doxdb-rest-${project.version}.jar</jar-file>
 		<class>net.trajano.doxdb.DoxMeta</class>
+		<class>net.trajano.doxdb.Dox</class>
+		<class>net.trajano.doxdb.DoxOob</class>
+		<class>net.trajano.doxdb.DoxTombstone</class>
+		<class>net.trajano.doxdb.DoxOobTombstone</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="eclipselink.logging.logger" value="JavaLogger" />

@@ -1,4 +1,4 @@
-package net.trajano.doxdb.ejb;
+package net.trajano.doxdb;
 
 import java.util.Date;
 
@@ -9,27 +9,27 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.ejb.internal.DoxLength;
 
 @Entity
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = {
-        "doxId",
-        "schemaName"
+        "parentId",
+        "name"
 }) )
-public class DoxTombstone {
+public class DoxOob {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(nullable = false,
-        updatable = false,
         length = DoxLength.CONTENT_LENGTH)
     private byte[] content;
 
@@ -43,44 +43,28 @@ public class DoxTombstone {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.PRINCIPAL_LENGTH)
-    private String deletedBy;
-
-    @Column(nullable = false,
-        updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deletedOn;
-
-    @Column(nullable = false,
-        updatable = false,
-        columnDefinition = "CHAR(32)",
-        length = DoxID.LENGTH)
-    private String doxId;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(nullable = false,
-        updatable = false,
         length = DoxLength.PRINCIPAL_LENGTH)
     private String lastUpdatedBy;
 
-    @Column(nullable = false,
-        updatable = false)
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
 
     @Column(nullable = false,
         updatable = false,
-        length = DoxLength.SCHEMA_NAME_LENGTH)
-    private String schemaName;
+        length = DoxLength.OOB_NAME_LENGTH)
+    private String name;
 
-    @Column(nullable = false,
-        updatable = false)
-    private int schemaVersion;
+    @ManyToOne(fetch = FetchType.LAZY,
+        optional = false)
+    @JoinColumn(name = "parentId",
+        nullable = false)
+    private Dox parentDox;
 
     public byte[] getContent() {
 
@@ -95,21 +79,6 @@ public class DoxTombstone {
     public Date getCreatedOn() {
 
         return createdOn;
-    }
-
-    public String getDeletedBy() {
-
-        return deletedBy;
-    }
-
-    public Date getDeletedOn() {
-
-        return deletedOn;
-    }
-
-    public DoxID getDoxId() {
-
-        return new DoxID(doxId);
     }
 
     public long getId() {
@@ -127,14 +96,14 @@ public class DoxTombstone {
         return lastUpdatedOn;
     }
 
-    public String getSchemaName() {
+    public String getName() {
 
-        return schemaName;
+        return name;
     }
 
-    public int getSchemaVersion() {
+    public Dox getParentDox() {
 
-        return schemaVersion;
+        return parentDox;
     }
 
     public void setContent(final byte[] content) {
@@ -152,21 +121,6 @@ public class DoxTombstone {
         this.createdOn = createdOn;
     }
 
-    public void setDeletedBy(final String deletedBy) {
-
-        this.deletedBy = deletedBy;
-    }
-
-    public void setDeletedOn(final Date deletedOn) {
-
-        this.deletedOn = deletedOn;
-    }
-
-    public void setDoxId(final DoxID doxId) {
-
-        this.doxId = doxId.toString();
-    }
-
     public void setId(final long id) {
 
         this.id = id;
@@ -182,13 +136,14 @@ public class DoxTombstone {
         this.lastUpdatedOn = lastUpdatedOn;
     }
 
-    public void setSchemaName(final String schemaName) {
+    public void setName(final String name) {
 
-        this.schemaName = schemaName;
+        this.name = name;
     }
 
-    public void setSchemaVersion(final int schemaVersion) {
+    public void setParentDox(final Dox parentDox) {
 
-        this.schemaVersion = schemaVersion;
+        this.parentDox = parentDox;
     }
+
 }

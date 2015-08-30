@@ -1,4 +1,4 @@
-package net.trajano.doxdb.ejb;
+package net.trajano.doxdb;
 
 import java.util.Date;
 
@@ -9,9 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,14 +20,16 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
 @Entity
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = {
-        "parentId",
+        "doxId",
+        "schemaName",
         "name"
 }) )
-public class DoxOob {
+public class DoxOobTombstone {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(nullable = false,
+        updatable = false,
         length = DoxLength.CONTENT_LENGTH)
     private byte[] content;
 
@@ -43,15 +43,32 @@ public class DoxOob {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String deletedBy;
+
+    @Column(nullable = false,
+        updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedOn;
+
+    @Column(nullable = false,
+        columnDefinition = "CHAR(32)",
+        length = DoxID.LENGTH)
+    private String doxId;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(nullable = false,
+        updatable = false,
         length = DoxLength.PRINCIPAL_LENGTH)
     private String lastUpdatedBy;
 
-    @Column(nullable = false)
+    @Column(nullable = false,
+        updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
 
@@ -60,11 +77,14 @@ public class DoxOob {
         length = DoxLength.OOB_NAME_LENGTH)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY,
-        optional = false)
-    @JoinColumn(name = "parentId",
-        nullable = false)
-    private Dox parentDox;
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.SCHEMA_NAME_LENGTH)
+    private String schemaName;
+
+    @Column(nullable = false,
+        updatable = false)
+    private int schemaVersion;
 
     public byte[] getContent() {
 
@@ -79,6 +99,21 @@ public class DoxOob {
     public Date getCreatedOn() {
 
         return createdOn;
+    }
+
+    public String getDeletedBy() {
+
+        return deletedBy;
+    }
+
+    public Date getDeletedOn() {
+
+        return deletedOn;
+    }
+
+    public DoxID getDoxId() {
+
+        return new DoxID(doxId);
     }
 
     public long getId() {
@@ -101,9 +136,14 @@ public class DoxOob {
         return name;
     }
 
-    public Dox getParentDox() {
+    public String getSchemaName() {
 
-        return parentDox;
+        return schemaName;
+    }
+
+    public int getSchemaVersion() {
+
+        return schemaVersion;
     }
 
     public void setContent(final byte[] content) {
@@ -119,6 +159,29 @@ public class DoxOob {
     public void setCreatedOn(final Date createdOn) {
 
         this.createdOn = createdOn;
+    }
+
+    public void setDeletedBy(final String deletedBy) {
+
+        this.deletedBy = deletedBy;
+    }
+
+    public void setDeletedOn(final Date deletedOn) {
+
+        this.deletedOn = deletedOn;
+    }
+
+    /**
+     * Sets the Dox ID value using a {@link DoxID}. This internally converts it
+     * to a string as a workaround when JPA converters are not working as
+     * expected.
+     *
+     * @param doxId
+     *            Dox ID
+     */
+    public void setDoxId(final DoxID doxId) {
+
+        this.doxId = doxId.toString();
     }
 
     public void setId(final long id) {
@@ -141,9 +204,13 @@ public class DoxOob {
         this.name = name;
     }
 
-    public void setParentDox(final Dox parentDox) {
+    public void setSchemaName(final String schemaName) {
 
-        this.parentDox = parentDox;
+        this.schemaName = schemaName;
     }
 
+    public void setSchemaVersion(final int schemaVersion) {
+
+        this.schemaVersion = schemaVersion;
+    }
 }
