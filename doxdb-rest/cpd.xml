@@ -36,10 +36,10 @@
     @Override]]></codefragment>
    </duplication>
    <duplication lines="66" tokens="162">
-      <file line="138"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
-      <file line="128"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
+      <file line="137"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
+      <file line="127"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
       <codefragment><![CDATA[    }
 
     public String getSchemaName() {
@@ -108,10 +108,10 @@
     public void setName(final String name) {]]></codefragment>
    </duplication>
    <duplication lines="30" tokens="123">
-      <file line="28"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
       <file line="27"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
+      <file line="26"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
       <codefragment><![CDATA[public class DoxOobTombstone {
 
     @Lob
@@ -144,10 +144,10 @@
     @Column(nullable = false,]]></codefragment>
    </duplication>
    <duplication lines="55" tokens="123">
-      <file line="81"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxOobTombstone.java"/>
-      <file line="76"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxTombstone.java"/>
+      <file line="80"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
+      <file line="75"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
       <codefragment><![CDATA[    @Column(nullable = false,
         updatable = false,
         length = DoxLength.SCHEMA_NAME_LENGTH)

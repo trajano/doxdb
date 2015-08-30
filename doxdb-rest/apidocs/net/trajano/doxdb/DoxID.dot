@@ -10,13 +10,13 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.DoxID
-	c495 [label=<<table title="net.trajano.doxdb.DoxID" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxID.html">
+	c498 [label=<<table title="net.trajano.doxdb.DoxID" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxID.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxID </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxID.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.DoxID implements java.io.Serializable
-	c530:p -> c495:p [dir=back,arrowtail=empty,style=dashed];
+	c530:p -> c498:p [dir=back,arrowtail=empty,style=dashed];
 	// java.io.Serializable
 	c530 [label=<<table title="java.io.Serializable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/Serializable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">

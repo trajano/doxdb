@@ -90,28 +90,28 @@
 <th>Class</th>
 <th>Bugs</th></tr>
 <tr class="b">
+<td><a href="#net.trajano.doxdb.Dox">net.trajano.doxdb.Dox</a></td>
+<td>6</td></tr>
+<tr class="a">
 <td><a href="#net.trajano.doxdb.DoxMeta">net.trajano.doxdb.DoxMeta</a></td>
 <td>9</td></tr>
-<tr class="a">
-<td><a href="#net.trajano.doxdb.ejb.Dox">net.trajano.doxdb.ejb.Dox</a></td>
-<td>6</td></tr>
 <tr class="b">
-<td><a href="#net.trajano.doxdb.ejb.DoxOob">net.trajano.doxdb.ejb.DoxOob</a></td>
+<td><a href="#net.trajano.doxdb.DoxOob">net.trajano.doxdb.DoxOob</a></td>
 <td>6</td></tr>
 <tr class="a">
-<td><a href="#net.trajano.doxdb.ejb.DoxOobTombstone">net.trajano.doxdb.ejb.DoxOobTombstone</a></td>
+<td><a href="#net.trajano.doxdb.DoxOobTombstone">net.trajano.doxdb.DoxOobTombstone</a></td>
 <td>8</td></tr>
 <tr class="b">
-<td><a href="#net.trajano.doxdb.ejb.DoxTombstone">net.trajano.doxdb.ejb.DoxTombstone</a></td>
+<td><a href="#net.trajano.doxdb.DoxTombstone">net.trajano.doxdb.DoxTombstone</a></td>
 <td>8</td></tr>
 <tr class="a">
 <td><a href="#net.trajano.doxdb.rest.DoxResource$1">net.trajano.doxdb.rest.DoxResource$1</a></td>
 <td>1</td></tr>
 <tr class="b">
 <td><a href="#net.trajano.doxdb.rest.DoxResource$3">net.trajano.doxdb.rest.DoxResource$3</a></td>
-<td>1</td></tr></table></div><a name="net.trajano.doxdb.DoxMeta"></a>
+<td>1</td></tr></table></div><a name="net.trajano.doxdb.Dox"></a>
 <div class="section">
-<h3><a name="net.trajano.doxdb.DoxMeta"></a>net.trajano.doxdb.DoxMeta</h3>
+<h3><a name="net.trajano.doxdb.Dox"></a>net.trajano.doxdb.Dox</h3>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Bug</th>
@@ -120,106 +120,106 @@
 <th>Line</th>
 <th>Priority</th></tr>
 <tr class="b">
+<td>net.trajano.doxdb.Dox.getAccessKey() may expose internal representation by returning Dox.accessKey</td>
+<td>MALICIOUS_CODE</td>
+<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
+<td><a href="./xref/net/trajano/doxdb/Dox.html#L160">160</a></td>
+<td>Medium</td></tr>
+<tr class="a">
+<td>net.trajano.doxdb.Dox.getCreatedOn() may expose internal representation by returning Dox.createdOn</td>
+<td>MALICIOUS_CODE</td>
+<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
+<td><a href="./xref/net/trajano/doxdb/Dox.html#L179">179</a></td>
+<td>Medium</td></tr>
+<tr class="b">
+<td>net.trajano.doxdb.Dox.getLastUpdatedOn() may expose internal representation by returning Dox.lastUpdatedOn</td>
+<td>MALICIOUS_CODE</td>
+<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
+<td><a href="./xref/net/trajano/doxdb/Dox.html#L208">208</a></td>
+<td>Medium</td></tr>
+<tr class="a">
+<td>net.trajano.doxdb.Dox.setAccessKey(byte[]) may expose internal representation by storing an externally mutable object into Dox.accessKey</td>
+<td>MALICIOUS_CODE</td>
+<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
+<td><a href="./xref/net/trajano/doxdb/Dox.html#L228">228</a></td>
+<td>Medium</td></tr>
+<tr class="b">
+<td>net.trajano.doxdb.Dox.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into Dox.createdOn</td>
+<td>MALICIOUS_CODE</td>
+<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
+<td><a href="./xref/net/trajano/doxdb/Dox.html#L247">247</a></td>
+<td>Medium</td></tr>
+<tr class="a">
+<td>net.trajano.doxdb.Dox.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into Dox.lastUpdatedOn</td>
+<td>MALICIOUS_CODE</td>
+<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
+<td><a href="./xref/net/trajano/doxdb/Dox.html#L276">276</a></td>
+<td>Medium</td></tr></table></div><a name="net.trajano.doxdb.DoxMeta"></a>
+<div class="section">
+<h3><a name="net.trajano.doxdb.DoxMeta"></a>net.trajano.doxdb.DoxMeta</h3>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>Bug</th>
+<th>Category</th>
+<th>Details</th>
+<th>Line</th>
+<th>Priority</th></tr>
+<tr class="a">
 <td>net.trajano.doxdb.DoxMeta.getAccessKey() may expose internal representation by returning DoxMeta.accessKey</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L75">75</a></td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>net.trajano.doxdb.DoxMeta.getCreatedOn() may expose internal representation by returning DoxMeta.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L90">90</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>net.trajano.doxdb.DoxMeta.getLastUpdatedOn() may expose internal representation by returning DoxMeta.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L117">117</a></td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>new net.trajano.doxdb.DoxMeta(long, String, int, int, byte[], String, Date, String, Date) may expose internal representation by storing an externally mutable object into DoxMeta.accessKey</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L66">66</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>new net.trajano.doxdb.DoxMeta(long, String, int, int, byte[], String, Date, String, Date) may expose internal representation by storing an externally mutable object into DoxMeta.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L68">68</a></td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>new net.trajano.doxdb.DoxMeta(long, String, int, int, byte[], String, Date, String, Date) may expose internal representation by storing an externally mutable object into DoxMeta.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L70">70</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>net.trajano.doxdb.DoxMeta.setAccessKey(byte[]) may expose internal representation by storing an externally mutable object into DoxMeta.accessKey</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L144">144</a></td>
 <td>Medium</td></tr>
-<tr class="a">
+<tr class="b">
 <td>net.trajano.doxdb.DoxMeta.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into DoxMeta.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L159">159</a></td>
 <td>Medium</td></tr>
-<tr class="b">
+<tr class="a">
 <td>net.trajano.doxdb.DoxMeta.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into DoxMeta.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/net/trajano/doxdb/DoxMeta.html#L179">179</a></td>
-<td>Medium</td></tr></table></div><a name="net.trajano.doxdb.ejb.Dox"></a>
+<td>Medium</td></tr></table></div><a name="net.trajano.doxdb.DoxOob"></a>
 <div class="section">
-<h3><a name="net.trajano.doxdb.ejb.Dox"></a>net.trajano.doxdb.ejb.Dox</h3>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>Bug</th>
-<th>Category</th>
-<th>Details</th>
-<th>Line</th>
-<th>Priority</th></tr>
-<tr class="b">
-<td>net.trajano.doxdb.ejb.Dox.getAccessKey() may expose internal representation by returning Dox.accessKey</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L161">161</a></td>
-<td>Medium</td></tr>
-<tr class="a">
-<td>net.trajano.doxdb.ejb.Dox.getCreatedOn() may expose internal representation by returning Dox.createdOn</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L180">180</a></td>
-<td>Medium</td></tr>
-<tr class="b">
-<td>net.trajano.doxdb.ejb.Dox.getLastUpdatedOn() may expose internal representation by returning Dox.lastUpdatedOn</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L209">209</a></td>
-<td>Medium</td></tr>
-<tr class="a">
-<td>net.trajano.doxdb.ejb.Dox.setAccessKey(byte[]) may expose internal representation by storing an externally mutable object into Dox.accessKey</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L229">229</a></td>
-<td>Medium</td></tr>
-<tr class="b">
-<td>net.trajano.doxdb.ejb.Dox.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into Dox.createdOn</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L248">248</a></td>
-<td>Medium</td></tr>
-<tr class="a">
-<td>net.trajano.doxdb.ejb.Dox.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into Dox.lastUpdatedOn</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/Dox.html#L277">277</a></td>
-<td>Medium</td></tr></table></div><a name="net.trajano.doxdb.ejb.DoxOob"></a>
-<div class="section">
-<h3><a name="net.trajano.doxdb.ejb.DoxOob"></a>net.trajano.doxdb.ejb.DoxOob</h3>
+<h3><a name="net.trajano.doxdb.DoxOob"></a>net.trajano.doxdb.DoxOob</h3>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>Bug</th>
@@ -228,43 +228,43 @@
 <th>Line</th>
 <th>Priority</th></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxOob.getContent() may expose internal representation by returning DoxOob.content</td>
+<td>net.trajano.doxdb.DoxOob.getContent() may expose internal representation by returning DoxOob.content</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOob.html#L71">71</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOob.html#L71">71</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxOob.getCreatedOn() may expose internal representation by returning DoxOob.createdOn</td>
+<td>net.trajano.doxdb.DoxOob.getCreatedOn() may expose internal representation by returning DoxOob.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOob.html#L81">81</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOob.html#L81">81</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxOob.getLastUpdatedOn() may expose internal representation by returning DoxOob.lastUpdatedOn</td>
+<td>net.trajano.doxdb.DoxOob.getLastUpdatedOn() may expose internal representation by returning DoxOob.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOob.html#L96">96</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOob.html#L96">96</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxOob.setContent(byte[]) may expose internal representation by storing an externally mutable object into DoxOob.content</td>
+<td>net.trajano.doxdb.DoxOob.setContent(byte[]) may expose internal representation by storing an externally mutable object into DoxOob.content</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOob.html#L111">111</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOob.html#L111">111</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxOob.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into DoxOob.createdOn</td>
+<td>net.trajano.doxdb.DoxOob.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into DoxOob.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOob.html#L121">121</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOob.html#L121">121</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxOob.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into DoxOob.lastUpdatedOn</td>
+<td>net.trajano.doxdb.DoxOob.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into DoxOob.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOob.html#L136">136</a></td>
-<td>Medium</td></tr></table></div><a name="net.trajano.doxdb.ejb.DoxOobTombstone"></a>
+<td><a href="./xref/net/trajano/doxdb/DoxOob.html#L136">136</a></td>
+<td>Medium</td></tr></table></div><a name="net.trajano.doxdb.DoxOobTombstone"></a>
 <div class="section">
-<h3><a name="net.trajano.doxdb.ejb.DoxOobTombstone"></a>net.trajano.doxdb.ejb.DoxOobTombstone</h3>
+<h3><a name="net.trajano.doxdb.DoxOobTombstone"></a>net.trajano.doxdb.DoxOobTombstone</h3>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>Bug</th>
@@ -273,55 +273,55 @@
 <th>Line</th>
 <th>Priority</th></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxOobTombstone.getContent() may expose internal representation by returning DoxOobTombstone.content</td>
+<td>net.trajano.doxdb.DoxOobTombstone.getContent() may expose internal representation by returning DoxOobTombstone.content</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOobTombstone.html#L92">92</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L91">91</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxOobTombstone.getCreatedOn() may expose internal representation by returning DoxOobTombstone.createdOn</td>
+<td>net.trajano.doxdb.DoxOobTombstone.getCreatedOn() may expose internal representation by returning DoxOobTombstone.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOobTombstone.html#L102">102</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L101">101</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxOobTombstone.getDeletedOn() may expose internal representation by returning DoxOobTombstone.deletedOn</td>
+<td>net.trajano.doxdb.DoxOobTombstone.getDeletedOn() may expose internal representation by returning DoxOobTombstone.deletedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOobTombstone.html#L112">112</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L111">111</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxOobTombstone.getLastUpdatedOn() may expose internal representation by returning DoxOobTombstone.lastUpdatedOn</td>
+<td>net.trajano.doxdb.DoxOobTombstone.getLastUpdatedOn() may expose internal representation by returning DoxOobTombstone.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOobTombstone.html#L132">132</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L131">131</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxOobTombstone.setContent(byte[]) may expose internal representation by storing an externally mutable object into DoxOobTombstone.content</td>
+<td>net.trajano.doxdb.DoxOobTombstone.setContent(byte[]) may expose internal representation by storing an externally mutable object into DoxOobTombstone.content</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOobTombstone.html#L152">152</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L151">151</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxOobTombstone.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into DoxOobTombstone.createdOn</td>
+<td>net.trajano.doxdb.DoxOobTombstone.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into DoxOobTombstone.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOobTombstone.html#L162">162</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L161">161</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxOobTombstone.setDeletedOn(Date) may expose internal representation by storing an externally mutable object into DoxOobTombstone.deletedOn</td>
+<td>net.trajano.doxdb.DoxOobTombstone.setDeletedOn(Date) may expose internal representation by storing an externally mutable object into DoxOobTombstone.deletedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOobTombstone.html#L172">172</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L171">171</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxOobTombstone.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into DoxOobTombstone.lastUpdatedOn</td>
+<td>net.trajano.doxdb.DoxOobTombstone.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into DoxOobTombstone.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxOobTombstone.html#L200">200</a></td>
-<td>Medium</td></tr></table></div><a name="net.trajano.doxdb.ejb.DoxTombstone"></a>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L199">199</a></td>
+<td>Medium</td></tr></table></div><a name="net.trajano.doxdb.DoxTombstone"></a>
 <div class="section">
-<h3><a name="net.trajano.doxdb.ejb.DoxTombstone"></a>net.trajano.doxdb.ejb.DoxTombstone</h3>
+<h3><a name="net.trajano.doxdb.DoxTombstone"></a>net.trajano.doxdb.DoxTombstone</h3>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>Bug</th>
@@ -330,52 +330,52 @@
 <th>Line</th>
 <th>Priority</th></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxTombstone.getContent() may expose internal representation by returning DoxTombstone.content</td>
+<td>net.trajano.doxdb.DoxTombstone.getContent() may expose internal representation by returning DoxTombstone.content</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxTombstone.html#L87">87</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L86">86</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxTombstone.getCreatedOn() may expose internal representation by returning DoxTombstone.createdOn</td>
+<td>net.trajano.doxdb.DoxTombstone.getCreatedOn() may expose internal representation by returning DoxTombstone.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxTombstone.html#L97">97</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L96">96</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxTombstone.getDeletedOn() may expose internal representation by returning DoxTombstone.deletedOn</td>
+<td>net.trajano.doxdb.DoxTombstone.getDeletedOn() may expose internal representation by returning DoxTombstone.deletedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxTombstone.html#L107">107</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L106">106</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxTombstone.getLastUpdatedOn() may expose internal representation by returning DoxTombstone.lastUpdatedOn</td>
+<td>net.trajano.doxdb.DoxTombstone.getLastUpdatedOn() may expose internal representation by returning DoxTombstone.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxTombstone.html#L127">127</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L126">126</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxTombstone.setContent(byte[]) may expose internal representation by storing an externally mutable object into DoxTombstone.content</td>
+<td>net.trajano.doxdb.DoxTombstone.setContent(byte[]) may expose internal representation by storing an externally mutable object into DoxTombstone.content</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxTombstone.html#L142">142</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L141">141</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxTombstone.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into DoxTombstone.createdOn</td>
+<td>net.trajano.doxdb.DoxTombstone.setCreatedOn(Date) may expose internal representation by storing an externally mutable object into DoxTombstone.createdOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxTombstone.html#L152">152</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L151">151</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>net.trajano.doxdb.ejb.DoxTombstone.setDeletedOn(Date) may expose internal representation by storing an externally mutable object into DoxTombstone.deletedOn</td>
+<td>net.trajano.doxdb.DoxTombstone.setDeletedOn(Date) may expose internal representation by storing an externally mutable object into DoxTombstone.deletedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxTombstone.html#L162">162</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L161">161</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>net.trajano.doxdb.ejb.DoxTombstone.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into DoxTombstone.lastUpdatedOn</td>
+<td>net.trajano.doxdb.DoxTombstone.setLastUpdatedOn(Date) may expose internal representation by storing an externally mutable object into DoxTombstone.lastUpdatedOn</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxTombstone.html#L182">182</a></td>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L181">181</a></td>
 <td>Medium</td></tr></table></div><a name="net.trajano.doxdb.rest.DoxResource1"></a>
 <div class="section">
 <h3><a name="net.trajano.doxdb.rest.DoxResource1"></a>net.trajano.doxdb.rest.DoxResource$1</h3>

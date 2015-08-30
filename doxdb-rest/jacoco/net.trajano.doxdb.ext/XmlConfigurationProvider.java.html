@@ -52,61 +52,61 @@ import net.trajano.doxdb.schema.SchemaType;
  *
  * @author Archimedes Trajano
  */
-@Lock(LockType.READ)
 public class XmlConfigurationProvider implements
     ConfigurationProvider {
 
-<span class="nc" id="L59">    private final Map&lt;String, SchemaType&gt; currentSchemaMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L58">    private final Map&lt;String, SchemaType&gt; currentSchemaMap = new HashMap&lt;&gt;();</span>
 
-<span class="nc" id="L61">    private final Map&lt;String, DoxType&gt; doxen = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L60">    private final Map&lt;String, DoxType&gt; doxen = new HashMap&lt;&gt;();</span>
 
     private final Map&lt;String, String&gt; indexMap;
 
-<span class="nc" id="L65">    private final ConcurrentMap&lt;String, JsonSchema&gt; jsonSchemaMap = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="nc" id="L64">    private final ConcurrentMap&lt;String, JsonSchema&gt; jsonSchemaMap = new ConcurrentHashMap&lt;&gt;();</span>
 
     private final DoxPersistence persistenceConfig;
 
-<span class="nc" id="L69">    public XmlConfigurationProvider() {</span>
+<span class="nc" id="L68">    public XmlConfigurationProvider() {</span>
 
-<span class="nc" id="L71">        try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(&quot;META-INF/dox.xml&quot;)) {</span>
-<span class="nc" id="L72">            final JAXBContext jaxb = JAXBContext.newInstance(DoxPersistence.class);</span>
-<span class="nc" id="L73">            final Unmarshaller unmarshaller = jaxb.createUnmarshaller();</span>
-<span class="nc" id="L74">            unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(getClass().getResource(&quot;/META-INF/xsd/dox.xsd&quot;)));</span>
-<span class="nc" id="L75">            persistenceConfig = (DoxPersistence) unmarshaller.unmarshal(is);</span>
-<span class="nc" id="L76">            indexMap = new ConcurrentHashMap&lt;&gt;(persistenceConfig.getIndex().size());</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">            for (final IndexType indexType : persistenceConfig.getIndex()) {</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">                indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());</span>
-<span class="nc" id="L79">            }</span>
+<span class="nc" id="L70">        try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(&quot;META-INF/dox.xml&quot;)) {</span>
+<span class="nc" id="L71">            final JAXBContext jaxb = JAXBContext.newInstance(DoxPersistence.class);</span>
+<span class="nc" id="L72">            final Unmarshaller unmarshaller = jaxb.createUnmarshaller();</span>
+<span class="nc" id="L73">            unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(getClass().getResource(&quot;/META-INF/xsd/dox.xsd&quot;)));</span>
+<span class="nc" id="L74">            persistenceConfig = (DoxPersistence) unmarshaller.unmarshal(is);</span>
+<span class="nc" id="L75">            indexMap = new ConcurrentHashMap&lt;&gt;(persistenceConfig.getIndex().size());</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            for (final IndexType indexType : persistenceConfig.getIndex()) {</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());</span>
+<span class="nc" id="L78">            }</span>
 
-<span class="nc bnc" id="L81" title="All 2 branches missed.">            for (final DoxType doxConfig : persistenceConfig.getDox()) {</span>
-<span class="nc" id="L82">                doxen.put(doxConfig.getName(), doxConfig);</span>
-<span class="nc" id="L83">                final SchemaType schema = doxConfig.getSchema().get(doxConfig.getSchema().size() - 1);</span>
-<span class="nc" id="L84">                currentSchemaMap.put(doxConfig.getName(), schema);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            for (final DoxType doxConfig : persistenceConfig.getDox()) {</span>
+<span class="nc" id="L81">                doxen.put(doxConfig.getName(), doxConfig);</span>
+<span class="nc" id="L82">                final SchemaType schema = doxConfig.getSchema().get(doxConfig.getSchema().size() - 1);</span>
+<span class="nc" id="L83">                currentSchemaMap.put(doxConfig.getName(), schema);</span>
                 //= jsonSchemaMap.get(schema.getLocation());
-<span class="nc" id="L86">                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()</span>
+<span class="nc" id="L85">                final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()</span>
                     .setDefaultVersion(SchemaVersion.DRAFTV4)
                     .freeze();
 
-<span class="nc" id="L90">                final JsonSchema jsonSchema = JsonSchemaFactory.newBuilder()</span>
+<span class="nc" id="L89">                final JsonSchema jsonSchema = JsonSchemaFactory.newBuilder()</span>
                     .setValidationConfiguration(cfg)
                     .freeze()
                     .getJsonSchema(JsonLoader.fromResource(&quot;/META-INF/schema/&quot; + schema.getLocation()));
-<span class="nc" id="L94">                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);</span>
+<span class="nc" id="L93">                jsonSchemaMap.putIfAbsent(schema.getLocation(), jsonSchema);</span>
 
-<span class="nc" id="L96">            }</span>
+<span class="nc" id="L95">            }</span>
 
-<span class="nc bnc" id="L98" title="All 8 branches missed.">        } catch (final IOException</span>
+<span class="nc bnc" id="L97" title="All 8 branches missed.">        } catch (final IOException</span>
             | SAXException
             | JAXBException
             | ProcessingException e) {
-<span class="nc" id="L102">            throw new ExceptionInInitializerError(e);</span>
-<span class="nc" id="L103">        }</span>
-<span class="nc" id="L104">    }</span>
+<span class="nc" id="L101">            throw new ExceptionInInitializerError(e);</span>
+<span class="nc" id="L102">        }</span>
+<span class="nc" id="L103">    }</span>
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @Lock(LockType.READ)
     public SchemaType getCollectionSchema(final String schemaName) {
 
 <span class="nc" id="L112">        return currentSchemaMap.get(schemaName);</span>
@@ -116,37 +116,41 @@ public class XmlConfigurationProvider implements
      * {@inheritDoc}
      */
     @Override
+    @Lock(LockType.READ)
     public JsonSchema getContentSchema(final String location) {
 
-<span class="nc" id="L121">        return jsonSchemaMap.get(location);</span>
+<span class="nc" id="L122">        return jsonSchemaMap.get(location);</span>
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @Lock(LockType.READ)
     public DoxType getDox(final String schemaName) {
 
-<span class="nc" id="L130">        return doxen.get(schemaName);</span>
+<span class="nc" id="L132">        return doxen.get(schemaName);</span>
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @Lock(LockType.READ)
     public String getMappedIndex(final String name) {
 
-<span class="nc" id="L139">        final String mappedName = indexMap.get(name);</span>
-<span class="nc bnc" id="L140" title="All 2 branches missed.">        if (mappedName == null) {</span>
-<span class="nc" id="L141">            throw new PersistenceException(&quot;No index defined for &quot; + name);</span>
+<span class="nc" id="L142">        final String mappedName = indexMap.get(name);</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if (mappedName == null) {</span>
+<span class="nc" id="L144">            throw new PersistenceException(&quot;No index defined for &quot; + name);</span>
         }
-<span class="nc" id="L143">        return mappedName;</span>
+<span class="nc" id="L146">        return mappedName;</span>
     }
 
     @Override
+    @Lock(LockType.READ)
     public DoxPersistence getPersistenceConfig() {
 
-<span class="nc" id="L149">        return persistenceConfig;</span>
+<span class="nc" id="L153">        return persistenceConfig;</span>
     }
 
 }

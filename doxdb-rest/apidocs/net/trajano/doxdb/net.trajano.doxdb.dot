@@ -9,26 +9,50 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// net.trajano.doxdb.Dox
+	c0 [label=<<table title="net.trajano.doxdb.Dox" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Dox.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Dox </td></tr>
+		</table></td></tr>
+		</table>>, URL="./Dox.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.DoxTombstone
+	c1 [label=<<table title="net.trajano.doxdb.DoxTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxTombstone.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxTombstone </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxTombstone.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.DoxOobTombstone
+	c2 [label=<<table title="net.trajano.doxdb.DoxOobTombstone" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOobTombstone.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxOobTombstone </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxOobTombstone.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.DoxID
-	c0 [label=<<table title="net.trajano.doxdb.DoxID" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxID.html">
+	c3 [label=<<table title="net.trajano.doxdb.DoxID" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxID.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxID </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxID.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.DoxOob
+	c4 [label=<<table title="net.trajano.doxdb.DoxOob" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxOob.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxOob </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxOob.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.DoxMeta
-	c1 [label=<<table title="net.trajano.doxdb.DoxMeta" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxMeta.html">
+	c5 [label=<<table title="net.trajano.doxdb.DoxMeta" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxMeta.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxMeta </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxMeta.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.SearchResult
-	c2 [label=<<table title="net.trajano.doxdb.SearchResult" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SearchResult.html">
+	c6 [label=<<table title="net.trajano.doxdb.SearchResult" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SearchResult.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SearchResult </td></tr>
 		</table></td></tr>
 		</table>>, URL="./SearchResult.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.IndexView
-	c3 [label=<<table title="net.trajano.doxdb.IndexView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexView.html">
+	c7 [label=<<table title="net.trajano.doxdb.IndexView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexView.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IndexView </td></tr>
 		</table></td></tr>
