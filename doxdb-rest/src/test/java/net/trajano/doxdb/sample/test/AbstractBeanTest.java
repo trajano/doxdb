@@ -20,7 +20,10 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
 
+import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.main.JsonSchema;
+import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 
@@ -79,21 +82,38 @@ public class AbstractBeanTest {
             @Override
             public SchemaType getCollectionSchema(final String schemaName) {
 
-                // TODO Auto-generated method stub
+                if ("horse".equals(schemaName)) {
+                    final SchemaType schema = new SchemaType();
+                    schema.setLocation("horse.json");
+                    schema.setVersion(1);
+                    return schema;
+                }
                 return null;
             }
 
             @Override
             public JsonSchema getContentSchema(final String location) {
 
-                // TODO Auto-generated method stub
-                return null;
+                try {
+                    return JsonSchemaFactory.byDefault().getJsonSchema(JsonLoader.fromResource("/META-INF/schema/" + location));
+                } catch (ProcessingException
+                    | IOException e) {
+                    throw new AssertionError(e);
+                }
             }
 
             @Override
             public DoxType getDox(final String schemaName) {
 
-                // TODO Auto-generated method stub
+                if ("horse".equals(schemaName)) {
+                    final DoxType doxType = new DoxType();
+                    doxType.setName("horse");
+                    final SchemaType schema = new SchemaType();
+                    schema.setLocation("horse.json");
+                    schema.setVersion(1);
+                    doxType.getSchema().add(schema);
+                    return doxType;
+                }
                 return null;
             }
 
