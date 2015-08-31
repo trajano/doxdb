@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2015 Trajano</copyright>
     <item>
-      <title>File: 39,
+      <title>File: 40,
              Errors: 0,
-             Warnings: 196,
+             Warnings: 197,
              Infos: 0
       </title>
             <link>http://site.trajano.net/doxdb//checkstyle.html</link>
@@ -150,7 +150,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  16
+                  15
                 </td>
                 <td>
                   0
@@ -515,6 +515,20 @@ under the License.
                 </td>
                 <td>
                   4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.CorsFilter.java">net/trajano/doxdb/rest/CorsFilter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
                 <td>
                   0
