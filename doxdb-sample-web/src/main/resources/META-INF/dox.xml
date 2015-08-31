@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dox-persistence xmlns="http://doxdb.trajano.net/schema/"
-	xsi:schemaLocation="http://doxdb.trajano.net/schema/ ../../../../../doxdb-core/src/main/resources/META-INF/xsd/dox.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	xsi:schemaLocation="http://doxdb.trajano.net/schema/ ../../../../../doxdb-rest/src/main/resources/META-INF/xsd/dox.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cors="*">
 	<dox name="horse" oob="true" readAll="none">
 		<schema version="1" location="horse.json" />
 	</dox>

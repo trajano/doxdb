@@ -19,6 +19,6 @@ public class DoxRestApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
 
-        return new HashSet<Class<?>>(Arrays.asList(DoxIDMapper.class, DoxResource.class, EntityNotFoundMapper.class, OptimisticLockingMapper.class));
+        return new HashSet<Class<?>>(Arrays.asList(DoxIDMapper.class, DoxResource.class, EntityNotFoundMapper.class, OptimisticLockingMapper.class, CorsFilter.class));
     }
 }

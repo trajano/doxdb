@@ -29,6 +29,15 @@
 					</appinfo>
 				</annotation>
 			</attribute>
+			<attribute name="cors" type="string" use="optional">
+				<annotation>
+					<appinfo>
+						<jxb:property>
+							<jxb:javadoc>Defines the value of the CORS header.</jxb:javadoc>
+						</jxb:property>
+					</appinfo>
+				</annotation>
+			</attribute>
 		</complexType>
 		<unique name="uniqueName">
 			<selector xpath="dox" />
