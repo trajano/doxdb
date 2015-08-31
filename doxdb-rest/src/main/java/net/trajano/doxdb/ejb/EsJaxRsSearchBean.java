@@ -17,6 +17,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonString;
 import javax.json.JsonValue;
+import javax.persistence.PersistenceException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -137,10 +138,15 @@ public class EsJaxRsSearchBean implements
      * {@inheritDoc}
      */
     @Override
-    public SearchResult search(final String index,
+    public SearchResult search(final String sourceIndex,
         final String queryString,
         final int limit,
         final Integer fromDoc) {
+
+        final String index = configurationProvider.getMappedIndex(sourceIndex);
+        if (index == null) {
+            throw new PersistenceException("index not found");
+        }
 
         int from = 0;
         if (fromDoc != null) {
@@ -182,11 +188,16 @@ public class EsJaxRsSearchBean implements
      * {@inheritDoc}
      */
     @Override
-    public SearchResult searchWithSchemaName(final String index,
+    public SearchResult searchWithSchemaName(final String sourceIndex,
         final String schemaName,
         final String queryString,
         final int limit,
         final Integer fromDoc) {
+
+        final String index = configurationProvider.getMappedIndex(sourceIndex);
+        if (index == null) {
+            throw new PersistenceException("index not found");
+        }
 
         int from = 0;
         if (fromDoc != null) {
