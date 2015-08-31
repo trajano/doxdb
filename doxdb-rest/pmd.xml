@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-31T01:49:51.273">
+<pmd version="5.0.5" timestamp="2015-08-31T02:19:40.703">
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/Dox.java">
 <violation beginline="119" endline="119" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'oobs'.
@@ -116,7 +116,10 @@ This call to String.startsWith can be rewritten using String.charAt(0)
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/target/generated-sources/xjc/net/trajano/doxdb/schema/DoxPersistence.java">
-<violation beginline="160" endline="160" begincolumn="37" endcolumn="48" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxPersistence" method="setElasticSearchUri" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="163" endline="163" begincolumn="37" endcolumn="48" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxPersistence" method="setElasticSearchUri" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'value' is not assigned and could be declared final
+</violation>
+<violation beginline="191" endline="191" begincolumn="25" endcolumn="36" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.schema" class="DoxPersistence" method="setCors" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'value' is not assigned and could be declared final
 </violation>
 </file>

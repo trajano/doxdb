@@ -5,8 +5,10 @@
 <area shape="rect" id="node2" href="./DoxIDMapper.html" title="&lt;TABLE&gt;" alt="" coords="204,5,325,53"/>
 <area shape="rect" id="node3_2" href="./DoxRestApplication.html" title="net.trajano.doxdb.rest.DoxRestApplication" alt="" coords="361,17,497,42"/>
 <area shape="rect" id="node3" href="./DoxRestApplication.html" title="&lt;TABLE&gt;" alt="" coords="350,5,507,53"/>
-<area shape="rect" id="node4_3" href="./OptimisticLockingMapper.html" title="net.trajano.doxdb.rest.OptimisticLockingMapper" alt="" coords="543,17,709,42"/>
-<area shape="rect" id="node4" href="./OptimisticLockingMapper.html" title="&lt;TABLE&gt;" alt="" coords="532,5,720,53"/>
-<area shape="rect" id="node5_4" href="./DoxResource.html" title="net.trajano.doxdb.rest.DoxResource" alt="" coords="755,17,855,42"/>
-<area shape="rect" id="node5" href="./DoxResource.html" title="&lt;TABLE&gt;" alt="" coords="744,5,865,53"/>
+<area shape="rect" id="node4_3" href="./CorsFilter.html" title="net.trajano.doxdb.rest.CorsFilter" alt="" coords="543,17,619,42"/>
+<area shape="rect" id="node4" href="./CorsFilter.html" title="&lt;TABLE&gt;" alt="" coords="532,5,629,53"/>
+<area shape="rect" id="node5_4" href="./OptimisticLockingMapper.html" title="net.trajano.doxdb.rest.OptimisticLockingMapper" alt="" coords="664,17,831,42"/>
+<area shape="rect" id="node5" href="./OptimisticLockingMapper.html" title="&lt;TABLE&gt;" alt="" coords="653,5,841,53"/>
+<area shape="rect" id="node6_5" href="./DoxResource.html" title="net.trajano.doxdb.rest.DoxResource" alt="" coords="876,17,976,42"/>
+<area shape="rect" id="node6" href="./DoxResource.html" title="&lt;TABLE&gt;" alt="" coords="865,5,987,53"/>
 </map>

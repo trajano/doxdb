@@ -10,31 +10,37 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.rest.EntityNotFoundMapper
-	c156 [label=<<table title="net.trajano.doxdb.rest.EntityNotFoundMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EntityNotFoundMapper.html">
+	c160 [label=<<table title="net.trajano.doxdb.rest.EntityNotFoundMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EntityNotFoundMapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EntityNotFoundMapper </td></tr>
 		</table></td></tr>
 		</table>>, URL="./EntityNotFoundMapper.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.rest.DoxIDMapper
-	c157 [label=<<table title="net.trajano.doxdb.rest.DoxIDMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxIDMapper.html">
+	c161 [label=<<table title="net.trajano.doxdb.rest.DoxIDMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxIDMapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxIDMapper </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxIDMapper.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.rest.DoxRestApplication
-	c158 [label=<<table title="net.trajano.doxdb.rest.DoxRestApplication" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxRestApplication.html">
+	c162 [label=<<table title="net.trajano.doxdb.rest.DoxRestApplication" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxRestApplication.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxRestApplication </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxRestApplication.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.rest.CorsFilter
+	c163 [label=<<table title="net.trajano.doxdb.rest.CorsFilter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CorsFilter.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> CorsFilter </td></tr>
+		</table></td></tr>
+		</table>>, URL="./CorsFilter.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.rest.OptimisticLockingMapper
-	c159 [label=<<table title="net.trajano.doxdb.rest.OptimisticLockingMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OptimisticLockingMapper.html">
+	c164 [label=<<table title="net.trajano.doxdb.rest.OptimisticLockingMapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OptimisticLockingMapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> OptimisticLockingMapper </td></tr>
 		</table></td></tr>
 		</table>>, URL="./OptimisticLockingMapper.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.rest.DoxResource
-	c160 [label=<<table title="net.trajano.doxdb.rest.DoxResource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxResource.html">
+	c165 [label=<<table title="net.trajano.doxdb.rest.DoxResource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxResource.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxResource </td></tr>
 		</table></td></tr>
