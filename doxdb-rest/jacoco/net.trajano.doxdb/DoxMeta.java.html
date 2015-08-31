@@ -46,9 +46,9 @@ public class DoxMeta implements
 
     private int version;
 
-<span class="nc" id="L49">    public DoxMeta() {</span>
+<span class="fc" id="L49">    public DoxMeta() {</span>
 
-<span class="nc" id="L51">    }</span>
+<span class="fc" id="L51">    }</span>
 
     public DoxMeta(final long id,
         final String doxid,
@@ -58,26 +58,26 @@ public class DoxMeta implements
         final String createdBy,
         final Date createdOn,
         final String lastUpdatedBy,
-<span class="nc" id="L61">        final Date lastUpdatedOn) {</span>
-<span class="nc" id="L62">        this.id = id;</span>
-<span class="nc" id="L63">        doxId = new DoxID(doxid);</span>
-<span class="nc" id="L64">        this.version = version;</span>
-<span class="nc" id="L65">        this.schemaVersion = schemaVersion;</span>
-<span class="nc" id="L66">        this.accessKey = accessKey;</span>
-<span class="nc" id="L67">        this.createdBy = new DoxPrincipal(createdBy);</span>
-<span class="nc" id="L68">        this.createdOn = createdOn;</span>
-<span class="nc" id="L69">        this.lastUpdatedBy = new DoxPrincipal(lastUpdatedBy);</span>
-<span class="nc" id="L70">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="nc" id="L71">    }</span>
+<span class="fc" id="L61">        final Date lastUpdatedOn) {</span>
+<span class="fc" id="L62">        this.id = id;</span>
+<span class="fc" id="L63">        doxId = new DoxID(doxid);</span>
+<span class="fc" id="L64">        this.version = version;</span>
+<span class="fc" id="L65">        this.schemaVersion = schemaVersion;</span>
+<span class="fc" id="L66">        this.accessKey = accessKey;</span>
+<span class="fc" id="L67">        this.createdBy = new DoxPrincipal(createdBy);</span>
+<span class="fc" id="L68">        this.createdOn = createdOn;</span>
+<span class="fc" id="L69">        this.lastUpdatedBy = new DoxPrincipal(lastUpdatedBy);</span>
+<span class="fc" id="L70">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="fc" id="L71">    }</span>
 
     public byte[] getAccessKey() {
 
-<span class="nc" id="L75">        return accessKey;</span>
+<span class="fc" id="L75">        return accessKey;</span>
     }
 
     public String getContentJson() {
 
-<span class="nc" id="L80">        return contentJson;</span>
+<span class="fc" id="L80">        return contentJson;</span>
     }
 
     public Principal getCreatedBy() {
@@ -99,12 +99,12 @@ public class DoxMeta implements
 
     public DoxID getDoxId() {
 
-<span class="nc" id="L102">        return doxId;</span>
+<span class="fc" id="L102">        return doxId;</span>
     }
 
     public long getId() {
 
-<span class="nc" id="L107">        return id;</span>
+<span class="fc" id="L107">        return id;</span>
     }
 
     public Principal getLastUpdatedBy() {
@@ -126,7 +126,7 @@ public class DoxMeta implements
 
     public int getSchemaVersion() {
 
-<span class="nc" id="L129">        return schemaVersion;</span>
+<span class="fc" id="L129">        return schemaVersion;</span>
     }
 
     public int getVersion() {
@@ -141,13 +141,13 @@ public class DoxMeta implements
 
     public void setAccessKey(final byte[] accessKey) {
 
-<span class="nc" id="L144">        this.accessKey = accessKey;</span>
-<span class="nc" id="L145">    }</span>
+<span class="fc" id="L144">        this.accessKey = accessKey;</span>
+<span class="fc" id="L145">    }</span>
 
     public void setContentJson(final String contentJson) {
 
-<span class="nc" id="L149">        this.contentJson = contentJson;</span>
-<span class="nc" id="L150">    }</span>
+<span class="fc" id="L149">        this.contentJson = contentJson;</span>
+<span class="fc" id="L150">    }</span>
 
     public void setCreatedBy(final Principal createdBy) {
 
@@ -161,8 +161,8 @@ public class DoxMeta implements
 
     public void setDoxId(final DoxID doxId) {
 
-<span class="nc" id="L164">        this.doxId = doxId;</span>
-<span class="nc" id="L165">    }</span>
+<span class="fc" id="L164">        this.doxId = doxId;</span>
+<span class="fc" id="L165">    }</span>
 
     public void setId(final long id) {
 
@@ -176,8 +176,8 @@ public class DoxMeta implements
 
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
-<span class="nc" id="L179">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="nc" id="L180">    }</span>
+<span class="fc" id="L179">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="fc" id="L180">    }</span>
 
     public void setSchemaVersion(final int contentVersion) {
 
@@ -186,7 +186,7 @@ public class DoxMeta implements
 
     public void setVersion(final int version) {
 
-<span class="nc" id="L189">        this.version = version;</span>
-<span class="nc" id="L190">    }</span>
+<span class="fc" id="L189">        this.version = version;</span>
+<span class="fc" id="L190">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
