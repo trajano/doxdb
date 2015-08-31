@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.json.Json;
@@ -33,7 +34,8 @@ import net.trajano.doxdb.schema.IndexType;
  */
 @Stateless
 @Dependent
-<span class="nc" id="L36">public class EsJaxRsSearchBean implements</span>
+@LocalBean
+<span class="nc" id="L38">public class EsJaxRsSearchBean implements</span>
     DoxSearch {
 
     /**
@@ -44,7 +46,7 @@ import net.trajano.doxdb.schema.IndexType;
      */
     public static String uid(final IndexView view) {
 
-<span class="nc" id="L47">        return view.getIndex() + &quot;\t&quot; + view.getCollection() + &quot;\t&quot; + view.getDoxID();</span>
+<span class="nc" id="L49">        return view.getIndex() + &quot;\t&quot; + view.getCollection() + &quot;\t&quot; + view.getDoxID();</span>
     }
 
     private ConfigurationProvider configurationProvider;
@@ -58,38 +60,38 @@ import net.trajano.doxdb.schema.IndexType;
     @Asynchronous
     public void addToIndex(final IndexView... indexViews) {
 
-<span class="nc" id="L61">        final WebTarget target = jestProvider.getTarget().path(&quot;_bulk&quot;);</span>
+<span class="nc" id="L63">        final WebTarget target = jestProvider.getTarget().path(&quot;_bulk&quot;);</span>
 
-<span class="nc" id="L63">        final StringBuilder b = new StringBuilder();</span>
-<span class="nc bnc" id="L64" title="All 2 branches missed.">        for (final IndexView indexView : indexViews) {</span>
-<span class="nc" id="L65">            b.append(</span>
+<span class="nc" id="L65">        final StringBuilder b = new StringBuilder();</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (final IndexView indexView : indexViews) {</span>
+<span class="nc" id="L67">            b.append(</span>
                 createObjectBuilder().add(&quot;index&quot;, createObjectBuilder()
                     .add(&quot;_index&quot;, configurationProvider.getMappedIndex(indexView.getIndex()))
                     .add(&quot;_type&quot;, indexView.getCollection())
                     .add(&quot;_id&quot;, indexView.getDoxID().toString())).build().toString());
-<span class="nc" id="L70">            b.append(&quot;\n&quot;);</span>
+<span class="nc" id="L72">            b.append(&quot;\n&quot;);</span>
 
-<span class="nc" id="L72">            final JsonObjectBuilder sourceBuilder = createObjectBuilder();</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">            for (final Entry&lt;String, BigDecimal&gt; d : indexView.getNumbers()) {</span>
-<span class="nc" id="L74">                sourceBuilder.add(d.getKey(), d.getValue());</span>
-<span class="nc" id="L75">            }</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; d : indexView.getStrings()) {</span>
-<span class="nc" id="L77">                sourceBuilder.add(d.getKey(), d.getValue());</span>
-<span class="nc" id="L78">            }</span>
+<span class="nc" id="L74">            final JsonObjectBuilder sourceBuilder = createObjectBuilder();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            for (final Entry&lt;String, BigDecimal&gt; d : indexView.getNumbers()) {</span>
+<span class="nc" id="L76">                sourceBuilder.add(d.getKey(), d.getValue());</span>
+<span class="nc" id="L77">            }</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; d : indexView.getStrings()) {</span>
+<span class="nc" id="L79">                sourceBuilder.add(d.getKey(), d.getValue());</span>
+<span class="nc" id="L80">            }</span>
 
-<span class="nc" id="L80">            final JsonObjectBuilder metaBuilder = createObjectBuilder();</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; d : indexView.getTexts()) {</span>
-<span class="nc" id="L82">                metaBuilder.add(d.getKey(), d.getValue());</span>
-<span class="nc" id="L83">            }</span>
-<span class="nc" id="L84">            metaBuilder.add(&quot;_text&quot;, indexView.getText());</span>
-<span class="nc" id="L85">            sourceBuilder.add(&quot;_&quot;, metaBuilder);</span>
+<span class="nc" id="L82">            final JsonObjectBuilder metaBuilder = createObjectBuilder();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            for (final Entry&lt;String, String&gt; d : indexView.getTexts()) {</span>
+<span class="nc" id="L84">                metaBuilder.add(d.getKey(), d.getValue());</span>
+<span class="nc" id="L85">            }</span>
+<span class="nc" id="L86">            metaBuilder.add(&quot;_text&quot;, indexView.getText());</span>
+<span class="nc" id="L87">            sourceBuilder.add(&quot;_&quot;, metaBuilder);</span>
 
-<span class="nc" id="L87">            b.append(sourceBuilder.build().toString());</span>
-<span class="nc" id="L88">            b.append(&quot;\n&quot;);</span>
+<span class="nc" id="L89">            b.append(sourceBuilder.build().toString());</span>
+<span class="nc" id="L90">            b.append(&quot;\n&quot;);</span>
         }
-<span class="nc" id="L90">        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);</span>
+<span class="nc" id="L92">        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);</span>
 
-<span class="nc" id="L92">    }</span>
+<span class="nc" id="L94">    }</span>
 
     /**
      * {@inheritDoc}
@@ -98,21 +100,21 @@ import net.trajano.doxdb.schema.IndexType;
     public void removeFromIndex(final String schemaName,
         final DoxID doxID) {
 
-<span class="nc" id="L101">        final WebTarget target = jestProvider.getTarget().path(&quot;_bulk&quot;);</span>
-<span class="nc" id="L102">        final StringBuilder b = new StringBuilder();</span>
+<span class="nc" id="L103">        final WebTarget target = jestProvider.getTarget().path(&quot;_bulk&quot;);</span>
+<span class="nc" id="L104">        final StringBuilder b = new StringBuilder();</span>
 
-<span class="nc bnc" id="L104" title="All 2 branches missed.">        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {</span>
 
-<span class="nc" id="L106">            b.append(</span>
+<span class="nc" id="L108">            b.append(</span>
                 createObjectBuilder().add(&quot;delete&quot;, createObjectBuilder()
                     .add(&quot;_index&quot;, configurationProvider.getMappedIndex(indexType.getName()))
                     .add(&quot;_type&quot;, schemaName)
                     .add(&quot;_id&quot;, doxID.toString())).build().toString());
-<span class="nc" id="L111">            b.append(&quot;\n&quot;);</span>
-<span class="nc" id="L112">        }</span>
+<span class="nc" id="L113">            b.append(&quot;\n&quot;);</span>
+<span class="nc" id="L114">        }</span>
 
-<span class="nc" id="L114">        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);</span>
-<span class="nc" id="L115">    }</span>
+<span class="nc" id="L116">        target.request(MediaType.APPLICATION_JSON).post(Entity.entity(b.toString(), MediaType.APPLICATION_OCTET_STREAM)).readEntity(JsonObject.class);</span>
+<span class="nc" id="L117">    }</span>
 
     /**
      * {@inheritDoc} Once the indices are removed,
@@ -122,14 +124,14 @@ import net.trajano.doxdb.schema.IndexType;
     @Override
     public void reset() {
 
-<span class="nc bnc" id="L125" title="All 2 branches missed.">        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        for (final IndexType indexType : configurationProvider.getPersistenceConfig().getIndex()) {</span>
 
-<span class="nc" id="L127">            final WebTarget target = jestProvider.getTarget().path(configurationProvider.getMappedIndex(indexType.getName()));</span>
-<span class="nc" id="L128">            target.request(MediaType.APPLICATION_JSON).delete().readEntity(JsonObject.class);</span>
+<span class="nc" id="L129">            final WebTarget target = jestProvider.getTarget().path(configurationProvider.getMappedIndex(indexType.getName()));</span>
+<span class="nc" id="L130">            target.request(MediaType.APPLICATION_JSON).delete().readEntity(JsonObject.class);</span>
 
-<span class="nc" id="L130">        }</span>
-<span class="nc" id="L131">        jestProvider.init();</span>
-<span class="nc" id="L132">    }</span>
+<span class="nc" id="L132">        }</span>
+<span class="nc" id="L133">        jestProvider.init();</span>
+<span class="nc" id="L134">    }</span>
 
     /**
      * {@inheritDoc}
@@ -140,39 +142,39 @@ import net.trajano.doxdb.schema.IndexType;
         final int limit,
         final Integer fromDoc) {
 
-<span class="nc" id="L143">        int from = 0;</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (fromDoc != null) {</span>
-<span class="nc" id="L145">            from = fromDoc;</span>
+<span class="nc" id="L145">        int from = 0;</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if (fromDoc != null) {</span>
+<span class="nc" id="L147">            from = fromDoc;</span>
         }
 
-<span class="nc" id="L148">        final SearchResult result = new SearchResult();</span>
+<span class="nc" id="L150">        final SearchResult result = new SearchResult();</span>
 
-<span class="nc" id="L150">        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add(&quot;query&quot;, queryString).add(&quot;default_operator&quot;, &quot;and&quot;);</span>
-<span class="nc" id="L151">        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add(&quot;simple_query_string&quot;, sqsBuilder);</span>
-<span class="nc" id="L152">        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add(&quot;size&quot;, limit).add(&quot;query&quot;, qBuilder).add(&quot;from&quot;, from);</span>
+<span class="nc" id="L152">        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add(&quot;query&quot;, queryString).add(&quot;default_operator&quot;, &quot;and&quot;);</span>
+<span class="nc" id="L153">        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add(&quot;simple_query_string&quot;, sqsBuilder);</span>
+<span class="nc" id="L154">        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add(&quot;size&quot;, limit).add(&quot;query&quot;, qBuilder).add(&quot;from&quot;, from);</span>
 
-<span class="nc" id="L154">        final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</span>
+<span class="nc" id="L156">        final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</span>
 
-<span class="nc" id="L156">        final JsonArray hits = results.getJsonObject(&quot;hits&quot;).getJsonArray(&quot;hits&quot;);</span>
-<span class="nc" id="L157">        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));</span>
-<span class="nc" id="L158">        result.setBottomDoc(Math.min(from + hits.size(), from + limit));</span>
-<span class="nc bnc" id="L159" title="All 2 branches missed.">        for (final JsonValue hitValue : hits) {</span>
-<span class="nc" id="L160">            final IndexView iv = new IndexView();</span>
-<span class="nc" id="L161">            final JsonObject hit = (JsonObject) hitValue;</span>
-<span class="nc" id="L162">            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));</span>
-<span class="nc" id="L163">            iv.setCollection(hit.getString(&quot;_type&quot;));</span>
+<span class="nc" id="L158">        final JsonArray hits = results.getJsonObject(&quot;hits&quot;).getJsonArray(&quot;hits&quot;);</span>
+<span class="nc" id="L159">        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));</span>
+<span class="nc" id="L160">        result.setBottomDoc(Math.min(from + hits.size(), from + limit));</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        for (final JsonValue hitValue : hits) {</span>
+<span class="nc" id="L162">            final IndexView iv = new IndexView();</span>
+<span class="nc" id="L163">            final JsonObject hit = (JsonObject) hitValue;</span>
+<span class="nc" id="L164">            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));</span>
+<span class="nc" id="L165">            iv.setCollection(hit.getString(&quot;_type&quot;));</span>
 
-<span class="nc bnc" id="L165" title="All 2 branches missed.">            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">                if (entry.getValue() instanceof JsonNumber) {</span>
-<span class="nc" id="L167">                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">                } else if (entry.getValue() instanceof JsonString) {</span>
-<span class="nc" id="L169">                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">                if (entry.getValue() instanceof JsonNumber) {</span>
+<span class="nc" id="L169">                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                } else if (entry.getValue() instanceof JsonString) {</span>
+<span class="nc" id="L171">                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());</span>
                 }
-<span class="nc" id="L171">            }</span>
-<span class="nc" id="L172">            result.addHit(iv);</span>
-<span class="nc" id="L173">        }</span>
+<span class="nc" id="L173">            }</span>
+<span class="nc" id="L174">            result.addHit(iv);</span>
+<span class="nc" id="L175">        }</span>
 
-<span class="nc" id="L175">        return result;</span>
+<span class="nc" id="L177">        return result;</span>
 
     }
 
@@ -186,42 +188,42 @@ import net.trajano.doxdb.schema.IndexType;
         final int limit,
         final Integer fromDoc) {
 
-<span class="nc" id="L189">        int from = 0;</span>
-<span class="nc bnc" id="L190" title="All 2 branches missed.">        if (fromDoc != null) {</span>
-<span class="nc" id="L191">            from = fromDoc;</span>
+<span class="nc" id="L191">        int from = 0;</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">        if (fromDoc != null) {</span>
+<span class="nc" id="L193">            from = fromDoc;</span>
         }
 
-<span class="nc" id="L194">        final SearchResult result = new SearchResult();</span>
+<span class="nc" id="L196">        final SearchResult result = new SearchResult();</span>
 
-<span class="nc" id="L196">        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add(&quot;query&quot;, queryString).add(&quot;default_operator&quot;, &quot;and&quot;);</span>
-<span class="nc" id="L197">        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add(&quot;simple_query_string&quot;, sqsBuilder);</span>
-<span class="nc" id="L198">        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder()</span>
+<span class="nc" id="L198">        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add(&quot;query&quot;, queryString).add(&quot;default_operator&quot;, &quot;and&quot;);</span>
+<span class="nc" id="L199">        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add(&quot;simple_query_string&quot;, sqsBuilder);</span>
+<span class="nc" id="L200">        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder()</span>
             .add(&quot;size&quot;, limit)
             .add(&quot;query&quot;, qBuilder)
             .add(&quot;from&quot;, from);
 
-<span class="nc" id="L203">        final JsonObject results = jestProvider.getTarget().path(index).path(schemaName).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</span>
+<span class="nc" id="L205">        final JsonObject results = jestProvider.getTarget().path(index).path(schemaName).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</span>
 
-<span class="nc" id="L205">        final JsonArray hits = results.getJsonObject(&quot;hits&quot;).getJsonArray(&quot;hits&quot;);</span>
-<span class="nc" id="L206">        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));</span>
-<span class="nc" id="L207">        result.setBottomDoc(Math.min(from + hits.size(), from + limit));</span>
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        for (final JsonValue hitValue : hits) {</span>
-<span class="nc" id="L209">            final IndexView iv = new IndexView();</span>
-<span class="nc" id="L210">            final JsonObject hit = (JsonObject) hitValue;</span>
-<span class="nc" id="L211">            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));</span>
-<span class="nc" id="L212">            iv.setCollection(hit.getString(&quot;_type&quot;));</span>
+<span class="nc" id="L207">        final JsonArray hits = results.getJsonObject(&quot;hits&quot;).getJsonArray(&quot;hits&quot;);</span>
+<span class="nc" id="L208">        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));</span>
+<span class="nc" id="L209">        result.setBottomDoc(Math.min(from + hits.size(), from + limit));</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        for (final JsonValue hitValue : hits) {</span>
+<span class="nc" id="L211">            final IndexView iv = new IndexView();</span>
+<span class="nc" id="L212">            final JsonObject hit = (JsonObject) hitValue;</span>
+<span class="nc" id="L213">            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));</span>
+<span class="nc" id="L214">            iv.setCollection(hit.getString(&quot;_type&quot;));</span>
 
-<span class="nc bnc" id="L214" title="All 2 branches missed.">            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {</span>
-<span class="nc bnc" id="L215" title="All 2 branches missed.">                if (entry.getValue() instanceof JsonNumber) {</span>
-<span class="nc" id="L216">                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());</span>
-<span class="nc bnc" id="L217" title="All 2 branches missed.">                } else if (entry.getValue() instanceof JsonString) {</span>
-<span class="nc" id="L218">                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">                if (entry.getValue() instanceof JsonNumber) {</span>
+<span class="nc" id="L218">                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                } else if (entry.getValue() instanceof JsonString) {</span>
+<span class="nc" id="L220">                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());</span>
                 }
-<span class="nc" id="L220">            }</span>
-<span class="nc" id="L221">            result.addHit(iv);</span>
-<span class="nc" id="L222">        }</span>
+<span class="nc" id="L222">            }</span>
+<span class="nc" id="L223">            result.addHit(iv);</span>
+<span class="nc" id="L224">        }</span>
 
-<span class="nc" id="L224">        return result;</span>
+<span class="nc" id="L226">        return result;</span>
 
     }
 
@@ -234,8 +236,8 @@ import net.trajano.doxdb.schema.IndexType;
     @EJB
     public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
 
-<span class="nc" id="L237">        this.configurationProvider = configurationProvider;</span>
-<span class="nc" id="L238">    }</span>
+<span class="nc" id="L239">        this.configurationProvider = configurationProvider;</span>
+<span class="nc" id="L240">    }</span>
 
     /**
      * Sets provider.
@@ -246,8 +248,8 @@ import net.trajano.doxdb.schema.IndexType;
     @EJB
     public void setJestProvider(final EsJaxRsProvider provider) {
 
-<span class="nc" id="L249">        jestProvider = provider;</span>
-<span class="nc" id="L250">    }</span>
+<span class="nc" id="L251">        jestProvider = provider;</span>
+<span class="nc" id="L252">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

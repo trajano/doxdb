@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-08-30T15:34:47.482">
+<pmd version="5.0.5" timestamp="2015-08-30T22:19:49.518">
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/Dox.java">
 <violation beginline="119" endline="119" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'oobs'.
@@ -74,22 +74,22 @@ Avoid declaring a variable if it is unreferenced before a possible exit point.
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java">
-<violation beginline="150" endline="150" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="152" endline="152" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="151" endline="151" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="153" endline="153" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="152" endline="152" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="154" endline="154" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="196" endline="196" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="198" endline="198" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="197" endline="197" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="199" endline="199" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="198" endline="198" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="200" endline="200" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
 </file>
