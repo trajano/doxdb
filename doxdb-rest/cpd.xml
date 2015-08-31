@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
    <duplication lines="29" tokens="251">
-      <file line="156"
+      <file line="162"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="205"
+      <file line="216"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
 
@@ -107,6 +107,34 @@
 
     public void setName(final String name) {]]></codefragment>
    </duplication>
+   <duplication lines="22" tokens="147">
+      <file line="141"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="192"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[    public SearchResult search(final String sourceIndex,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+        final String index = configurationProvider.getMappedIndex(sourceIndex);
+        if (index == null) {
+            throw new PersistenceException("index not found");
+        }
+
+        int from = 0;
+        if (fromDoc != null) {
+            from = fromDoc;
+        }
+
+        final SearchResult result = new SearchResult();
+
+        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add("query", queryString).add("default_operator", "and");
+        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add("simple_query_string", sqsBuilder);
+        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add("size", limit).add("query", qBuilder).add("from", from);
+
+        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);]]></codefragment>
+   </duplication>
    <duplication lines="30" tokens="123">
       <file line="27"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
@@ -203,28 +231,5 @@
     }
 
     public String getName() {]]></codefragment>
-   </duplication>
-   <duplication lines="17" tokens="123">
-      <file line="140"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="186"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <codefragment><![CDATA[    public SearchResult search(final String index,
-        final String queryString,
-        final int limit,
-        final Integer fromDoc) {
-
-        int from = 0;
-        if (fromDoc != null) {
-            from = fromDoc;
-        }
-
-        final SearchResult result = new SearchResult();
-
-        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add("query", queryString).add("default_operator", "and");
-        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add("simple_query_string", sqsBuilder);
-        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add("size", limit).add("query", qBuilder).add("from", from);
-
-        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);]]></codefragment>
    </duplication>
 </pmd-cpd>
