@@ -7,10 +7,11 @@
 <title>DoxDB</title>
 <link rel="stylesheet"
 	href="webjars/material-design-lite/${material-design-lite.version}/material.min.css">
-<link href="webjars/roboto-fontface/0.3.0/fonts/roboto-fontface.css"
+<link href="webjars/roboto-fontface/0.3.0/roboto-fontface.css"
 	rel="stylesheet">
-<link href="webjars/font-awesome/${font-awesome.version}/css/font-awesome.min.css"
-	rel="stylesheet">	
+<link
+	href="webjars/font-awesome/${font-awesome.version}/css/font-awesome.min.css"
+	rel="stylesheet">
 <style type="text/css">
 html, body {
 	font-family: 'Roboto', 'Helvetica', sans-serif;
@@ -39,10 +40,14 @@ html, body {
 	color: #37474F;
 }
 
-.doxdb-navigation .mdl-navigation__link .material-icons {
+.doxdb-navigation .mdl-navigation__link .fa {
 	font-size: 24px;
 	color: rgba(255, 255, 255, 0.56);
 	margin-right: 32px;
+}
+
+.doxdb-content {
+	max-width: 1080px;
 }
 </style>
 </head>
@@ -58,7 +63,7 @@ html, body {
 				<div
 					class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
 					<label class="mdl-button mdl-js-button mdl-button--icon"
-						for="search"> <i class="material-icons">search</i>
+						for="search"> <i class="fa fa-search"> </i>
 					</label>
 					<div class="mdl-textfield__expandable-holder">
 						<input class="mdl-textfield__input" type="text" id="search" /> <label
@@ -69,7 +74,7 @@ html, body {
 				<button
 					class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
 					id="hdrbtn">
-					<i class="material-icons">more_vert</i>
+					<i class="fa fa-ellipsis-v"> </i>
 				</button>
 				<ul
 					class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right"
@@ -84,39 +89,22 @@ html, body {
 			class="doxdb-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
 			<nav class="doxdb-navigation mdl-navigation mdl-color--blue-grey-800"
 				x-ng-controller="DoxDBNavController as doxdbnav">
+
+				<a class="mdl-navigation__link" href="#/"><i
+					class="mdl-color-text--blue-grey-400 fa fa-home"
+					role="presentation"> </i>Welcome</a>
+
 				<!-- route to different pages but will be a list of all the schemas here.  -->
 
-				<a class="mdl-navigation__link" href=""
+				<a class="mdl-navigation__link" href="#{{schema.schema}}"
 					x-ng-repeat="schema in doxdbnav.schemas"><i
-					class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">cloud</i>{{schema.name}}</a> <a
-					class="mdl-navigation__link" href=""><i
-					class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">folder_open</i>Horse</a> <a
-					class="mdl-navigation__link" href=""><i
-					class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">inbox</i>Inbox</a> <a class="mdl-navigation__link"
-					href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">delete</i>Trash</a> <a class="mdl-navigation__link"
-					href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">report</i>Spam</a> <a class="mdl-navigation__link"
-					href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">forum</i>Forums</a> <a class="mdl-navigation__link"
-					href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">flag</i>Updates</a> <a class="mdl-navigation__link"
-					href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">local_offer</i>Promos</a> <a
-					class="mdl-navigation__link" href=""><i
-					class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">shopping_cart</i>Purchases</a> <a
-					class="mdl-navigation__link" href=""><i
-					class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">people</i>Social</a>
-				<div class="mdl-layout-spacer"></div>
-				<a class="mdl-navigation__link" href=""><i
-					class="mdl-color-text--blue-grey-400 material-icons"
-					role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
+					class="mdl-color-text--blue-grey-400 fa fa-book"
+					role="presentation"> </i>{{schema.name}}</a>
 			</nav>
+		</div>
+
+		<div class="mdl-layout__content mdl-color--grey-100">
+			<div class="mdl-grid doxdb-content" x-ng-view></div>
 		</div>
 	</div>
 
