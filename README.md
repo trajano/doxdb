@@ -47,6 +47,8 @@ Remaining:
 Out of scope:
 
    * Alternate search (not going to be in scope until a better alternative to ElasticSearch is found)
+   * REST API to list all the schema types.  It is expected the applications 
+     would know what to use.
    * Extra operations are out of scope.  Instead the application will provide
      their own REST API.  However, DoxDB provides a Local EJB API that the
      REST API may invoke. 

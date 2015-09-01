@@ -12,9 +12,13 @@
     <properties>
         <angularjs.version>1.4.3-1</angularjs.version>
         <angular-schema-form.version>0.8.8</angular-schema-form.version>
+        <angular-ui-bootstrap.version>0.13.3</angular-ui-bootstrap.version>
         <bootstrap.version>3.3.5</bootstrap.version>
+        <font-awesome.version>4.4.0</font-awesome.version>
+        <jquery.version>2.1.4</jquery.version>
         <m2e.jpa.activation>true</m2e.jpa.activation>
         <m2eclipse.wtp.contextRoot>/doxdb-sample</m2eclipse.wtp.contextRoot>
+        <material-design-lite.version>1.0.4</material-design-lite.version>
         <objectpath.version>1.1.0</objectpath.version>
         <tv4.version>1.0.15</tv4.version>
     </properties>
@@ -40,13 +44,43 @@
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
+            <artifactId>angular-ui-bootstrap</artifactId>
+            <version>${angular-ui-bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>${font-awesome.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>2.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>angular-material-icons</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>material-design-lite</artifactId>
+            <version>${material-design-lite.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>objectpath</artifactId>
             <version>${objectpath.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>roboto-fontface</artifactId>
+            <version>0.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
