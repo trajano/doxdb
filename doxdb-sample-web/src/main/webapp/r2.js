@@ -2,7 +2,9 @@ angular.module('doxdbApp', [
     'doxdb', 'ngRoute'
 ])
 
-.config(function($routeProvider) {
+.config(function($compileProvider, $routeProvider) {
+
+    $compileProvider.debugInfoEnabled(false);
 
     $routeProvider
 
@@ -12,14 +14,28 @@ angular.module('doxdbApp', [
         controllerAs : "doxdbWelcome"
     })
 
-    .when("/:name", {
+    .when("/venue", {
         templateUrl : "partials/schema.html",
         controller : "DoxDBSchemaController",
-        controllerAs : "doxdbSchema"
+        controllerAs : "doxdbSchema",
+        resolve : {
+            "resource" : "DoxDBvenue"
+        }
     })
 
     .otherwise("/welcome");
 
+})
+
+.run(function($rootScope, $location, $timeout) {
+
+    $rootScope.$on('$viewContentLoaded', function() {
+
+        $timeout(function() {
+
+            componentHandler.upgradeAllRegistered();
+        });
+    });
 })
 
 .controller('DoxDBNavController', function(DoxDBService) {
@@ -29,12 +45,38 @@ angular.module('doxdbApp', [
     navController.schemas = DoxDBService.schemas;
 })
 
-.controller('DoxDBSchemaController', function(DoxDBService, $routeParams, $log) {
+.controller('DoxDBSchemaController', function(DoxDBService, $routeParams, $log, resource) {
 
     schemaController = this;
-    $log.info($routeParams);
-    $log.info("HERE");
-    schemaController.schema = $routeParams.name;
+    schemaController.uiRowModel = {};
+
+    resource.query({}, function(items) {
+
+        schemaController.items = items;
+    });
+
+    schemaController.toggleDetails = function(_id) {
+
+        if (schemaController.uiRowModel[_id] === undefined) {
+            schemaController.uiRowModel[_id] = {
+                shown : false
+            };
+        }
+        schemaController.uiRowModel[_id].shown = !schemaController.uiRowModel[_id].shown;
+    };
+
+    schemaController.edit = function(_id) {
+
+        $log.info("open editor for " + _id);
+
+    };
+
+    schemaController.trash = function(_id) {
+
+        $log.info("delete confirmation for " + _id);
+
+    };
+
 })
 
 .controller('DoxDBWelcomeController', function(DoxDBService) {
@@ -48,10 +90,12 @@ angular.module('doxdbApp', [
     this.schemas = [
         {
             "name" : "Venue",
-            "schema" : "venue"
+            "schema" : "venue",
+            "readAll" : true
         }, {
             "name" : "Horse",
-            "schema" : "horse"
+            "schema" : "horse",
+            "readAll" : false
         }
     ];
 
