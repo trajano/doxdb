@@ -1,5 +1,5 @@
 angular.module('doxdbApp', [
-    'doxdb', 'ngRoute'
+    'doxdb', 'ngRoute', 'ui.bootstrap'
 ])
 
 .config(function($compileProvider, $routeProvider) {
