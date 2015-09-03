@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html x-ng-app="demoApp">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+	<div x-ng-controller="DemoAppController as demo">
+		<div x-foo>bar</div>
+		<div x-foo>
+			bar<b>bee</b>
+		</div>
+	</div>
+	<div>
+		<div>bar</div>
+		<div>
+			bar<b>bee</b>
+		</div>
+	</div>
+	<script src="webjars/angularjs/${angularjs.version}/angular.js"></script>
+	<script>
+        angular.module("demoApp", []).controller("DemoAppController", function($log) {
+
+        }).directive("foo", function($log) {
+
+            return {
+                transclude : true,
+                template : function(tElement, tAttr) {
+
+                    return "<div ng-transclude />";
+                }
+
+            };
+        });
+    </script>
+</body>
+</html>

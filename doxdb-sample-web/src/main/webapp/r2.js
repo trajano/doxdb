@@ -1,10 +1,10 @@
 angular.module('doxdbApp', [
-    'doxdb', 'ngRoute', 'ui.bootstrap'
+    'doxdb.module', 'ngRoute', 'ui.bootstrap'
 ])
 
 .config(function($compileProvider, $routeProvider) {
 
-    $compileProvider.debugInfoEnabled(false);
+    $compileProvider.debugInfoEnabled(true);
 
     $routeProvider
 
@@ -79,10 +79,172 @@ angular.module('doxdbApp', [
 
 })
 
-.controller('DoxDBWelcomeController', function(DoxDBService) {
+.controller('DoxDBWelcomeController', function(DoxDBService, $log) {
 
     welcomeController = this;
+    welcomeController.collapsed = true;
+    welcomeController.foo = function() {
 
+        $log.info("HERE");
+    }
+
+})
+
+.controller('AccordionTableController', function() {
+
+    accordionTable = this;
+    accordionTable.groups = [
+        {
+            details : []
+        }
+    ];
+    accordionTable.currentGroup = accordionTable.groups[0];
+
+    this.addDataRow = function(dataRowScope) {
+
+        // this is added for the data row which is used to trigger an expansion.
+        if (accordionTable.currentGroup.data !== undefined) {
+            accordionTable.groups.push({
+                details : []
+            });
+            accordionTable.currentGroup = accordionTable.groups[accordionTable.groups.length - 1];
+        }
+        accordionTable.currentGroup.data = dataRowScope;
+        dataRowScope.$on('$destroy', function(event) {
+
+            accordionTable.removeGroup(dataRowScope);
+        });
+    };
+
+    this.addDetailRow = function(detailRowScope) {
+
+        // this is expected to be executed after a data row.  There can be more than one detail row.
+        accordionTable.currentGroup.details.push(detailRowScope);
+    };
+
+    // This is called from the accordion-group directive when to remove itself
+    this.removeGroup = function(rowScope) {
+
+        var filteredGroups = [];
+        angular.forEach(accordionTable.groups, function(group) {
+
+            if (group.data != rowScope) {
+                filteredGroups.push(group);
+            }
+        });
+        accordionTable.groups = filteredGroups;
+    };
+
+})
+
+// The accordion directive simply sets up the directive controller
+// and adds an accordion CSS class to itself element.
+.directive('accordionTable', function() {
+
+    return {
+        controller : 'AccordionTableController',
+        controllerAs : 'accordionTable',
+        transclude : true,
+        link : function(scope, el, iAttrs, controller, transcludeFn) {
+
+            transcludeFn(scope, function(clonedTranscludedContent) {
+
+                el.append(clonedTranscludedContent);
+            });
+
+        }
+
+    };
+})
+
+.directive('accordionTableDataRow', function($log, $compile) {
+
+    return {
+        transclude : true,
+        scope : {},
+        require : "^accordionTable",
+
+        xcompile : function(templateElement, templateAttributes) {
+
+            var templateDirectiveContent = templateElement.contents().remove();
+            var compiledContent = null;
+
+            return function($scope, linkElement, linkAttributes) {
+
+                /*
+                 * This verification avoid to compile the content to all
+                 * siblings, because when you compile the siblings, don't work
+                 * (I don't know why, yet). So, doing this we get only the top
+                 * level link function (from each iteration)
+                 */
+                if (!compiledContent) {
+                    compiledContent = $compile(templateDirectiveContent);
+                }
+
+                /*
+                 * Calling the link function passing the actual scope we get a
+                 * clone object wich contains the finish viewed object, the view
+                 * itself, the DOM!! Then, we attach the new dom in the element
+                 * wich contains the directive
+                 */
+                compiledContent($scope, function(clone) {
+
+                    linkElement.append(clone);
+                });
+            };
+        },
+
+        compile : function(tElement, tAttrs, transclude) {
+
+            tAttrs.$set("ngClick", "doxdbWelcome.foo()");
+            delete tAttrs['accordionTableDataRow'];
+            return function(scope, el, iAttrs, controller, transcludeFn) {
+
+                var rec = $compile(tElement);
+                //$compile(el)(scope);
+                rec(scope);
+                transcludeFn(scope, function(clonedTranscludedContent) {
+
+                    scope.isOpen = false;
+                    $log.info(el);
+                    el.append(clonedTranscludedContent);
+                });
+
+                //var c = $compile(el.contents());
+                //c(scope);
+
+                //$compile(el);//(scope);
+                //                $compile(el);
+            };
+        },
+        xxlink : {
+            pre : function(scope, el, iAttrs, controller) {
+
+                el.attr("ng-click", "doxdbWelcome.foo()");
+                el.removeAttr("x-accordion-table-data-row");
+                $compile(el)(scope);
+                //el.attr("ng-click", "doxdbWelcome.foo()");
+                //$compile(el)(scope);
+                //                $log.info(el);
+            },
+            post : function(scope, el, iAttrs, controller, transcludeFn) {
+
+                //$compile(el)(scope);
+                transcludeFn(scope, function(clonedTranscludedContent) {
+
+                    scope.isOpen = false;
+                    $log.info(el);
+                    el.append(clonedTranscludedContent);
+                });
+
+                //var c = $compile(el.contents());
+                //c(scope);
+
+                //$compile(el);//(scope);
+                //                $compile(el);
+            }
+        }
+    };
 })
 
 .service('DoxDBService', function() {
