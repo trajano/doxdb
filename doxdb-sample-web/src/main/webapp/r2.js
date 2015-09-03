@@ -161,7 +161,7 @@ angular.module('doxdbApp', [
 
     return {
         transclude : true,
-        scope : {},
+        xscope : {},
         require : "^accordionTable",
 
         xcompile : function(templateElement, templateAttributes) {
@@ -193,8 +193,21 @@ angular.module('doxdbApp', [
                 });
             };
         },
+        replace : true,
+        template : function(tElement, tAttr) {
 
-        compile : function(tElement, tAttrs, transclude) {
+            tElement.attr("ng-click", "doxdbWelcome.foo()");
+            tElement.attr("ng-transclude", "");
+            if (tAttr.$attr.accordionTableDataRow === undefined) {
+                return "<" + tElement[0].outerHTML.replace(/(^<\w+|\w+>$)/g, 'div') + ">";
+            } else {
+                tElement.removeAttr(tAttr.$attr.accordionTableDataRow);
+                $log.info(tElement[0].outerHTML);
+                return tElement[0].outerHTML;
+            }
+        },
+
+        xxxcompile : function(tElement, tAttrs, transclude) {
 
             tAttrs.$set("ngClick", "doxdbWelcome.foo()");
             delete tAttrs['accordionTableDataRow'];
