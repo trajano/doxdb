@@ -12,6 +12,7 @@
 		<div x-foo x-abc='123' x-no-op>
 			bar<b>bee</b>
 		</div>
+		<foo x-abc='123' x-no-op> Element<b>bee</b> </foo>
 	</div>
 	<div>
 		<div>bar</div>
@@ -30,17 +31,17 @@
         }).directive("foo", function($log) {
 
             return {
-                restrict : 'A',
                 transclude : true,
                 template : function(tElement, tAttr) {
 
                     tElement.attr("ng-click", "demo.logme()");
                     tElement.attr("ng-transclude", "");
-                    tElement.removeAttr(tAttr.$attr.foo);
-                    var t = tElement[0].outerHTML;
-                    $log.info(t);
-                    return t;
-                    //return "<div ng-transclude />";
+                    if (tAttr.$attr.foo === undefined) {
+                        return "<" + tElement[0].outerHTML.replace(/(^<\w+|\w+>$)/g, 'div') + ">";
+                    } else {
+                        tElement.removeAttr(tAttr.$attr.foo);
+                        return tElement[0].outerHTML;
+                    }
                 }
 
             };
