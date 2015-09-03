@@ -9,7 +9,7 @@
 
 	<div x-ng-controller="DemoAppController as demo">
 		<div x-foo>bar</div>
-		<div x-foo>
+		<div x-foo x-abc='123' x-no-op>
 			bar<b>bee</b>
 		</div>
 	</div>
@@ -23,13 +23,24 @@
 	<script>
         angular.module("demoApp", []).controller("DemoAppController", function($log) {
 
+            this.logme = function() {
+
+                $log.info("here");
+            }
         }).directive("foo", function($log) {
 
             return {
+                restrict : 'A',
                 transclude : true,
                 template : function(tElement, tAttr) {
 
-                    return "<div ng-transclude />";
+                    tElement.attr("ng-click", "demo.logme()");
+                    tElement.attr("ng-transclude", "");
+                    tElement.removeAttr(tAttr.$attr.foo);
+                    var t = tElement[0].outerHTML;
+                    $log.info(t);
+                    return t;
+                    //return "<div ng-transclude />";
                 }
 
             };
