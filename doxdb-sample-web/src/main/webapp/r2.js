@@ -1,5 +1,5 @@
 angular.module('doxdbApp', [
-    'doxdb.module', 'ngRoute', 'ui.bootstrap'
+    'doxdb.module', 'ngRoute', 'ngAnimate', 'ui.bootstrap'
 ])
 
 .config(function($compileProvider, $routeProvider) {
@@ -83,14 +83,15 @@ angular.module('doxdbApp', [
 
     welcomeController = this;
     welcomeController.collapsed = true;
+    welcomeController.hello = "Hello world";
     welcomeController.foo = function() {
 
         $log.info("HERE");
-    }
+    };
 
 })
 
-.controller('AccordionTableController', function() {
+.controller('AccordionTableController', function($log) {
 
     accordionTable = this;
     accordionTable.groups = [
@@ -102,6 +103,7 @@ angular.module('doxdbApp', [
 
     this.addDataRow = function(dataRowScope) {
 
+        $log.info(dataRowScope);
         // this is added for the data row which is used to trigger an expansion.
         if (accordionTable.currentGroup.data !== undefined) {
             accordionTable.groups.push({
@@ -114,6 +116,11 @@ angular.module('doxdbApp', [
 
             accordionTable.removeGroup(dataRowScope);
         });
+    };
+
+    this.getDataRow = function() {
+
+        return accordionTable.currentGroup.data;
     };
 
     this.addDetailRow = function(detailRowScope) {
@@ -142,17 +149,9 @@ angular.module('doxdbApp', [
 .directive('accordionTable', function() {
 
     return {
+        scope : true,
         controller : 'AccordionTableController',
         controllerAs : 'accordionTable',
-        transclude : true,
-        link : function(scope, el, iAttrs, controller, transcludeFn) {
-
-            transcludeFn(scope, function(clonedTranscludedContent) {
-
-                el.append(clonedTranscludedContent);
-            });
-
-        }
 
     };
 })
@@ -161,101 +160,115 @@ angular.module('doxdbApp', [
 
     return {
         transclude : true,
-        xscope : {},
         require : "^accordionTable",
+        replace : true,
+        scope : true,
+        controller : function($scope, $log) {
 
-        xcompile : function(templateElement, templateAttributes) {
+            row = this;
+            row.isOpen = false;
 
-            var templateDirectiveContent = templateElement.contents().remove();
-            var compiledContent = null;
+            row.toggle = function() {
 
-            return function($scope, linkElement, linkAttributes) {
-
-                /*
-                 * This verification avoid to compile the content to all
-                 * siblings, because when you compile the siblings, don't work
-                 * (I don't know why, yet). So, doing this we get only the top
-                 * level link function (from each iteration)
-                 */
-                if (!compiledContent) {
-                    compiledContent = $compile(templateDirectiveContent);
-                }
-
-                /*
-                 * Calling the link function passing the actual scope we get a
-                 * clone object wich contains the finish viewed object, the view
-                 * itself, the DOM!! Then, we attach the new dom in the element
-                 * wich contains the directive
-                 */
-                compiledContent($scope, function(clone) {
-
-                    linkElement.append(clone);
-                });
+                row.isOpen = !row.isOpen;
+                $log.info(row.isOpen);
             };
         },
-        replace : true,
+        controllerAs : 'row',
         template : function(tElement, tAttr) {
 
-            tElement.attr("ng-click", "doxdbWelcome.foo()");
+            tElement.attr("ng-click", "row.toggle()");
             tElement.attr("ng-transclude", "");
             if (tAttr.$attr.accordionTableDataRow === undefined) {
                 return "<" + tElement[0].outerHTML.replace(/(^<\w+|\w+>$)/g, 'div') + ">";
             } else {
                 tElement.removeAttr(tAttr.$attr.accordionTableDataRow);
-                $log.info(tElement[0].outerHTML);
                 return tElement[0].outerHTML;
             }
         },
+        link : function(scope, iElement, iAttrs, accordionTable) {
 
-        xxxcompile : function(tElement, tAttrs, transclude) {
+            accordionTable.addDataRow(scope);
+            scope.$watch('row.isOpen', function(isOpen) {
 
-            tAttrs.$set("ngClick", "doxdbWelcome.foo()");
-            delete tAttrs['accordionTableDataRow'];
-            return function(scope, el, iAttrs, controller, transcludeFn) {
+                if (isOpen) {
 
-                var rec = $compile(tElement);
-                //$compile(el)(scope);
-                rec(scope);
-                transcludeFn(scope, function(clonedTranscludedContent) {
+                }
+            });
+        }
+    };
+})
 
-                    scope.isOpen = false;
-                    $log.info(el);
-                    el.append(clonedTranscludedContent);
-                });
+.directive('accordionTableDetailRow', function($log, $compile, $animate) {
 
-                //var c = $compile(el.contents());
-                //c(scope);
+    return {
+        require : "^accordionTable",
+        replace : true,
+        link : function(scope, element, iAttrs, accordionTable) {
 
-                //$compile(el);//(scope);
-                //                $compile(el);
-            };
-        },
-        xxlink : {
-            pre : function(scope, el, iAttrs, controller) {
+            function expand() {
 
-                el.attr("ng-click", "doxdbWelcome.foo()");
-                el.removeAttr("x-accordion-table-data-row");
-                $compile(el)(scope);
-                //el.attr("ng-click", "doxdbWelcome.foo()");
-                //$compile(el)(scope);
-                //                $log.info(el);
-            },
-            post : function(scope, el, iAttrs, controller, transcludeFn) {
+                element.removeClass('collapse').addClass('collapsing').attr('aria-expanded', true).attr('aria-hidden', false);
 
-                //$compile(el)(scope);
-                transcludeFn(scope, function(clonedTranscludedContent) {
-
-                    scope.isOpen = false;
-                    $log.info(el);
-                    el.append(clonedTranscludedContent);
-                });
-
-                //var c = $compile(el.contents());
-                //c(scope);
-
-                //$compile(el);//(scope);
-                //                $compile(el);
+                $animate.addClass(element, 'in', {
+                    to : {
+                        height : element[0].scrollHeight + 'px'
+                    }
+                }).then(expandDone);
             }
+
+            function expandDone() {
+
+                element.removeClass('collapsing');
+                element.css({
+                    height : 'auto'
+                });
+            }
+
+            function collapse() {
+
+                if (!element.hasClass('collapse') && !element.hasClass('in')) {
+                    return collapseDone();
+                }
+
+                element
+                // IMPORTANT: The height must be set before adding "collapsing" class.
+                // Otherwise, the browser attempts to animate from height 0 (in
+                // collapsing class) to the given height here.
+                .css({
+                    height : element[0].scrollHeight + 'px'
+                })
+                // initially all panel collapse have the collapse class, this removal
+                // prevents the animation from jumping to collapsed state
+                .removeClass('collapse').addClass('collapsing').attr('aria-expanded', false).attr('aria-hidden', true);
+
+                $animate.removeClass(element, 'in', {
+                    to : {
+                        height : '0'
+                    }
+                }).then(collapseDone);
+            }
+
+            function collapseDone() {
+
+                element.css({
+                    height : '0'
+                }); // Required so that collapse works when animation is disabled
+                element.removeClass('collapsing');
+                element.addClass('collapse');
+            }
+
+            accordionTable.addDetailRow(scope);
+            //            $log.info("data row row" + dataRow.row.isOpen);
+            //            scope.$watch('dataRow.row.isOpen', function(shouldCollapse) {
+            //
+            //                $log.info("shouldCollapse" + shouldCollapse);
+            //                if (shouldCollapse) {
+            //                    collapse();
+            //                } else {
+            //                    expand();
+            //                }
+            //            });
         }
     };
 })

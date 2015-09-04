@@ -1,5 +1,37 @@
 <div id="lipsum">
 
+	<table class="table table-bordered" x-accordion-table>
+		<thead>
+			<tr>
+				<th class="">Material</th>
+				<th>Quantity</th>
+				<th>Unit price</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr x-accordion-table-data-row x-hello="test">
+				<td class="">Acrylic (Transparent)</td>
+				<td>{{row}}</td>
+				<td>{{doxdbWelcome.hello}}</td>
+			</tr>
+			<tr x-accordion-table-detail-row x-hello="test">
+				<td class="">Detail Row {{doxdbWelcome.hello}}</td>
+				<td>{{row.isOpen}}</td>
+				<td>$2.90</td>
+			</tr>
+			<tr x-accordion-table-data-row x-hello="test">
+				<td class="">Acrylic (Transparent)</td>
+				<td>25</td>
+				<td>$2.90</td>
+			</tr>
+			<tr x-accordion-table-detail-row x-hello="test">
+				<td class="">Detail Row {{doxdbWelcome.hello}}</td>
+				<td>{{row.isOpen}}</td>
+				<td>$2.90</td>
+			</tr>
+		</tbody>
+	</table>
+
 	<table class="mdl-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col"
 		x-accordion-table>
 		<thead>
@@ -13,21 +45,33 @@
 			<tr x-accordion-table-data-row x-hello="test">
 				<td class="mdl-data-table__cell--non-numeric">Acrylic
 					(Transparent)</td>
+				<td>{{row}}</td>
+				<td>{{doxdbWelcome.hello}}</td>
+			</tr>
+			<tr x-accordion-table-detail-row x-hello="test">
+				<td class="mdl-data-table__cell--non-numeric">Detail Row
+					{{doxdbWelcome.hello}}</td>
+				<td>{{row.isOpen}}</td>
+				<td>$2.90</td>
+			</tr>
+			<tr x-accordion-table-data-row x-hello="test">
+				<td class="mdl-data-table__cell--non-numeric">Acrylic
+					(Transparent)</td>
 				<td>25</td>
 				<td>$2.90</td>
 			</tr>
-			<tr x-ng-click="doxdbWelcome.foo()">
+			<tr x-ng-click="isOpen = !isOpen">
 				<td class="mdl-data-table__cell--non-numeric">ngclick here
 					(Transparent)</td>
 				<td>25</td>
 				<td>$2.90</td>
 			</tr>
-			<tr>
-				<td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
+			<tr class="mdl-color--primary" x-collapse="!isOpen">
+				<td class="mdl-data-table__cell--non-numeric">Collaps</td>
 				<td>50</td>
 				<td>$1.25</td>
 			</tr>
-			<tr>
+			<tr class="mdl-color--primary" x-collapse="!isOpen">
 				<td class="mdl-data-table__cell--non-numeric" colspan="3">
 					<table
 						class="mdl-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col">
@@ -78,8 +122,7 @@
 	</table>
 
 
-	<table class="mdl-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col"
-		>
+	<table class="mdl-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col">
 		<thead>
 			<tr>
 				<th class="mdl-data-table__cell--non-numeric">Material</th>
@@ -259,31 +302,7 @@
 
 	</div>
 
-	<div x-accordion x-close-others="false">
-		<div x-accordion-group x-template-url="partials/accordion-group.html">
-			<div x-accordion-heading>
-				I can have markup, too! <i class="pull-right fa fa-chevron-down">
-				</i>
-			</div>
-			This is just some content to illustrate fancy headings.
-		</div>
 
-		<div x-accordion-group x-template-url="partials/accordion-group.html">
-			<div x-accordion-heading>
-				I can have markup, too! <i class="pull-right fa fa-chevron-down">
-				</i>
-			</div>
-			This is just some content to illustrate fancy headings.
-		</div>
-
-
-
-
-
-
-
-
-	</div>
 
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
 		id diam odio. Duis eget nibh non mi bibendum egestas. Cras lectus
