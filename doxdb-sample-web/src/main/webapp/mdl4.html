@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html x-ng-app="demoApp">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="webjars/material-design-lite/${material-design-lite.version}/material.min.css">
+<link
+	href="webjars/bootstrap/${bootstrap.version}/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="webjars/roboto-fontface/0.3.0/roboto-fontface.css"
+	rel="stylesheet">
+<link
+	href="webjars/font-awesome/${font-awesome.version}/css/font-awesome.min.css"
+	rel="stylesheet">
+</head>
+<body>
+
+	<div x-ng-controller="DemoAppController as demo">
+
+
+		<table class="table table-bordered" x-accordion-table>
+			<thead>
+				<tr>
+					<th class="">Material</th>
+					<th>Quantity</th>
+					<th>Unit price</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr x-accordion-table-data-row x-hello="test">
+					<td class="">Acrylic (Transparent)</td>
+					<td>{{row}}</td>
+					<td>{{doxdbWelcome.hello}}</td>
+				</tr>
+				<tr x-accordion-table-detail-row x-hello="test">
+					<td class="">Detail Row {{doxdbWelcome.hello}}</td>
+					<td>{{row.isOpen}}</td>
+					<td>$2.90</td>
+				</tr>
+				<tr x-accordion-table-data-row x-hello="test">
+					<td class="">Acrylic (Transparent)</td>
+					<td>25</td>
+					<td>$2.90</td>
+				</tr>
+				<tr x-accordion-table-detail-row x-hello="test">
+					<td class="">Detail Row {{doxdbWelcome.hello}}</td>
+					<td>{{row.isOpen}}</td>
+					<td>$2.90</td>
+				</tr>
+			</tbody>
+		</table>
+
+
+
+
+
+
+
+
+
+
+
+	</div>
+
+	<script src="webjars/angularjs/${angularjs.version}/angular.js"></script>
+	<script src="webjars/angularjs/${angularjs.version}/angular-animate.js"></script>
+	<script src="accordion-table.js"></script>
+	<script>
+        angular.module("demoApp", [
+            'accordionTable'
+        ]).controller("DemoAppController", function($log) {
+
+            this.logme = function() {
+
+                $log.info("here");
+            }
+        }).directive("foo", function($log) {
+
+            return {
+                transclude : true,
+                replace : true,
+                template : function(tElement, tAttr) {
+
+                    tElement.attr("ng-click", "demo.logme()");
+                    tElement.attr("ng-transclude", "");
+                    if (tAttr.$attr.foo === undefined) {
+                        return "<" + tElement[0].outerHTML.replace(/(^<\w+|\w+>$)/g, 'div') + ">";
+                    } else {
+                        tElement.removeAttr(tAttr.$attr.foo);
+                        return tElement[0].outerHTML;
+                    }
+                }
+
+            };
+        });
+    </script>
+</body>
+</html>
