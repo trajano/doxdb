@@ -1,73 +1,82 @@
-<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp"
-	x-accordion-table>
+<div class="row">
+	<div class="col-md-12">
 
-	<thead>
-		<tr>
-			<th class="mdl-data-table__cell--non-numeric">Material</th>
-			<th>Quantity</th>
-			<th class="mdl-data-table__cell--non-numeric">ID</th>
-			<th class="mdl-data-table__cell--non-numeric"></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr x-ng-repeat-start="item in doxdbSchema.items"
-			x-accordion-table-data-row
-			x-ng-click="doxdbSchema.toggleDetails(item._id)"
-			x-ng-dblclick="doxdbSchema.edit(item._id)">
-			<td class="mdl-data-table__cell--non-numeric">{{item.name}}</td>
-			<td>25</td>
-			<td class="mdl-data-table__cell--non-numeric">{{item._id}}</td>
-			<td class="doxdb-list-actions">
-				<button id="edit_{{::item._id}}"
-					class="mdl-button mdl-js-button mdl-button--icon"
-					x-ng-click="doxdbSchema.edit(item._id);$event.stopPropagation()">
-					<i class="fa fa-edit"> </i>
-				</button> <label class="mdl-tooltip" for="edit_{{::item._id}}">Edit</label>
-				<button id="delete_{{::item._id}}"
-					class="mdl-button mdl-js-button mdl-button--icon"
-					x-ng-click="doxdbSchema.trash(item._id);$event.stopPropagation()">
-					<i class="fa fa-trash"> </i>
-				</button> <label class="mdl-tooltip" for="delete_{{::item._id}}">Delete</label>
-			</td>
+		<div class="table-responsive">
+			<table class="table table-hover doxdb-list" x-accordion-table>
 
-		</tr>
-		<tr x-ng-click="doxdbSchema.toggleDetails(item._id)" x-ng-repeat-end
-			x-accordion-table-detail-row
-			x-ng-show="doxdbSchema.uiRowModel[item._id].shown"
-			class="doxdb-list-details">
-			<td colspan="4">Expanded {{item.name}}</td>
-		</tr>
-	</tbody>
-</table>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-	id diam odio. Duis eget nibh non mi bibendum egestas. Cras lectus enim,
-	rutrum sed turpis sit amet, suscipit lacinia mi. Interdum et malesuada
-	fames ac ante ipsum primis in faucibus. Sed mollis, leo eu pulvinar
-	laoreet, dui felis facilisis urna, sed congue neque neque at libero.
-	Suspendisse potenti. Mauris accumsan, purus ut faucibus aliquet, orci
-	diam volutpat dolor, in tincidunt nisl lectus vitae diam. Nam eu purus
-	id purus auctor lobortis. Donec molestie tortor eu dui auctor, et
-	efficitur augue venenatis. Donec volutpat risus eleifend sollicitudin
-	ultricies. Nullam metus lorem, semper pharetra metus id, vestibulum
-	aliquam tellus. Cras consectetur aliquet erat non pulvinar.</p>
-<p>Phasellus dictum sagittis vestibulum. In hac habitasse platea
-	dictumst. Donec laoreet elementum ex. Vivamus consectetur ligula nisl,
-	vel vehicula erat semper ac. Nam dictum metus in ipsum feugiat, a
-	tempus purus luctus. Sed semper feugiat tincidunt. Donec accumsan diam
-	nec elit consectetur, a suscipit ligula rutrum. Duis dictum mauris in
-	molestie finibus. Nam posuere quam id sem commodo iaculis. Quisque a
-	facilisis tortor. Curabitur laoreet sed magna in consequat. Integer sed
-	malesuada nulla.</p>
-<p>Aenean malesuada, elit rutrum vestibulum efficitur, dolor erat
-	ullamcorper leo, eu auctor enim nulla eget quam. Aliquam dapibus ornare
-	turpis ac luctus. In quis auctor urna. Pellentesque nec iaculis tortor.
-	Vestibulum venenatis sem eget lectus molestie, imperdiet fringilla arcu
-	tempor. Nam id varius nunc, vel elementum tortor. In id ante mattis,
-	fermentum nunc vitae, pulvinar libero. Etiam viverra sapien nec elit
-	lacinia, non tristique neque pretium.</p>
-<div id="page-actions" class="mdl-content">
-	<button
-		class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent">
-		<i class="fa fa-plus mdl-color-text--white" role="presentation"> </i>
-	</button>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Quantity</th>
+						<th>ID</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr x-ng-repeat-start="item in doxdbSchema.items"
+						x-accordion-table-data-row x-ng-class-odd="'odd'"
+						x-ng-class-even="'even'"
+						x-ng-click="doxdbSchema.toggleDetails(item._id)"
+						x-ng-dblclick="doxdbSchema.edit(item._id)">
+						<td>{{item.name}}</td>
+						<td>{{$index}}</td>
+						<td class="mdl-data-table__cell--non-numeric">{{item._id}}</td>
+						<td class="doxdb-list-actions">
+							<button id="edit_{{::item._id}}"
+								class="mdl-button mdl-js-button mdl-button--icon"
+								x-ng-click="doxdbSchema.edit(item._id);$event.stopPropagation()">
+								<i class="fa fa-edit"> </i>
+							</button> <label class="mdl-tooltip" for="edit_{{::item._id}}">Edit</label>
+							<button id="delete_{{::item._id}}"
+								class="mdl-button mdl-js-button mdl-button--icon"
+								x-ng-click="doxdbSchema.trash(item._id);$event.stopPropagation()">
+								<i class="fa fa-trash"> </i>
+							</button> <label class="mdl-tooltip" for="delete_{{::item._id}}">Delete</label>
+						</td>
+
+					</tr>
+					<tr x-ng-click="doxdbSchema.toggleDetails(item._id)"
+						x-ng-repeat-end x-accordion-table-detail-row
+						x-ng-show="doxdbSchema.uiRowModel[item._id].shown"
+						class="doxdb-list-details">
+						<td colspan="4">Expanded {{item.name}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+			id diam odio. Duis eget nibh non mi bibendum egestas. Cras lectus
+			enim, rutrum sed turpis sit amet, suscipit lacinia mi. Interdum et
+			malesuada fames ac ante ipsum primis in faucibus. Sed mollis, leo eu
+			pulvinar laoreet, dui felis facilisis urna, sed congue neque neque at
+			libero. Suspendisse potenti. Mauris accumsan, purus ut faucibus
+			aliquet, orci diam volutpat dolor, in tincidunt nisl lectus vitae
+			diam. Nam eu purus id purus auctor lobortis. Donec molestie tortor eu
+			dui auctor, et efficitur augue venenatis. Donec volutpat risus
+			eleifend sollicitudin ultricies. Nullam metus lorem, semper pharetra
+			metus id, vestibulum aliquam tellus. Cras consectetur aliquet erat
+			non pulvinar.</p>
+		<p>Phasellus dictum sagittis vestibulum. In hac habitasse platea
+			dictumst. Donec laoreet elementum ex. Vivamus consectetur ligula
+			nisl, vel vehicula erat semper ac. Nam dictum metus in ipsum feugiat,
+			a tempus purus luctus. Sed semper feugiat tincidunt. Donec accumsan
+			diam nec elit consectetur, a suscipit ligula rutrum. Duis dictum
+			mauris in molestie finibus. Nam posuere quam id sem commodo iaculis.
+			Quisque a facilisis tortor. Curabitur laoreet sed magna in consequat.
+			Integer sed malesuada nulla.</p>
+		<p>Aenean malesuada, elit rutrum vestibulum efficitur, dolor erat
+			ullamcorper leo, eu auctor enim nulla eget quam. Aliquam dapibus
+			ornare turpis ac luctus. In quis auctor urna. Pellentesque nec
+			iaculis tortor. Vestibulum venenatis sem eget lectus molestie,
+			imperdiet fringilla arcu tempor. Nam id varius nunc, vel elementum
+			tortor. In id ante mattis, fermentum nunc vitae, pulvinar libero.
+			Etiam viverra sapien nec elit lacinia, non tristique neque pretium.</p>
+		<div id="page-actions" class="mdl-content">
+			<button
+				class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent">
+				<i class="fa fa-plus mdl-color-text--white" role="presentation">
+				</i>
+			</button>
+		</div>
+	</div>
 </div>

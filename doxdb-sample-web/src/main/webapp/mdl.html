@@ -15,6 +15,7 @@
 <link
 	href="webjars/font-awesome/${font-awesome.version}/css/font-awesome.min.css"
 	rel="stylesheet">
+<link href="styles.css" rel="stylesheet">
 <style type="text/css">
 html, body {
 	font-family: 'Roboto', 'Helvetica', sans-serif;
@@ -74,6 +75,22 @@ html, body {
 .doxdb-content td.doxdb-list-actions {
 	text-align: right;
 	min-width: 150px;
+}
+
+.doxdb-content .doxdb-list thead {
+	background-color: #FFFFFF;
+}
+
+.doxdb-content .doxdb-list .odd {
+	background-color: #B3E5FC;
+}
+
+.doxdb-content .doxdb-list .eveb {
+	background-color: #FFFFFF;
+}
+
+.doxdb-content .doxdb-list-details {
+	background-color: #B6B6B6;
 }
 </style>
 </head>
@@ -142,8 +159,7 @@ html, body {
 	</div>
 
 	<script src="webjars/angularjs/${angularjs.version}/angular.js"></script>
-	<script
-		src="webjars/angularjs/${angularjs.version}/angular-animate.js"></script>
+	<script src="webjars/angularjs/${angularjs.version}/angular-animate.js"></script>
 	<script
 		src="webjars/angularjs/${angularjs.version}/angular-route.min.js"></script>
 	<script
