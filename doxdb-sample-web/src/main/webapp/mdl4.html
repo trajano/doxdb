@@ -14,6 +14,8 @@
 <link
 	href="webjars/font-awesome/${font-awesome.version}/css/font-awesome.min.css"
 	rel="stylesheet">
+<style>
+</style>
 </head>
 <body>
 
@@ -25,38 +27,90 @@
 				<tr>
 					<th class="">Material</th>
 					<th>Quantity</th>
-					<th>Unit price</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr x-accordion-table-data-row x-hello="test">
-					<td class="">Acrylic (Transparent)</td>
-					<td>{{row}}</td>
-					<td>{{doxdbWelcome.hello}}</td>
+				<tr x-ng-repeat-start="item in demo.itemList"
+					x-accordion-table-data-row x-hello="test">
+					<td class="">{{item.name}}</td>
+					<td>{{isOpen}}</td>
 				</tr>
-				<tr x-accordion-table-detail-row x-hello="test">
-					<td class="">Detail Row {{doxdbWelcome.hello}}</td>
-					<td>{{row.isOpen}}</td>
-					<td>$2.90</td>
+				<tr x-accordion-table-detail-row class="detail-row active">
+					<td class="">{{item.description}}</td>
+					<td>{{dataRow.isOpen}}</td>
 				</tr>
-				<tr x-accordion-table-data-row x-hello="test">
-					<td class="">Acrylic (Transparent)</td>
-					<td>25</td>
-					<td>$2.90</td>
-				</tr>
-				<tr x-accordion-table-detail-row x-hello="test">
-					<td class="">Detail Row {{doxdbWelcome.hello}}</td>
-					<td>{{row.isOpen}}</td>
-					<td>$2.90</td>
+				<tr x-ng-repeat-end x-accordion-table-detail-row
+					class="detail-row success">
+					<td class="">{{item._id}}</td>
+					<td>{{isOpen}}</td>
 				</tr>
 			</tbody>
 		</table>
 
 
+		<table
+			class="mdl-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col"
+			x-accordion-table>
+			<thead>
+				<tr>
+					<th class="mdl-data-table__cell--non-numeric">Material</th>
+					<th>Quantity</th>
+					<th>Unit price</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr x-ng-repeat-start="item in demo.itemList"
+					x-accordion-table-data-row>
+					<td class="mdl-data-table__cell--non-numeric">{{item.name}}</td>
+					<td>{{isOpen}}</td>
+					<td>{{demo.hello}}</td>
+
+				</tr>
+				<tr x-accordion-table-detail-row
+					class="detail-row mdl-color--accent">
+					<td class="mdl-data-table__cell--non-numeric" colspan="3">
+
+						<table
+							class="mdl-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col"
+							x-accordion-table>
+							<thead>
+								<tr>
+									<th class="mdl-data-table__cell--non-numeric">Material</th>
+									<th>Quantity</th>
+									<th>Unit price</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr x-ng-repeat-start="item in demo.itemList"
+									x-accordion-table-data-row>
+									<td class="mdl-data-table__cell--non-numeric">{{item.name}}</td>
+									<td>{{isOpen}}</td>
+									<td>{{demo.hello}}</td>
+
+								</tr>
+
+								<tr x-ng-repeat-end x-accordion-table-detail-row
+									class="detail-row mdl-color--primary">
+									<td class="mdl-data-table__cell--non-numeric">{{item.name}}</td>
+									<td>{{item._id}}</td>
+									<td>{{dataRow.isOpen}}</td>
+								</tr>
+							</tbody>
+						</table>
 
 
 
 
+					</td>
+				</tr>
+				<tr x-ng-repeat-end x-accordion-table-detail-row
+					class="detail-row mdl-color--primary">
+					<td class="mdl-data-table__cell--non-numeric">{{item.name}}</td>
+					<td>{{item._id}}</td>
+					<td>{{dataRow.isOpen}}</td>
+				</tr>
+			</tbody>
+		</table>
 
 
 
@@ -72,28 +126,34 @@
             'accordionTable'
         ]).controller("DemoAppController", function($log) {
 
+            var item1 = {
+                name : "Max",
+                description : "Person",
+                _id : 142
+            };
+            var item2 = {
+                name : "R2D2",
+                description : "Robot",
+                _id : 464
+            };
+            var item3 = {
+                name : "C3PO",
+                description : "Robot",
+                _id : 424
+            };
+            var item4 = {
+                name : "Ripley",
+                description : "Person",
+                _id : 145
+            };
+            this.itemList = [
+                item1, item2, item3, item4
+            ];
+
             this.logme = function() {
 
                 $log.info("here");
             }
-        }).directive("foo", function($log) {
-
-            return {
-                transclude : true,
-                replace : true,
-                template : function(tElement, tAttr) {
-
-                    tElement.attr("ng-click", "demo.logme()");
-                    tElement.attr("ng-transclude", "");
-                    if (tAttr.$attr.foo === undefined) {
-                        return "<" + tElement[0].outerHTML.replace(/(^<\w+|\w+>$)/g, 'div') + ">";
-                    } else {
-                        tElement.removeAttr(tAttr.$attr.foo);
-                        return tElement[0].outerHTML;
-                    }
-                }
-
-            };
         });
     </script>
 </body>

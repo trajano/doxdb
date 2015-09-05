@@ -1,185 +1,92 @@
-angular.module('accordionTable', [
-    'ngAnimate'
-])
+'use strict';
+/**
+ * <h2>Features</h2>
+ * <ul>
+ * <li>Works with Material Design Lite and Bootstrap tables.</li>
+ * </ul>
+ * <h2>Known issues</h2>
+ * <ul>
+ * <li>Requires <code>ng-repeat</code>. It cannot work correctly with
+ * individual entries and will trigger open and close for the entire table.</li>
+ * <li>Animations against the <code>tr</code> does not work.</li>
+ * </ul>
+ */
+angular.module('accordionTable', [])
 
-.controller('AccordionTableController', function($log) {
-
-    accordionTable = this;
-    accordionTable.groups = [
-        {
-            details : []
-        }
-    ];
-    accordionTable.currentGroup = accordionTable.groups[0];
-
-    this.addDataRow = function(dataRowScope) {
-
-        $log.info(dataRowScope);
-        // this is added for the data row which is used to trigger an expansion.
-        if (accordionTable.currentGroup.data !== undefined) {
-            accordionTable.groups.push({
-                details : []
-            });
-            accordionTable.currentGroup = accordionTable.groups[accordionTable.groups.length - 1];
-        }
-        accordionTable.currentGroup.data = dataRowScope;
-        dataRowScope.$on('$destroy', function(event) {
-
-            accordionTable.removeGroup(dataRowScope);
-        });
-    };
-
-    this.getDataRow = function() {
-
-        return accordionTable.currentGroup.data;
-    };
-
-    this.addDetailRow = function(detailRowScope) {
-
-        // this is expected to be executed after a data row.  There can be more than one detail row.
-        accordionTable.currentGroup.details.push(detailRowScope);
-    };
-
-    // This is called from the accordion-group directive when to remove itself
-    this.removeGroup = function(rowScope) {
-
-        var filteredGroups = [];
-        angular.forEach(accordionTable.groups, function(group) {
-
-            if (group.data != rowScope) {
-                filteredGroups.push(group);
-            }
-        });
-        accordionTable.groups = filteredGroups;
-    };
-
-})
-
-// The accordion directive simply sets up the directive controller
-// and adds an accordion CSS class to itself element.
 .directive('accordionTable', function() {
 
     return {
-        scope : true,
-        controller : 'AccordionTableController',
-        controllerAs : 'accordionTable',
+        scope : {},
+        controller : [
+            '$scope', function($scope) {
+
+                /*
+                 * Hack initialization is to get rid of the Eclipse warning
+                 * flagging currentDataRowScope is unused.
+                 */
+                var currentDataRowScope = null;
+                currentDataRowScope !== undefined;
+
+                this.addDataRowScope = function(dataRowScope) {
+
+                    currentDataRowScope = dataRowScope;
+                };
+
+                this.addDetailRowScope = function(detailRowScope) {
+
+                    detailRowScope.dataRow = currentDataRowScope;
+                };
+
+            }
+        ]
 
     };
 })
 
-.directive('accordionTableDataRow', function($log, $compile) {
+.directive('accordionTableDataRow', function() {
 
     return {
-        transclude : true,
-        require : "^accordionTable",
-        replace : true,
-        scope : true,
-        controller : function($scope, $log) {
+        require : ''^accordionTable',
+        controller : [
+            '$scope', function($scope) {
 
-            row = this;
-            row.isOpen = false;
-
-            row.toggle = function() {
-
-                row.isOpen = !row.isOpen;
-                $log.info(row.isOpen);
-            };
-        },
-        controllerAs : 'row',
-        template : function(tElement, tAttr) {
-
-            tElement.attr("ng-click", "row.toggle()");
-            tElement.attr("ng-transclude", "");
-            if (tAttr.$attr.accordionTableDataRow === undefined) {
-                return "<" + tElement[0].outerHTML.replace(/(^<\w+|\w+>$)/g, 'div') + ">";
-            } else {
-                tElement.removeAttr(tAttr.$attr.accordionTableDataRow);
-                return tElement[0].outerHTML;
+                $scope.rowIsExpanded = false;
             }
-        },
-        link : function(scope, iElement, iAttrs, accordionTable) {
+        ],
+        link : function(scope, iElement, iAttrs, accordionTableCtrl) {
 
-            accordionTable.addDataRow(scope);
-            scope.$watch('row.isOpen', function(isOpen) {
+            accordionTableCtrl.addDataRowScope(scope);
+            iElement.on('click', function(event) {
 
-                if (isOpen) {
+                scope.$apply(function() {
 
-                }
+                    scope.rowIsExpanded = !scope.rowIsExpanded;
+                });
             });
         }
     };
 })
 
-.directive('accordionTableDetailRow', function($log, $compile, $animate) {
+.directive('accordionTableDetailRow', [
+    '$animate', function($animate) {
 
-    return {
-        require : "^accordionTable",
-        replace : true,
-        link : function(scope, element, iAttrs, accordionTable) {
+        return {
+            scope : {},
+            require : '^accordionTable',
+            link : function(scope, element, iAttrs, accordionTable) {
 
-            function expand() {
+                accordionTable.addDetailRowScope(scope);
 
-                element.removeClass('collapse').addClass('collapsing').attr('aria-expanded', true).attr('aria-hidden', false);
+                scope.$watch('dataRow.rowIsExpanded', function(rowIsExpanded) {
 
-                $animate.addClass(element, 'in', {
-                    to : {
-                        height : element[0].scrollHeight + 'px'
+                    if (rowIsExpanded) {
+                        element.removeClass('ng-hide');
+                    } else {
+                        element.addClass('ng-hide');
                     }
-                }).then(expandDone);
-            }
-
-            function expandDone() {
-
-                element.removeClass('collapsing');
-                element.css({
-                    height : 'auto'
                 });
+
             }
-
-            function collapse() {
-
-                if (!element.hasClass('collapse') && !element.hasClass('in')) {
-                    return collapseDone();
-                }
-
-                element
-                // IMPORTANT: The height must be set before adding "collapsing" class.
-                // Otherwise, the browser attempts to animate from height 0 (in
-                // collapsing class) to the given height here.
-                .css({
-                    height : element[0].scrollHeight + 'px'
-                })
-                // initially all panel collapse have the collapse class, this removal
-                // prevents the animation from jumping to collapsed state
-                .removeClass('collapse').addClass('collapsing').attr('aria-expanded', false).attr('aria-hidden', true);
-
-                $animate.removeClass(element, 'in', {
-                    to : {
-                        height : '0'
-                    }
-                }).then(collapseDone);
-            }
-
-            function collapseDone() {
-
-                element.css({
-                    height : '0'
-                }); // Required so that collapse works when animation is disabled
-                element.removeClass('collapsing');
-                element.addClass('collapse');
-            }
-
-            accordionTable.addDetailRow(scope);
-            //            $log.info("data row row" + dataRow.row.isOpen);
-            //            scope.$watch('dataRow.row.isOpen', function(shouldCollapse) {
-            //
-            //                $log.info("shouldCollapse" + shouldCollapse);
-            //                if (shouldCollapse) {
-            //                    collapse();
-            //                } else {
-            //                    expand();
-            //                }
-            //            });
-        }
-    };
-});
+        };
+    }
+]);
