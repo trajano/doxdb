@@ -1,4 +1,5 @@
-<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp"
+	x-accordion-table>
 
 	<thead>
 		<tr>
@@ -10,6 +11,7 @@
 	</thead>
 	<tbody>
 		<tr x-ng-repeat-start="item in doxdbSchema.items"
+			x-accordion-table-data-row
 			x-ng-click="doxdbSchema.toggleDetails(item._id)"
 			x-ng-dblclick="doxdbSchema.edit(item._id)">
 			<td class="mdl-data-table__cell--non-numeric">{{item.name}}</td>
@@ -30,7 +32,9 @@
 
 		</tr>
 		<tr x-ng-click="doxdbSchema.toggleDetails(item._id)" x-ng-repeat-end
-			x-ng-show="doxdbSchema.uiRowModel[item._id].shown" class="doxdb-list-details">
+			x-accordion-table-detail-row
+			x-ng-show="doxdbSchema.uiRowModel[item._id].shown"
+			class="doxdb-list-details">
 			<td colspan="4">Expanded {{item.name}}</td>
 		</tr>
 	</tbody>

@@ -46,7 +46,7 @@ angular.module('accordionTable', [])
 .directive('accordionTableDataRow', function() {
 
     return {
-        require : ''^accordionTable',
+        require : '^accordionTable',
         controller : [
             '$scope', function($scope) {
 
@@ -67,26 +67,24 @@ angular.module('accordionTable', [])
     };
 })
 
-.directive('accordionTableDetailRow', [
-    '$animate', function($animate) {
+.directive('accordionTableDetailRow', function() {
 
-        return {
-            scope : {},
-            require : '^accordionTable',
-            link : function(scope, element, iAttrs, accordionTable) {
+    return {
+        scope : {},
+        require : '^accordionTable',
+        link : function(scope, element, iAttrs, accordionTable) {
 
-                accordionTable.addDetailRowScope(scope);
+            accordionTable.addDetailRowScope(scope);
 
-                scope.$watch('dataRow.rowIsExpanded', function(rowIsExpanded) {
+            scope.$watch('dataRow.rowIsExpanded', function(rowIsExpanded) {
 
-                    if (rowIsExpanded) {
-                        element.removeClass('ng-hide');
-                    } else {
-                        element.addClass('ng-hide');
-                    }
-                });
+                if (rowIsExpanded) {
+                    element.removeClass('ng-hide');
+                } else {
+                    element.addClass('ng-hide');
+                }
+            });
 
-            }
-        };
-    }
-]);
+        }
+    };
+});
