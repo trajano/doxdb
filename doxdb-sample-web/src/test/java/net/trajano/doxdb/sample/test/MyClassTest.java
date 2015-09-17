@@ -1,5 +1,7 @@
 package net.trajano.doxdb.sample.test;
 
+import org.junit.Test;
+
 import net.trajano.doxdb.sample.ejb.MyConfigurationProvider;
 import net.trajano.doxdb.sample.ejb.MyEventHandler;
 
@@ -10,11 +12,13 @@ import net.trajano.doxdb.sample.ejb.MyEventHandler;
  */
 public class MyClassTest {
 
+    @Test
     public void testMyConfigurationProvider() {
 
         new MyConfigurationProvider();
     }
 
+    @Test
     public void testMyEventHandler() {
 
         final MyEventHandler eventHandler = new MyEventHandler();
