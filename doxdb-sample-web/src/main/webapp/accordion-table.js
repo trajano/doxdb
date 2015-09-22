@@ -55,6 +55,7 @@ angular.module('accordionTable', [])
         ],
         link : function(scope, iElement, iAttrs, accordionTableCtrl) {
 
+            scope.numberOfColumns = iElement.children().length;
             accordionTableCtrl.addDataRowScope(scope);
             iElement.on('click', function(event) {
 
@@ -75,6 +76,8 @@ angular.module('accordionTable', [])
         link : function(scope, element, iAttrs, accordionTable) {
 
             accordionTable.addDetailRowScope(scope);
+            // Correct the colspan regardless whether it is set or not.
+            angular.element(element.children()[0]).attr("colspan", scope.dataRow.numberOfColumns);
 
             scope.$watch('dataRow.rowIsExpanded', function(rowIsExpanded) {
 
