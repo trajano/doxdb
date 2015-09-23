@@ -13,7 +13,7 @@ standard RDBMS transactions.
 Completed:
 
    * JSON validation
-   * Distributed Search (using ElasticSearch REST API via Jest)
+   * Distributed Search (using [ElasticSearch][] REST API via Jest)
    * CRUD
    * Event handling
    * REST API
@@ -25,6 +25,7 @@ Completed:
    * Migrate from JEST to JAX-RS Client
    * AngularJS Module Generation
    * Change database schema
+   * Andvanced [ElasticSearch][] queries
 
 Remaining:
 
@@ -46,3 +47,4 @@ Out of scope:
 
 [1]: http://schemaform.io/
 [2]: http://stackoverflow.com/questions/32205381/how-do-i-override-the-schema-for-a-jpa-app-inside-a-web-fragment-from-a-web-app
+[ElasticSearch]: https://www.elastic.co/products/elasticsearch

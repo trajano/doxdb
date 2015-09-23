@@ -1,6 +1,7 @@
 package net.trajano.doxdb.ejb;
 
 import javax.ejb.Local;
+import javax.json.JsonObject;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.IndexView;
@@ -15,6 +16,18 @@ public interface DoxSearch {
      * @param indexViews
      */
     void addToIndex(IndexView... indexViews);
+
+    /**
+     * Performs an advanced query that allows for near arbitrary searches on a
+     * given collection.
+     *
+     * @param sourceIndex
+     * @param query
+     * @return
+     */
+    SearchResult advancedSearch(String sourceIndex,
+        String schemaName,
+        JsonObject query);
 
     /**
      * This must only be one thread at a time.

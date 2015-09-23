@@ -104,6 +104,20 @@ public class DoxResource {
     @EJB
     private SessionManager sessionManager;
 
+    @POST
+    @Path("search/{index}/{schemaName}")
+    @Produces(RESPONSE_TYPE)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response advancedSearchWithSchemaName(@PathParam("index") final String index,
+        @PathParam("schemaName") final String schemaName,
+        final JsonObject query,
+        @Context final UriInfo uriInfo) {
+
+        final SearchResult results = dox.advancedSearch(index, schemaName, query);
+        final JsonObject resultJson = searchResultBuilder(uriInfo, results).build();
+        return Response.ok(resultJson).cacheControl(NO_CACHE).build();
+    }
+
     @Path("{collection}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

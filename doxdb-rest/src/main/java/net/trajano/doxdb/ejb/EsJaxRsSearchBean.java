@@ -94,6 +94,41 @@ public class EsJaxRsSearchBean implements
 
     }
 
+    @Override
+    public SearchResult advancedSearch(final String sourceIndex,
+        final String schemaName,
+        final JsonObject query) {
+
+        final String index = configurationProvider.getMappedIndex(sourceIndex);
+        if (index == null) {
+            throw new PersistenceException("index not found");
+        }
+
+        final SearchResult result = new SearchResult();
+
+        final JsonObject results = jestProvider.getTarget().path(index).path(schemaName).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(query, MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
+
+        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
+        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
     /**
      * {@inheritDoc}
      */

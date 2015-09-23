@@ -20,6 +20,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
+import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
@@ -104,6 +105,14 @@ public class DoxBean implements
         document.put("_id", new BsonString(doxId.toString()));
         document.put("_version", new BsonInt32(version));
         return document;
+    }
+
+    @Override
+    public SearchResult advancedSearch(final String index,
+        final String schemaName,
+        final JsonObject query) {
+
+        return doxSearchBean.advancedSearch(index, schemaName, query);
     }
 
     @Override

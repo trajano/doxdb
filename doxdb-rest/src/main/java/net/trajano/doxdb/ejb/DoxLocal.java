@@ -3,6 +3,7 @@ package net.trajano.doxdb.ejb;
 import java.io.InputStream;
 
 import javax.ejb.Local;
+import javax.json.JsonObject;
 
 import org.bson.BsonDocument;
 
@@ -13,6 +14,10 @@ import net.trajano.doxdb.schema.DoxPersistence;
 
 @Local
 public interface DoxLocal {
+
+    SearchResult advancedSearch(String index,
+        String schemaName,
+        JsonObject query);
 
     /**
      * Creates a dox record into the database. This will allocate a "_id" value
