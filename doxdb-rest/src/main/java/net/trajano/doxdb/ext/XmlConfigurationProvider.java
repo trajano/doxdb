@@ -25,8 +25,8 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
+import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.DoxPersistence;
-import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.IndexType;
 import net.trajano.doxdb.schema.SchemaType;
 
@@ -57,7 +57,7 @@ public class XmlConfigurationProvider implements
 
     private final Map<String, SchemaType> currentSchemaMap = new HashMap<>();
 
-    private final Map<String, DoxType> doxen = new HashMap<>();
+    private final Map<String, CollectionType> doxen = new HashMap<>();
 
     private final Map<String, String> indexMap;
 
@@ -77,7 +77,7 @@ public class XmlConfigurationProvider implements
                 indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());
             }
 
-            for (final DoxType doxConfig : persistenceConfig.getDox()) {
+            for (final CollectionType doxConfig : persistenceConfig.getDox()) {
                 doxen.put(doxConfig.getName(), doxConfig);
                 final SchemaType schema = doxConfig.getSchema().get(doxConfig.getSchema().size() - 1);
                 currentSchemaMap.put(doxConfig.getName(), schema);
@@ -127,7 +127,7 @@ public class XmlConfigurationProvider implements
      */
     @Override
     @Lock(LockType.READ)
-    public DoxType getDox(final String schemaName) {
+    public CollectionType getDox(final String schemaName) {
 
         return doxen.get(schemaName);
     }

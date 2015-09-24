@@ -50,7 +50,7 @@ import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ejb.DoxLocal;
-import net.trajano.doxdb.schema.DoxType;
+import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.ws.SessionManager;
 
 /**
@@ -177,7 +177,7 @@ public class DoxResource {
                     w.println("\"use strict\";");
                     w.print("(function(){");
                     w.print("angular.module('doxdb',['ngResource'])");
-                    for (final DoxType doxType : dox.getConfiguration().getDox()) {
+                    for (final CollectionType doxType : dox.getConfiguration().getDox()) {
                         final String name = doxType.getName();
                         w.print(".factory('DoxDB" + name + "', ['$resource',function(r){");
                         final String uri = uriInfo.getBaseUriBuilder().path(name).build() + "/:id?v=:version";
