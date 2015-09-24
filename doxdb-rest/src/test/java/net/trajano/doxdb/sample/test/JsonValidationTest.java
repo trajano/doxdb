@@ -71,6 +71,6 @@ public class JsonValidationTest {
     @Test
     public void testMediaType() {
 
-        assertEquals("application/json; charset=utf-8", MediaType.APPLICATION_JSON_TYPE.withCharset("utf-8").toString());
+        assertEquals("application/json;charset=utf-8", MediaType.APPLICATION_JSON_TYPE.withCharset("utf-8").toString());
     }
 }
