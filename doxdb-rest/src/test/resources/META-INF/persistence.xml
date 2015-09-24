@@ -9,6 +9,8 @@
 		<class>net.trajano.doxdb.DoxTombstone</class>
 		<class>net.trajano.doxdb.DoxOob</class>
 		<class>net.trajano.doxdb.DoxOobTombstone</class>
+		<class>net.trajano.doxdb.DoxLookup</class>
+		<class>net.trajano.doxdb.DoxUnique</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
 </persistence>

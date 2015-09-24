@@ -74,7 +74,7 @@ public class DoxTombstone {
 
     @Column(nullable = false,
         updatable = false,
-        length = DoxLength.SCHEMA_NAME_LENGTH)
+        length = DoxLength.COLLECTION_NAME_LENGTH)
     private String schemaName;
 
     @Column(nullable = false,

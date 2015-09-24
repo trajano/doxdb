@@ -23,6 +23,8 @@ public class DoxMeta implements
 
     private byte[] accessKey;
 
+    private int collectionSchemaVersion;
+
     /**
      * Content in JSON format.
      */
@@ -42,8 +44,6 @@ public class DoxMeta implements
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
 
-    private int schemaVersion;
-
     private int version;
 
     public DoxMeta() {
@@ -53,7 +53,7 @@ public class DoxMeta implements
     public DoxMeta(final long id,
         final String doxid,
         final int version,
-        final int schemaVersion,
+        final int collectionSchemaVersion,
         final byte[] accessKey,
         final String createdBy,
         final Date createdOn,
@@ -62,7 +62,7 @@ public class DoxMeta implements
         this.id = id;
         doxId = new DoxID(doxid);
         this.version = version;
-        this.schemaVersion = schemaVersion;
+        this.collectionSchemaVersion = collectionSchemaVersion;
         this.accessKey = accessKey;
         this.createdBy = new DoxPrincipal(createdBy);
         this.createdOn = createdOn;
@@ -73,6 +73,11 @@ public class DoxMeta implements
     public byte[] getAccessKey() {
 
         return accessKey;
+    }
+
+    public int getCollectionSchemaVersion() {
+
+        return collectionSchemaVersion;
     }
 
     public String getContentJson() {
@@ -124,11 +129,6 @@ public class DoxMeta implements
         return DatatypeConverter.printDateTime(cal);
     }
 
-    public int getSchemaVersion() {
-
-        return schemaVersion;
-    }
-
     public int getVersion() {
 
         return version;
@@ -142,6 +142,11 @@ public class DoxMeta implements
     public void setAccessKey(final byte[] accessKey) {
 
         this.accessKey = accessKey;
+    }
+
+    public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
+
+        this.collectionSchemaVersion = collectionSchemaVersion;
     }
 
     public void setContentJson(final String contentJson) {
@@ -177,11 +182,6 @@ public class DoxMeta implements
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
         this.lastUpdatedOn = lastUpdatedOn;
-    }
-
-    public void setSchemaVersion(final int contentVersion) {
-
-        schemaVersion = contentVersion;
     }
 
     public void setVersion(final int version) {

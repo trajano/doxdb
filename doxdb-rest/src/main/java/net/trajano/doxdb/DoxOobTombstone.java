@@ -17,14 +17,28 @@ import javax.persistence.UniqueConstraint;
 
 import net.trajano.doxdb.ejb.internal.DoxLength;
 
+/**
+ * Out of band tombstone data for Dox. This has a bit more meta-data as the
+ * record could be associated with an older version of the Dox record whose
+ * schema is no longer active.
+ */
 @Entity
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = {
         "doxId",
-        "schemaName",
-        "name"
+        "collectionName",
+        "oobName"
 }) )
 public class DoxOobTombstone {
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.COLLECTION_NAME_LENGTH)
+    private String collectionName;
+
+    @Column(nullable = false,
+        updatable = false)
+    private int collectionSchemaVersion;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -75,16 +89,17 @@ public class DoxOobTombstone {
     @Column(nullable = false,
         updatable = false,
         length = DoxLength.OOB_NAME_LENGTH)
-    private String name;
+    private String oobName;
 
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.SCHEMA_NAME_LENGTH)
-    private String schemaName;
+    public String getCollectionName() {
 
-    @Column(nullable = false,
-        updatable = false)
-    private int schemaVersion;
+        return collectionName;
+    }
+
+    public int getCollectionSchemaVersion() {
+
+        return collectionSchemaVersion;
+    }
 
     public byte[] getContent() {
 
@@ -131,19 +146,19 @@ public class DoxOobTombstone {
         return lastUpdatedOn;
     }
 
-    public String getName() {
+    public String getOobName() {
 
-        return name;
+        return oobName;
     }
 
-    public String getSchemaName() {
+    public void setCollectionName(final String collectionName) {
 
-        return schemaName;
+        this.collectionName = collectionName;
     }
 
-    public int getSchemaVersion() {
+    public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
 
-        return schemaVersion;
+        this.collectionSchemaVersion = collectionSchemaVersion;
     }
 
     public void setContent(final byte[] content) {
@@ -199,18 +214,8 @@ public class DoxOobTombstone {
         this.lastUpdatedOn = lastUpdatedOn;
     }
 
-    public void setName(final String name) {
+    public void setOobName(final String oobName) {
 
-        this.name = name;
-    }
-
-    public void setSchemaName(final String schemaName) {
-
-        this.schemaName = schemaName;
-    }
-
-    public void setSchemaVersion(final int schemaVersion) {
-
-        this.schemaVersion = schemaVersion;
+        this.oobName = oobName;
     }
 }

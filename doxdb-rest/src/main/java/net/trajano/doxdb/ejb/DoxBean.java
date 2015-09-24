@@ -137,8 +137,8 @@ public class DoxBean implements
         entity.setCreatedOn(ts);
         entity.setLastUpdatedBy(ctx.getCallerPrincipal());
         entity.setLastUpdatedOn(ts);
-        entity.setSchemaName(config.getName());
-        entity.setSchemaVersion(schema.getVersion());
+        entity.setCollectionName(config.getName());
+        entity.setCollectionSchemaVersion(schema.getVersion());
         entity.setAccessKey(accessKey);
         entity.setVersion(1);
 
@@ -189,8 +189,8 @@ public class DoxBean implements
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         String contentJson = contentBson.toJson();
-        if (meta.getSchemaVersion() != schema.getVersion()) {
-            contentJson = migrator.migrate(collectionName, meta.getSchemaVersion(), schema.getVersion(), contentJson);
+        if (meta.getCollectionSchemaVersion() != schema.getVersion()) {
+            contentJson = migrator.migrate(collectionName, meta.getCollectionSchemaVersion(), schema.getVersion(), contentJson);
         }
 
         doxSearchBean.removeFromIndex(config.getName(), doxid);
@@ -233,12 +233,12 @@ public class DoxBean implements
 
         String contentJson;
 
-        if (meta.getSchemaVersion() != schema.getVersion()) {
+        if (meta.getCollectionSchemaVersion() != schema.getVersion()) {
             final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            contentJson = migrator.migrate(collectionName, e.getSchemaVersion(), schema.getVersion(), e.getJsonContent());
+            contentJson = migrator.migrate(collectionName, e.getCollectionSchemaVersion(), schema.getVersion(), e.getJsonContent());
             final BsonDocument document = BsonDocument.parse(contentJson);
-            meta.setSchemaVersion(schema.getVersion());
-            e.setSchemaVersion(schema.getVersion());
+            meta.setCollectionSchemaVersion(schema.getVersion());
+            e.setCollectionSchemaVersion(schema.getVersion());
             contentJson = document.toJson();
             em.persist(e);
         } else {
@@ -289,8 +289,8 @@ public class DoxBean implements
                 final boolean last = !i.hasNext();
                 result.getAccessKey();
                 // TODO check security
-                if (result.getSchemaVersion() != schema.getVersion()) {
-                    migrator.migrate(schemaName, result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());
+                if (result.getCollectionSchemaVersion() != schema.getVersion()) {
+                    migrator.migrate(schemaName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
                     // queue migrate later?
                 } else {
                     os.write(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());
@@ -317,8 +317,8 @@ public class DoxBean implements
 
             result.getAccessKey();
             // TODO check security
-            if (result.getSchemaVersion() != schema.getVersion()) {
-                migrator.migrate(schemaName, result.getSchemaVersion(), schema.getVersion(), result.getJsonContent());
+            if (result.getCollectionSchemaVersion() != schema.getVersion()) {
+                migrator.migrate(schemaName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
                 // queue migrate later?
             } else {
                 b.append(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());
@@ -367,7 +367,7 @@ public class DoxBean implements
                 //                rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
                 final IndexView[] indexViewBuilt = indexer.buildIndexViews(config.getName(), e.getJsonContent());
                 for (final IndexView indexView : indexViewBuilt) {
-                    indexView.setCollection(e.getSchemaName());
+                    indexView.setCollection(e.getCollectionName());
                     indexView.setDoxID(e.getDoxId());
                     indexViews.add(indexView);
                 }

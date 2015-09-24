@@ -25,7 +25,7 @@ Completed:
    * Migrate from JEST to JAX-RS Client
    * AngularJS Module Generation
    * Change database schema
-   * Andvanced [ElasticSearch][] queries
+   * Advanced [ElasticSearch][] queries
 
 Remaining:
 
@@ -40,6 +40,9 @@ Remaining:
    * Data anonymization
    * Create a data dictionary and rename the methods and fields
      to correspond to the data dictionary.
+   * Unique lookup
+   * Non-unique lookup
+   * Defining lookups via json-path  
 
 Out of scope:
 
