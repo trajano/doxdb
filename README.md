@@ -8,6 +8,8 @@ of an RDBMS and file system.  It keeps the notion of document data away
 from the storage facility, but still provides robust ACID transactions using
 standard RDBMS transactions.
 
+[![Build Status](https://drone.io/github.com/trajano/doxdb/status.png)](https://drone.io/github.com/trajano/doxdb/latest)
+
 ### Roadmap
 
 Completed:
@@ -26,6 +28,9 @@ Completed:
    * AngularJS Module Generation
    * Change database schema
    * Advanced [ElasticSearch][] queries
+   * Unique lookup queries
+   * Non-unique lookup queries
+   * Defining lookups via json-path  
 
 Remaining:
 
@@ -40,9 +45,6 @@ Remaining:
    * Data anonymization
    * Create a data dictionary and rename the methods and fields
      to correspond to the data dictionary.
-   * Unique lookup
-   * Non-unique lookup
-   * Defining lookups via json-path  
 
 Out of scope:
 
