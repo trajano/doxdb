@@ -15,7 +15,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import net.trajano.doxdb.ext.ConfigurationProvider;
-import net.trajano.doxdb.schema.DoxType;
+import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.IndexType;
 
 /**
@@ -48,8 +48,8 @@ public class EsJaxRsProvider {
 
             if (getTarget().path(mappedName).request().head().getStatus() == 404) {
                 final JsonObjectBuilder mappingBuilder = createObjectBuilder();
-                for (final DoxType doxType : configurationProvider.getPersistenceConfig().getDox()) {
-                    mappingBuilder.add(doxType.getName(), createObjectBuilder()
+                for (final CollectionType collectionType : configurationProvider.getPersistenceConfig().getDox()) {
+                    mappingBuilder.add(collectionType.getName(), createObjectBuilder()
                         .add("_source", createObjectBuilder()
                             .add("excludes", createArrayBuilder()
                                 .add("_")

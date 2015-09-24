@@ -49,8 +49,8 @@ import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.EventHandler;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.ext.Migrator;
+import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.DoxPersistence;
-import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.ReadAllType;
 import net.trajano.doxdb.schema.SchemaType;
 
@@ -120,7 +120,7 @@ public class DoxBean implements
         final BsonDocument bson) {
 
         final Date ts = new Date();
-        final DoxType config = configurationProvider.getDox(schemaName);
+        final CollectionType config = configurationProvider.getDox(schemaName);
         final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
 
         final String inputJson = bson.toJson();
@@ -171,7 +171,7 @@ public class DoxBean implements
         final int version) {
 
         final Date ts = new Date();
-        final DoxType config = configurationProvider.getDox(collectionName);
+        final CollectionType config = configurationProvider.getDox(collectionName);
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
 
         meta.getAccessKey();
@@ -223,7 +223,7 @@ public class DoxBean implements
     public DoxMeta read(final String collectionName,
         final DoxID doxid) {
 
-        final DoxType config = configurationProvider.getDox(collectionName);
+        final CollectionType config = configurationProvider.getDox(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         final DoxMeta meta = em.createNamedQuery(Dox.READ_META_BY_SCHEMA_NAME_DOX_ID, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("collectionName", config.getName()).getSingleResult();
@@ -257,7 +257,7 @@ public class DoxBean implements
     @Override
     public String readAll(final String collectionName) {
 
-        final DoxType config = configurationProvider.getDox(collectionName);
+        final CollectionType config = configurationProvider.getDox(collectionName);
         if (config.getReadAll() == ReadAllType.FILE) {
             try {
                 return readAllToFile(config.getName());
@@ -358,7 +358,7 @@ public class DoxBean implements
         doxSearchBean.reset();
         // TODO this will do everything in one transaction which can kill the database.  What could be done is the
         // reindexing can be done in chunks and let an MDB do the process
-        for (final DoxType config : configurationProvider.getPersistenceConfig().getDox()) {
+        for (final CollectionType config : configurationProvider.getPersistenceConfig().getDox()) {
 
             final List<IndexView> indexViews = new LinkedList<>();
             for (final Dox e : em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("schemaName", config.getName()).getResultList()) {
@@ -469,7 +469,7 @@ public class DoxBean implements
         final int version) {
 
         final Timestamp ts = new Timestamp(System.currentTimeMillis());
-        final DoxType config = configurationProvider.getDox(collectionName);
+        final CollectionType config = configurationProvider.getDox(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         final String inputJson = bson.toJson();
