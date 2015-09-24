@@ -226,7 +226,7 @@ public class DoxBean implements
         final CollectionType config = configurationProvider.getDox(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
-        final DoxMeta meta = em.createNamedQuery(Dox.READ_META_BY_SCHEMA_NAME_DOX_ID, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("collectionSchemaName", config.getName()).getSingleResult();
+        final DoxMeta meta = em.createNamedQuery(Dox.READ_META_BY_SCHEMA_NAME_DOX_ID, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("collectionName", config.getName()).getSingleResult();
 
         meta.getAccessKey();
         // TODO check the security.
