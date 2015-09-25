@@ -10,7 +10,6 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -41,9 +40,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-
-import org.bson.BsonDocument;
-import org.bson.BsonValue;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
@@ -118,22 +114,24 @@ public class DoxResource {
         return Response.ok(resultJson).cacheControl(NO_CACHE).build();
     }
 
-    @Path("{collection}")
+    /**
+     * This will create the J
+     *
+     * @param collectionName
+     *            collection name
+     * @param content
+     *            JSON content.
+     * @return
+     */
+    @Path("{collectionName}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(RESPONSE_TYPE)
-    public Response create(@PathParam("collection") final String collection,
-        final String json) {
+    public Response create(@PathParam("collectionName") final String collectionName,
+        final JsonObject content) {
 
-        final BsonDocument bson = BsonDocument.parse(json);
-        for (final String key : bson.keySet()) {
-            if (key.startsWith("_")) {
-                bson.remove(key);
-            }
-        }
-
-        final DoxMeta meta = dox.create(collection, bson);
-        sessionManager.sendMessage("CREATE", meta.getDoxId(), collection, meta.getLastUpdatedOn());
+        final DoxMeta meta = dox.create(collectionName, content);
+        sessionManager.sendMessage("CREATE", meta.getDoxId(), collectionName, meta.getLastUpdatedOn());
         return Response.ok(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
 
@@ -242,7 +240,7 @@ public class DoxResource {
 
     private Response op(final String collection,
         final String opName,
-        final String content) {
+        final JsonObject content) {
 
         return Response.ok().type(RESPONSE_TYPE).entity(content).build();
     }
@@ -295,20 +293,10 @@ public class DoxResource {
 
     private Response save(final String collection,
         final String id,
-        final String json,
+        final JsonObject json,
         final int version) {
 
-        final BsonDocument bson = BsonDocument.parse(json);
-
-        final Iterator<Entry<String, BsonValue>> iterator = bson.entrySet().iterator();
-        while (iterator.hasNext()) {
-            final Entry<String, BsonValue> entry = iterator.next();
-            if (entry.getKey().startsWith("_")) {
-                iterator.remove();
-            }
-        }
-
-        final DoxMeta meta = dox.update(collection, new DoxID(id), bson, version);
+        final DoxMeta meta = dox.update(collection, new DoxID(id), json, version);
         sessionManager.sendMessage("UPDATE", meta.getDoxId(), collection, meta.getLastUpdatedOn());
         return Response.ok(meta.getContentJson()).lastModified(meta.getLastUpdatedOn()).build();
     }
@@ -330,7 +318,7 @@ public class DoxResource {
     public Response saveOrOp(@PathParam("collection") final String collection,
         @PathParam("idOrOp") final String idOrOp,
         @QueryParam("v") final int version,
-        final String content) {
+        final JsonObject content) {
 
         if (idOrOp.startsWith("_")) {
             return op(collection, idOrOp.substring(1), content);

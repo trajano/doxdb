@@ -5,8 +5,6 @@ import java.io.InputStream;
 import javax.ejb.Local;
 import javax.json.JsonObject;
 
-import org.bson.BsonDocument;
-
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.SearchResult;
@@ -25,24 +23,24 @@ public interface DoxLocal {
      *
      * @param collectionName
      *            collection name
-     * @param contents
-     *            dox contents as a BSON. The contents MUST be valid for the
+     * @param content
+     *            dox contents as a JSON. The contents MUST be valid for the
      *            schema.
      * @return dox meta with contents with "_id" and "_version" set.
      */
     DoxMeta create(String collectionName,
-        BsonDocument contents);
+        JsonObject content);
 
     /**
-     * @param collection
-     *            collection
+     * @param collectionName
+     *            collection name
      * @param doxID
      *            Dox ID
      * @param version
      *            version
      * @return true if a record was deleted.
      */
-    boolean delete(String collection,
+    boolean delete(String collectionName,
         DoxID doxID,
         int version);
 
@@ -127,7 +125,7 @@ public interface DoxLocal {
      */
     DoxMeta update(String schemaName,
         DoxID id,
-        BsonDocument contents,
+        JsonObject contents,
         int version);
 
 }

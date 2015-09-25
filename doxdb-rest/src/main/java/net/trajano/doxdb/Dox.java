@@ -1,10 +1,13 @@
 package net.trajano.doxdb;
 
+import java.io.StringReader;
 import java.nio.ByteBuffer;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -211,6 +214,13 @@ public class Dox {
         return decoded.toJson();
     }
 
+    public JsonObject getJsonObject() {
+
+        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()
+            .build());
+        return Json.createReader(new StringReader(decoded.toJson())).readObject();
+    }
+
     public Principal getLastUpdatedBy() {
 
         return new DoxPrincipal(lastUpdatedBy);
@@ -247,6 +257,34 @@ public class Dox {
         new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), bson, EncoderContext.builder()
             .build());
         content = basicOutputBuffer.toByteArray();
+    }
+
+    /**
+     * Sets the content value where the source content is a {@link JsonObject}.
+     *
+     * @param content
+     *            JSON content
+     */
+    public void setContent(final JsonObject content) {
+
+        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
+        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(content.toString()), EncoderContext.builder()
+            .build());
+        this.content = basicOutputBuffer.toByteArray();
+    }
+
+    /**
+     * Sets the content value where the source content is a JSON string..
+     *
+     * @param content
+     *            content as JSON string.
+     */
+    public void setContent(final String content) {
+
+        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
+        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(content), EncoderContext.builder()
+            .build());
+        this.content = basicOutputBuffer.toByteArray();
     }
 
     public void setCreatedBy(final Principal createdBy) {

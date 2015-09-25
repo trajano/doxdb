@@ -1,10 +1,14 @@
 package net.trajano.doxdb;
 
 import java.io.Serializable;
+import java.io.StringReader;
 import java.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -80,6 +84,16 @@ public class DoxMeta implements
         return collectionSchemaVersion;
     }
 
+    /**
+     * Content as a JSON object.
+     *
+     * @return
+     */
+    public JsonObject getContent() {
+
+        return Json.createReader(new StringReader(contentJson)).readObject();
+    }
+
     public String getContentJson() {
 
         return contentJson;
@@ -147,6 +161,32 @@ public class DoxMeta implements
     public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
 
         this.collectionSchemaVersion = collectionSchemaVersion;
+    }
+
+    /**
+     * Sets the content JSON with the DoxID and optimistic locking version data
+     * decorated in.
+     *
+     * @param content
+     *            content
+     * @param doxId
+     *            Dox ID
+     * @param version
+     *            optimistic locking version
+     */
+    public void setContentJson(final JsonObject content,
+        final DoxID doxId,
+        final int version) {
+
+        final JsonObjectBuilder b = Json.createObjectBuilder();
+        b.add("_id", doxId.toString());
+        b.add("_version", version);
+        for (final String key : content.keySet()) {
+            if (!key.startsWith("_")) {
+                b.add(key, content.get(key));
+            }
+        }
+        contentJson = b.build().toString();
     }
 
     public void setContentJson(final String contentJson) {

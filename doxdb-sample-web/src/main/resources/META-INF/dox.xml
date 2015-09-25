@@ -3,10 +3,15 @@
 	xsi:schemaLocation="http://doxdb.trajano.net/schema/ ../../../../../doxdb-rest/src/main/resources/META-INF/xsd/dox.xsd"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cors="*">
 	<dox name="horse" oob="true" readAll="none">
-		<schema version="1" location="horse.json" />
+		<schema version="1" location="horse.json">
+			<unique name="horseName" path="$.name" />
+			<unique name="horseFei" path="$.fei" />
+		</schema>
 	</dox>
 	<dox name="venue" oob="false" readAll="memory">
-		<schema version="1" location="venue.json" />
+		<schema version="1" location="venue.json">
+			<unique name="venueName" path="$.name" />
+		</schema>
 	</dox>
 	<index name="myindex" />
 	<index name="maskedindex" />
