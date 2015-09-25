@@ -39,6 +39,7 @@ import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.IndexType;
 import net.trajano.doxdb.schema.SchemaType;
+import net.trajano.doxdb.schema.UniqueType;
 
 public class AbstractBeanTest {
 
@@ -86,6 +87,10 @@ public class AbstractBeanTest {
                     final SchemaType schema = new SchemaType();
                     schema.setLocation("horse.json");
                     schema.setVersion(1);
+                    final UniqueType unique = new UniqueType();
+                    unique.setName("name");
+                    unique.setPath("$.name");
+                    schema.getUnique().add(unique);
                     return schema;
                 }
                 return null;
@@ -111,6 +116,10 @@ public class AbstractBeanTest {
                     final SchemaType schema = new SchemaType();
                     schema.setLocation("horse.json");
                     schema.setVersion(1);
+                    final UniqueType unique = new UniqueType();
+                    unique.setName("name");
+                    unique.setPath("$.name");
+                    schema.getUnique().add(unique);
                     CollectionType.getSchema().add(schema);
                     return CollectionType;
                 }

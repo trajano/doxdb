@@ -92,6 +92,10 @@ public interface DoxLocal {
      */
     String readAll(String schemaName);
 
+    DoxMeta readByUniqueLookup(String collectionName,
+        String lookupName,
+        String lookupKey);
+
     /**
      * Delete all the index data and reindex all the documents.
      */

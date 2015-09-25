@@ -36,7 +36,10 @@ public class DataLoader {
             final long start = System.currentTimeMillis();
             for (final JsonValue item : collection) {
                 final JsonObject record = (JsonObject) item;
-                final JsonObject jsonObject = Json.createObjectBuilder().add("name", record.get("last_name")).add("language", record.get("language")).add("rings", Json.createArrayBuilder()).build();
+                final JsonObject jsonObject = Json.createObjectBuilder()
+                    .add("name", record.get("last_name"))
+                    .add("feiId", String.valueOf(record.get("id")))
+                    .add("language", record.get("language")).add("rings", Json.createArrayBuilder()).build();
 
                 request.post(Entity.entity(jsonObject, MediaType.APPLICATION_JSON_TYPE)).readEntity(JsonObject.class);
             }
@@ -56,6 +59,7 @@ public class DataLoader {
                 final JsonObject jsonObject = Json.createObjectBuilder()
                     .add("name", record.get("Product Name"))
                     .add("countryOfBirth", record.get("Country"))
+                    .add("fei", String.valueOf(record.get("id")))
                     .add("gender", "F".equals(record.get("Gender")) ? "mare" : "gelding")
                     .build();
                 request2.post(Entity.entity(jsonObject, MediaType.APPLICATION_JSON_TYPE)).readEntity(JsonObject.class);

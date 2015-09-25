@@ -62,6 +62,8 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 })
 public class Dox {
 
+    public static final String COLLECTION_NAME = "collectionName";
+
     /**
      * Named query {@value #READ_ALL_BY_SCHEMA_NAME};
      */

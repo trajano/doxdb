@@ -47,6 +47,8 @@ import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ejb.DoxLocal;
 import net.trajano.doxdb.schema.CollectionType;
+import net.trajano.doxdb.schema.SchemaType;
+import net.trajano.doxdb.schema.UniqueType;
 import net.trajano.doxdb.ws.SessionManager;
 
 /**
@@ -114,8 +116,18 @@ public class DoxResource {
         return Response.ok(resultJson).cacheControl(NO_CACHE).build();
     }
 
+    private String capitalize(final String s) {
+
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        final char[] a = s.toCharArray();
+        a[0] = Character.toUpperCase(a[0]);
+        return new String(a);
+    }
+
     /**
-     * This will create the J
+     * This will create the Dox object.
      *
      * @param collectionName
      *            collection name
@@ -160,6 +172,14 @@ public class DoxResource {
         return Response.ok(meta.getContentJson()).cacheControl(OK_CACHE).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();
     }
 
+    /**
+     * In addition to the default operations, the lookup operations will also be
+     * provided as the string "getBy{lookupName}" for unique lookups. Note that
+     * lookupName will have it's first character capitalized.
+     *
+     * @param uriInfo
+     * @return
+     */
     @GET
     @Path("module.js")
     @Produces("application/javascript")
@@ -174,12 +194,25 @@ public class DoxResource {
                 try (final PrintStream w = new PrintStream(os)) {
                     w.println("\"use strict\";");
                     w.print("(function(){");
+                    //                    w.print("function s(d){");
+                    //                    w.print("delete d._id;");
+                    //                    w.print("delete d._v;");
+                    //                    w.print("}");
                     w.print("angular.module('doxdb',['ngResource'])");
-                    for (final CollectionType doxType : dox.getConfiguration().getDox()) {
-                        final String name = doxType.getName();
+                    for (final CollectionType collectionType : dox.getConfiguration().getDox()) {
+                        final String name = collectionType.getName();
                         w.print(".factory('DoxDB" + name + "', ['$resource',function(r){");
                         final String uri = uriInfo.getBaseUriBuilder().path(name).build() + "/:id?v=:version";
-                        w.print("return r('" + uri + "',{'id':'@_id','version':'@_version'});");
+                        w.print("return r('" + uri + "',{'id':'@_id','version':'@_version'},{");
+
+                        final SchemaType currentSchemaType = collectionType.getSchema().get(collectionType.getSchema().size() - 1);
+
+                        for (final UniqueType uniqueType : currentSchemaType.getUnique()) {
+                            final String lookupUri = uriInfo.getBaseUriBuilder().path(name).build() + "/" + uniqueType.getName() + "/:lookupKey";
+                            w.print("'getBy" + capitalize(uniqueType.getName()) + "':{method:'GET',url:'" + lookupUri + "'},");
+                        }
+
+                        w.print("});");
                         w.print("}])");
                     }
                     w.print(";})();");
@@ -236,6 +269,36 @@ public class DoxResource {
             }
         };
         return Response.ok(out).encoding("UTF-8").build();
+    }
+
+    /**
+     * This will return either an array or a single JsobObject depending on
+     * whether the lookup is for unique or not.
+     *
+     * @param collectionName
+     *            collection name
+     * @param lookupName
+     *            lookup name (can be either unique or not)
+     * @param lookupKey
+     *            lookup key
+     * @return array or a single JsobObject depending on whether the lookup is
+     *         for unique or not.
+     */
+    @GET
+    @Path("{collectionName}/{lookupName}/{lookupKey}")
+    @Produces(RESPONSE_TYPE)
+    public Response lookup(@PathParam("collectionName") final String collectionName,
+        @PathParam("lookupName") final String lookupName,
+        @PathParam("lookupKey") final String lookupKey,
+        @Context final UriInfo uriInfo) {
+
+        final DoxMeta meta = dox.readByUniqueLookup(collectionName, lookupName, lookupKey);
+        if (meta == null) {
+            return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Dox not found").build();
+        }
+        final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
+        final URI location = uriInfo.getBaseUriBuilder().path(collectionName).path(meta.getDoxId().toString()).build();
+        return Response.seeOther(location).cacheControl(OK_CACHE).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();
     }
 
     private Response op(final String collection,

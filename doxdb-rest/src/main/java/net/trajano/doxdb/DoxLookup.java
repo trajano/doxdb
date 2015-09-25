@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.LockModeType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -46,6 +47,8 @@ public class DoxLookup {
 
     @ManyToOne(fetch = FetchType.LAZY,
         optional = false)
+    @JoinColumn(name = "doxId",
+        nullable = false)
     private Dox dox;
 
     @Id

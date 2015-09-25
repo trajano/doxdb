@@ -11,6 +11,9 @@
 		"language":{
 			"type":"string"
 		},
+		"feiId":{
+			"type":"string"
+		},
 		"rings":{
 			"type":"array",
 			"items": {
