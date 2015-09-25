@@ -15,7 +15,7 @@ public class DoxLength {
     /**
      * Collection name length. 64 bytes.
      */
-    public static final int COLLECTION_NAME_LENGTH = 64;
+    public static final int COLLECTION_NAME_LENGTH = 32;
 
     /**
      * Content length. 10 MB.
@@ -40,9 +40,9 @@ public class DoxLength {
     /**
      * Lookup key length.
      */
-    public static final int LOOKUP_KEY_LENGTH = 512;
+    public static final int LOOKUP_KEY_LENGTH = 128;
 
-    public static final int LOOKUP_NAME_LENGTH = 64;
+    public static final int LOOKUP_NAME_LENGTH = 32;
 
     /**
      * OOB length. 20 MB.

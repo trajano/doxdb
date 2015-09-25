@@ -10,7 +10,7 @@
 	</dox>
 	<dox name="venue" oob="false" readAll="memory">
 		<schema version="1" location="venue.json">
-			<unique name="venueName" path="$.name" />
+			<unique name="fei" path="$.feiId" />
 		</schema>
 	</dox>
 	<index name="myindex" />

@@ -47,7 +47,7 @@
 		}
 	},
 	"required":[
-		"name"
+		"name", "fei"
 	],
 	"patternProperties" : {
 		"_[a-z]+" : {

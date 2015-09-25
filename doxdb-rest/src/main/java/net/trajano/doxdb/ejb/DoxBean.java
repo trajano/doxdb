@@ -42,6 +42,7 @@ import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.DoxTombstone;
+import net.trajano.doxdb.DoxUnique;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ext.CollectionAccessControl;
@@ -49,10 +50,12 @@ import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.EventHandler;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.ext.Migrator;
+import net.trajano.doxdb.jsonpath.JsonPath;
 import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.ReadAllType;
 import net.trajano.doxdb.schema.SchemaType;
+import net.trajano.doxdb.schema.UniqueType;
 
 /**
  * Implements the DoxDB persistence operations. An EJB is used to take advantage
@@ -85,6 +88,29 @@ public class DoxBean implements
         final JsonObjectBuilder b = Json.createObjectBuilder();
         b.add("_id", doxId.toString());
         b.add("_version", version);
+        for (final String key : jsonObject.keySet()) {
+            if (!key.startsWith("_")) {
+                b.add(key, jsonObject.get(key));
+            }
+        }
+        return b.build();
+    }
+
+    /**
+     * This will create a new JsonObject with reserved properties removed.
+     * Reserved properties start with "_" including "_id" and "_version".
+     *
+     * @param jsonObject
+     *            object to decorate
+     * @param doxId
+     *            Dox ID
+     * @param version
+     *            optimistic locking version
+     * @return decorated JSOB object.
+     */
+    public static JsonObject sanitize(final JsonObject jsonObject) {
+
+        final JsonObjectBuilder b = Json.createObjectBuilder();
         for (final String key : jsonObject.keySet()) {
             if (!key.startsWith("_")) {
                 b.add(key, jsonObject.get(key));
@@ -126,12 +152,13 @@ public class DoxBean implements
 
     @Override
     public DoxMeta create(final String schemaName,
-        final JsonObject content) {
+        final JsonObject unsanitizedContent) {
 
         final Date ts = new Date();
         final CollectionType config = configurationProvider.getDox(schemaName);
         final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
 
+        final JsonObject content = sanitize(unsanitizedContent);
         validate(schema, content);
 
         final DoxID doxId = DoxID.generate();
@@ -152,6 +179,16 @@ public class DoxBean implements
         entity.setVersion(1);
 
         em.persist(entity);
+
+        for (final UniqueType unique : schema.getUnique()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            final DoxUnique doxUnique = new DoxUnique();
+            doxUnique.setCollectionName(config.getName());
+            doxUnique.setDox(entity);
+            doxUnique.setLookupName(unique.getName());
+            doxUnique.setLookupKey(lookupKey);
+            em.persist(doxUnique);
+        }
 
         final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
         for (final IndexView indexView : indexViews) {
@@ -189,6 +226,8 @@ public class DoxBean implements
         if (toBeDeleted == null) {
             return false;
         }
+        em.createNamedQuery(DoxUnique.REMOVE_UNIQUE_FOR_DOX).setParameter("dox", toBeDeleted).executeUpdate();
+
         final BsonDocument contentBson = toBeDeleted.getContent();
         final DoxTombstone tombstone = toBeDeleted.buildTombstone(ctx.getCallerPrincipal(), ts);
         em.persist(tombstone);
@@ -247,6 +286,7 @@ public class DoxBean implements
             e.setContent(contentJson);
             em.persist(e);
             em.flush();
+            em.refresh(e);
             final JsonObject content = e.getJsonObject();
             meta.setContentJson(content, meta.getDoxId(), e.getVersion());
         } else {
@@ -278,16 +318,16 @@ public class DoxBean implements
 
     }
 
-    private String readAllToFile(final String schemaName) throws IOException {
+    private String readAllToFile(final String collectionName) throws IOException {
 
-        final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
-        final File f = File.createTempFile("doxdb", schemaName);
+        final File f = File.createTempFile("doxdb", collectionName);
 
         try (final Writer os = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(f)), "UTF-8")) {
             os.write('[');
 
-            final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("schemaName", schemaName).getResultList();
+            final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("collectionName", collectionName).getResultList();
             final Iterator<Dox> i = results.iterator();
             while (i.hasNext()) {
 
@@ -296,7 +336,7 @@ public class DoxBean implements
                 result.getAccessKey();
                 // TODO check security
                 if (result.getCollectionSchemaVersion() != schema.getVersion()) {
-                    migrator.migrate(schemaName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
+                    migrator.migrate(collectionName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
                     // queue migrate later?
                 } else {
                     os.write(decorateWithIdVersion(result.getJsonObject(), result.getDoxId(), result.getVersion()).toString());
@@ -312,19 +352,19 @@ public class DoxBean implements
 
     }
 
-    private String readAllToString(final String schemaName) {
+    private String readAllToString(final String collectionName) {
 
-        final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         final StringBuilder b = new StringBuilder("[");
 
-        final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("schemaName", schemaName).getResultList();
+        final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter(Dox.COLLECTION_NAME, collectionName).getResultList();
         for (final Dox result : results) {
 
             result.getAccessKey();
             // TODO check security
             if (result.getCollectionSchemaVersion() != schema.getVersion()) {
-                migrator.migrate(schemaName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
+                migrator.migrate(collectionName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
                 // queue migrate later?
             } else {
                 b.append(decorateWithIdVersion(result.getJsonObject(), result.getDoxId(), result.getVersion()).toString());
@@ -341,13 +381,26 @@ public class DoxBean implements
 
     }
 
+    @Override
+    public DoxMeta readByUniqueLookup(final String collectionName,
+        final String lookupName,
+        final String lookupKey) {
+
+        final Dox dox = (Dox) em.createNamedQuery(DoxUnique.UNIQUE_LOOKUP)
+            .setParameter(DoxUnique.COLLECTION_NAME, collectionName)
+            .setParameter(DoxUnique.LOOKUP_NAME, lookupName)
+            .setParameter(DoxUnique.LOOKUP_KEY, lookupKey).getSingleResult();
+        return read(collectionName, dox.getDoxId());
+
+    }
+
     private DoxMeta readMetaAndLock(
         final String schemaName,
         final DoxID doxid,
         final int version) {
 
         try {
-            return em.createNamedQuery(Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("schemaName", schemaName).setParameter("version", version).getSingleResult();
+            return em.createNamedQuery(Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("collectionName", schemaName).setParameter("version", version).getSingleResult();
 
         } catch (final NoResultException e) {
             throw new OptimisticLockException(e);
@@ -471,13 +524,14 @@ public class DoxBean implements
     @Override
     public DoxMeta update(final String collectionName,
         final DoxID doxId,
-        final JsonObject content,
+        final JsonObject unsanitizedContent,
         final int version) {
 
         final Timestamp ts = new Timestamp(System.currentTimeMillis());
         final CollectionType config = configurationProvider.getDox(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
+        final JsonObject content = sanitize(unsanitizedContent);
         final String inputJson = content.toString();
         validate(schema, inputJson);
 
@@ -497,8 +551,11 @@ public class DoxBean implements
         e.setContent(content);
         e.setAccessKey(accessKey);
         em.persist(e);
-        em.flush();
-        em.refresh(e);
+
+        for (final UniqueType unique : schema.getUnique()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            em.createNamedQuery(DoxUnique.UPDATE_UNIQUE_FOR_DOX).setParameter("dox", e).setParameter(DoxUnique.LOOKUP_KEY, lookupKey).executeUpdate();
+        }
 
         for (final IndexView indexView : indexViews) {
             indexView.setCollection(config.getName());
