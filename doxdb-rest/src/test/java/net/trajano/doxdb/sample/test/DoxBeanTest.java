@@ -2,9 +2,12 @@ package net.trajano.doxdb.sample.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.StringReader;
+
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.validation.ValidationException;
 
-import org.bson.BsonDocument;
 import org.junit.Test;
 
 import net.trajano.doxdb.DoxMeta;
@@ -16,13 +19,9 @@ public class DoxBeanTest extends AbstractBeanTest {
 
         tx.begin();
         final String inputJson = "{\"name\":\"abc\"}";
-        final BsonDocument bson = BsonDocument.parse(inputJson);
-        final DoxMeta meta = bean.create("horse", bson);
+        final DoxMeta meta = bean.create("horse", Json.createReader(new StringReader(inputJson)).readObject());
 
-        final BsonDocument readBson = BsonDocument.parse(bean.read("horse", meta.getDoxId())
-            .getContentJson());
-
-        assertEquals(bson.getString("name"), readBson.getString("name"));
+        assertEquals("abc", bean.read("horse", meta.getDoxId()).getContent().getString("name"));
         tx.commit();
     }
 
@@ -31,8 +30,8 @@ public class DoxBeanTest extends AbstractBeanTest {
 
         tx.begin();
         final String inputJson = "{\"noname\":\"abc\"}";
-        final BsonDocument bson = BsonDocument.parse(inputJson);
-        bean.create("horse", bson);
+        final JsonObject json = Json.createReader(new StringReader(inputJson)).readObject();
+        bean.create("horse", json);
         tx.commit();
 
     }

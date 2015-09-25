@@ -20,7 +20,9 @@ import javax.ejb.LocalBean;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
+import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
@@ -30,8 +32,6 @@ import javax.persistence.PersistenceException;
 import javax.validation.ValidationException;
 
 import org.bson.BsonDocument;
-import org.bson.BsonInt32;
-import org.bson.BsonString;
 
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
@@ -66,6 +66,33 @@ import net.trajano.doxdb.schema.SchemaType;
 public class DoxBean implements
     DoxLocal {
 
+    /**
+     * This will create a new JsonObject with the _id and _version fields set.
+     * Also any top level values whose key starts with "_" is removed.
+     *
+     * @param jsonObject
+     *            object to decorate
+     * @param doxId
+     *            Dox ID
+     * @param version
+     *            optimistic locking version
+     * @return decorated JSOB object.
+     */
+    public static JsonObject decorateWithIdVersion(final JsonObject jsonObject,
+        final DoxID doxId,
+        final int version) {
+
+        final JsonObjectBuilder b = Json.createObjectBuilder();
+        b.add("_id", doxId.toString());
+        b.add("_version", version);
+        for (final String key : jsonObject.keySet()) {
+            if (!key.startsWith("_")) {
+                b.add(key, jsonObject.get(key));
+            }
+        }
+        return b.build();
+    }
+
     private CollectionAccessControl collectionAccessControl;
 
     private ConfigurationProvider configurationProvider;
@@ -89,24 +116,6 @@ public class DoxBean implements
 
     private Migrator migrator;
 
-    /**
-     * Adds the meta fields to the BSON document that is being returned.
-     *
-     * @param document
-     *            document to update (will be modified).
-     * @param doxId
-     * @param version
-     * @return updated document
-     */
-    private BsonDocument addMeta(final BsonDocument document,
-        final DoxID doxId,
-        final int version) {
-
-        document.put("_id", new BsonString(doxId.toString()));
-        document.put("_version", new BsonInt32(version));
-        return document;
-    }
-
     @Override
     public SearchResult advancedSearch(final String index,
         final String schemaName,
@@ -117,22 +126,22 @@ public class DoxBean implements
 
     @Override
     public DoxMeta create(final String schemaName,
-        final BsonDocument bson) {
+        final JsonObject content) {
 
         final Date ts = new Date();
         final CollectionType config = configurationProvider.getDox(schemaName);
         final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
 
-        final String inputJson = bson.toJson();
-        validate(schema, inputJson);
+        validate(schema, content);
 
         final DoxID doxId = DoxID.generate();
 
+        final String inputJson = content.toString();
         final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());
 
         final Dox entity = new Dox();
         entity.setDoxId(doxId);
-        entity.setContent(bson);
+        entity.setContent(inputJson);
         entity.setCreatedBy(ctx.getCallerPrincipal());
         entity.setCreatedOn(ts);
         entity.setLastUpdatedBy(ctx.getCallerPrincipal());
@@ -158,8 +167,7 @@ public class DoxBean implements
         meta.setVersion(1);
         meta.setDoxId(doxId);
 
-        addMeta(bson, doxId, 1);
-        meta.setContentJson(bson.toJson());
+        meta.setContentJson(content, doxId, 1);
 
         eventHandler.onRecordCreate(config.getName(), doxId, inputJson);
         return meta;
@@ -231,25 +239,23 @@ public class DoxBean implements
         meta.getAccessKey();
         // TODO check the security.
 
-        String contentJson;
-
         if (meta.getCollectionSchemaVersion() != schema.getVersion()) {
             final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
-            contentJson = migrator.migrate(collectionName, e.getCollectionSchemaVersion(), schema.getVersion(), e.getJsonContent());
-            final BsonDocument document = BsonDocument.parse(contentJson);
+            final String contentJson = migrator.migrate(collectionName, e.getCollectionSchemaVersion(), schema.getVersion(), e.getJsonContent());
             meta.setCollectionSchemaVersion(schema.getVersion());
             e.setCollectionSchemaVersion(schema.getVersion());
-            contentJson = document.toJson();
+            e.setContent(contentJson);
             em.persist(e);
+            em.flush();
+            final JsonObject content = e.getJsonObject();
+            meta.setContentJson(content, meta.getDoxId(), e.getVersion());
         } else {
             final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC);
-            final BsonDocument document = e.getContent();
-            addMeta(document, e.getDoxId(), e.getVersion());
-            contentJson = document.toJson();
+            final JsonObject content = e.getJsonObject();
+            meta.setContentJson(content, meta.getDoxId(), meta.getVersion());
         }
 
-        meta.setContentJson(contentJson);
-        eventHandler.onRecordCreate(config.getName(), doxid, contentJson);
+        eventHandler.onRecordCreate(config.getName(), doxid, meta.getContentJson());
         return meta;
 
     }
@@ -293,7 +299,7 @@ public class DoxBean implements
                     migrator.migrate(schemaName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
                     // queue migrate later?
                 } else {
-                    os.write(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());
+                    os.write(decorateWithIdVersion(result.getJsonObject(), result.getDoxId(), result.getVersion()).toString());
                     if (!last) {
                         os.write(',');
                     }
@@ -321,7 +327,7 @@ public class DoxBean implements
                 migrator.migrate(schemaName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
                 // queue migrate later?
             } else {
-                b.append(addMeta(result.getContent(), result.getDoxId(), result.getVersion()).toJson());
+                b.append(decorateWithIdVersion(result.getJsonObject(), result.getDoxId(), result.getVersion()).toString());
                 b.append(',');
             }
 
@@ -464,18 +470,18 @@ public class DoxBean implements
      */
     @Override
     public DoxMeta update(final String collectionName,
-        final DoxID doxid,
-        final BsonDocument bson,
+        final DoxID doxId,
+        final JsonObject content,
         final int version) {
 
         final Timestamp ts = new Timestamp(System.currentTimeMillis());
         final CollectionType config = configurationProvider.getDox(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
-        final String inputJson = bson.toJson();
+        final String inputJson = content.toString();
         validate(schema, inputJson);
 
-        final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
+        final DoxMeta meta = readMetaAndLock(config.getName(), doxId, version);
         meta.incrementVersion();
 
         meta.getAccessKey();
@@ -488,7 +494,7 @@ public class DoxBean implements
         final Dox e = em.find(Dox.class, meta.getId());
         e.setLastUpdatedBy(ctx.getCallerPrincipal());
         e.setLastUpdatedOn(ts);
-        e.setContent(bson);
+        e.setContent(content);
         e.setAccessKey(accessKey);
         em.persist(e);
         em.flush();
@@ -496,14 +502,20 @@ public class DoxBean implements
 
         for (final IndexView indexView : indexViews) {
             indexView.setCollection(config.getName());
-            indexView.setDoxID(doxid);
+            indexView.setDoxID(doxId);
         }
         doxSearchBean.addToIndex(indexViews);
 
-        eventHandler.onRecordUpdate(config.getName(), doxid, e.getJsonContent());
-        addMeta(bson, doxid, e.getVersion());
-        meta.setContentJson(bson.toJson());
+        eventHandler.onRecordUpdate(config.getName(), doxId, e.getJsonContent());
+        meta.setContentJson(content, doxId, e.getVersion());
         return meta;
+
+    }
+
+    private void validate(final SchemaType schema,
+        final JsonObject content) {
+
+        validate(schema, content.toString());
 
     }
 
