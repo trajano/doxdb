@@ -25,9 +25,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @JsonPropertyOrder({
     &quot;name&quot;,
     &quot;language&quot;,
+    &quot;feiId&quot;,
     &quot;rings&quot;
 })
-<span class="nc" id="L30">public class Venue {</span>
+<span class="nc" id="L31">public class Venue {</span>
 
     /**
      * 
@@ -39,7 +40,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     private String name;
     @JsonProperty(&quot;language&quot;)
     private String language;
-<span class="nc" id="L42">    @JsonProperty(&quot;rings&quot;)</span>
+    @JsonProperty(&quot;feiId&quot;)
+    private String feiId;
+<span class="nc" id="L45">    @JsonProperty(&quot;rings&quot;)</span>
     @Valid
     private List&lt;Ring&gt; rings = new ArrayList&lt;Ring&gt;();
 
@@ -52,7 +55,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      */
     @JsonProperty(&quot;name&quot;)
     public String getName() {
-<span class="nc" id="L55">        return name;</span>
+<span class="nc" id="L58">        return name;</span>
     }
 
     /**
@@ -64,12 +67,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      */
     @JsonProperty(&quot;name&quot;)
     public void setName(String name) {
-<span class="nc" id="L67">        this.name = name;</span>
-<span class="nc" id="L68">    }</span>
+<span class="nc" id="L70">        this.name = name;</span>
+<span class="nc" id="L71">    }</span>
 
     public Venue withName(String name) {
-<span class="nc" id="L71">        this.name = name;</span>
-<span class="nc" id="L72">        return this;</span>
+<span class="nc" id="L74">        this.name = name;</span>
+<span class="nc" id="L75">        return this;</span>
     }
 
     /**
@@ -79,7 +82,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      */
     @JsonProperty(&quot;language&quot;)
     public String getLanguage() {
-<span class="nc" id="L82">        return language;</span>
+<span class="nc" id="L85">        return language;</span>
     }
 
     /**
@@ -89,12 +92,37 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      */
     @JsonProperty(&quot;language&quot;)
     public void setLanguage(String language) {
-<span class="nc" id="L92">        this.language = language;</span>
-<span class="nc" id="L93">    }</span>
+<span class="nc" id="L95">        this.language = language;</span>
+<span class="nc" id="L96">    }</span>
 
     public Venue withLanguage(String language) {
-<span class="nc" id="L96">        this.language = language;</span>
-<span class="nc" id="L97">        return this;</span>
+<span class="nc" id="L99">        this.language = language;</span>
+<span class="nc" id="L100">        return this;</span>
+    }
+
+    /**
+     * 
+     * @return
+     *     The feiId
+     */
+    @JsonProperty(&quot;feiId&quot;)
+    public String getFeiId() {
+<span class="nc" id="L110">        return feiId;</span>
+    }
+
+    /**
+     * 
+     * @param feiId
+     *     The feiId
+     */
+    @JsonProperty(&quot;feiId&quot;)
+    public void setFeiId(String feiId) {
+<span class="nc" id="L120">        this.feiId = feiId;</span>
+<span class="nc" id="L121">    }</span>
+
+    public Venue withFeiId(String feiId) {
+<span class="nc" id="L124">        this.feiId = feiId;</span>
+<span class="nc" id="L125">        return this;</span>
     }
 
     /**
@@ -104,7 +132,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      */
     @JsonProperty(&quot;rings&quot;)
     public List&lt;Ring&gt; getRings() {
-<span class="nc" id="L107">        return rings;</span>
+<span class="nc" id="L135">        return rings;</span>
     }
 
     /**
@@ -114,35 +142,35 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      */
     @JsonProperty(&quot;rings&quot;)
     public void setRings(List&lt;Ring&gt; rings) {
-<span class="nc" id="L117">        this.rings = rings;</span>
-<span class="nc" id="L118">    }</span>
+<span class="nc" id="L145">        this.rings = rings;</span>
+<span class="nc" id="L146">    }</span>
 
     public Venue withRings(List&lt;Ring&gt; rings) {
-<span class="nc" id="L121">        this.rings = rings;</span>
-<span class="nc" id="L122">        return this;</span>
+<span class="nc" id="L149">        this.rings = rings;</span>
+<span class="nc" id="L150">        return this;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L127">        return ToStringBuilder.reflectionToString(this);</span>
+<span class="nc" id="L155">        return ToStringBuilder.reflectionToString(this);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L132">        return new HashCodeBuilder().append(name).append(language).append(rings).toHashCode();</span>
+<span class="nc" id="L160">        return new HashCodeBuilder().append(name).append(language).append(feiId).append(rings).toHashCode();</span>
     }
 
     @Override
     public boolean equals(Object other) {
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (other == this) {</span>
-<span class="nc" id="L138">            return true;</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (other == this) {</span>
+<span class="nc" id="L166">            return true;</span>
         }
-<span class="nc bnc" id="L140" title="All 2 branches missed.">        if ((other instanceof Venue) == false) {</span>
-<span class="nc" id="L141">            return false;</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        if ((other instanceof Venue) == false) {</span>
+<span class="nc" id="L169">            return false;</span>
         }
-<span class="nc" id="L143">        Venue rhs = ((Venue) other);</span>
-<span class="nc" id="L144">        return new EqualsBuilder().append(name, rhs.name).append(language, rhs.language).append(rings, rhs.rings).isEquals();</span>
+<span class="nc" id="L171">        Venue rhs = ((Venue) other);</span>
+<span class="nc" id="L172">        return new EqualsBuilder().append(name, rhs.name).append(language, rhs.language).append(feiId, rhs.feiId).append(rings, rhs.rings).isEquals();</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

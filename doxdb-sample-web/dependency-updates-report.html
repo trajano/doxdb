@@ -71,7 +71,7 @@
 <tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td># of dependencies using the latest version available</td>
-<td>9</td></tr>
+<td>10</td></tr>
 <tr class="b">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td># of dependencies where the next version available is smaller than an incremental version update</td>
@@ -79,7 +79,7 @@
 <tr class="a">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td># of dependencies where the next version available is an incremental version update</td>
-<td>2</td></tr>
+<td>1</td></tr>
 <tr class="b">
 <td><img src="images/icon_warning_sml.gif" alt="" /></td>
 <td># of dependencies where the next version available is a minor version update</td>
@@ -128,6 +128,18 @@
 <td></td>
 <td></td></tr>
 <tr class="a">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>net.trajano.doxdb</td>
+<td>json-path</td>
+<td>1.0.3-SNAPSHOT</td>
+<td></td>
+<td></td>
+<td>jar</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr class="b">
 <th>Status</th>
 <th>Group Id</th>
 <th>Artifact Id</th>
@@ -142,7 +154,7 @@
 <div class="section">
 <h3><a name="Dependencies"></a>Dependencies</h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Status</th>
 <th>Group Id</th>
 <th>Artifact Id</th>
@@ -154,19 +166,19 @@
 <th>Next Incremental</th>
 <th>Next Minor</th>
 <th>Next Major</th></tr>
-<tr class="a">
-<td><img src="images/icon_warning_sml.gif" alt="" /></td>
-<td>com.fasterxml.jackson.core</td>
-<td>jackson-databind</td>
-<td>2.6.1</td>
-<td>compile</td>
+<tr class="b">
+<td><img src="images/icon_success_sml.gif" alt="" /></td>
+<td>fish.payara.extras</td>
+<td>payara-embedded-all</td>
+<td>4.1.153</td>
+<td>test</td>
 <td></td>
 <td>jar</td>
 <td></td>
-<td><b>2.6.2</b></td>
+<td></td>
 <td></td>
 <td></td></tr>
-<tr class="b">
+<tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>javax</td>
 <td>javaee-api</td>
@@ -178,7 +190,7 @@
 <td></td>
 <td></td>
 <td></td></tr>
-<tr class="a">
+<tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>junit</td>
 <td>junit</td>
@@ -190,7 +202,7 @@
 <td></td>
 <td></td>
 <td></td></tr>
-<tr class="b">
+<tr class="a">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>net.trajano.commons</td>
 <td>commons-testing</td>
@@ -202,24 +214,12 @@
 <td></td>
 <td></td>
 <td></td></tr>
-<tr class="a">
+<tr class="b">
 <td><img src="images/icon_success_sml.gif" alt="" /></td>
 <td>org.apache.commons</td>
 <td>commons-lang3</td>
 <td>3.4</td>
 <td>compile</td>
-<td></td>
-<td>jar</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td></tr>
-<tr class="b">
-<td><img src="images/icon_success_sml.gif" alt="" /></td>
-<td>org.glassfish.main.extras</td>
-<td>glassfish-embedded-all</td>
-<td>4.1</td>
-<td>test</td>
 <td></td>
 <td>jar</td>
 <td></td>
@@ -314,32 +314,29 @@
 <h2><a name="Dependency_Updates"></a>Dependency Updates</h2>
 <p></p>
 <div class="section">
-<h3><a name="com.fasterxml.jackson.core:jackson-databind"></a>com.fasterxml.jackson.core:jackson-databind</h3>
+<h3><a name="fish.payara.extras:payara-embedded-all"></a>fish.payara.extras:payara-embedded-all</h3>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th width="80%">Status</th>
-<td><img src="images/icon_warning_sml.gif" alt="" />&#160;There is at least one newer incremental version available. Incremental updates are typically passive.</td></tr>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
 <tr class="a">
 <th width="80%">Group Id</th>
-<td>com.fasterxml.jackson.core</td></tr>
+<td>fish.payara.extras</td></tr>
 <tr class="b">
 <th width="80%">Artifact Id</th>
-<td>jackson-databind</td></tr>
+<td>payara-embedded-all</td></tr>
 <tr class="a">
 <th width="80%">Current Version</th>
-<td>2.6.1</td></tr>
+<td>4.1.153</td></tr>
 <tr class="b">
 <th width="80%">Scope</th>
-<td>compile</td></tr>
+<td>test</td></tr>
 <tr class="a">
 <th width="80%">Classifier</th>
 <td></td></tr>
 <tr class="b">
 <th width="80%">Type</th>
-<td>jar</td></tr>
-<tr class="a">
-<th width="80%">Newer versions</th>
-<td><b>2.6.2</b>&#160;<i>Next Incremental</i></td></tr></table></div>
+<td>jar</td></tr></table></div>
 <div class="section">
 <h3><a name="javax:javaee-api"></a>javax:javaee-api</h3>
 <table border="0" class="bodyTable">
@@ -461,6 +458,30 @@
 <th width="80%">Type</th>
 <td>war</td></tr></table></div>
 <div class="section">
+<h3><a name="net.trajano.doxdb:json-path"></a>net.trajano.doxdb:json-path</h3>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th width="80%">Status</th>
+<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
+<tr class="b">
+<th width="80%">Group Id</th>
+<td>net.trajano.doxdb</td></tr>
+<tr class="a">
+<th width="80%">Artifact Id</th>
+<td>json-path</td></tr>
+<tr class="b">
+<th width="80%">Current Version</th>
+<td>1.0.3-SNAPSHOT</td></tr>
+<tr class="a">
+<th width="80%">Scope</th>
+<td></td></tr>
+<tr class="b">
+<th width="80%">Classifier</th>
+<td></td></tr>
+<tr class="a">
+<th width="80%">Type</th>
+<td>jar</td></tr></table></div>
+<div class="section">
 <h3><a name="org.apache.commons:commons-lang3"></a>org.apache.commons:commons-lang3</h3>
 <table border="0" class="bodyTable">
 <tr class="a">
@@ -478,30 +499,6 @@
 <tr class="a">
 <th width="80%">Scope</th>
 <td>compile</td></tr>
-<tr class="b">
-<th width="80%">Classifier</th>
-<td></td></tr>
-<tr class="a">
-<th width="80%">Type</th>
-<td>jar</td></tr></table></div>
-<div class="section">
-<h3><a name="org.glassfish.main.extras:glassfish-embedded-all"></a>org.glassfish.main.extras:glassfish-embedded-all</h3>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th width="80%">Status</th>
-<td><img src="images/icon_success_sml.gif" alt="" />&#160;No newer versions available.</td></tr>
-<tr class="b">
-<th width="80%">Group Id</th>
-<td>org.glassfish.main.extras</td></tr>
-<tr class="a">
-<th width="80%">Artifact Id</th>
-<td>glassfish-embedded-all</td></tr>
-<tr class="b">
-<th width="80%">Current Version</th>
-<td>4.1</td></tr>
-<tr class="a">
-<th width="80%">Scope</th>
-<td>test</td></tr>
 <tr class="b">
 <th width="80%">Classifier</th>
 <td></td></tr>

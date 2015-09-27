@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-09-27T12:56:23.787">
+<pmd version="5.0.5" timestamp="2015-09-27T13:20:21.829">
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Country.java">
 <violation beginline="257" endline="257" begincolumn="20" endcolumn="39" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.sample.json" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
@@ -18,97 +18,97 @@ Local variable 'constant' could be declared final
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Horse.java">
-<violation beginline="99" endline="99" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="105" endline="105" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'name' is not assigned and could be declared final
 </violation>
-<violation beginline="103" endline="103" begincolumn="27" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="109" endline="109" begincolumn="27" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'name' is not assigned and could be declared final
 </violation>
-<violation beginline="124" endline="124" begincolumn="29" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setPassport" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="130" endline="130" begincolumn="29" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setPassport" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'passport' is not assigned and could be declared final
 </violation>
-<violation beginline="128" endline="128" begincolumn="31" endcolumn="45" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withPassport" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="134" endline="134" begincolumn="31" endcolumn="45" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withPassport" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'passport' is not assigned and could be declared final
 </violation>
-<violation beginline="149" endline="149" begincolumn="24" endcolumn="33" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setFei" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="159" endline="159" begincolumn="24" endcolumn="33" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setFei" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'fei' is not assigned and could be declared final
 </violation>
-<violation beginline="153" endline="153" begincolumn="26" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withFei" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="163" endline="163" begincolumn="26" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withFei" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'fei' is not assigned and could be declared final
 </violation>
-<violation beginline="174" endline="174" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setUsef" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="184" endline="184" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setUsef" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'usef' is not assigned and could be declared final
 </violation>
-<violation beginline="178" endline="178" begincolumn="27" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withUsef" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="188" endline="188" begincolumn="27" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withUsef" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'usef' is not assigned and could be declared final
 </violation>
-<violation beginline="199" endline="199" begincolumn="23" endcolumn="31" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setEc" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="209" endline="209" begincolumn="23" endcolumn="31" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setEc" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'ec' is not assigned and could be declared final
 </violation>
-<violation beginline="203" endline="203" begincolumn="25" endcolumn="33" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withEc" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="213" endline="213" begincolumn="25" endcolumn="33" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withEc" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'ec' is not assigned and could be declared final
 </violation>
-<violation beginline="224" endline="224" begincolumn="32" endcolumn="49" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setDateOfBirth" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="234" endline="234" begincolumn="32" endcolumn="49" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setDateOfBirth" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'dateOfBirth' is not assigned and could be declared final
 </violation>
-<violation beginline="228" endline="228" begincolumn="34" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withDateOfBirth" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="238" endline="238" begincolumn="34" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withDateOfBirth" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'dateOfBirth' is not assigned and could be declared final
 </violation>
-<violation beginline="255" endline="255" begincolumn="35" endcolumn="56" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setCountryOfBirth" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="265" endline="265" begincolumn="35" endcolumn="56" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setCountryOfBirth" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'countryOfBirth' is not assigned and could be declared final
 </violation>
-<violation beginline="259" endline="259" begincolumn="37" endcolumn="58" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withCountryOfBirth" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="269" endline="269" begincolumn="37" endcolumn="58" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withCountryOfBirth" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'countryOfBirth' is not assigned and could be declared final
 </violation>
-<violation beginline="280" endline="280" begincolumn="27" endcolumn="45" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setGender" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="290" endline="290" begincolumn="27" endcolumn="45" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setGender" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'gender' is not assigned and could be declared final
 </violation>
-<violation beginline="284" endline="284" begincolumn="29" endcolumn="47" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withGender" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="294" endline="294" begincolumn="29" endcolumn="47" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withGender" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'gender' is not assigned and could be declared final
 </violation>
-<violation beginline="305" endline="305" begincolumn="26" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setColor" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="315" endline="315" begincolumn="26" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setColor" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'color' is not assigned and could be declared final
 </violation>
-<violation beginline="309" endline="309" begincolumn="28" endcolumn="39" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withColor" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="319" endline="319" begincolumn="28" endcolumn="39" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withColor" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'color' is not assigned and could be declared final
 </violation>
-<violation beginline="330" endline="330" begincolumn="26" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setBreed" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="340" endline="340" begincolumn="26" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setBreed" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'breed' is not assigned and could be declared final
 </violation>
-<violation beginline="334" endline="334" begincolumn="28" endcolumn="39" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withBreed" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="344" endline="344" begincolumn="28" endcolumn="39" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withBreed" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'breed' is not assigned and could be declared final
 </violation>
-<violation beginline="355" endline="355" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setSire" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="365" endline="365" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setSire" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'sire' is not assigned and could be declared final
 </violation>
-<violation beginline="359" endline="359" begincolumn="27" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withSire" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="369" endline="369" begincolumn="27" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withSire" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'sire' is not assigned and could be declared final
 </violation>
-<violation beginline="380" endline="380" begincolumn="28" endcolumn="41" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setSireDam" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="390" endline="390" begincolumn="28" endcolumn="41" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setSireDam" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'sireDam' is not assigned and could be declared final
 </violation>
-<violation beginline="384" endline="384" begincolumn="30" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withSireDam" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="394" endline="394" begincolumn="30" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="withSireDam" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'sireDam' is not assigned and could be declared final
 </violation>
-<violation beginline="400" endline="400" begincolumn="27" endcolumn="38" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="equals" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="410" endline="410" begincolumn="27" endcolumn="38" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="equals" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'other' is not assigned and could be declared final
 </violation>
-<violation beginline="407" endline="407" begincolumn="9" endcolumn="35" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="equals" variable="rhs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+<violation beginline="417" endline="417" begincolumn="9" endcolumn="35" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="equals" variable="rhs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
 Local variable 'rhs' could be declared final
 </violation>
-<violation beginline="417" endline="417" begincolumn="24" endcolumn="48" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.sample.json" class="Horse" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
+<violation beginline="427" endline="427" begincolumn="24" endcolumn="48" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.sample.json" class="Horse" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
 </violation>
-<violation beginline="420" endline="420" begincolumn="18" endcolumn="31" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" variable="c" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+<violation beginline="430" endline="430" begincolumn="18" endcolumn="31" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" variable="c" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
 Local variable 'c' could be declared final
 </violation>
-<violation beginline="425" endline="425" begincolumn="24" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="435" endline="435" begincolumn="24" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'value' is not assigned and could be declared final
 </violation>
-<violation beginline="436" endline="436" begincolumn="46" endcolumn="57" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="fromValue" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="446" endline="446" begincolumn="46" endcolumn="57" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="fromValue" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'value' is not assigned and could be declared final
 </violation>
-<violation beginline="437" endline="437" begincolumn="13" endcolumn="56" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="fromValue" variable="constant" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+<violation beginline="447" endline="447" begincolumn="13" endcolumn="56" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="fromValue" variable="constant" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
 Local variable 'constant' could be declared final
 </violation>
 </file>
@@ -148,28 +148,34 @@ Local variable 'rhs' could be declared final
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Venue.java">
-<violation beginline="66" endline="66" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="69" endline="69" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'name' is not assigned and could be declared final
 </violation>
-<violation beginline="70" endline="70" begincolumn="27" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="withName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="73" endline="73" begincolumn="27" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="withName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'name' is not assigned and could be declared final
 </violation>
-<violation beginline="91" endline="91" begincolumn="29" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="setLanguage" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="94" endline="94" begincolumn="29" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="setLanguage" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'language' is not assigned and could be declared final
 </violation>
-<violation beginline="95" endline="95" begincolumn="31" endcolumn="45" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="withLanguage" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="98" endline="98" begincolumn="31" endcolumn="45" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="withLanguage" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'language' is not assigned and could be declared final
 </violation>
-<violation beginline="116" endline="116" begincolumn="26" endcolumn="41" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="setRings" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="119" endline="119" begincolumn="26" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="setFeiId" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'feiId' is not assigned and could be declared final
+</violation>
+<violation beginline="123" endline="123" begincolumn="28" endcolumn="39" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="withFeiId" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+Parameter 'feiId' is not assigned and could be declared final
+</violation>
+<violation beginline="144" endline="144" begincolumn="26" endcolumn="41" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="setRings" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'rings' is not assigned and could be declared final
 </violation>
-<violation beginline="120" endline="120" begincolumn="28" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="withRings" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="148" endline="148" begincolumn="28" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="withRings" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'rings' is not assigned and could be declared final
 </violation>
-<violation beginline="136" endline="136" begincolumn="27" endcolumn="38" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="equals" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
+<violation beginline="164" endline="164" begincolumn="27" endcolumn="38" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="equals" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'other' is not assigned and could be declared final
 </violation>
-<violation beginline="143" endline="143" begincolumn="9" endcolumn="35" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="equals" variable="rhs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
+<violation beginline="171" endline="171" begincolumn="9" endcolumn="35" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="equals" variable="rhs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
 Local variable 'rhs' could be declared final
 </violation>
 </file>
