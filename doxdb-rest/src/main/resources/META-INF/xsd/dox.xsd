@@ -110,7 +110,8 @@
 		</annotation>
 		<sequence>
 			<element name="oob" type="token" minOccurs="0" maxOccurs="unbounded" />
-			<element name="unique" type="tns:UniqueType" minOccurs="0" maxOccurs="unbounded" />
+			<element name="unique" type="tns:LookupType" minOccurs="0" maxOccurs="unbounded" />
+			<element name="lookup" type="tns:LookupType" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="version" type="positiveInteger" use="required">
 			<annotation>
@@ -162,12 +163,12 @@
 			</annotation>
 		</attribute>
 	</complexType>
-	<complexType name="UniqueType">
+	<complexType name="LookupType">
 		<attribute name="name" type="token" use="required">
 			<annotation>
 				<appinfo>
 					<jxb:property>
-						<jxb:javadoc>Name of the unique lookup
+						<jxb:javadoc>Name of the  lookup
 						</jxb:javadoc>
 					</jxb:property>
 				</appinfo>

@@ -21,6 +21,8 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.EntityManager;
@@ -40,6 +42,7 @@ import com.github.fge.jsonschema.main.JsonSchema;
 
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxLookup;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.DoxTombstone;
 import net.trajano.doxdb.DoxUnique;
@@ -53,9 +56,9 @@ import net.trajano.doxdb.ext.Migrator;
 import net.trajano.doxdb.jsonpath.JsonPath;
 import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.DoxPersistence;
+import net.trajano.doxdb.schema.LookupType;
 import net.trajano.doxdb.schema.ReadAllType;
 import net.trajano.doxdb.schema.SchemaType;
-import net.trajano.doxdb.schema.UniqueType;
 
 /**
  * Implements the DoxDB persistence operations. An EJB is used to take advantage
@@ -180,7 +183,7 @@ public class DoxBean implements
 
         em.persist(entity);
 
-        for (final UniqueType unique : schema.getUnique()) {
+        for (final LookupType unique : schema.getUnique()) {
             final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
             final DoxUnique doxUnique = new DoxUnique();
             doxUnique.setCollectionName(config.getName());
@@ -188,6 +191,15 @@ public class DoxBean implements
             doxUnique.setLookupName(unique.getName());
             doxUnique.setLookupKey(lookupKey);
             em.persist(doxUnique);
+        }
+        for (final LookupType unique : schema.getLookup()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            final DoxLookup doxLookup = new DoxLookup();
+            doxLookup.setCollectionName(config.getName());
+            doxLookup.setDox(entity);
+            doxLookup.setLookupName(unique.getName());
+            doxLookup.setLookupKey(lookupKey);
+            em.persist(doxLookup);
         }
 
         final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
@@ -227,6 +239,7 @@ public class DoxBean implements
             return false;
         }
         em.createNamedQuery(DoxUnique.REMOVE_UNIQUE_FOR_DOX).setParameter("dox", toBeDeleted).executeUpdate();
+        em.createNamedQuery(DoxLookup.REMOVE_LOOKUP_FOR_DOX).setParameter("dox", toBeDeleted).executeUpdate();
 
         final BsonDocument contentBson = toBeDeleted.getContent();
         final DoxTombstone tombstone = toBeDeleted.buildTombstone(ctx.getCallerPrincipal(), ts);
@@ -379,6 +392,35 @@ public class DoxBean implements
         }
         return b.toString();
 
+    }
+
+    @Override
+    public JsonArray readByLookup(final String collectionName,
+        final String lookupName,
+        final String lookupKey) {
+
+        final List<Dox> results = em.createNamedQuery(DoxLookup.LOOKUP, Dox.class)
+            .setParameter(DoxLookup.COLLECTION_NAME, collectionName)
+            .setParameter(DoxLookup.LOOKUP_NAME, lookupName)
+            .setParameter(DoxLookup.LOOKUP_KEY, lookupKey).getResultList();
+
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
+
+        final JsonArrayBuilder b = Json.createArrayBuilder();
+
+        for (final Dox result : results) {
+
+            result.getAccessKey();
+            // TODO check security
+            if (result.getCollectionSchemaVersion() != schema.getVersion()) {
+                migrator.migrate(collectionName, result.getCollectionSchemaVersion(), schema.getVersion(), result.getJsonContent());
+                // queue migrate later?
+            } else {
+                b.add(decorateWithIdVersion(result.getJsonObject(), result.getDoxId(), result.getVersion()));
+            }
+
+        }
+        return b.build();
     }
 
     @Override
@@ -552,9 +594,13 @@ public class DoxBean implements
         e.setAccessKey(accessKey);
         em.persist(e);
 
-        for (final UniqueType unique : schema.getUnique()) {
+        for (final LookupType unique : schema.getUnique()) {
             final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
             em.createNamedQuery(DoxUnique.UPDATE_UNIQUE_FOR_DOX).setParameter("dox", e).setParameter(DoxUnique.LOOKUP_KEY, lookupKey).executeUpdate();
+        }
+        for (final LookupType lookup : schema.getLookup()) {
+            final String lookupKey = JsonPath.compile(lookup.getPath()).read(inputJson);
+            em.createNamedQuery(DoxLookup.UPDATE_LOOKUP_FOR_DOX).setParameter("dox", e).setParameter(DoxUnique.LOOKUP_KEY, lookupKey).executeUpdate();
         }
 
         for (final IndexView indexView : indexViews) {

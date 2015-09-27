@@ -38,8 +38,8 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.DoxPersistence;
 import net.trajano.doxdb.schema.IndexType;
+import net.trajano.doxdb.schema.LookupType;
 import net.trajano.doxdb.schema.SchemaType;
-import net.trajano.doxdb.schema.UniqueType;
 
 public class AbstractBeanTest {
 
@@ -87,7 +87,7 @@ public class AbstractBeanTest {
                     final SchemaType schema = new SchemaType();
                     schema.setLocation("horse.json");
                     schema.setVersion(1);
-                    final UniqueType unique = new UniqueType();
+                    final LookupType unique = new LookupType();
                     unique.setName("name");
                     unique.setPath("$.name");
                     schema.getUnique().add(unique);
@@ -116,7 +116,7 @@ public class AbstractBeanTest {
                     final SchemaType schema = new SchemaType();
                     schema.setLocation("horse.json");
                     schema.setVersion(1);
-                    final UniqueType unique = new UniqueType();
+                    final LookupType unique = new LookupType();
                     unique.setName("name");
                     unique.setPath("$.name");
                     schema.getUnique().add(unique);

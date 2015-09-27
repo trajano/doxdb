@@ -47,8 +47,8 @@ import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
 import net.trajano.doxdb.ejb.DoxLocal;
 import net.trajano.doxdb.schema.CollectionType;
+import net.trajano.doxdb.schema.LookupType;
 import net.trajano.doxdb.schema.SchemaType;
-import net.trajano.doxdb.schema.UniqueType;
 import net.trajano.doxdb.ws.SessionManager;
 
 /**
@@ -207,9 +207,9 @@ public class DoxResource {
 
                         final SchemaType currentSchemaType = collectionType.getSchema().get(collectionType.getSchema().size() - 1);
 
-                        for (final UniqueType uniqueType : currentSchemaType.getUnique()) {
-                            final String lookupUri = uriInfo.getBaseUriBuilder().path(name).build() + "/" + uniqueType.getName() + "/:lookupKey";
-                            w.print("'getBy" + capitalize(uniqueType.getName()) + "':{method:'GET',url:'" + lookupUri + "'},");
+                        for (final LookupType LookupType : currentSchemaType.getUnique()) {
+                            final String lookupUri = uriInfo.getBaseUriBuilder().path(name).build() + "/" + LookupType.getName() + "/:lookupKey";
+                            w.print("'getBy" + capitalize(LookupType.getName()) + "':{method:'GET',url:'" + lookupUri + "'},");
                         }
 
                         w.print("});");
@@ -292,13 +292,35 @@ public class DoxResource {
         @PathParam("lookupKey") final String lookupKey,
         @Context final UriInfo uriInfo) {
 
-        final DoxMeta meta = dox.readByUniqueLookup(collectionName, lookupName, lookupKey);
-        if (meta == null) {
-            return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Dox not found").build();
+        SchemaType schema = null;
+        for (final CollectionType collection : dox.getConfiguration().getDox()) {
+            if (collection.getName().equals(collectionName)) {
+                schema = collection.getSchema().get(collection.getSchema().size() - 1);
+                break;
+            }
         }
-        final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
-        final URI location = uriInfo.getBaseUriBuilder().path(collectionName).path(meta.getDoxId().toString()).build();
-        return Response.seeOther(location).cacheControl(OK_CACHE).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();
+        if (schema == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+
+        for (final LookupType lookup : schema.getUnique()) {
+            if (lookup.getName().equals(lookupName)) {
+                final DoxMeta meta = dox.readByUniqueLookup(collectionName, lookupName, lookupKey);
+                if (meta == null) {
+                    return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Dox not found").build();
+                }
+                final EntityTag entityTag = new EntityTag(String.valueOf(meta.getVersion()));
+                final URI location = uriInfo.getBaseUriBuilder().path(collectionName).path(meta.getDoxId().toString()).build();
+                return Response.seeOther(location).cacheControl(OK_CACHE).tag(entityTag).lastModified(meta.getLastUpdatedOn()).build();
+            }
+        }
+        for (final LookupType lookup : schema.getLookup()) {
+            if (lookup.getName().equals(lookupName)) {
+                return Response.ok(dox.readByLookup(collectionName, lookupName, lookupKey)).build();
+            }
+        }
+        return Response.status(Status.NOT_FOUND).build();
+
     }
 
     private Response op(final String collection,

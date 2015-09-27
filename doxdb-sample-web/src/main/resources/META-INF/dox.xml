@@ -4,8 +4,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" cors="*">
 	<dox name="horse" oob="true" readAll="none">
 		<schema version="1" location="horse.json">
-			<unique name="horseName" path="$.name" />
-			<unique name="horseFei" path="$.fei" />
+			<lookup name="horseName" path="$.name" />
+			<lookup name="horseFei" path="$.fei" />
 		</schema>
 	</dox>
 	<dox name="venue" oob="false" readAll="memory">
