@@ -1,0 +1,5 @@
+net.trajano.doxdb.jsonpath
+net.trajano.doxdb.jsonpath.spi.mapper
+net.trajano.doxdb.jsonpath.spi.json
+net.trajano.doxdb.jsonpath.internal
+net.trajano.doxdb.jsonpath.internal.token
