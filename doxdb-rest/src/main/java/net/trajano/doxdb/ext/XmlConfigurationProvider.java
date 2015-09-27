@@ -66,9 +66,24 @@ public class XmlConfigurationProvider implements
 
     private final DoxPersistence persistenceConfig;
 
+    /**
+     * Constructs XmlConfigurationProvider with the default "META-INF/dox.xml"
+     * configuration file.
+     */
     public XmlConfigurationProvider() {
+        this("META-INF/dox.xml");
+    }
 
-        try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/dox.xml")) {
+    /**
+     * Constructs XmlConfigurationProvider.
+     *
+     * @param configurationXml
+     *            relative to the root the the current thread's context class
+     *            loader.
+     */
+    public XmlConfigurationProvider(final String configurationXml) {
+
+        try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(configurationXml)) {
             final JAXBContext jaxb = JAXBContext.newInstance(DoxPersistence.class);
             final Unmarshaller unmarshaller = jaxb.createUnmarshaller();
             unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new StreamSource(getClass().getResourceAsStream("/META-INF/xsd/dox.xsd"))));
