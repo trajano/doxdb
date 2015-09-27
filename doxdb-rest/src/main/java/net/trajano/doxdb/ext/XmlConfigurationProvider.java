@@ -14,6 +14,7 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
@@ -70,7 +71,7 @@ public class XmlConfigurationProvider implements
         try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/dox.xml")) {
             final JAXBContext jaxb = JAXBContext.newInstance(DoxPersistence.class);
             final Unmarshaller unmarshaller = jaxb.createUnmarshaller();
-            unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(getClass().getResource("/META-INF/xsd/dox.xsd")));
+            unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new StreamSource(getClass().getResourceAsStream("/META-INF/xsd/dox.xsd"))));
             persistenceConfig = (DoxPersistence) unmarshaller.unmarshal(is);
             indexMap = new ConcurrentHashMap<>(persistenceConfig.getIndex().size());
             for (final IndexType indexType : persistenceConfig.getIndex()) {
