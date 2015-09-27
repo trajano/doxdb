@@ -23,7 +23,7 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> javax.ws.rs.core.MediaType;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> net.trajano.doxdb.ext.ConfigurationProvider;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> net.trajano.doxdb.schema.DoxType;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> net.trajano.doxdb.schema.CollectionType;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> net.trajano.doxdb.schema.IndexType;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">/**</em>
@@ -56,8 +56,8 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">if</strong> (getTarget().path(mappedName).request().head().getStatus() == 404) {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>                  <strong class="jxr_keyword">final</strong> JsonObjectBuilder mappingBuilder = createObjectBuilder();
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> DoxType doxType : configurationProvider.getPersistenceConfig().getDox()) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>                      mappingBuilder.add(doxType.getName(), createObjectBuilder()
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> CollectionType collectionType : configurationProvider.getPersistenceConfig().getDox()) {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                      mappingBuilder.add(collectionType.getName(), createObjectBuilder()
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>                          .add(<span class="jxr_string">"_source"</span>, createObjectBuilder()
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>                              .add(<span class="jxr_string">"excludes"</span>, createArrayBuilder()
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>                                  .add(<span class="jxr_string">"_"</span>)

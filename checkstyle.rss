@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2015 Trajano</copyright>
     <item>
-      <title>File: 40,
-             Errors: 0,
-             Warnings: 197,
+      <title>File: 88,
+             Errors: 3,
+             Warnings: 2361,
              Infos: 0
       </title>
             <link>http://site.trajano.net/doxdb//checkstyle.html</link>
@@ -46,13 +46,13 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.DoxLocal.java">net/trajano/doxdb/ejb/DoxLocal.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.JsonReader.java">net/trajano/doxdb/jsonpath/internal/JsonReader.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  9
+                  139
                 </td>
                 <td>
                   0
@@ -60,13 +60,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.EntityNotFoundMapper.java">net/trajano/doxdb/rest/EntityNotFoundMapper.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.DoxLookup.java">net/trajano/doxdb/DoxLookup.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  1
+                  8
                 </td>
                 <td>
                   0
@@ -80,7 +80,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  6
+                  5
                 </td>
                 <td>
                   0
@@ -102,55 +102,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.DoxBean.java">net/trajano/doxdb/ejb/DoxBean.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  16
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.sample.web.RestApplication.java">net/trajano/doxdb/sample/web/RestApplication.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.DoxMeta.java">net/trajano/doxdb/DoxMeta.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  16
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.DoxResource.java">net/trajano/doxdb/rest/DoxResource.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  15
+                  19
                 </td>
                 <td>
                   0
@@ -172,27 +130,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.internal.DoxPrincipal.java">net/trajano/doxdb/internal/DoxPrincipal.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.EvaluationContextImpl.java">net/trajano/doxdb/jsonpath/internal/token/EvaluationContextImpl.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  4
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.DoxRestApplication.java">net/trajano/doxdb/rest/DoxRestApplication.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
+                  68
                 </td>
                 <td>
                   0
@@ -200,55 +144,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.Indexer.java">net/trajano/doxdb/ext/Indexer.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.Criteria.java">net/trajano/doxdb/jsonpath/Criteria.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  3
+                  288
                 </td>
                 <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.internal.package-info.java">net/trajano/doxdb/rest/internal/package-info.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.PathRef.java">net/trajano/doxdb/jsonpath/internal/PathRef.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.internal.DoxLength.java">net/trajano/doxdb/ejb/internal/DoxLength.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.Migrator.java">net/trajano/doxdb/ext/Migrator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
+                  203
                 </td>
                 <td>
                   0
@@ -262,7 +178,21 @@ under the License.
                   0
                 </td>
                 <td>
-                  10
+                  9
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.JsonPathException.java">net/trajano/doxdb/jsonpath/JsonPathException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
                 </td>
                 <td>
                   0
@@ -271,6 +201,20 @@ under the License.
                           <tr>
                 <td>
                   <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.sample.web.HorseResource.java">net/trajano/doxdb/sample/web/HorseResource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.Option.java">net/trajano/doxdb/jsonpath/Option.java</a>
                 </td>
                 <td>
                   0
@@ -298,27 +242,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.DoxSearch.java">net/trajano/doxdb/ejb/DoxSearch.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  8
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.DoxOobTombstone.java">net/trajano/doxdb/DoxOobTombstone.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  14
+                  13
                 </td>
                 <td>
                   0
@@ -326,13 +256,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.package-info.java">net/trajano/doxdb/package-info.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.DoxSearch.java">net/trajano/doxdb/ejb/DoxSearch.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  0
+                  12
                 </td>
                 <td>
                   0
@@ -340,13 +270,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.CollectionAccessControl.java">net/trajano/doxdb/ext/CollectionAccessControl.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.spi.json.AbstractJsonProvider.java">net/trajano/doxdb/jsonpath/spi/json/AbstractJsonProvider.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  1
+                  75
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.spi.mapper.JacksonMappingProvider.java">net/trajano/doxdb/jsonpath/spi/mapper/JacksonMappingProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
                 </td>
                 <td>
                   0
@@ -360,7 +304,21 @@ under the License.
                   0
                 </td>
                 <td>
-                  20
+                  21
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.EvaluationAbortException.java">net/trajano/doxdb/jsonpath/internal/EvaluationAbortException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -382,27 +340,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.DefaultEventHandler.java">net/trajano/doxdb/ext/DefaultEventHandler.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.Filter.java">net/trajano/doxdb/jsonpath/Filter.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.DoxID.java">net/trajano/doxdb/DoxID.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
+                  89
                 </td>
                 <td>
                   0
@@ -410,27 +354,41 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.sample.web.package-info.java">net/trajano/doxdb/sample/web/package-info.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.EsJaxRsProvider.java">net/trajano/doxdb/ejb/EsJaxRsProvider.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.Path.java">net/trajano/doxdb/jsonpath/internal/Path.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
                   2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.PathToken.java">net/trajano/doxdb/jsonpath/internal/token/PathToken.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  89
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.JsonFormatter.java">net/trajano/doxdb/jsonpath/internal/JsonFormatter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
                 </td>
                 <td>
                   0
@@ -452,6 +410,34 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.JsonPath.java">net/trajano/doxdb/jsonpath/JsonPath.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  227
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.spi.json.JacksonJsonNodeJsonProvider.java">net/trajano/doxdb/jsonpath/spi/json/JacksonJsonNodeJsonProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  84
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.DoxTombstone.java">net/trajano/doxdb/DoxTombstone.java</a>
                 </td>
                 <td>
@@ -466,13 +452,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.ScanPathToken.java">net/trajano/doxdb/jsonpath/internal/token/ScanPathToken.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  94
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.ConfigurationProvider.java">net/trajano/doxdb/ext/ConfigurationProvider.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  8
+                  7
                 </td>
                 <td>
                   0
@@ -522,6 +522,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.PredicatePathToken.java">net/trajano/doxdb/jsonpath/internal/token/PredicatePathToken.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.CorsFilter.java">net/trajano/doxdb/rest/CorsFilter.java</a>
                 </td>
                 <td>
@@ -536,13 +550,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.EsJaxRsSearchBean.java">net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</a>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.ReadContext.java">net/trajano/doxdb/jsonpath/ReadContext.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  4
+                  20
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.EvaluationContext.java">net/trajano/doxdb/jsonpath/internal/EvaluationContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
                 </td>
                 <td>
                   0
@@ -564,6 +592,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.Configuration.java">net/trajano/doxdb/jsonpath/Configuration.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  93
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.sample.ejb.MyEventHandler.java">net/trajano/doxdb/sample/ejb/MyEventHandler.java</a>
                 </td>
                 <td>
@@ -571,6 +613,608 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.spi.mapper.MappingException.java">net/trajano/doxdb/jsonpath/spi/mapper/MappingException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.WildcardPathToken.java">net/trajano/doxdb/jsonpath/internal/token/WildcardPathToken.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.DocumentContext.java">net/trajano/doxdb/jsonpath/DocumentContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.RootPathToken.java">net/trajano/doxdb/jsonpath/internal/token/RootPathToken.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.spi.json.JacksonJsonProvider.java">net/trajano/doxdb/jsonpath/spi/json/JacksonJsonProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  29
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.EntityNotFoundMapper.java">net/trajano/doxdb/rest/EntityNotFoundMapper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.DoxLocal.java">net/trajano/doxdb/ejb/DoxLocal.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.DoxBean.java">net/trajano/doxdb/ejb/DoxBean.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.InvalidCriteriaException.java">net/trajano/doxdb/jsonpath/InvalidCriteriaException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.EvaluationListener.java">net/trajano/doxdb/jsonpath/EvaluationListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.InvalidPathException.java">net/trajano/doxdb/jsonpath/InvalidPathException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.sample.web.RestApplication.java">net/trajano/doxdb/sample/web/RestApplication.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.WriteContext.java">net/trajano/doxdb/jsonpath/WriteContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.DoxResource.java">net/trajano/doxdb/rest/DoxResource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  20
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.TypeRef.java">net/trajano/doxdb/jsonpath/TypeRef.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.internal.DoxPrincipal.java">net/trajano/doxdb/internal/DoxPrincipal.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.DoxRestApplication.java">net/trajano/doxdb/rest/DoxRestApplication.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.Cache.java">net/trajano/doxdb/jsonpath/internal/Cache.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  36
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.Indexer.java">net/trajano/doxdb/ext/Indexer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.rest.internal.package-info.java">net/trajano/doxdb/rest/internal/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.internal.DoxLength.java">net/trajano/doxdb/ejb/internal/DoxLength.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.PathNotFoundException.java">net/trajano/doxdb/jsonpath/PathNotFoundException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.Migrator.java">net/trajano/doxdb/ext/Migrator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.Predicate.java">net/trajano/doxdb/jsonpath/Predicate.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.CompiledPath.java">net/trajano/doxdb/jsonpath/internal/CompiledPath.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  32
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.InvalidModificationException.java">net/trajano/doxdb/jsonpath/InvalidModificationException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.Utils.java">net/trajano/doxdb/jsonpath/internal/Utils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  135
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.package-info.java">net/trajano/doxdb/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.CollectionAccessControl.java">net/trajano/doxdb/ext/CollectionAccessControl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.ValueCompareException.java">net/trajano/doxdb/jsonpath/ValueCompareException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.PropertyPathToken.java">net/trajano/doxdb/jsonpath/internal/token/PropertyPathToken.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.spi.json.JsonProvider.java">net/trajano/doxdb/jsonpath/spi/json/JsonProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  19
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.DefaultsImpl.java">net/trajano/doxdb/jsonpath/internal/DefaultsImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.InvalidJsonException.java">net/trajano/doxdb/jsonpath/InvalidJsonException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  18
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ext.DefaultEventHandler.java">net/trajano/doxdb/ext/DefaultEventHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.DoxID.java">net/trajano/doxdb/DoxID.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.ParseContext.java">net/trajano/doxdb/jsonpath/ParseContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.PredicateContextImpl.java">net/trajano/doxdb/jsonpath/internal/token/PredicateContextImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  25
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.sample.web.package-info.java">net/trajano/doxdb/sample/web/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.EsJaxRsProvider.java">net/trajano/doxdb/ejb/EsJaxRsProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.token.ArrayPathToken.java">net/trajano/doxdb/jsonpath/internal/token/ArrayPathToken.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.internal.PathCompiler.java">net/trajano/doxdb/jsonpath/internal/PathCompiler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  104
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.ejb.EsJaxRsSearchBean.java">net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
                 <td>
                   0
@@ -599,6 +1243,34 @@ under the License.
                 </td>
                 <td>
                   4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.jsonpath.spi.mapper.MappingProvider.java">net/trajano/doxdb/jsonpath/spi/mapper/MappingProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.DoxUnique.java">net/trajano/doxdb/DoxUnique.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
                 </td>
                 <td>
                   0
