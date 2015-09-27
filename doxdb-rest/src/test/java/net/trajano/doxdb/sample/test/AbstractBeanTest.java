@@ -35,9 +35,10 @@ import net.trajano.doxdb.ext.ConfigurationProvider;
 import net.trajano.doxdb.ext.DefaultEventHandler;
 import net.trajano.doxdb.ext.Indexer;
 import net.trajano.doxdb.internal.DoxPrincipal;
+import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.DoxPersistence;
-import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.IndexType;
+import net.trajano.doxdb.schema.LookupType;
 import net.trajano.doxdb.schema.SchemaType;
 
 public class AbstractBeanTest {
@@ -86,6 +87,10 @@ public class AbstractBeanTest {
                     final SchemaType schema = new SchemaType();
                     schema.setLocation("horse.json");
                     schema.setVersion(1);
+                    final LookupType unique = new LookupType();
+                    unique.setName("name");
+                    unique.setPath("$.name");
+                    schema.getUnique().add(unique);
                     return schema;
                 }
                 return null;
@@ -103,16 +108,20 @@ public class AbstractBeanTest {
             }
 
             @Override
-            public DoxType getDox(final String schemaName) {
+            public CollectionType getDox(final String schemaName) {
 
                 if ("horse".equals(schemaName)) {
-                    final DoxType doxType = new DoxType();
-                    doxType.setName("horse");
+                    final CollectionType CollectionType = new CollectionType();
+                    CollectionType.setName("horse");
                     final SchemaType schema = new SchemaType();
                     schema.setLocation("horse.json");
                     schema.setVersion(1);
-                    doxType.getSchema().add(schema);
-                    return doxType;
+                    final LookupType unique = new LookupType();
+                    unique.setName("name");
+                    unique.setPath("$.name");
+                    schema.getUnique().add(unique);
+                    CollectionType.getSchema().add(schema);
+                    return CollectionType;
                 }
                 return null;
             }
@@ -130,13 +139,13 @@ public class AbstractBeanTest {
             public DoxPersistence getPersistenceConfig() {
 
                 final DoxPersistence doxPersistence = new DoxPersistence();
-                final DoxType doxType = new DoxType();
-                doxType.setName("horse");
+                final CollectionType CollectionType = new CollectionType();
+                CollectionType.setName("horse");
                 final SchemaType schema = new SchemaType();
                 schema.setLocation("horse.json");
                 schema.setVersion(1);
-                doxType.getSchema().add(schema);
-                doxPersistence.getDox().add(doxType);
+                CollectionType.getSchema().add(schema);
+                doxPersistence.getDox().add(CollectionType);
                 {
                     final IndexType indexType = new IndexType();
                     indexType.setName("myindex");

@@ -8,12 +8,14 @@ of an RDBMS and file system.  It keeps the notion of document data away
 from the storage facility, but still provides robust ACID transactions using
 standard RDBMS transactions.
 
+[![Build Status](https://drone.io/github.com/trajano/doxdb/status.png)](https://drone.io/github.com/trajano/doxdb/latest)
+
 ### Roadmap
 
 Completed:
 
    * JSON validation
-   * Distributed Search (using ElasticSearch REST API via Jest)
+   * Distributed Search (using [ElasticSearch][] REST API via Jest)
    * CRUD
    * Event handling
    * REST API
@@ -25,6 +27,10 @@ Completed:
    * Migrate from JEST to JAX-RS Client
    * AngularJS Module Generation
    * Change database schema
+   * Advanced [ElasticSearch][] queries
+   * Unique lookup queries
+   * Non-unique lookup queries
+   * Defining lookups via json-path  
 
 Remaining:
 
@@ -46,3 +52,4 @@ Out of scope:
 
 [1]: http://schemaform.io/
 [2]: http://stackoverflow.com/questions/32205381/how-do-i-override-the-schema-for-a-jpa-app-inside-a-web-fragment-from-a-web-app
+[ElasticSearch]: https://www.elastic.co/products/elasticsearch

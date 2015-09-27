@@ -14,6 +14,7 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
@@ -25,8 +26,8 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
+import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.DoxPersistence;
-import net.trajano.doxdb.schema.DoxType;
 import net.trajano.doxdb.schema.IndexType;
 import net.trajano.doxdb.schema.SchemaType;
 
@@ -57,7 +58,7 @@ public class XmlConfigurationProvider implements
 
     private final Map<String, SchemaType> currentSchemaMap = new HashMap<>();
 
-    private final Map<String, DoxType> doxen = new HashMap<>();
+    private final Map<String, CollectionType> doxen = new HashMap<>();
 
     private final Map<String, String> indexMap;
 
@@ -65,19 +66,34 @@ public class XmlConfigurationProvider implements
 
     private final DoxPersistence persistenceConfig;
 
+    /**
+     * Constructs XmlConfigurationProvider with the default "META-INF/dox.xml"
+     * configuration file.
+     */
     public XmlConfigurationProvider() {
+        this("META-INF/dox.xml");
+    }
 
-        try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/dox.xml")) {
+    /**
+     * Constructs XmlConfigurationProvider.
+     *
+     * @param configurationXml
+     *            relative to the root the the current thread's context class
+     *            loader.
+     */
+    public XmlConfigurationProvider(final String configurationXml) {
+
+        try (final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(configurationXml)) {
             final JAXBContext jaxb = JAXBContext.newInstance(DoxPersistence.class);
             final Unmarshaller unmarshaller = jaxb.createUnmarshaller();
-            unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(getClass().getResource("/META-INF/xsd/dox.xsd")));
+            unmarshaller.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(new StreamSource(getClass().getResourceAsStream("/META-INF/xsd/dox.xsd"))));
             persistenceConfig = (DoxPersistence) unmarshaller.unmarshal(is);
             indexMap = new ConcurrentHashMap<>(persistenceConfig.getIndex().size());
             for (final IndexType indexType : persistenceConfig.getIndex()) {
                 indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());
             }
 
-            for (final DoxType doxConfig : persistenceConfig.getDox()) {
+            for (final CollectionType doxConfig : persistenceConfig.getDox()) {
                 doxen.put(doxConfig.getName(), doxConfig);
                 final SchemaType schema = doxConfig.getSchema().get(doxConfig.getSchema().size() - 1);
                 currentSchemaMap.put(doxConfig.getName(), schema);
@@ -127,7 +143,7 @@ public class XmlConfigurationProvider implements
      */
     @Override
     @Lock(LockType.READ)
-    public DoxType getDox(final String schemaName) {
+    public CollectionType getDox(final String schemaName) {
 
         return doxen.get(schemaName);
     }

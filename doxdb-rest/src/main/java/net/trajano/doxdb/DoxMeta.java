@@ -1,10 +1,14 @@
 package net.trajano.doxdb;
 
 import java.io.Serializable;
+import java.io.StringReader;
 import java.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,6 +26,8 @@ public class DoxMeta implements
     private static final long serialVersionUID = -910687815159740508L;
 
     private byte[] accessKey;
+
+    private int collectionSchemaVersion;
 
     /**
      * Content in JSON format.
@@ -42,8 +48,6 @@ public class DoxMeta implements
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
 
-    private int schemaVersion;
-
     private int version;
 
     public DoxMeta() {
@@ -53,7 +57,7 @@ public class DoxMeta implements
     public DoxMeta(final long id,
         final String doxid,
         final int version,
-        final int schemaVersion,
+        final int collectionSchemaVersion,
         final byte[] accessKey,
         final String createdBy,
         final Date createdOn,
@@ -62,7 +66,7 @@ public class DoxMeta implements
         this.id = id;
         doxId = new DoxID(doxid);
         this.version = version;
-        this.schemaVersion = schemaVersion;
+        this.collectionSchemaVersion = collectionSchemaVersion;
         this.accessKey = accessKey;
         this.createdBy = new DoxPrincipal(createdBy);
         this.createdOn = createdOn;
@@ -73,6 +77,21 @@ public class DoxMeta implements
     public byte[] getAccessKey() {
 
         return accessKey;
+    }
+
+    public int getCollectionSchemaVersion() {
+
+        return collectionSchemaVersion;
+    }
+
+    /**
+     * Content as a JSON object.
+     *
+     * @return
+     */
+    public JsonObject getContent() {
+
+        return Json.createReader(new StringReader(contentJson)).readObject();
     }
 
     public String getContentJson() {
@@ -124,11 +143,6 @@ public class DoxMeta implements
         return DatatypeConverter.printDateTime(cal);
     }
 
-    public int getSchemaVersion() {
-
-        return schemaVersion;
-    }
-
     public int getVersion() {
 
         return version;
@@ -142,6 +156,37 @@ public class DoxMeta implements
     public void setAccessKey(final byte[] accessKey) {
 
         this.accessKey = accessKey;
+    }
+
+    public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
+
+        this.collectionSchemaVersion = collectionSchemaVersion;
+    }
+
+    /**
+     * Sets the content JSON with the DoxID and optimistic locking version data
+     * decorated in.
+     *
+     * @param content
+     *            content
+     * @param doxId
+     *            Dox ID
+     * @param version
+     *            optimistic locking version
+     */
+    public void setContentJson(final JsonObject content,
+        final DoxID doxId,
+        final int version) {
+
+        final JsonObjectBuilder b = Json.createObjectBuilder();
+        b.add("_id", doxId.toString());
+        b.add("_version", version);
+        for (final String key : content.keySet()) {
+            if (!key.startsWith("_")) {
+                b.add(key, content.get(key));
+            }
+        }
+        contentJson = b.build().toString();
     }
 
     public void setContentJson(final String contentJson) {
@@ -177,11 +222,6 @@ public class DoxMeta implements
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
         this.lastUpdatedOn = lastUpdatedOn;
-    }
-
-    public void setSchemaVersion(final int contentVersion) {
-
-        schemaVersion = contentVersion;
     }
 
     public void setVersion(final int version) {

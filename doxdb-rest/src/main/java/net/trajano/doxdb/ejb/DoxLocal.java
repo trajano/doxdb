@@ -3,8 +3,8 @@ package net.trajano.doxdb.ejb;
 import java.io.InputStream;
 
 import javax.ejb.Local;
-
-import org.bson.BsonDocument;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
@@ -14,30 +14,34 @@ import net.trajano.doxdb.schema.DoxPersistence;
 @Local
 public interface DoxLocal {
 
+    SearchResult advancedSearch(String index,
+        String schemaName,
+        JsonObject query);
+
     /**
      * Creates a dox record into the database. This will allocate a "_id" value
      * for the record.
      *
      * @param collectionName
      *            collection name
-     * @param contents
-     *            dox contents as a BSON. The contents MUST be valid for the
+     * @param content
+     *            dox contents as a JSON. The contents MUST be valid for the
      *            schema.
      * @return dox meta with contents with "_id" and "_version" set.
      */
     DoxMeta create(String collectionName,
-        BsonDocument contents);
+        JsonObject content);
 
     /**
-     * @param collection
-     *            collection
+     * @param collectionName
+     *            collection name
      * @param doxID
      *            Dox ID
      * @param version
      *            version
      * @return true if a record was deleted.
      */
-    boolean delete(String collection,
+    boolean delete(String collectionName,
         DoxID doxID,
         int version);
 
@@ -89,6 +93,14 @@ public interface DoxLocal {
      */
     String readAll(String schemaName);
 
+    JsonArray readByLookup(String collectionName,
+        String lookupName,
+        String lookupKey);
+
+    DoxMeta readByUniqueLookup(String collectionName,
+        String lookupName,
+        String lookupKey);
+
     /**
      * Delete all the index data and reindex all the documents.
      */
@@ -122,7 +134,7 @@ public interface DoxLocal {
      */
     DoxMeta update(String schemaName,
         DoxID id,
-        BsonDocument contents,
+        JsonObject contents,
         int version);
 
 }

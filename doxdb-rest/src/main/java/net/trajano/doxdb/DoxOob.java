@@ -19,11 +19,16 @@ import javax.persistence.UniqueConstraint;
 
 import net.trajano.doxdb.ejb.internal.DoxLength;
 
+/**
+ * Out of band data for Dox.
+ *
+ * @author Archimedes Trajano
+ */
 @Entity
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = {
         "parentId",
-        "name"
+        "oobName"
 }) )
 public class DoxOob {
 
@@ -58,7 +63,7 @@ public class DoxOob {
     @Column(nullable = false,
         updatable = false,
         length = DoxLength.OOB_NAME_LENGTH)
-    private String name;
+    private String oobName;
 
     @ManyToOne(fetch = FetchType.LAZY,
         optional = false)
@@ -96,9 +101,9 @@ public class DoxOob {
         return lastUpdatedOn;
     }
 
-    public String getName() {
+    public String getOobName() {
 
-        return name;
+        return oobName;
     }
 
     public Dox getParentDox() {
@@ -136,9 +141,9 @@ public class DoxOob {
         this.lastUpdatedOn = lastUpdatedOn;
     }
 
-    public void setName(final String name) {
+    public void setOobName(final String oobName) {
 
-        this.name = name;
+        this.oobName = oobName;
     }
 
     public void setParentDox(final Dox parentDox) {

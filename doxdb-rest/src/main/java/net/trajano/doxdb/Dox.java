@@ -1,10 +1,13 @@
 package net.trajano.doxdb;
 
+import java.io.StringReader;
 import java.nio.ByteBuffer;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,25 +42,27 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 
 @Entity
 @Table(
-    indexes = @Index(columnList = "schemaName") ,
+    indexes = @Index(columnList = "collectionName") ,
     uniqueConstraints = @UniqueConstraint(columnNames = {
         "doxId",
-        "schemaName"
+        "collectionName"
 }) )
 @NamedQueries({
     @NamedQuery(name = Dox.READ_META_BY_SCHEMA_NAME_DOX_ID,
-        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId",
+        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId",
         lockMode = LockModeType.OPTIMISTIC),
 
     @NamedQuery(name = Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION,
-        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId and e.version = :version",
+        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version",
         lockMode = LockModeType.OPTIMISTIC_FORCE_INCREMENT),
 
     @NamedQuery(name = Dox.READ_ALL_BY_SCHEMA_NAME,
-        query = "from Dox e where e.schemaName = :schemaName",
+        query = "from Dox e where e.collectionName = :collectionName",
         lockMode = LockModeType.NONE)
 })
 public class Dox {
+
+    public static final String COLLECTION_NAME = "collectionName";
 
     /**
      * Named query {@value #READ_ALL_BY_SCHEMA_NAME};
@@ -79,6 +84,17 @@ public class Dox {
         length = DoxLength.ACCESS_KEY_LENGTH)
     private byte[] accessKey;
 
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.COLLECTION_NAME_LENGTH)
+    private String collectionName;
+
+    @Column(nullable = false)
+    private int collectionSchemaVersion;
+
+    /**
+     * Content stored as a serialized BSON object.
+     */
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(nullable = false,
@@ -118,14 +134,6 @@ public class Dox {
         fetch = FetchType.LAZY)
     private Collection<DoxOob> oobs;
 
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.SCHEMA_NAME_LENGTH)
-    private String schemaName;
-
-    @Column(nullable = false)
-    private int schemaVersion;
-
     @Version
     private int version;
 
@@ -150,14 +158,24 @@ public class Dox {
         tombstone.setDoxId(getDoxId());
         tombstone.setLastUpdatedBy(lastUpdatedBy);
         tombstone.setLastUpdatedOn(lastUpdatedOn);
-        tombstone.setSchemaName(schemaName);
-        tombstone.setSchemaVersion(schemaVersion);
+        tombstone.setSchemaName(collectionName);
+        tombstone.setSchemaVersion(collectionSchemaVersion);
         return tombstone;
     }
 
     public byte[] getAccessKey() {
 
         return accessKey;
+    }
+
+    public String getCollectionName() {
+
+        return collectionName;
+    }
+
+    public int getCollectionSchemaVersion() {
+
+        return collectionSchemaVersion;
     }
 
     public BsonDocument getContent() {
@@ -198,6 +216,13 @@ public class Dox {
         return decoded.toJson();
     }
 
+    public JsonObject getJsonObject() {
+
+        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()
+            .build());
+        return Json.createReader(new StringReader(decoded.toJson())).readObject();
+    }
+
     public Principal getLastUpdatedBy() {
 
         return new DoxPrincipal(lastUpdatedBy);
@@ -206,16 +231,6 @@ public class Dox {
     public Date getLastUpdatedOn() {
 
         return lastUpdatedOn;
-    }
-
-    public String getSchemaName() {
-
-        return schemaName;
-    }
-
-    public int getSchemaVersion() {
-
-        return schemaVersion;
     }
 
     public int getVersion() {
@@ -228,12 +243,50 @@ public class Dox {
         this.accessKey = accessKey;
     }
 
+    public void setCollectionName(final String collectionName) {
+
+        this.collectionName = collectionName;
+    }
+
+    public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
+
+        this.collectionSchemaVersion = collectionSchemaVersion;
+    }
+
     public void setContent(final BsonDocument bson) {
 
         final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
         new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), bson, EncoderContext.builder()
             .build());
         content = basicOutputBuffer.toByteArray();
+    }
+
+    /**
+     * Sets the content value where the source content is a {@link JsonObject}.
+     *
+     * @param content
+     *            JSON content
+     */
+    public void setContent(final JsonObject content) {
+
+        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
+        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(content.toString()), EncoderContext.builder()
+            .build());
+        this.content = basicOutputBuffer.toByteArray();
+    }
+
+    /**
+     * Sets the content value where the source content is a JSON string..
+     *
+     * @param content
+     *            content as JSON string.
+     */
+    public void setContent(final String content) {
+
+        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();
+        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(content), EncoderContext.builder()
+            .build());
+        this.content = basicOutputBuffer.toByteArray();
     }
 
     public void setCreatedBy(final Principal createdBy) {
@@ -274,16 +327,6 @@ public class Dox {
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
         this.lastUpdatedOn = lastUpdatedOn;
-    }
-
-    public void setSchemaName(final String schemaName) {
-
-        this.schemaName = schemaName;
-    }
-
-    public void setSchemaVersion(final int schemaVersion) {
-
-        this.schemaVersion = schemaVersion;
     }
 
     public void setVersion(final int version) {

@@ -14,7 +14,7 @@
 	<element name="dox-persistence">
 		<complexType>
 			<sequence>
-				<element type="tns:DoxType" name="dox" minOccurs="1"
+				<element type="tns:CollectionType" name="dox" minOccurs="1"
 					maxOccurs="unbounded" />
 				<element type="tns:IndexType" name="index" minOccurs="0"
 					maxOccurs="unbounded" />
@@ -44,7 +44,7 @@
 			<field xpath="@name" />
 		</unique>
 	</element>
-	<complexType name="DoxType">
+	<complexType name="CollectionType">
 		<sequence>
 			<element name="schema" type="tns:SchemaType" minOccurs="0"
 				maxOccurs="unbounded" />
@@ -110,6 +110,8 @@
 		</annotation>
 		<sequence>
 			<element name="oob" type="token" minOccurs="0" maxOccurs="unbounded" />
+			<element name="unique" type="tns:LookupType" minOccurs="0" maxOccurs="unbounded" />
+			<element name="lookup" type="tns:LookupType" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="version" type="positiveInteger" use="required">
 			<annotation>
@@ -156,6 +158,27 @@
 						<jxb:javadoc>Name of the physical index if it is not the same as
 							'name'.
 						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+	</complexType>
+	<complexType name="LookupType">
+		<attribute name="name" type="token" use="required">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Name of the  lookup
+						</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
+		<attribute name="path" type="token" use="required">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Json Path to the value for the lookup key.</jxb:javadoc>
 					</jxb:property>
 				</appinfo>
 			</annotation>
