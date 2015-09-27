@@ -17,14 +17,28 @@ import javax.persistence.UniqueConstraint;
 
 import net.trajano.doxdb.ejb.internal.DoxLength;
 
+/**
+ * Out of band tombstone data for Dox. This has a bit more meta-data as the
+ * record could be associated with an older version of the Dox record whose
+ * schema is no longer active.
+ */
 @Entity
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = {
         &quot;doxId&quot;,
-        &quot;schemaName&quot;,
-        &quot;name&quot;
+        &quot;collectionName&quot;,
+        &quot;oobName&quot;
 }) )
-<span class="fc" id="L27">public class DoxOobTombstone {</span>
+<span class="fc" id="L32">public class DoxOobTombstone {</span>
+
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.COLLECTION_NAME_LENGTH)
+    private String collectionName;
+
+    @Column(nullable = false,
+        updatable = false)
+    private int collectionSchemaVersion;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -75,101 +89,102 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
     @Column(nullable = false,
         updatable = false,
         length = DoxLength.OOB_NAME_LENGTH)
-    private String name;
+    private String oobName;
 
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.SCHEMA_NAME_LENGTH)
-    private String schemaName;
+    public String getCollectionName() {
 
-    @Column(nullable = false,
-        updatable = false)
-    private int schemaVersion;
+<span class="nc" id="L96">        return collectionName;</span>
+    }
+
+    public int getCollectionSchemaVersion() {
+
+<span class="nc" id="L101">        return collectionSchemaVersion;</span>
+    }
 
     public byte[] getContent() {
 
-<span class="nc" id="L91">        return content;</span>
+<span class="nc" id="L106">        return content;</span>
     }
 
     public String getCreatedBy() {
 
-<span class="nc" id="L96">        return createdBy;</span>
+<span class="nc" id="L111">        return createdBy;</span>
     }
 
     public Date getCreatedOn() {
 
-<span class="nc" id="L101">        return createdOn;</span>
+<span class="nc" id="L116">        return createdOn;</span>
     }
 
     public String getDeletedBy() {
 
-<span class="nc" id="L106">        return deletedBy;</span>
+<span class="nc" id="L121">        return deletedBy;</span>
     }
 
     public Date getDeletedOn() {
 
-<span class="nc" id="L111">        return deletedOn;</span>
+<span class="nc" id="L126">        return deletedOn;</span>
     }
 
     public DoxID getDoxId() {
 
-<span class="nc" id="L116">        return new DoxID(doxId);</span>
+<span class="nc" id="L131">        return new DoxID(doxId);</span>
     }
 
     public long getId() {
 
-<span class="nc" id="L121">        return id;</span>
+<span class="nc" id="L136">        return id;</span>
     }
 
     public String getLastUpdatedBy() {
 
-<span class="nc" id="L126">        return lastUpdatedBy;</span>
+<span class="nc" id="L141">        return lastUpdatedBy;</span>
     }
 
     public Date getLastUpdatedOn() {
 
-<span class="nc" id="L131">        return lastUpdatedOn;</span>
+<span class="nc" id="L146">        return lastUpdatedOn;</span>
     }
 
-    public String getName() {
+    public String getOobName() {
 
-<span class="nc" id="L136">        return name;</span>
+<span class="nc" id="L151">        return oobName;</span>
     }
 
-    public String getSchemaName() {
+    public void setCollectionName(final String collectionName) {
 
-<span class="nc" id="L141">        return schemaName;</span>
-    }
+<span class="nc" id="L156">        this.collectionName = collectionName;</span>
+<span class="nc" id="L157">    }</span>
 
-    public int getSchemaVersion() {
+    public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
 
-<span class="nc" id="L146">        return schemaVersion;</span>
-    }
+<span class="nc" id="L161">        this.collectionSchemaVersion = collectionSchemaVersion;</span>
+<span class="nc" id="L162">    }</span>
 
     public void setContent(final byte[] content) {
 
-<span class="nc" id="L151">        this.content = content;</span>
-<span class="nc" id="L152">    }</span>
+<span class="nc" id="L166">        this.content = content;</span>
+<span class="nc" id="L167">    }</span>
 
     public void setCreatedBy(final String createdBy) {
 
-<span class="nc" id="L156">        this.createdBy = createdBy;</span>
-<span class="nc" id="L157">    }</span>
+<span class="nc" id="L171">        this.createdBy = createdBy;</span>
+<span class="nc" id="L172">    }</span>
 
     public void setCreatedOn(final Date createdOn) {
 
-<span class="nc" id="L161">        this.createdOn = createdOn;</span>
-<span class="nc" id="L162">    }</span>
+<span class="nc" id="L176">        this.createdOn = createdOn;</span>
+<span class="nc" id="L177">    }</span>
 
     public void setDeletedBy(final String deletedBy) {
 
-<span class="nc" id="L166">        this.deletedBy = deletedBy;</span>
-<span class="nc" id="L167">    }</span>
+<span class="nc" id="L181">        this.deletedBy = deletedBy;</span>
+<span class="nc" id="L182">    }</span>
 
     public void setDeletedOn(final Date deletedOn) {
 
-<span class="nc" id="L171">        this.deletedOn = deletedOn;</span>
-<span class="nc" id="L172">    }</span>
+<span class="nc" id="L186">        this.deletedOn = deletedOn;</span>
+<span class="nc" id="L187">    }</span>
 
     /**
      * Sets the Dox ID value using a {@link DoxID}. This internally converts it
@@ -181,37 +196,27 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
      */
     public void setDoxId(final DoxID doxId) {
 
-<span class="nc" id="L184">        this.doxId = doxId.toString();</span>
-<span class="nc" id="L185">    }</span>
+<span class="nc" id="L199">        this.doxId = doxId.toString();</span>
+<span class="nc" id="L200">    }</span>
 
     public void setId(final long id) {
 
-<span class="nc" id="L189">        this.id = id;</span>
-<span class="nc" id="L190">    }</span>
+<span class="nc" id="L204">        this.id = id;</span>
+<span class="nc" id="L205">    }</span>
 
     public void setLastUpdatedBy(final String lastUpdatedBy) {
 
-<span class="nc" id="L194">        this.lastUpdatedBy = lastUpdatedBy;</span>
-<span class="nc" id="L195">    }</span>
+<span class="nc" id="L209">        this.lastUpdatedBy = lastUpdatedBy;</span>
+<span class="nc" id="L210">    }</span>
 
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
-<span class="nc" id="L199">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="nc" id="L200">    }</span>
-
-    public void setName(final String name) {
-
-<span class="nc" id="L204">        this.name = name;</span>
-<span class="nc" id="L205">    }</span>
-
-    public void setSchemaName(final String schemaName) {
-
-<span class="nc" id="L209">        this.schemaName = schemaName;</span>
-<span class="nc" id="L210">    }</span>
-
-    public void setSchemaVersion(final int schemaVersion) {
-
-<span class="nc" id="L214">        this.schemaVersion = schemaVersion;</span>
+<span class="nc" id="L214">        this.lastUpdatedOn = lastUpdatedOn;</span>
 <span class="nc" id="L215">    }</span>
+
+    public void setOobName(final String oobName) {
+
+<span class="nc" id="L219">        this.oobName = oobName;</span>
+<span class="nc" id="L220">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

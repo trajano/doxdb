@@ -19,13 +19,18 @@ import javax.persistence.UniqueConstraint;
 
 import net.trajano.doxdb.ejb.internal.DoxLength;
 
+/**
+ * Out of band data for Dox.
+ *
+ * @author Archimedes Trajano
+ */
 @Entity
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = {
         &quot;parentId&quot;,
-        &quot;name&quot;
+        &quot;oobName&quot;
 }) )
-<span class="fc" id="L28">public class DoxOob {</span>
+<span class="fc" id="L33">public class DoxOob {</span>
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -58,7 +63,7 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
     @Column(nullable = false,
         updatable = false,
         length = DoxLength.OOB_NAME_LENGTH)
-    private String name;
+    private String oobName;
 
     @ManyToOne(fetch = FetchType.LAZY,
         optional = false)
@@ -68,83 +73,83 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
 
     public byte[] getContent() {
 
-<span class="nc" id="L71">        return content;</span>
+<span class="nc" id="L76">        return content;</span>
     }
 
     public String getCreatedBy() {
 
-<span class="nc" id="L76">        return createdBy;</span>
+<span class="nc" id="L81">        return createdBy;</span>
     }
 
     public Date getCreatedOn() {
 
-<span class="nc" id="L81">        return createdOn;</span>
+<span class="nc" id="L86">        return createdOn;</span>
     }
 
     public long getId() {
 
-<span class="nc" id="L86">        return id;</span>
+<span class="nc" id="L91">        return id;</span>
     }
 
     public String getLastUpdatedBy() {
 
-<span class="nc" id="L91">        return lastUpdatedBy;</span>
+<span class="nc" id="L96">        return lastUpdatedBy;</span>
     }
 
     public Date getLastUpdatedOn() {
 
-<span class="nc" id="L96">        return lastUpdatedOn;</span>
+<span class="nc" id="L101">        return lastUpdatedOn;</span>
     }
 
-    public String getName() {
+    public String getOobName() {
 
-<span class="nc" id="L101">        return name;</span>
+<span class="nc" id="L106">        return oobName;</span>
     }
 
     public Dox getParentDox() {
 
-<span class="nc" id="L106">        return parentDox;</span>
+<span class="nc" id="L111">        return parentDox;</span>
     }
 
     public void setContent(final byte[] content) {
 
-<span class="nc" id="L111">        this.content = content;</span>
-<span class="nc" id="L112">    }</span>
+<span class="nc" id="L116">        this.content = content;</span>
+<span class="nc" id="L117">    }</span>
 
     public void setCreatedBy(final String createdBy) {
 
-<span class="nc" id="L116">        this.createdBy = createdBy;</span>
-<span class="nc" id="L117">    }</span>
+<span class="nc" id="L121">        this.createdBy = createdBy;</span>
+<span class="nc" id="L122">    }</span>
 
     public void setCreatedOn(final Date createdOn) {
 
-<span class="nc" id="L121">        this.createdOn = createdOn;</span>
-<span class="nc" id="L122">    }</span>
+<span class="nc" id="L126">        this.createdOn = createdOn;</span>
+<span class="nc" id="L127">    }</span>
 
     public void setId(final long id) {
 
-<span class="nc" id="L126">        this.id = id;</span>
-<span class="nc" id="L127">    }</span>
+<span class="nc" id="L131">        this.id = id;</span>
+<span class="nc" id="L132">    }</span>
 
     public void setLastUpdatedBy(final String lastUpdatedBy) {
 
-<span class="nc" id="L131">        this.lastUpdatedBy = lastUpdatedBy;</span>
-<span class="nc" id="L132">    }</span>
+<span class="nc" id="L136">        this.lastUpdatedBy = lastUpdatedBy;</span>
+<span class="nc" id="L137">    }</span>
 
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
-<span class="nc" id="L136">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="nc" id="L137">    }</span>
-
-    public void setName(final String name) {
-
-<span class="nc" id="L141">        this.name = name;</span>
+<span class="nc" id="L141">        this.lastUpdatedOn = lastUpdatedOn;</span>
 <span class="nc" id="L142">    }</span>
+
+    public void setOobName(final String oobName) {
+
+<span class="nc" id="L146">        this.oobName = oobName;</span>
+<span class="nc" id="L147">    }</span>
 
     public void setParentDox(final Dox parentDox) {
 
-<span class="nc" id="L146">        this.parentDox = parentDox;</span>
-<span class="nc" id="L147">    }</span>
+<span class="nc" id="L151">        this.parentDox = parentDox;</span>
+<span class="nc" id="L152">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

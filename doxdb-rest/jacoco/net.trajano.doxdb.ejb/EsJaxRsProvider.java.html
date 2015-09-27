@@ -15,7 +15,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import net.trajano.doxdb.ext.ConfigurationProvider;
-import net.trajano.doxdb.schema.DoxType;
+import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.IndexType;
 
 /**
@@ -48,8 +48,8 @@ import net.trajano.doxdb.schema.IndexType;
 
 <span class="nc bnc" id="L49" title="All 2 branches missed.">            if (getTarget().path(mappedName).request().head().getStatus() == 404) {</span>
 <span class="nc" id="L50">                final JsonObjectBuilder mappingBuilder = createObjectBuilder();</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">                for (final DoxType doxType : configurationProvider.getPersistenceConfig().getDox()) {</span>
-<span class="nc" id="L52">                    mappingBuilder.add(doxType.getName(), createObjectBuilder()</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                for (final CollectionType collectionType : configurationProvider.getPersistenceConfig().getDox()) {</span>
+<span class="nc" id="L52">                    mappingBuilder.add(collectionType.getName(), createObjectBuilder()</span>
                         .add(&quot;_source&quot;, createObjectBuilder()
                             .add(&quot;excludes&quot;, createArrayBuilder()
                                 .add(&quot;_&quot;)
@@ -75,4 +75,4 @@ import net.trajano.doxdb.schema.IndexType;
 <span class="nc" id="L75">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

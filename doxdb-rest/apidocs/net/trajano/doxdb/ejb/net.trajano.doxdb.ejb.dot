@@ -10,40 +10,40 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.ejb.DoxSearch
-	c82 [label=<<table title="net.trajano.doxdb.ejb.DoxSearch" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxSearch.html">
+	c90 [label=<<table title="net.trajano.doxdb.ejb.DoxSearch" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxSearch.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DoxSearch </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxSearch.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxBean
-	c83 [label=<<table title="net.trajano.doxdb.ejb.DoxBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxBean.html">
+	c91 [label=<<table title="net.trajano.doxdb.ejb.DoxBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxBean </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.EsJaxRsSearchBean
-	c84 [label=<<table title="net.trajano.doxdb.ejb.EsJaxRsSearchBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EsJaxRsSearchBean.html">
+	c92 [label=<<table title="net.trajano.doxdb.ejb.EsJaxRsSearchBean" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EsJaxRsSearchBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EsJaxRsSearchBean </td></tr>
 		</table></td></tr>
 		</table>>, URL="./EsJaxRsSearchBean.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.DoxLocal
-	c85 [label=<<table title="net.trajano.doxdb.ejb.DoxLocal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLocal.html">
+	c93 [label=<<table title="net.trajano.doxdb.ejb.DoxLocal" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLocal.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DoxLocal </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxLocal.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ejb.EsJaxRsProvider
-	c86 [label=<<table title="net.trajano.doxdb.ejb.EsJaxRsProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EsJaxRsProvider.html">
+	c94 [label=<<table title="net.trajano.doxdb.ejb.EsJaxRsProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EsJaxRsProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EsJaxRsProvider </td></tr>
 		</table></td></tr>
 		</table>>, URL="./EsJaxRsProvider.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.ejb.DoxBean implements net.trajano.doxdb.ejb.DoxLocal
-	c85:p -> c83:p [dir=back,arrowtail=empty,style=dashed];
+	c93:p -> c91:p [dir=back,arrowtail=empty,style=dashed];
 	//net.trajano.doxdb.ejb.EsJaxRsSearchBean implements net.trajano.doxdb.ejb.DoxSearch
-	c82:p -> c84:p [dir=back,arrowtail=empty,style=dashed];
+	c90:p -> c92:p [dir=back,arrowtail=empty,style=dashed];
 }
 

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxMeta.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DoxDB REST API</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb</a> &gt; <span class="el_source">DoxMeta.java</span></div><h1>DoxMeta.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb;
 
 import java.io.Serializable;
+import java.io.StringReader;
 import java.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,6 +26,8 @@ public class DoxMeta implements
     private static final long serialVersionUID = -910687815159740508L;
 
     private byte[] accessKey;
+
+    private int collectionSchemaVersion;
 
     /**
      * Content in JSON format.
@@ -42,151 +48,185 @@ public class DoxMeta implements
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedOn;
 
-    private int schemaVersion;
-
     private int version;
 
-<span class="fc" id="L49">    public DoxMeta() {</span>
+<span class="fc" id="L53">    public DoxMeta() {</span>
 
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L55">    }</span>
 
     public DoxMeta(final long id,
         final String doxid,
         final int version,
-        final int schemaVersion,
+        final int collectionSchemaVersion,
         final byte[] accessKey,
         final String createdBy,
         final Date createdOn,
         final String lastUpdatedBy,
-<span class="fc" id="L61">        final Date lastUpdatedOn) {</span>
-<span class="fc" id="L62">        this.id = id;</span>
-<span class="fc" id="L63">        doxId = new DoxID(doxid);</span>
-<span class="fc" id="L64">        this.version = version;</span>
-<span class="fc" id="L65">        this.schemaVersion = schemaVersion;</span>
-<span class="fc" id="L66">        this.accessKey = accessKey;</span>
-<span class="fc" id="L67">        this.createdBy = new DoxPrincipal(createdBy);</span>
-<span class="fc" id="L68">        this.createdOn = createdOn;</span>
-<span class="fc" id="L69">        this.lastUpdatedBy = new DoxPrincipal(lastUpdatedBy);</span>
-<span class="fc" id="L70">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L65">        final Date lastUpdatedOn) {</span>
+<span class="fc" id="L66">        this.id = id;</span>
+<span class="fc" id="L67">        doxId = new DoxID(doxid);</span>
+<span class="fc" id="L68">        this.version = version;</span>
+<span class="fc" id="L69">        this.collectionSchemaVersion = collectionSchemaVersion;</span>
+<span class="fc" id="L70">        this.accessKey = accessKey;</span>
+<span class="fc" id="L71">        this.createdBy = new DoxPrincipal(createdBy);</span>
+<span class="fc" id="L72">        this.createdOn = createdOn;</span>
+<span class="fc" id="L73">        this.lastUpdatedBy = new DoxPrincipal(lastUpdatedBy);</span>
+<span class="fc" id="L74">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="fc" id="L75">    }</span>
 
     public byte[] getAccessKey() {
 
-<span class="fc" id="L75">        return accessKey;</span>
+<span class="fc" id="L79">        return accessKey;</span>
+    }
+
+    public int getCollectionSchemaVersion() {
+
+<span class="fc" id="L84">        return collectionSchemaVersion;</span>
+    }
+
+    /**
+     * Content as a JSON object.
+     *
+     * @return
+     */
+    public JsonObject getContent() {
+
+<span class="fc" id="L94">        return Json.createReader(new StringReader(contentJson)).readObject();</span>
     }
 
     public String getContentJson() {
 
-<span class="fc" id="L80">        return contentJson;</span>
+<span class="fc" id="L99">        return contentJson;</span>
     }
 
     public Principal getCreatedBy() {
 
-<span class="nc" id="L85">        return createdBy;</span>
+<span class="nc" id="L104">        return createdBy;</span>
     }
 
     public Date getCreatedOn() {
 
-<span class="nc" id="L90">        return createdOn;</span>
+<span class="nc" id="L109">        return createdOn;</span>
     }
 
     public String getCreatedOnString() {
 
-<span class="nc" id="L95">        final Calendar cal = Calendar.getInstance();</span>
-<span class="nc" id="L96">        cal.setTime(createdOn);</span>
-<span class="nc" id="L97">        return DatatypeConverter.printDateTime(cal);</span>
+<span class="nc" id="L114">        final Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L115">        cal.setTime(createdOn);</span>
+<span class="nc" id="L116">        return DatatypeConverter.printDateTime(cal);</span>
     }
 
     public DoxID getDoxId() {
 
-<span class="fc" id="L102">        return doxId;</span>
+<span class="fc" id="L121">        return doxId;</span>
     }
 
     public long getId() {
 
-<span class="fc" id="L107">        return id;</span>
+<span class="fc" id="L126">        return id;</span>
     }
 
     public Principal getLastUpdatedBy() {
 
-<span class="nc" id="L112">        return lastUpdatedBy;</span>
+<span class="nc" id="L131">        return lastUpdatedBy;</span>
     }
 
     public Date getLastUpdatedOn() {
 
-<span class="nc" id="L117">        return lastUpdatedOn;</span>
+<span class="nc" id="L136">        return lastUpdatedOn;</span>
     }
 
     public String getLastUpdatedOnString() {
 
-<span class="nc" id="L122">        final Calendar cal = Calendar.getInstance();</span>
-<span class="nc" id="L123">        cal.setTime(lastUpdatedOn);</span>
-<span class="nc" id="L124">        return DatatypeConverter.printDateTime(cal);</span>
-    }
-
-    public int getSchemaVersion() {
-
-<span class="fc" id="L129">        return schemaVersion;</span>
+<span class="nc" id="L141">        final Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L142">        cal.setTime(lastUpdatedOn);</span>
+<span class="nc" id="L143">        return DatatypeConverter.printDateTime(cal);</span>
     }
 
     public int getVersion() {
 
-<span class="nc" id="L134">        return version;</span>
+<span class="fc" id="L148">        return version;</span>
     }
 
     public void incrementVersion() {
 
-<span class="nc" id="L139">        ++version;</span>
-<span class="nc" id="L140">    }</span>
+<span class="fc" id="L153">        ++version;</span>
+<span class="fc" id="L154">    }</span>
 
     public void setAccessKey(final byte[] accessKey) {
 
-<span class="fc" id="L144">        this.accessKey = accessKey;</span>
-<span class="fc" id="L145">    }</span>
+<span class="fc" id="L158">        this.accessKey = accessKey;</span>
+<span class="fc" id="L159">    }</span>
+
+    public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
+
+<span class="nc" id="L163">        this.collectionSchemaVersion = collectionSchemaVersion;</span>
+<span class="nc" id="L164">    }</span>
+
+    /**
+     * Sets the content JSON with the DoxID and optimistic locking version data
+     * decorated in.
+     *
+     * @param content
+     *            content
+     * @param doxId
+     *            Dox ID
+     * @param version
+     *            optimistic locking version
+     */
+    public void setContentJson(final JsonObject content,
+        final DoxID doxId,
+        final int version) {
+
+<span class="fc" id="L181">        final JsonObjectBuilder b = Json.createObjectBuilder();</span>
+<span class="fc" id="L182">        b.add(&quot;_id&quot;, doxId.toString());</span>
+<span class="fc" id="L183">        b.add(&quot;_version&quot;, version);</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        for (final String key : content.keySet()) {</span>
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">            if (!key.startsWith(&quot;_&quot;)) {</span>
+<span class="fc" id="L186">                b.add(key, content.get(key));</span>
+            }
+<span class="fc" id="L188">        }</span>
+<span class="fc" id="L189">        contentJson = b.build().toString();</span>
+<span class="fc" id="L190">    }</span>
 
     public void setContentJson(final String contentJson) {
 
-<span class="fc" id="L149">        this.contentJson = contentJson;</span>
-<span class="fc" id="L150">    }</span>
+<span class="nc" id="L194">        this.contentJson = contentJson;</span>
+<span class="nc" id="L195">    }</span>
 
     public void setCreatedBy(final Principal createdBy) {
 
-<span class="nc" id="L154">        this.createdBy = createdBy;</span>
-<span class="nc" id="L155">    }</span>
+<span class="nc" id="L199">        this.createdBy = createdBy;</span>
+<span class="nc" id="L200">    }</span>
 
     public void setCreatedOn(final Date createdOn) {
 
-<span class="nc" id="L159">        this.createdOn = createdOn;</span>
-<span class="nc" id="L160">    }</span>
+<span class="nc" id="L204">        this.createdOn = createdOn;</span>
+<span class="nc" id="L205">    }</span>
 
     public void setDoxId(final DoxID doxId) {
 
-<span class="fc" id="L164">        this.doxId = doxId;</span>
-<span class="fc" id="L165">    }</span>
+<span class="fc" id="L209">        this.doxId = doxId;</span>
+<span class="fc" id="L210">    }</span>
 
     public void setId(final long id) {
 
-<span class="nc" id="L169">        this.id = id;</span>
-<span class="nc" id="L170">    }</span>
+<span class="nc" id="L214">        this.id = id;</span>
+<span class="nc" id="L215">    }</span>
 
     public void setLastUpdatedBy(final Principal lastUpdatedBy) {
 
-<span class="nc" id="L174">        this.lastUpdatedBy = lastUpdatedBy;</span>
-<span class="nc" id="L175">    }</span>
+<span class="nc" id="L219">        this.lastUpdatedBy = lastUpdatedBy;</span>
+<span class="nc" id="L220">    }</span>
 
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
-<span class="fc" id="L179">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="fc" id="L180">    }</span>
-
-    public void setSchemaVersion(final int contentVersion) {
-
-<span class="nc" id="L184">        schemaVersion = contentVersion;</span>
-<span class="nc" id="L185">    }</span>
+<span class="fc" id="L224">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="fc" id="L225">    }</span>
 
     public void setVersion(final int version) {
 
-<span class="fc" id="L189">        this.version = version;</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L229">        this.version = version;</span>
+<span class="fc" id="L230">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

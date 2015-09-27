@@ -10,42 +10,42 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.sample.test.AccessControls
-	c26 [label=<<table title="net.trajano.doxdb.sample.test.AccessControls" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./AccessControls.html">
+	c30 [label=<<table title="net.trajano.doxdb.sample.test.AccessControls" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./AccessControls.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AccessControls </td></tr>
 		</table></td></tr>
 		</table>>, URL="./AccessControls.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//net.trajano.doxdb.sample.test.AccessControls implements net.trajano.doxdb.ext.CollectionAccessControl
-	c28:p -> c26:p [dir=back,arrowtail=empty,style=dashed];
+	c32:p -> c30:p [dir=back,arrowtail=empty,style=dashed];
 	//net.trajano.doxdb.sample.test.AccessControls implements net.trajano.doxdb.ext.EventHandler
-	c29:p -> c26:p [dir=back,arrowtail=empty,style=dashed];
+	c33:p -> c30:p [dir=back,arrowtail=empty,style=dashed];
 	//net.trajano.doxdb.sample.test.AccessControls implements net.trajano.doxdb.ext.Migrator
-	c30:p -> c26:p [dir=back,arrowtail=empty,style=dashed];
+	c34:p -> c30:p [dir=back,arrowtail=empty,style=dashed];
 	//net.trajano.doxdb.sample.test.AccessControls implements net.trajano.doxdb.ext.Indexer
-	c31:p -> c26:p [dir=back,arrowtail=empty,style=dashed];
+	c35:p -> c30:p [dir=back,arrowtail=empty,style=dashed];
 	// net.trajano.doxdb.ext.EventHandler
-	c29 [label=<<table title="net.trajano.doxdb.ext.EventHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/EventHandler.html">
+	c33 [label=<<table title="net.trajano.doxdb.ext.EventHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/EventHandler.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> EventHandler </td></tr>
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/EventHandler.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ext.CollectionAccessControl
-	c28 [label=<<table title="net.trajano.doxdb.ext.CollectionAccessControl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/CollectionAccessControl.html">
+	c32 [label=<<table title="net.trajano.doxdb.ext.CollectionAccessControl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/CollectionAccessControl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> CollectionAccessControl </td></tr>
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/CollectionAccessControl.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ext.Migrator
-	c30 [label=<<table title="net.trajano.doxdb.ext.Migrator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Migrator.html">
+	c34 [label=<<table title="net.trajano.doxdb.ext.Migrator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Migrator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Migrator </td></tr>
 		</table></td></tr>
 		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Migrator.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.ext.Indexer
-	c31 [label=<<table title="net.trajano.doxdb.ext.Indexer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Indexer.html">
+	c35 [label=<<table title="net.trajano.doxdb.ext.Indexer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/net/trajano/doxdb/ext/Indexer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Indexer </td></tr>

@@ -13,6 +13,10 @@
 <area shape="rect" id="node6" href="./DoxMeta.html" title="&lt;TABLE&gt;" alt="" coords="649,5,743,53"/>
 <area shape="rect" id="node7_6" href="./SearchResult.html" title="net.trajano.doxdb.SearchResult" alt="" coords="777,17,876,42"/>
 <area shape="rect" id="node7" href="./SearchResult.html" title="&lt;TABLE&gt;" alt="" coords="767,5,887,53"/>
-<area shape="rect" id="node8_7" href="./IndexView.html" title="net.trajano.doxdb.IndexView" alt="" coords="921,17,1001,42"/>
-<area shape="rect" id="node8" href="./IndexView.html" title="&lt;TABLE&gt;" alt="" coords="911,5,1012,53"/>
+<area shape="rect" id="node8_7" href="./DoxLookup.html" title="net.trajano.doxdb.DoxLookup" alt="" coords="921,17,1007,42"/>
+<area shape="rect" id="node8" href="./DoxLookup.html" title="&lt;TABLE&gt;" alt="" coords="911,5,1017,53"/>
+<area shape="rect" id="node9_8" href="./DoxUnique.html" title="net.trajano.doxdb.DoxUnique" alt="" coords="1053,17,1137,42"/>
+<area shape="rect" id="node9" href="./DoxUnique.html" title="&lt;TABLE&gt;" alt="" coords="1042,5,1147,53"/>
+<area shape="rect" id="node10_9" href="./IndexView.html" title="net.trajano.doxdb.IndexView" alt="" coords="1183,17,1263,42"/>
+<area shape="rect" id="node10" href="./IndexView.html" title="&lt;TABLE&gt;" alt="" coords="1172,5,1273,53"/>
 </map>

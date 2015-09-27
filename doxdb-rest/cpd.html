@@ -75,10 +75,10 @@
 <th>Line</th></tr>
 <tr class="b">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L162">162</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L197">197</a></td></tr>
 <tr class="a">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L216">216</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L251">251</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>        final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
@@ -115,24 +115,206 @@
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
+<td>net/trajano/doxdb/DoxLookup.java</td>
+<td><a href="./xref/net/trajano/doxdb/DoxLookup.html#L63">63</a></td></tr>
+<tr class="a">
+<td>net/trajano/doxdb/DoxUnique.java</td>
+<td><a href="./xref/net/trajano/doxdb/DoxUnique.html#L67">67</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>    @Column(nullable = false,
+        insertable = true,
+        updatable = false)
+    private String collectionName;
+
+    @ManyToOne(fetch = FetchType.LAZY,
+        optional = false)
+    @JoinColumn(name = &quot;doxId&quot;,
+        nullable = false)
+    private Dox dox;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(nullable = false,
+        length = DoxLength.LOOKUP_KEY_LENGTH,
+        insertable = true,
+        updatable = false)
+    private String lookupKey;
+
+    @Column(nullable = false,
+        length = DoxLength.LOOKUP_NAME_LENGTH,
+        insertable = true,
+        updatable = false)
+    private String lookupName;
+
+    public String getCollectionName() {
+
+        return collectionName;
+    }
+
+    public Dox getDox() {
+
+        return dox;
+    }
+
+    public long getId() {
+
+        return id;
+    }
+
+    public String getLookupKey() {
+
+        return lookupKey;
+    }
+
+    public String getLookupName() {
+
+        return lookupName;
+    }
+
+    public void setCollectionName(final String collectionName) {
+
+        this.collectionName = collectionName;
+    }
+
+    public void setDox(final Dox dox) {
+
+        this.dox = dox;
+    }
+
+    public void setLookupKey(final String lookupKey) {
+
+        this.lookupKey = lookupKey;
+    }
+
+    public void setLookupName(final String lookupName) {
+
+        this.lookupName = lookupName;
+    }
+
+}</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L112">112</a></td></tr>
+<tr class="a">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L201">201</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));
+            iv.setCollection(hit.getString(&quot;_type&quot;));
+
+            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeFromIndex(final String schemaName,</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L112">112</a></td></tr>
+<tr class="a">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L255">255</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));
+            iv.setCollection(hit.getString(&quot;_type&quot;));
+
+            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L176">176</a></td></tr>
+<tr class="a">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L227">227</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>    public SearchResult search(final String sourceIndex,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+        final String index = configurationProvider.getMappedIndex(sourceIndex);
+        if (index == null) {
+            throw new PersistenceException(&quot;index not found&quot;);
+        }
+
+        int from = 0;
+        if (fromDoc != null) {
+            from = fromDoc;
+        }
+
+        final SearchResult result = new SearchResult();
+
+        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add(&quot;query&quot;, queryString).add(&quot;default_operator&quot;, &quot;and&quot;);
+        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add(&quot;simple_query_string&quot;, sqsBuilder);
+        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add(&quot;size&quot;, limit).add(&quot;query&quot;, qBuilder).add(&quot;from&quot;, from);
+
+        final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
 <td>net/trajano/doxdb/DoxOobTombstone.java</td>
-<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L137">137</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L162">162</a></td></tr>
 <tr class="a">
 <td>net/trajano/doxdb/DoxTombstone.java</td>
-<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L127">127</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L137">137</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>    }
-
-    public String getSchemaName() {
-
-        return schemaName;
-    }
-
-    public int getSchemaVersion() {
-
-        return schemaVersion;
-    }
 
     public void setContent(final byte[] content) {
 
@@ -187,56 +369,20 @@
         this.lastUpdatedOn = lastUpdatedOn;
     }
 
-    public void setName(final String name) {</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
-<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L141">141</a></td></tr>
-<tr class="a">
-<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L192">192</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>    public SearchResult search(final String sourceIndex,
-        final String queryString,
-        final int limit,
-        final Integer fromDoc) {
-
-        final String index = configurationProvider.getMappedIndex(sourceIndex);
-        if (index == null) {
-            throw new PersistenceException(&quot;index not found&quot;);
-        }
-
-        int from = 0;
-        if (fromDoc != null) {
-            from = fromDoc;
-        }
-
-        final SearchResult result = new SearchResult();
-
-        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add(&quot;query&quot;, queryString).add(&quot;default_operator&quot;, &quot;and&quot;);
-        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add(&quot;simple_query_string&quot;, sqsBuilder);
-        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add(&quot;size&quot;, limit).add(&quot;query&quot;, qBuilder).add(&quot;from&quot;, from);
-
-        final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</pre></div></td></tr></table>
+    public void setOobName(final String oobName) {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
 <td>net/trajano/doxdb/DoxOobTombstone.java</td>
-<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L27">27</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L43">43</a></td></tr>
 <tr class="a">
 <td>net/trajano/doxdb/DoxTombstone.java</td>
-<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L26">26</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L28">28</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
-<pre>public class DoxOobTombstone {
-
-    @Lob
+<pre>    @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(nullable = false,
         updatable = false,
@@ -263,74 +409,7 @@
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedOn;
 
-    @Column(nullable = false,</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
-<td>net/trajano/doxdb/DoxOobTombstone.java</td>
-<td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L80">80</a></td></tr>
-<tr class="a">
-<td>net/trajano/doxdb/DoxTombstone.java</td>
-<td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L75">75</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.SCHEMA_NAME_LENGTH)
-    private String schemaName;
-
-    @Column(nullable = false,
-        updatable = false)
-    private int schemaVersion;
-
-    public byte[] getContent() {
-
-        return content;
-    }
-
-    public String getCreatedBy() {
-
-        return createdBy;
-    }
-
-    public Date getCreatedOn() {
-
-        return createdOn;
-    }
-
-    public String getDeletedBy() {
-
-        return deletedBy;
-    }
-
-    public Date getDeletedOn() {
-
-        return deletedOn;
-    }
-
-    public DoxID getDoxId() {
-
-        return new DoxID(doxId);
-    }
-
-    public long getId() {
-
-        return id;
-    }
-
-    public String getLastUpdatedBy() {
-
-        return lastUpdatedBy;
-    }
-
-    public Date getLastUpdatedOn() {
-
-        return lastUpdatedOn;
-    }
-
-    public String getName() {</pre></div></td></tr></table></div>
+    @Column(nullable = false,</pre></div></td></tr></table></div>
 	      </div>
 	    </article>
 	  </div>

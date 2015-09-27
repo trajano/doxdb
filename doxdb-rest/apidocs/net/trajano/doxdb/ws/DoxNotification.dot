@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.ws.DoxNotification
-	c738 [label=<<table title="net.trajano.doxdb.ws.DoxNotification" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxNotification.html">
+	c879 [label=<<table title="net.trajano.doxdb.ws.DoxNotification" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DoxNotification.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxNotification </td></tr>
 		</table></td></tr>

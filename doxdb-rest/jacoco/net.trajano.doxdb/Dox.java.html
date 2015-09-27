@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Dox.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DoxDB REST API</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb</a> &gt; <span class="el_source">Dox.java</span></div><h1>Dox.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb;
 
+import java.io.StringReader;
 import java.nio.ByteBuffer;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,25 +42,27 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 
 @Entity
 @Table(
-    indexes = @Index(columnList = &quot;schemaName&quot;) ,
+    indexes = @Index(columnList = &quot;collectionName&quot;) ,
     uniqueConstraints = @UniqueConstraint(columnNames = {
         &quot;doxId&quot;,
-        &quot;schemaName&quot;
+        &quot;collectionName&quot;
 }) )
 @NamedQueries({
     @NamedQuery(name = Dox.READ_META_BY_SCHEMA_NAME_DOX_ID,
-        query = &quot;select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId&quot;,
+        query = &quot;select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId&quot;,
         lockMode = LockModeType.OPTIMISTIC),
 
     @NamedQuery(name = Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION,
-        query = &quot;select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.schemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.schemaName = :schemaName and e.doxId = :doxId and e.version = :version&quot;,
+        query = &quot;select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version&quot;,
         lockMode = LockModeType.OPTIMISTIC_FORCE_INCREMENT),
 
     @NamedQuery(name = Dox.READ_ALL_BY_SCHEMA_NAME,
-        query = &quot;from Dox e where e.schemaName = :schemaName&quot;,
+        query = &quot;from Dox e where e.collectionName = :collectionName&quot;,
         lockMode = LockModeType.NONE)
 })
-<span class="fc" id="L60">public class Dox {</span>
+<span class="fc" id="L63">public class Dox {</span>
+
+    public static final String COLLECTION_NAME = &quot;collectionName&quot;;
 
     /**
      * Named query {@value #READ_ALL_BY_SCHEMA_NAME};
@@ -79,6 +84,17 @@ import net.trajano.doxdb.internal.DoxPrincipal;
         length = DoxLength.ACCESS_KEY_LENGTH)
     private byte[] accessKey;
 
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.COLLECTION_NAME_LENGTH)
+    private String collectionName;
+
+    @Column(nullable = false)
+    private int collectionSchemaVersion;
+
+    /**
+     * Content stored as a serialized BSON object.
+     */
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(nullable = false,
@@ -118,14 +134,6 @@ import net.trajano.doxdb.internal.DoxPrincipal;
         fetch = FetchType.LAZY)
     private Collection&lt;DoxOob&gt; oobs;
 
-    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.SCHEMA_NAME_LENGTH)
-    private String schemaName;
-
-    @Column(nullable = false)
-    private int schemaVersion;
-
     @Version
     private int version;
 
@@ -141,111 +149,156 @@ import net.trajano.doxdb.internal.DoxPrincipal;
     public DoxTombstone buildTombstone(final Principal deletedBy,
         final Date deletedOn) {
 
-<span class="nc" id="L144">        final DoxTombstone tombstone = new DoxTombstone();</span>
-<span class="nc" id="L145">        tombstone.setContent(content);</span>
-<span class="nc" id="L146">        tombstone.setCreatedBy(createdBy);</span>
-<span class="nc" id="L147">        tombstone.setCreatedOn(createdOn);</span>
-<span class="nc" id="L148">        tombstone.setDeletedBy(deletedBy.getName());</span>
-<span class="nc" id="L149">        tombstone.setDeletedOn(deletedOn);</span>
-<span class="nc" id="L150">        tombstone.setDoxId(getDoxId());</span>
-<span class="nc" id="L151">        tombstone.setLastUpdatedBy(lastUpdatedBy);</span>
-<span class="nc" id="L152">        tombstone.setLastUpdatedOn(lastUpdatedOn);</span>
-<span class="nc" id="L153">        tombstone.setSchemaName(schemaName);</span>
-<span class="nc" id="L154">        tombstone.setSchemaVersion(schemaVersion);</span>
-<span class="nc" id="L155">        return tombstone;</span>
+<span class="nc" id="L152">        final DoxTombstone tombstone = new DoxTombstone();</span>
+<span class="nc" id="L153">        tombstone.setContent(content);</span>
+<span class="nc" id="L154">        tombstone.setCreatedBy(createdBy);</span>
+<span class="nc" id="L155">        tombstone.setCreatedOn(createdOn);</span>
+<span class="nc" id="L156">        tombstone.setDeletedBy(deletedBy.getName());</span>
+<span class="nc" id="L157">        tombstone.setDeletedOn(deletedOn);</span>
+<span class="nc" id="L158">        tombstone.setDoxId(getDoxId());</span>
+<span class="nc" id="L159">        tombstone.setLastUpdatedBy(lastUpdatedBy);</span>
+<span class="nc" id="L160">        tombstone.setLastUpdatedOn(lastUpdatedOn);</span>
+<span class="nc" id="L161">        tombstone.setSchemaName(collectionName);</span>
+<span class="nc" id="L162">        tombstone.setSchemaVersion(collectionSchemaVersion);</span>
+<span class="nc" id="L163">        return tombstone;</span>
     }
 
     public byte[] getAccessKey() {
 
-<span class="nc" id="L160">        return accessKey;</span>
+<span class="nc" id="L168">        return accessKey;</span>
+    }
+
+    public String getCollectionName() {
+
+<span class="nc" id="L173">        return collectionName;</span>
+    }
+
+    public int getCollectionSchemaVersion() {
+
+<span class="nc" id="L178">        return collectionSchemaVersion;</span>
     }
 
     public BsonDocument getContent() {
 
-<span class="fc" id="L165">        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()</span>
+<span class="nc" id="L183">        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()</span>
             .build());
-<span class="fc" id="L167">        decoded.put(&quot;_id&quot;, new BsonString(doxId.toString()));</span>
-<span class="fc" id="L168">        decoded.put(&quot;_version&quot;, new BsonInt32(version));</span>
-<span class="fc" id="L169">        return decoded;</span>
+<span class="nc" id="L185">        decoded.put(&quot;_id&quot;, new BsonString(doxId.toString()));</span>
+<span class="nc" id="L186">        decoded.put(&quot;_version&quot;, new BsonInt32(version));</span>
+<span class="nc" id="L187">        return decoded;</span>
     }
 
     public Principal getCreatedBy() {
 
-<span class="nc" id="L174">        return new DoxPrincipal(createdBy);</span>
+<span class="nc" id="L192">        return new DoxPrincipal(createdBy);</span>
     }
 
     public Date getCreatedOn() {
 
-<span class="nc" id="L179">        return createdOn;</span>
+<span class="nc" id="L197">        return createdOn;</span>
     }
 
     public DoxID getDoxId() {
 
-<span class="fc" id="L184">        return new DoxID(doxId);</span>
+<span class="fc" id="L202">        return new DoxID(doxId);</span>
     }
 
     public long getId() {
 
-<span class="nc" id="L189">        return id;</span>
+<span class="nc" id="L207">        return id;</span>
     }
 
     public String getJsonContent() {
 
-<span class="nc" id="L194">        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()</span>
+<span class="fc" id="L212">        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()</span>
             .build());
-<span class="nc" id="L196">        decoded.remove(&quot;_id&quot;);</span>
-<span class="nc" id="L197">        decoded.remove(&quot;_version&quot;);</span>
-<span class="nc" id="L198">        return decoded.toJson();</span>
+<span class="fc" id="L214">        decoded.remove(&quot;_id&quot;);</span>
+<span class="fc" id="L215">        decoded.remove(&quot;_version&quot;);</span>
+<span class="fc" id="L216">        return decoded.toJson();</span>
+    }
+
+    public JsonObject getJsonObject() {
+
+<span class="fc" id="L221">        final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(content)), DecoderContext.builder()</span>
+            .build());
+<span class="fc" id="L223">        return Json.createReader(new StringReader(decoded.toJson())).readObject();</span>
     }
 
     public Principal getLastUpdatedBy() {
 
-<span class="nc" id="L203">        return new DoxPrincipal(lastUpdatedBy);</span>
+<span class="nc" id="L228">        return new DoxPrincipal(lastUpdatedBy);</span>
     }
 
     public Date getLastUpdatedOn() {
 
-<span class="nc" id="L208">        return lastUpdatedOn;</span>
-    }
-
-    public String getSchemaName() {
-
-<span class="nc" id="L213">        return schemaName;</span>
-    }
-
-    public int getSchemaVersion() {
-
-<span class="nc" id="L218">        return schemaVersion;</span>
+<span class="nc" id="L233">        return lastUpdatedOn;</span>
     }
 
     public int getVersion() {
 
-<span class="fc" id="L223">        return version;</span>
+<span class="fc" id="L238">        return version;</span>
     }
 
     public void setAccessKey(final byte[] accessKey) {
 
-<span class="fc" id="L228">        this.accessKey = accessKey;</span>
-<span class="fc" id="L229">    }</span>
+<span class="fc" id="L243">        this.accessKey = accessKey;</span>
+<span class="fc" id="L244">    }</span>
+
+    public void setCollectionName(final String collectionName) {
+
+<span class="fc" id="L248">        this.collectionName = collectionName;</span>
+<span class="fc" id="L249">    }</span>
+
+    public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
+
+<span class="fc" id="L253">        this.collectionSchemaVersion = collectionSchemaVersion;</span>
+<span class="fc" id="L254">    }</span>
 
     public void setContent(final BsonDocument bson) {
 
-<span class="fc" id="L233">        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();</span>
-<span class="fc" id="L234">        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), bson, EncoderContext.builder()</span>
+<span class="nc" id="L258">        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();</span>
+<span class="nc" id="L259">        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), bson, EncoderContext.builder()</span>
             .build());
-<span class="fc" id="L236">        content = basicOutputBuffer.toByteArray();</span>
-<span class="fc" id="L237">    }</span>
+<span class="nc" id="L261">        content = basicOutputBuffer.toByteArray();</span>
+<span class="nc" id="L262">    }</span>
+
+    /**
+     * Sets the content value where the source content is a {@link JsonObject}.
+     *
+     * @param content
+     *            JSON content
+     */
+    public void setContent(final JsonObject content) {
+
+<span class="fc" id="L272">        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();</span>
+<span class="fc" id="L273">        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(content.toString()), EncoderContext.builder()</span>
+            .build());
+<span class="fc" id="L275">        this.content = basicOutputBuffer.toByteArray();</span>
+<span class="fc" id="L276">    }</span>
+
+    /**
+     * Sets the content value where the source content is a JSON string..
+     *
+     * @param content
+     *            content as JSON string.
+     */
+    public void setContent(final String content) {
+
+<span class="fc" id="L286">        final BasicOutputBuffer basicOutputBuffer = new BasicOutputBuffer();</span>
+<span class="fc" id="L287">        new BsonDocumentCodec().encode(new BsonBinaryWriter(basicOutputBuffer), BsonDocument.parse(content), EncoderContext.builder()</span>
+            .build());
+<span class="fc" id="L289">        this.content = basicOutputBuffer.toByteArray();</span>
+<span class="fc" id="L290">    }</span>
 
     public void setCreatedBy(final Principal createdBy) {
 
-<span class="fc" id="L241">        this.createdBy = createdBy.getName();</span>
+<span class="fc" id="L294">        this.createdBy = createdBy.getName();</span>
 
-<span class="fc" id="L243">    }</span>
+<span class="fc" id="L296">    }</span>
 
     public void setCreatedOn(final Date createdOn) {
 
-<span class="fc" id="L247">        this.createdOn = createdOn;</span>
-<span class="fc" id="L248">    }</span>
+<span class="fc" id="L300">        this.createdOn = createdOn;</span>
+<span class="fc" id="L301">    }</span>
 
     /**
      * Sets the Dox ID value using a {@link DoxID}. This internally converts it
@@ -257,38 +310,28 @@ import net.trajano.doxdb.internal.DoxPrincipal;
      */
     public void setDoxId(final DoxID doxId) {
 
-<span class="fc" id="L260">        this.doxId = doxId.toString();</span>
-<span class="fc" id="L261">    }</span>
+<span class="fc" id="L313">        this.doxId = doxId.toString();</span>
+<span class="fc" id="L314">    }</span>
 
     public void setId(final long id) {
 
-<span class="nc" id="L265">        this.id = id;</span>
-<span class="nc" id="L266">    }</span>
+<span class="nc" id="L318">        this.id = id;</span>
+<span class="nc" id="L319">    }</span>
 
     public void setLastUpdatedBy(final Principal lastUpdatedBy) {
 
-<span class="fc" id="L270">        this.lastUpdatedBy = lastUpdatedBy.getName();</span>
+<span class="fc" id="L323">        this.lastUpdatedBy = lastUpdatedBy.getName();</span>
 
-<span class="fc" id="L272">    }</span>
+<span class="fc" id="L325">    }</span>
 
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
-<span class="fc" id="L276">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="fc" id="L277">    }</span>
-
-    public void setSchemaName(final String schemaName) {
-
-<span class="fc" id="L281">        this.schemaName = schemaName;</span>
-<span class="fc" id="L282">    }</span>
-
-    public void setSchemaVersion(final int schemaVersion) {
-
-<span class="fc" id="L286">        this.schemaVersion = schemaVersion;</span>
-<span class="fc" id="L287">    }</span>
+<span class="fc" id="L329">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="fc" id="L330">    }</span>
 
     public void setVersion(final int version) {
 
-<span class="fc" id="L291">        this.version = version;</span>
-<span class="fc" id="L292">    }</span>
+<span class="fc" id="L334">        this.version = version;</span>
+<span class="fc" id="L335">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

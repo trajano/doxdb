@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
    <duplication lines="29" tokens="251">
-      <file line="162"
+      <file line="197"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="216"
+      <file line="251"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
 
@@ -35,22 +35,180 @@
      */
     @Override]]></codefragment>
    </duplication>
-   <duplication lines="66" tokens="162">
-      <file line="137"
+   <duplication lines="73" tokens="213">
+      <file line="63"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxLookup.java"/>
+      <file line="67"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxUnique.java"/>
+      <codefragment><![CDATA[    @Column(nullable = false,
+        insertable = true,
+        updatable = false)
+    private String collectionName;
+
+    @ManyToOne(fetch = FetchType.LAZY,
+        optional = false)
+    @JoinColumn(name = "doxId",
+        nullable = false)
+    private Dox dox;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(nullable = false,
+        length = DoxLength.LOOKUP_KEY_LENGTH,
+        insertable = true,
+        updatable = false)
+    private String lookupKey;
+
+    @Column(nullable = false,
+        length = DoxLength.LOOKUP_NAME_LENGTH,
+        insertable = true,
+        updatable = false)
+    private String lookupName;
+
+    public String getCollectionName() {
+
+        return collectionName;
+    }
+
+    public Dox getDox() {
+
+        return dox;
+    }
+
+    public long getId() {
+
+        return id;
+    }
+
+    public String getLookupKey() {
+
+        return lookupKey;
+    }
+
+    public String getLookupName() {
+
+        return lookupName;
+    }
+
+    public void setCollectionName(final String collectionName) {
+
+        this.collectionName = collectionName;
+    }
+
+    public void setDox(final Dox dox) {
+
+        this.dox = dox;
+    }
+
+    public void setLookupKey(final String lookupKey) {
+
+        this.lookupKey = lookupKey;
+    }
+
+    public void setLookupName(final String lookupName) {
+
+        this.lookupName = lookupName;
+    }
+
+}]]></codefragment>
+   </duplication>
+   <duplication lines="25" tokens="165">
+      <file line="112"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="201"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeFromIndex(final String schemaName,]]></codefragment>
+   </duplication>
+   <duplication lines="24" tokens="163">
+      <file line="112"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="255"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override]]></codefragment>
+   </duplication>
+   <duplication lines="22" tokens="147">
+      <file line="176"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="227"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[    public SearchResult search(final String sourceIndex,
+        final String queryString,
+        final int limit,
+        final Integer fromDoc) {
+
+        final String index = configurationProvider.getMappedIndex(sourceIndex);
+        if (index == null) {
+            throw new PersistenceException("index not found");
+        }
+
+        int from = 0;
+        if (fromDoc != null) {
+            from = fromDoc;
+        }
+
+        final SearchResult result = new SearchResult();
+
+        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add("query", queryString).add("default_operator", "and");
+        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add("simple_query_string", sqsBuilder);
+        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add("size", limit).add("query", qBuilder).add("from", from);
+
+        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);]]></codefragment>
+   </duplication>
+   <duplication lines="56" tokens="144">
+      <file line="162"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
-      <file line="127"
+      <file line="137"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
       <codefragment><![CDATA[    }
-
-    public String getSchemaName() {
-
-        return schemaName;
-    }
-
-    public int getSchemaVersion() {
-
-        return schemaVersion;
-    }
 
     public void setContent(final byte[] content) {
 
@@ -105,44 +263,14 @@
         this.lastUpdatedOn = lastUpdatedOn;
     }
 
-    public void setName(final String name) {]]></codefragment>
+    public void setOobName(final String oobName) {]]></codefragment>
    </duplication>
-   <duplication lines="22" tokens="147">
-      <file line="141"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="192"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <codefragment><![CDATA[    public SearchResult search(final String sourceIndex,
-        final String queryString,
-        final int limit,
-        final Integer fromDoc) {
-
-        final String index = configurationProvider.getMappedIndex(sourceIndex);
-        if (index == null) {
-            throw new PersistenceException("index not found");
-        }
-
-        int from = 0;
-        if (fromDoc != null) {
-            from = fromDoc;
-        }
-
-        final SearchResult result = new SearchResult();
-
-        final JsonObjectBuilder sqsBuilder = Json.createObjectBuilder().add("query", queryString).add("default_operator", "and");
-        final JsonObjectBuilder qBuilder = Json.createObjectBuilder().add("simple_query_string", sqsBuilder);
-        final JsonObjectBuilder queryBuilder = Json.createObjectBuilder().add("size", limit).add("query", qBuilder).add("from", from);
-
-        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);]]></codefragment>
-   </duplication>
-   <duplication lines="30" tokens="123">
-      <file line="27"
+   <duplication lines="28" tokens="122">
+      <file line="43"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
-      <file line="26"
+      <file line="28"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
-      <codefragment><![CDATA[public class DoxOobTombstone {
-
-    @Lob
+      <codefragment><![CDATA[    @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(nullable = false,
         updatable = false,
@@ -170,66 +298,5 @@
     private Date deletedOn;
 
     @Column(nullable = false,]]></codefragment>
-   </duplication>
-   <duplication lines="55" tokens="123">
-      <file line="80"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
-      <file line="75"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
-      <codefragment><![CDATA[    @Column(nullable = false,
-        updatable = false,
-        length = DoxLength.SCHEMA_NAME_LENGTH)
-    private String schemaName;
-
-    @Column(nullable = false,
-        updatable = false)
-    private int schemaVersion;
-
-    public byte[] getContent() {
-
-        return content;
-    }
-
-    public String getCreatedBy() {
-
-        return createdBy;
-    }
-
-    public Date getCreatedOn() {
-
-        return createdOn;
-    }
-
-    public String getDeletedBy() {
-
-        return deletedBy;
-    }
-
-    public Date getDeletedOn() {
-
-        return deletedOn;
-    }
-
-    public DoxID getDoxId() {
-
-        return new DoxID(doxId);
-    }
-
-    public long getId() {
-
-        return id;
-    }
-
-    public String getLastUpdatedBy() {
-
-        return lastUpdatedBy;
-    }
-
-    public Date getLastUpdatedOn() {
-
-        return lastUpdatedOn;
-    }
-
-    public String getName() {]]></codefragment>
    </duplication>
 </pmd-cpd>

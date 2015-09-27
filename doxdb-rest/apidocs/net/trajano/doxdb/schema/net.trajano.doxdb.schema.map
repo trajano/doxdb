@@ -3,12 +3,14 @@
 <area shape="rect" id="node1" href="./DoxPersistence.html" title="&lt;TABLE&gt;" alt="" coords="5,8,139,56"/>
 <area shape="rect" id="node2_1" href="./SchemaType.html" title="net.trajano.doxdb.schema.SchemaType" alt="" coords="173,19,269,45"/>
 <area shape="rect" id="node2" href="./SchemaType.html" title="&lt;TABLE&gt;" alt="" coords="163,8,280,56"/>
-<area shape="rect" id="node3_2" href="./DoxType.html" title="net.trajano.doxdb.schema.DoxType" alt="" coords="315,19,387,45"/>
-<area shape="rect" id="node3" href="./DoxType.html" title="&lt;TABLE&gt;" alt="" coords="304,8,397,56"/>
-<area shape="rect" id="node4_3" href="./ReadAllType.html" title="net.trajano.doxdb.schema.ReadAllType" alt="" coords="432,11,536,53"/>
-<area shape="rect" id="node4" href="./ReadAllType.html" title="&lt;TABLE&gt;" alt="" coords="421,5,547,59"/>
-<area shape="rect" id="node5_4" href="./IndexType.html" title="net.trajano.doxdb.schema.IndexType" alt="" coords="581,19,661,45"/>
-<area shape="rect" id="node5" href="./IndexType.html" title="&lt;TABLE&gt;" alt="" coords="571,8,672,56"/>
-<area shape="rect" id="node6_5" href="./ObjectFactory.html" title="net.trajano.doxdb.schema.ObjectFactory" alt="" coords="707,19,808,45"/>
-<area shape="rect" id="node6" href="./ObjectFactory.html" title="&lt;TABLE&gt;" alt="" coords="696,8,819,56"/>
+<area shape="rect" id="node3_2" href="./ReadAllType.html" title="net.trajano.doxdb.schema.ReadAllType" alt="" coords="315,11,419,53"/>
+<area shape="rect" id="node3" href="./ReadAllType.html" title="&lt;TABLE&gt;" alt="" coords="304,5,429,59"/>
+<area shape="rect" id="node4_3" href="./IndexType.html" title="net.trajano.doxdb.schema.IndexType" alt="" coords="464,19,544,45"/>
+<area shape="rect" id="node4" href="./IndexType.html" title="&lt;TABLE&gt;" alt="" coords="453,8,555,56"/>
+<area shape="rect" id="node5_4" href="./CollectionType.html" title="net.trajano.doxdb.schema.CollectionType" alt="" coords="589,19,696,45"/>
+<area shape="rect" id="node5" href="./CollectionType.html" title="&lt;TABLE&gt;" alt="" coords="579,8,707,56"/>
+<area shape="rect" id="node6_5" href="./LookupType.html" title="net.trajano.doxdb.schema.LookupType" alt="" coords="741,19,832,45"/>
+<area shape="rect" id="node6" href="./LookupType.html" title="&lt;TABLE&gt;" alt="" coords="731,8,843,56"/>
+<area shape="rect" id="node7_6" href="./ObjectFactory.html" title="net.trajano.doxdb.schema.ObjectFactory" alt="" coords="877,19,979,45"/>
+<area shape="rect" id="node7" href="./ObjectFactory.html" title="&lt;TABLE&gt;" alt="" coords="867,8,989,56"/>
 </map>

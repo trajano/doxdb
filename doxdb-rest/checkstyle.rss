@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2015 Trajano</copyright>
     <item>
-      <title>File: 41,
+      <title>File: 44,
              Errors: 1,
-             Warnings: 309,
+             Warnings: 369,
              Infos: 0
       </title>
             <link>http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html</link>
@@ -60,13 +60,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.schema.CollectionType.java">net/trajano/doxdb/schema/CollectionType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  36
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.schema.SchemaType.java">net/trajano/doxdb/schema/SchemaType.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  20
+                  34
                 </td>
                 <td>
                   1
@@ -80,7 +94,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  9
+                  12
                 </td>
                 <td>
                   0
@@ -102,13 +116,27 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.DoxLookup.java">net/trajano/doxdb/DoxLookup.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ext.XmlConfigurationProvider.java">net/trajano/doxdb/ext/XmlConfigurationProvider.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  6
+                  5
                 </td>
                 <td>
                   0
@@ -136,21 +164,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  16
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.schema.DoxType.java">net/trajano/doxdb/schema/DoxType.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  36
+                  17
                 </td>
                 <td>
                   0
@@ -164,7 +178,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  16
+                  19
                 </td>
                 <td>
                   0
@@ -178,7 +192,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  15
+                  20
                 </td>
                 <td>
                   0
@@ -276,7 +290,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  10
+                  9
                 </td>
                 <td>
                   0
@@ -298,13 +312,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxSearch.java">net/trajano/doxdb/ejb/DoxSearch.java</a>
+                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.DoxOobTombstone.java">net/trajano/doxdb/DoxOobTombstone.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  8
+                  13
                 </td>
                 <td>
                   0
@@ -312,13 +326,13 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.DoxOobTombstone.java">net/trajano/doxdb/DoxOobTombstone.java</a>
+                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.DoxSearch.java">net/trajano/doxdb/ejb/DoxSearch.java</a>
                 </td>
                 <td>
                   0
                 </td>
                 <td>
-                  14
+                  12
                 </td>
                 <td>
                   0
@@ -346,7 +360,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  9
+                  11
                 </td>
                 <td>
                   0
@@ -374,7 +388,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  20
+                  21
                 </td>
                 <td>
                   0
@@ -486,7 +500,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  8
+                  7
                 </td>
                 <td>
                   0
@@ -578,6 +592,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.schema.LookupType.java">net/trajano/doxdb/schema/LookupType.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.ejb.EsJaxRsSearchBean.java">net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</a>
                 </td>
                 <td>
@@ -613,6 +641,20 @@ under the License.
                 </td>
                 <td>
                   4
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb/doxdb-rest//checkstyle.html#net.trajano.doxdb.DoxUnique.java">net/trajano/doxdb/DoxUnique.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
                 </td>
                 <td>
                   0

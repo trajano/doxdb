@@ -51,8 +51,20 @@ digraph G {
 <tr><td align="center" balign="center"> SearchResult </td></tr>
 		</table></td></tr>
 		</table>>, URL="./SearchResult.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.DoxLookup
+	c7 [label=<<table title="net.trajano.doxdb.DoxLookup" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLookup.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxLookup </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxLookup.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// net.trajano.doxdb.DoxUnique
+	c8 [label=<<table title="net.trajano.doxdb.DoxUnique" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxUnique.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DoxUnique </td></tr>
+		</table></td></tr>
+		</table>>, URL="./DoxUnique.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.IndexView
-	c7 [label=<<table title="net.trajano.doxdb.IndexView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexView.html">
+	c9 [label=<<table title="net.trajano.doxdb.IndexView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexView.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IndexView </td></tr>
 		</table></td></tr>
