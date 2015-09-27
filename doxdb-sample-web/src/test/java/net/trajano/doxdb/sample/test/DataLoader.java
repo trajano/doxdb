@@ -59,7 +59,7 @@ public class DataLoader {
                 final JsonObject jsonObject = Json.createObjectBuilder()
                     .add("name", record.get("Product Name"))
                     .add("countryOfBirth", record.get("Country"))
-                    .add("fei", String.valueOf(record.get("id")))
+                    .add("fei", String.valueOf(record.get("Phone Number")))
                     .add("gender", "F".equals(record.get("Gender")) ? "mare" : "gelding")
                     .build();
                 request2.post(Entity.entity(jsonObject, MediaType.APPLICATION_JSON_TYPE)).readEntity(JsonObject.class);

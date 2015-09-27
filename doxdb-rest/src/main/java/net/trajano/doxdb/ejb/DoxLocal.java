@@ -3,6 +3,7 @@ package net.trajano.doxdb.ejb;
 import java.io.InputStream;
 
 import javax.ejb.Local;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import net.trajano.doxdb.DoxID;
@@ -91,6 +92,10 @@ public interface DoxLocal {
      * @return JSON string or file name
      */
     String readAll(String schemaName);
+
+    JsonArray readByLookup(String collectionName,
+        String lookupName,
+        String lookupKey);
 
     DoxMeta readByUniqueLookup(String collectionName,
         String lookupName,
