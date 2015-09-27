@@ -15,7 +15,7 @@ standard RDBMS transactions.
 Completed:
 
    * JSON validation
-   * Distributed Search (using [ElasticSearch][] REST API via Jest)
+   * Distributed Search (using [ElasticSearch][] REST API)
    * CRUD
    * Event handling
    * REST API
