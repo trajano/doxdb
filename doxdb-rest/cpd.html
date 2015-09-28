@@ -75,10 +75,10 @@
 <th>Line</th></tr>
 <tr class="b">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L197">197</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L232">232</a></td></tr>
 <tr class="a">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L251">251</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L286">286</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>        final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
@@ -110,6 +110,43 @@
      * {@inheritDoc}
      */
     @Override</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L109">109</a></td></tr>
+<tr class="a">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L144">144</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>        final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(query, MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
+
+        final JsonArray hits = results.getJsonObject(&quot;hits&quot;).getJsonArray(&quot;hits&quot;);
+        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));
+            iv.setCollection(hit.getString(&quot;_type&quot;));
+
+            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    @Override
+    public SearchResult advancedSearch(final String sourceIndex,</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -204,7 +241,41 @@
 <td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L112">112</a></td></tr>
 <tr class="a">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L201">201</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L236">236</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString(&quot;_id&quot;)));
+            iv.setCollection(hit.getString(&quot;_type&quot;));
+
+            for (final Entry&lt;String, JsonValue&gt; entry : hit.getJsonObject(&quot;_source&quot;).entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    @Override
+    public SearchResult advancedSearch(final String sourceIndex,</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L147">147</a></td></tr>
+<tr class="a">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L236">236</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));
@@ -241,8 +312,11 @@
 <td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L112">112</a></td></tr>
 <tr class="a">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L255">255</a></td></tr>
-<tr class="b"><td colspan='2'>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L147">147</a></td></tr>
+<tr class="b">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L290">290</a></td></tr>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>        result.setTotalHits(results.getJsonObject(&quot;hits&quot;).getInt(&quot;total&quot;));
         for (final JsonValue hitValue : hits) {
@@ -264,21 +338,18 @@
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
-<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L176">176</a></td></tr>
 <tr class="a">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L227">227</a></td></tr>
-<tr class="b"><td colspan='2'>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L211">211</a></td></tr>
+<tr class="b">
+<td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L262">262</a></td></tr>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>    public SearchResult search(final String sourceIndex,
         final String queryString,
@@ -303,16 +374,16 @@
 
         final JsonObject results = jestProvider.getTarget().path(index).path(&quot;_search&quot;).request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>net/trajano/doxdb/DoxOobTombstone.java</td>
 <td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L162">162</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>net/trajano/doxdb/DoxTombstone.java</td>
 <td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L137">137</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>    }
 
@@ -371,16 +442,16 @@
 
     public void setOobName(final String oobName) {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
-<tr class="a">
+<tr class="b">
 <th>File</th>
 <th>Line</th></tr>
-<tr class="b">
+<tr class="a">
 <td>net/trajano/doxdb/DoxOobTombstone.java</td>
 <td><a href="./xref/net/trajano/doxdb/DoxOobTombstone.html#L43">43</a></td></tr>
-<tr class="a">
+<tr class="b">
 <td>net/trajano/doxdb/DoxTombstone.java</td>
 <td><a href="./xref/net/trajano/doxdb/DoxTombstone.html#L28">28</a></td></tr>
-<tr class="b"><td colspan='2'>
+<tr class="a"><td colspan='2'>
 <div>
 <pre>    @Lob
     @Basic(fetch = FetchType.LAZY)

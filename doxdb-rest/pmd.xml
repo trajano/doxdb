@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-09-27T15:36:39.105">
+<pmd version="5.0.5" timestamp="2015-09-27T23:18:29.376">
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/Dox.java">
 <violation beginline="135" endline="135" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'oobs'.
@@ -78,27 +78,27 @@ This call to String.startsWith can be rewritten using String.charAt(0)
 <violation beginline="118" endline="118" begincolumn="18" endcolumn="36" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxBean" method="sanitize" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
 This call to String.startsWith can be rewritten using String.charAt(0)
 </violation>
-<violation beginline="230" endline="230" begincolumn="9" endcolumn="34" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxBean" method="delete" variable="ts" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
+<violation beginline="237" endline="237" begincolumn="9" endcolumn="34" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxBean" method="delete" variable="ts" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
 Avoid declaring a variable if it is unreferenced before a possible exit point.
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java">
-<violation beginline="193" endline="193" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="228" endline="228" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="194" endline="194" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="229" endline="229" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="195" endline="195" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="230" endline="230" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="search" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="244" endline="244" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="279" endline="279" begincolumn="46" endcolumn="69" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="245" endline="245" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="280" endline="280" begincolumn="44" endcolumn="67" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
-<violation beginline="246" endline="246" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
+<violation beginline="281" endline="281" begincolumn="48" endcolumn="71" rule="UnnecessaryFullyQualifiedName" ruleset="Import Statements" package="net.trajano.doxdb.ejb" class="EsJaxRsSearchBean" method="searchWithSchemaName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnnecessaryFullyQualifiedName" priority="4">
 Unnecessary use of fully qualified name 'Json.createObjectBuilder' due to existing import 'javax.json.Json'
 </violation>
 </file>
@@ -108,17 +108,6 @@ If you run in Java5 or newer and have concurrent access, you should use the Conc
 </violation>
 <violation beginline="61" endline="61" begincolumn="19" endcolumn="45" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.ext" class="XmlConfigurationProvider" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
-</violation>
-</file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/rest/DoxResource.java">
-<violation beginline="326" endline="326" begincolumn="38" endcolumn="47" rule="UnusedFormalParameter" ruleset="Unused Code" package="net.trajano.doxdb.rest" class="DoxResource" method="op" variable="collection" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedFormalParameter" priority="3">
-Avoid unused method parameters such as 'collection'.
-</violation>
-<violation beginline="327" endline="327" begincolumn="22" endcolumn="27" rule="UnusedFormalParameter" ruleset="Unused Code" package="net.trajano.doxdb.rest" class="DoxResource" method="op" variable="opName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedFormalParameter" priority="3">
-Avoid unused method parameters such as 'opName'.
-</violation>
-<violation beginline="408" endline="408" begincolumn="13" endcolumn="34" rule="SimplifyStartsWith" ruleset="Optimization" package="net.trajano.doxdb.rest" class="DoxResource" method="saveOrOp" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#SimplifyStartsWith" priority="3">
-This call to String.startsWith can be rewritten using String.charAt(0)
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/target/generated-sources/xjc/net/trajano/doxdb/schema/CollectionType.java">

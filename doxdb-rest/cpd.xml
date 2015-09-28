@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
    <duplication lines="29" tokens="251">
-      <file line="197"
+      <file line="232"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="251"
+      <file line="286"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
 
@@ -34,6 +34,37 @@
      * {@inheritDoc}
      */
     @Override]]></codefragment>
+   </duplication>
+   <duplication lines="25" tokens="228">
+      <file line="109"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="144"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(query, MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
+
+        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
+        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    @Override
+    public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
    </duplication>
    <duplication lines="73" tokens="213">
       <file line="63"
@@ -114,10 +145,38 @@
 
 }]]></codefragment>
    </duplication>
-   <duplication lines="25" tokens="165">
+   <duplication lines="22" tokens="166">
       <file line="112"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="201"
+      <file line="236"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    @Override
+    public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
+   </duplication>
+   <duplication lines="25" tokens="165">
+      <file line="147"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="236"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
         for (final JsonValue hitValue : hits) {
@@ -145,10 +204,12 @@
     @Override
     public void removeFromIndex(final String schemaName,]]></codefragment>
    </duplication>
-   <duplication lines="24" tokens="163">
+   <duplication lines="21" tokens="163">
       <file line="112"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="255"
+      <file line="147"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="290"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
         for (final JsonValue hitValue : hits) {
@@ -170,15 +231,12 @@
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override]]></codefragment>
    </duplication>
    <duplication lines="22" tokens="147">
-      <file line="176"
+      <file line="211"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="227"
+      <file line="262"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[    public SearchResult search(final String sourceIndex,
         final String queryString,
