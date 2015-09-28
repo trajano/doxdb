@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a>                     <em class="jxr_comment">//                    w.print("delete d._v;");</em>
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>                     <em class="jxr_comment">//                    w.print("}");</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>                     w.print(<span class="jxr_string">"angular.module('doxdb',['ngResource'])"</span>);
-<a class="jxr_linenumber" name="L215" href="#L215">215</a>                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> CollectionType collectionType : dox.getConfiguration().getDox()) {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a>                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> CollectionType collectionType : dox.getConfiguration().getCollection()) {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a>                         <strong class="jxr_keyword">final</strong> String name = collectionType.getName();
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>                         w.print(<span class="jxr_string">".factory('DoxDB"</span> + name + <span class="jxr_string">"', ['$resource',function(r){"</span>);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a>                         <strong class="jxr_keyword">final</strong> String uri = uriInfo.getBaseUriBuilder().path(name).build() + <span class="jxr_string">"/:id?v=:version"</span>;
@@ -314,7 +314,7 @@
 <a class="jxr_linenumber" name="L306" href="#L306">306</a>         @Context <strong class="jxr_keyword">final</strong> UriInfo uriInfo) {
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 
 <a class="jxr_linenumber" name="L308" href="#L308">308</a>         SchemaType schema = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> CollectionType collection : dox.getConfiguration().getDox()) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> CollectionType collection : dox.getConfiguration().getCollection()) {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a>             <strong class="jxr_keyword">if</strong> (collection.getName().equals(collectionName)) {
 <a class="jxr_linenumber" name="L311" href="#L311">311</a>                 schema = collection.getSchema().get(collection.getSchema().size() - 1);
 <a class="jxr_linenumber" name="L312" href="#L312">312</a>                 <strong class="jxr_keyword">break</strong>;

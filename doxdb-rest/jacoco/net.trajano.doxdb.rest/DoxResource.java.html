@@ -212,7 +212,7 @@ import net.trajano.doxdb.ws.SessionManager;
                     //                    w.print(&quot;delete d._v;&quot;);
                     //                    w.print(&quot;}&quot;);
 <span class="nc" id="L214">                    w.print(&quot;angular.module('doxdb',['ngResource'])&quot;);</span>
-<span class="nc bnc" id="L215" title="All 2 branches missed.">                    for (final CollectionType collectionType : dox.getConfiguration().getDox()) {</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                    for (final CollectionType collectionType : dox.getConfiguration().getCollection()) {</span>
 <span class="nc" id="L216">                        final String name = collectionType.getName();</span>
 <span class="nc" id="L217">                        w.print(&quot;.factory('DoxDB&quot; + name + &quot;', ['$resource',function(r){&quot;);</span>
 <span class="nc" id="L218">                        final String uri = uriInfo.getBaseUriBuilder().path(name).build() + &quot;/:id?v=:version&quot;;</span>
@@ -306,7 +306,7 @@ import net.trajano.doxdb.ws.SessionManager;
         @Context final UriInfo uriInfo) {
 
 <span class="nc" id="L308">        SchemaType schema = null;</span>
-<span class="nc bnc" id="L309" title="All 2 branches missed.">        for (final CollectionType collection : dox.getConfiguration().getDox()) {</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">        for (final CollectionType collection : dox.getConfiguration().getCollection()) {</span>
 <span class="nc bnc" id="L310" title="All 2 branches missed.">            if (collection.getName().equals(collectionName)) {</span>
 <span class="nc" id="L311">                schema = collection.getSchema().get(collection.getSchema().size() - 1);</span>
 <span class="nc" id="L312">                break;</span>

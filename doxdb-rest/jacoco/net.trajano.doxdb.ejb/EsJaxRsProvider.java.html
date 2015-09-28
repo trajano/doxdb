@@ -48,7 +48,7 @@ import net.trajano.doxdb.schema.IndexType;
 
 <span class="nc bnc" id="L49" title="All 2 branches missed.">            if (getTarget().path(mappedName).request().head().getStatus() == 404) {</span>
 <span class="nc" id="L50">                final JsonObjectBuilder mappingBuilder = createObjectBuilder();</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">                for (final CollectionType collectionType : configurationProvider.getPersistenceConfig().getDox()) {</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                for (final CollectionType collectionType : configurationProvider.getPersistenceConfig().getCollection()) {</span>
 <span class="nc" id="L52">                    mappingBuilder.add(collectionType.getName(), createObjectBuilder()</span>
                         .add(&quot;_source&quot;, createObjectBuilder()
                             .add(&quot;excludes&quot;, createArrayBuilder()

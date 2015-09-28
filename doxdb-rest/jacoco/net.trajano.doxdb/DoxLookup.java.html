@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxLookup.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DoxDB REST API</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb</a> &gt; <span class="el_source">DoxLookup.java</span></div><h1>DoxLookup.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +18,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import net.trajano.doxdb.ejb.internal.DoxLength;
+import net.trajano.doxdb.jsonpath.JsonPath;
+import net.trajano.doxdb.schema.LookupType;
+import net.trajano.doxdb.schema.SchemaType;
 
 /**
  * Provides a secondary lookup table for the Dox data. It is used for simple
@@ -34,10 +40,12 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
         lockMode = LockModeType.NONE),
     @NamedQuery(name = DoxLookup.REMOVE_LOOKUP_FOR_DOX,
         query = &quot;delete from DoxLookup u where u.dox = :dox&quot;),
+    @NamedQuery(name = DoxLookup.REMOVE_ALL,
+        query = &quot;delete from DoxLookup &quot;),
     @NamedQuery(name = DoxLookup.UPDATE_LOOKUP_FOR_DOX,
         query = &quot;update DoxLookup u set u.lookupKey = :lookupKey where u.dox = :dox&quot;)
 })
-<span class="fc" id="L40">public class DoxLookup {</span>
+<span class="fc" id="L48">public class DoxLookup {</span>
 
     public static final String COLLECTION_NAME = &quot;collectionName&quot;;
 
@@ -50,6 +58,8 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
 
     public static final String LOOKUP_NAME = &quot;lookupName&quot;;
 
+    public static final String REMOVE_ALL = &quot;removeAllLookup&quot;;
+
     /**
      * Named query {@value #REMOVE_LOOKUPFOR_DOX}.
      */
@@ -59,6 +69,33 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
      * Named query {@value #UPDATE_LOOKUP_FOR_DOX}.
      */
     public static final String UPDATE_LOOKUP_FOR_DOX = &quot;updateLookupForDox&quot;;
+
+    /**
+     * Creates an list of {@link DoxUnique} based on the data from a {@link Dox}
+     * and the {@link SchemaType}.
+     *
+     * @param dox
+     *            dox
+     * @param schemaType
+     *            schema type
+     * @return list of {@link DoxUnique}.
+     */
+    public static List&lt;DoxLookup&gt; fromDox(final Dox dox,
+        final SchemaType schemaType) {
+
+<span class="fc" id="L86">        final List&lt;DoxLookup&gt; a = new ArrayList&lt;&gt;(schemaType.getUnique().size());</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        for (final LookupType lookup : schemaType.getLookup()) {</span>
+<span class="nc" id="L88">            final DoxLookup r = new DoxLookup();</span>
+<span class="nc" id="L89">            r.collectionName = dox.getCollectionName();</span>
+<span class="nc" id="L90">            r.dox = dox;</span>
+<span class="nc" id="L91">            r.lookupName = lookup.getName();</span>
+<span class="nc" id="L92">            r.lookupKey = JsonPath.compile(lookup.getPath()).read(dox.getJsonObject().toString());</span>
+<span class="nc" id="L93">            a.add(r);</span>
+<span class="nc" id="L94">        }</span>
+
+<span class="fc" id="L96">        return a;</span>
+
+    }
 
     @Column(nullable = false,
         insertable = true,
@@ -89,48 +126,48 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
 
     public String getCollectionName() {
 
-<span class="nc" id="L92">        return collectionName;</span>
+<span class="nc" id="L129">        return collectionName;</span>
     }
 
     public Dox getDox() {
 
-<span class="nc" id="L97">        return dox;</span>
+<span class="nc" id="L134">        return dox;</span>
     }
 
     public long getId() {
 
-<span class="nc" id="L102">        return id;</span>
+<span class="nc" id="L139">        return id;</span>
     }
 
     public String getLookupKey() {
 
-<span class="nc" id="L107">        return lookupKey;</span>
+<span class="nc" id="L144">        return lookupKey;</span>
     }
 
     public String getLookupName() {
 
-<span class="nc" id="L112">        return lookupName;</span>
+<span class="nc" id="L149">        return lookupName;</span>
     }
 
     public void setCollectionName(final String collectionName) {
 
-<span class="nc" id="L117">        this.collectionName = collectionName;</span>
-<span class="nc" id="L118">    }</span>
+<span class="nc" id="L154">        this.collectionName = collectionName;</span>
+<span class="nc" id="L155">    }</span>
 
     public void setDox(final Dox dox) {
 
-<span class="nc" id="L122">        this.dox = dox;</span>
-<span class="nc" id="L123">    }</span>
+<span class="nc" id="L159">        this.dox = dox;</span>
+<span class="nc" id="L160">    }</span>
 
     public void setLookupKey(final String lookupKey) {
 
-<span class="nc" id="L127">        this.lookupKey = lookupKey;</span>
-<span class="nc" id="L128">    }</span>
+<span class="nc" id="L164">        this.lookupKey = lookupKey;</span>
+<span class="nc" id="L165">    }</span>
 
     public void setLookupName(final String lookupName) {
 
-<span class="nc" id="L132">        this.lookupName = lookupName;</span>
-<span class="nc" id="L133">    }</span>
+<span class="nc" id="L169">        this.lookupName = lookupName;</span>
+<span class="nc" id="L170">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

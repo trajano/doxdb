@@ -1,77 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pmd-cpd>
-   <duplication lines="29" tokens="251">
-      <file line="232"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="286"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
-
-        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
-        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
-        result.setBottomDoc(Math.min(from + hits.size(), from + limit));
-        for (final JsonValue hitValue : hits) {
-            final IndexView iv = new IndexView();
-            final JsonObject hit = (JsonObject) hitValue;
-            iv.setDoxID(new DoxID(hit.getString("_id")));
-            iv.setCollection(hit.getString("_type"));
-
-            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
-                if (entry.getValue() instanceof JsonNumber) {
-                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
-                } else if (entry.getValue() instanceof JsonString) {
-                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
-                }
-            }
-            result.addHit(iv);
-        }
-
-        return result;
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override]]></codefragment>
-   </duplication>
-   <duplication lines="25" tokens="228">
-      <file line="109"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <file line="144"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
-      <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(query, MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
-
-        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
-        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
-        for (final JsonValue hitValue : hits) {
-            final IndexView iv = new IndexView();
-            final JsonObject hit = (JsonObject) hitValue;
-            iv.setDoxID(new DoxID(hit.getString("_id")));
-            iv.setCollection(hit.getString("_type"));
-
-            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
-                if (entry.getValue() instanceof JsonNumber) {
-                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
-                } else if (entry.getValue() instanceof JsonString) {
-                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
-                }
-            }
-            result.addHit(iv);
-        }
-
-        return result;
-    }
-
-    @Override
-    public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
-   </duplication>
-   <duplication lines="73" tokens="213">
-      <file line="63"
+   <duplication lines="85" tokens="275">
+      <file line="88"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxLookup.java"/>
-      <file line="67"
+      <file line="92"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxUnique.java"/>
-      <codefragment><![CDATA[    @Column(nullable = false,
+      <codefragment><![CDATA[            final DoxLookup r = new DoxLookup();
+            r.collectionName = dox.getCollectionName();
+            r.dox = dox;
+            r.lookupName = lookup.getName();
+            r.lookupKey = JsonPath.compile(lookup.getPath()).read(dox.getJsonObject().toString());
+            a.add(r);
+        }
+
+        return a;
+
+    }
+
+    @Column(nullable = false,
         insertable = true,
         updatable = false)
     private String collectionName;
@@ -144,6 +90,72 @@
     }
 
 }]]></codefragment>
+   </duplication>
+   <duplication lines="29" tokens="251">
+      <file line="232"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="286"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
+
+        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
+        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        result.setBottomDoc(Math.min(from + hits.size(), from + limit));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override]]></codefragment>
+   </duplication>
+   <duplication lines="25" tokens="228">
+      <file line="109"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <file line="144"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+      <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(query, MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
+
+        final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
+        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
+        for (final JsonValue hitValue : hits) {
+            final IndexView iv = new IndexView();
+            final JsonObject hit = (JsonObject) hitValue;
+            iv.setDoxID(new DoxID(hit.getString("_id")));
+            iv.setCollection(hit.getString("_type"));
+
+            for (final Entry<String, JsonValue> entry : hit.getJsonObject("_source").entrySet()) {
+                if (entry.getValue() instanceof JsonNumber) {
+                    iv.setNumber(entry.getKey(), ((JsonNumber) entry.getValue()).bigDecimalValue());
+                } else if (entry.getValue() instanceof JsonString) {
+                    iv.setString(entry.getKey(), ((JsonString) entry.getValue()).getString());
+                }
+            }
+            result.addHit(iv);
+        }
+
+        return result;
+    }
+
+    @Override
+    public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
    </duplication>
    <duplication lines="22" tokens="166">
       <file line="112"
