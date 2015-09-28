@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">if</strong> (getTarget().path(mappedName).request().head().getStatus() == 404) {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>                  <strong class="jxr_keyword">final</strong> JsonObjectBuilder mappingBuilder = createObjectBuilder();
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> CollectionType collectionType : configurationProvider.getPersistenceConfig().getDox()) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> CollectionType collectionType : configurationProvider.getPersistenceConfig().getCollection()) {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>                      mappingBuilder.add(collectionType.getName(), createObjectBuilder()
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>                          .add(<span class="jxr_string">"_source"</span>, createObjectBuilder()
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>                              .add(<span class="jxr_string">"excludes"</span>, createArrayBuilder()
