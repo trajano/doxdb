@@ -336,13 +336,6 @@ public class DoxResource {
 
     }
 
-    private Response op(final String collection,
-        final String opName,
-        final JsonObject content) {
-
-        return Response.ok().type(RESPONSE_TYPE).entity(content).build();
-    }
-
     @GET
     @Path("{collection}")
     @Produces(RESPONSE_TYPE)
@@ -389,9 +382,13 @@ public class DoxResource {
         return Response.noContent().build();
     }
 
-    private Response save(final String collection,
-        final String id,
-        final JsonObject json,
+    @POST
+    @Path("{collectionName}/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(RESPONSE_TYPE)
+    public Response save(final String collection,
+        @PathParam("id") final String id,
+        @QueryParam("v") final JsonObject json,
         final int version) {
 
         final DoxMeta meta = dox.update(collection, new DoxID(id), json, version);
@@ -407,22 +404,6 @@ public class DoxResource {
         @PathParam("oobname") final String oobname) {
 
         return Response.ok().type(RESPONSE_TYPE).entity("OOB").build();
-    }
-
-    @POST
-    @Path("{collection}/{idOrOp}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(RESPONSE_TYPE)
-    public Response saveOrOp(@PathParam("collection") final String collection,
-        @PathParam("idOrOp") final String idOrOp,
-        @QueryParam("v") final int version,
-        final JsonObject content) {
-
-        if (idOrOp.startsWith("_")) {
-            return op(collection, idOrOp.substring(1), content);
-        } else {
-            return save(collection, idOrOp, content, version);
-        }
     }
 
     /**
