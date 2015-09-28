@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-09-27T23:58:49.372">
+<pmd version="5.0.5" timestamp="2015-09-28T03:25:10.391">
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/Configuration.java">
 <violation beginline="36" endline="36" begincolumn="29" endcolumn="43" rule="RedundantFieldInitializer" ruleset="Optimization" package="net.trajano.doxdb.jsonpath" class="Configuration" variable="DEFAULTS" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#RedundantFieldInitializer" priority="3">
 Avoid using redundant field initializer for 'DEFAULTS'
