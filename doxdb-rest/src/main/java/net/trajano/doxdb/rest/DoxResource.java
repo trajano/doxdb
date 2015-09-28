@@ -103,11 +103,24 @@ public class DoxResource {
     private SessionManager sessionManager;
 
     @POST
-    @Path("search/{index}/{schemaName}")
+    @Path("search/{index}")
     @Produces(RESPONSE_TYPE)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response advancedSearchWithSchemaName(@PathParam("index") final String index,
-        @PathParam("schemaName") final String schemaName,
+    public Response advancedSearch(@PathParam("index") final String index,
+        final JsonObject query,
+        @Context final UriInfo uriInfo) {
+
+        final SearchResult results = dox.advancedSearch(index, query);
+        final JsonObject resultJson = searchResultBuilder(uriInfo, results).build();
+        return Response.ok(resultJson).cacheControl(NO_CACHE).build();
+    }
+
+    @POST
+    @Path("search/{index}/{collectionName}")
+    @Produces(RESPONSE_TYPE)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response advancedSearchWithinCollection(@PathParam("index") final String index,
+        @PathParam("collectionName") final String schemaName,
         final JsonObject query,
         @Context final UriInfo uriInfo) {
 

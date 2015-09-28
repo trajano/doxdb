@@ -15,7 +15,7 @@ standard RDBMS transactions.
 Completed:
 
    * JSON validation
-   * Distributed Search (using [ElasticSearch][] REST API)
+   * Distributed Search (using [ElasticSearch][] using REST API via JAX-RS)
    * CRUD
    * Event handling
    * REST API
@@ -24,9 +24,8 @@ Completed:
    * Allow for retrieving large collections
    * Schema retrieval
    * Example with [Angular Schema Form][1]
-   * Migrate from JEST to JAX-RS Client
    * AngularJS Module Generation
-   * Change database schema
+   * [Change database schema][2]
    * Advanced [ElasticSearch][] queries
    * Unique lookup queries
    * Non-unique lookup queries
@@ -49,6 +48,10 @@ Remaining:
 Out of scope:
 
    * Alternate search (not going to be in scope until a better alternative to ElasticSearch is found)
+   
+Notes:
+
+   * Jest is no longer used to avoid having too many transitive dependencies.
 
 [1]: http://schemaform.io/
 [2]: http://stackoverflow.com/questions/32205381/how-do-i-override-the-schema-for-a-jpa-app-inside-a-web-fragment-from-a-web-app

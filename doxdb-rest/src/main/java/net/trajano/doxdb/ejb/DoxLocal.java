@@ -15,6 +15,9 @@ import net.trajano.doxdb.schema.DoxPersistence;
 public interface DoxLocal {
 
     SearchResult advancedSearch(String index,
+        JsonObject query);
+
+    SearchResult advancedSearch(String index,
         String schemaName,
         JsonObject query);
 

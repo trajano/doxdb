@@ -147,6 +147,13 @@ public class DoxBean implements
 
     @Override
     public SearchResult advancedSearch(final String index,
+        final JsonObject query) {
+
+        return doxSearchBean.advancedSearch(index, query);
+    }
+
+    @Override
+    public SearchResult advancedSearch(final String index,
         final String schemaName,
         final JsonObject query) {
 

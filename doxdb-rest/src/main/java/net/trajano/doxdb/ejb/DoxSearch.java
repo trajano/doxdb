@@ -19,14 +19,28 @@ public interface DoxSearch {
 
     /**
      * Performs an advanced query that allows for near arbitrary searches on a
+     * given index.
+     *
+     * @param sourceIndex
+     *            index
+     * @param query
+     * @return
+     */
+    SearchResult advancedSearch(String index,
+        JsonObject query);
+
+    /**
+     * Performs an advanced query that allows for near arbitrary searches on a
      * given collection.
      *
      * @param sourceIndex
+     * @param collectionName
+     *            collection name
      * @param query
      * @return
      */
     SearchResult advancedSearch(String sourceIndex,
-        String schemaName,
+        String collectionName,
         JsonObject query);
 
     /**
