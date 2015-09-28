@@ -38,7 +38,6 @@ Remaining:
    * Automatic Schema migration
    * Import/Export
    * Temporal data
-   * Extra operations
    * Corrupted index repair
    * Off-line sync
    * Data anonymization
@@ -48,6 +47,9 @@ Remaining:
 Out of scope:
 
    * Alternate search (not going to be in scope until a better alternative to ElasticSearch is found)
+   * Extra operations are out of scope.  Instead the application will provide
+     their own REST API.  However, DoxDB provides a Local EJB API that the
+     REST API may invoke. 
    
 Notes:
 
