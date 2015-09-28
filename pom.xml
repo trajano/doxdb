@@ -8,7 +8,7 @@
     </parent>
     <groupId>net.trajano.doxdb</groupId>
     <artifactId>doxdb</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>DoxDB</name>
     <description>A data framework to allow storing of structured data using JPA.</description>
@@ -27,7 +27,7 @@
     <scm>
         <connection>scm:git:https://github.com/trajano/${project.artifactId}</connection>
         <developerConnection>scm:git:ssh://git@github.com/trajano/${project.artifactId}.git</developerConnection>
-        <tag>doxdb-1.0.3</tag>
+        <tag>HEAD</tag>
         <url>http://github.com/trajano/${project.artifactId}</url>
     </scm>
     <distributionManagement>
@@ -227,7 +227,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <addClasspath/>
+                                <addClasspath />
                             </manifest>
                         </archive>
                         <ejbVersion>3.2</ejbVersion>

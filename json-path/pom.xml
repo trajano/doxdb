@@ -4,7 +4,7 @@
     <parent>
         <groupId>net.trajano.doxdb</groupId>
         <artifactId>doxdb</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
     <artifactId>json-path</artifactId>
     <name>JSON Path</name>
@@ -61,7 +61,7 @@
                 <groupId>io.github.divinespear</groupId>
                 <artifactId>jpa-schema-maven-plugin</artifactId>
                 <version>0.1.12</version>
-                <dependencies/>
+                <dependencies />
             </plugin>
         </plugins>
     </build>
