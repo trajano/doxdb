@@ -14,7 +14,7 @@
 	<element name="dox-persistence">
 		<complexType>
 			<sequence>
-				<element type="tns:CollectionType" name="dox" minOccurs="1"
+				<element type="tns:CollectionType" name="collection" minOccurs="1"
 					maxOccurs="unbounded" />
 				<element type="tns:IndexType" name="index" minOccurs="0"
 					maxOccurs="unbounded" />
@@ -40,7 +40,7 @@
 			</attribute>
 		</complexType>
 		<unique name="uniqueName">
-			<selector xpath="dox" />
+			<selector xpath="collection" />
 			<field xpath="@name" />
 		</unique>
 	</element>

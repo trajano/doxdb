@@ -30,6 +30,11 @@ public class DoxBeanTest extends AbstractBeanTest {
         }
         {
             tx.begin();
+            assertEquals("abc", bean.read("horse", bean.readByUniqueLookup("horse", "horseName", "abc").getDoxId()).getContent().getString("name"));
+            tx.commit();
+        }
+        {
+            tx.begin();
             final String inputJson = "{\"name\":\"xyz\"}";
             final DoxMeta meta = bean.create("horse", Json.createReader(new StringReader(inputJson)).readObject());
 
@@ -39,8 +44,8 @@ public class DoxBeanTest extends AbstractBeanTest {
         {
             tx.begin();
 
-            assertEquals("abc", bean.read("horse", bean.readByUniqueLookup("horse", "name", "abc").getDoxId()).getContent().getString("name"));
-            assertEquals("xyz", bean.read("horse", bean.readByUniqueLookup("horse", "name", "xyz").getDoxId()).getContent().getString("name"));
+            assertEquals("abc", bean.read("horse", bean.readByUniqueLookup("horse", "horseName", "abc").getDoxId()).getContent().getString("name"));
+            assertEquals("xyz", bean.read("horse", bean.readByUniqueLookup("horse", "horseName", "xyz").getDoxId()).getContent().getString("name"));
             tx.commit();
         }
     }
@@ -51,7 +56,7 @@ public class DoxBeanTest extends AbstractBeanTest {
         final DoxID doxId;
         {
             tx.begin();
-            final String inputJson = "{\"name\":\"abc\"}";
+            final String inputJson = "{\"name\":\"abc\",\"fei\":\"abc\"}";
             final DoxMeta meta = bean.create("horse", Json.createReader(new StringReader(inputJson)).readObject());
 
             doxId = meta.getDoxId();
@@ -66,6 +71,17 @@ public class DoxBeanTest extends AbstractBeanTest {
             assertEquals(doxId, meta.getDoxId());
             assertEquals(2, meta.getVersion());
             assertEquals("xyz", bean.read("horse", doxId).getContent().getString("name"));
+            tx.commit();
+        }
+    }
+
+    @Test
+    public void testCreateUpdateReindex() throws Exception {
+
+        testCreateUpdate();
+        {
+            tx.begin();
+            bean.reindex();
             tx.commit();
         }
     }

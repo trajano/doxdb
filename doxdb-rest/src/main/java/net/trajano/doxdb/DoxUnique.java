@@ -1,5 +1,8 @@
 package net.trajano.doxdb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +19,9 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import net.trajano.doxdb.ejb.internal.DoxLength;
+import net.trajano.doxdb.jsonpath.JsonPath;
+import net.trajano.doxdb.schema.LookupType;
+import net.trajano.doxdb.schema.SchemaType;
 
 /**
  * Unique lookup table. Provides a secondary lookup table for the Dox data. It
@@ -38,6 +44,8 @@ import net.trajano.doxdb.ejb.internal.DoxLength;
         lockMode = LockModeType.NONE),
     @NamedQuery(name = DoxUnique.REMOVE_UNIQUE_FOR_DOX,
         query = "delete from DoxUnique u where u.dox = :dox"),
+    @NamedQuery(name = DoxUnique.REMOVE_ALL,
+        query = "delete from DoxUnique"),
     @NamedQuery(name = DoxUnique.UPDATE_UNIQUE_FOR_DOX,
         query = "update DoxUnique u set u.lookupKey = :lookupKey where u.dox = :dox")
 })
@@ -48,6 +56,8 @@ public class DoxUnique {
     public static final String LOOKUP_KEY = "lookupKey";
 
     public static final String LOOKUP_NAME = "lookupName";
+
+    public static final String REMOVE_ALL = "removeAllUnique";
 
     /**
      * Named query {@value #REMOVE_UNIQUE_FOR_DOX}.
@@ -63,6 +73,33 @@ public class DoxUnique {
      * Named query {@value #UPDATE_UNIQUE_FOR_DOX}.
      */
     public static final String UPDATE_UNIQUE_FOR_DOX = "updateUniqueForDox";
+
+    /**
+     * Creates an list of {@link DoxUnique} based on the data from a {@link Dox}
+     * and the {@link SchemaType}.
+     *
+     * @param dox
+     *            dox
+     * @param schemaType
+     *            schema type
+     * @return list of {@link DoxUnique}.
+     */
+    public static List<DoxUnique> fromDox(final Dox dox,
+        final SchemaType schemaType) {
+
+        final List<DoxUnique> a = new ArrayList<>(schemaType.getUnique().size());
+        for (final LookupType lookup : schemaType.getUnique()) {
+            final DoxUnique r = new DoxUnique();
+            r.collectionName = dox.getCollectionName();
+            r.dox = dox;
+            r.lookupName = lookup.getName();
+            r.lookupKey = JsonPath.compile(lookup.getPath()).read(dox.getJsonObject().toString());
+            a.add(r);
+        }
+
+        return a;
+
+    }
 
     @Column(nullable = false,
         insertable = true,

@@ -466,11 +466,25 @@ public class DoxBean implements
         doxSearchBean.reset();
         // TODO this will do everything in one transaction which can kill the database.  What could be done is the
         // reindexing can be done in chunks and let an MDB do the process
-        for (final CollectionType config : configurationProvider.getPersistenceConfig().getDox()) {
+        for (final CollectionType config : configurationProvider.getPersistenceConfig().getCollection()) {
+
+            em.createNamedQuery(DoxUnique.REMOVE_ALL)
+                .executeUpdate();
+
+            em.createNamedQuery(DoxLookup.REMOVE_ALL)
+                .executeUpdate();
+
+            final SchemaType schemaType = config.getSchema().get(config.getSchema().size() - 1);
 
             final List<IndexView> indexViews = new LinkedList<>();
-            for (final Dox e : em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("schemaName", config.getName()).getResultList()) {
+            for (final Dox e : em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter(Dox.COLLECTION_NAME, config.getName()).getResultList()) {
 
+                for (final DoxUnique doxUnique : DoxUnique.fromDox(e, schemaType)) {
+                    em.persist(doxUnique);
+                }
+                for (final DoxLookup doxLookup : DoxLookup.fromDox(e, schemaType)) {
+                    em.persist(doxLookup);
+                }
                 // TODO later
                 //                rs.updateBytes(3, collectionAccessControl.buildAccessKey(config.getName(), json, new DoxPrincipal(rs.getString(4))));
                 final IndexView[] indexViewBuilt = indexer.buildIndexViews(config.getName(), e.getJsonContent());

@@ -212,7 +212,7 @@ public class DoxResource {
                     //                    w.print("delete d._v;");
                     //                    w.print("}");
                     w.print("angular.module('doxdb',['ngResource'])");
-                    for (final CollectionType collectionType : dox.getConfiguration().getDox()) {
+                    for (final CollectionType collectionType : dox.getConfiguration().getCollection()) {
                         final String name = collectionType.getName();
                         w.print(".factory('DoxDB" + name + "', ['$resource',function(r){");
                         final String uri = uriInfo.getBaseUriBuilder().path(name).build() + "/:id?v=:version";
@@ -306,7 +306,7 @@ public class DoxResource {
         @Context final UriInfo uriInfo) {
 
         SchemaType schema = null;
-        for (final CollectionType collection : dox.getConfiguration().getDox()) {
+        for (final CollectionType collection : dox.getConfiguration().getCollection()) {
             if (collection.getName().equals(collectionName)) {
                 schema = collection.getSchema().get(collection.getSchema().size() - 1);
                 break;

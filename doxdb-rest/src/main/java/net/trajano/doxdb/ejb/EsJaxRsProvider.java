@@ -48,7 +48,7 @@ public class EsJaxRsProvider {
 
             if (getTarget().path(mappedName).request().head().getStatus() == 404) {
                 final JsonObjectBuilder mappingBuilder = createObjectBuilder();
-                for (final CollectionType collectionType : configurationProvider.getPersistenceConfig().getDox()) {
+                for (final CollectionType collectionType : configurationProvider.getPersistenceConfig().getCollection()) {
                     mappingBuilder.add(collectionType.getName(), createObjectBuilder()
                         .add("_source", createObjectBuilder()
                             .add("excludes", createArrayBuilder()

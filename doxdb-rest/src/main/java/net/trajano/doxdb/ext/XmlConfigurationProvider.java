@@ -93,7 +93,7 @@ public class XmlConfigurationProvider implements
                 indexMap.put(indexType.getName(), indexType.getMappedName() == null ? indexType.getName() : indexType.getMappedName());
             }
 
-            for (final CollectionType doxConfig : persistenceConfig.getDox()) {
+            for (final CollectionType doxConfig : persistenceConfig.getCollection()) {
                 doxen.put(doxConfig.getName(), doxConfig);
                 final SchemaType schema = doxConfig.getSchema().get(doxConfig.getSchema().size() - 1);
                 currentSchemaMap.put(doxConfig.getName(), schema);

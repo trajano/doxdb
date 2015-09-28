@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dox-persistence xmlns="http://doxdb.trajano.net/schema/"
+	xsi:schemaLocation="http://doxdb.trajano.net/schema/ ../../../../../doxdb-core/src/main/resources/META-INF/xsd/dox.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<collection name="horse" oob="true">
+		<schema version="1" location="horse.json">
+			<unique name="horseName" path="$.name"/>
+		</schema>
+	</collection>
+	<index name="myindex" mappedName="testIndex1" />
+	<index name="maskedindex" mappedName="testIndex2" />
+</dox-persistence>
