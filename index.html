@@ -80,7 +80,7 @@
   
 <li>JSON validation</li>
   
-<li>Distributed Search (using <a class="externalLink" href="https://www.elastic.co/products/elasticsearch">ElasticSearch</a> REST API)</li>
+<li>Distributed Search (using <a class="externalLink" href="https://www.elastic.co/products/elasticsearch">ElasticSearch</a> using REST API via JAX-RS)</li>
   
 <li>CRUD</li>
   
@@ -98,11 +98,9 @@
   
 <li>Example with <a class="externalLink" href="http://schemaform.io/">Angular Schema Form</a></li>
   
-<li>Migrate from JEST to JAX-RS Client</li>
-  
 <li>AngularJS Module Generation</li>
   
-<li>Change database schema</li>
+<li><a class="externalLink" href="http://stackoverflow.com/questions/32205381/how-do-i-override-the-schema-for-a-jpa-app-inside-a-web-fragment-from-a-web-app">Change database schema</a></li>
   
 <li>Advanced <a class="externalLink" href="https://www.elastic.co/products/elasticsearch">ElasticSearch</a> queries</li>
   
@@ -126,8 +124,6 @@
   
 <li>Temporal data</li>
   
-<li>Extra operations</li>
-  
 <li>Corrupted index repair</li>
   
 <li>Off-line sync</li>
@@ -141,6 +137,14 @@
 <ul>
   
 <li>Alternate search (not going to be in scope until a better alternative to ElasticSearch is found)</li>
+  
+<li>Extra operations are out of scope. Instead the application will provide  their own REST API. However, DoxDB provides a Local EJB API that the  REST API may invoke.</li>
+</ul>
+<p>Notes:</p>
+
+<ul>
+  
+<li>Jest is no longer used to avoid having too many transitive dependencies.</li>
 </ul></div></div>
 	      </div>
 	    </article>
