@@ -386,10 +386,10 @@ import net.trajano.doxdb.ws.SessionManager;
     @Path(&quot;{collectionName}/{id}&quot;)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(RESPONSE_TYPE)
-    public Response save(final String collection,
+    public Response save(@PathParam(&quot;collectionName&quot;) final String collection,
         @PathParam(&quot;id&quot;) final String id,
-        @QueryParam(&quot;v&quot;) final JsonObject json,
-        final int version) {
+        final JsonObject json,
+        @QueryParam(&quot;v&quot;) final int version) {
 
 <span class="nc" id="L394">        final DoxMeta meta = dox.update(collection, new DoxID(id), json, version);</span>
 <span class="nc" id="L395">        sessionManager.sendMessage(&quot;UPDATE&quot;, meta.getDoxId(), collection, meta.getLastUpdatedOn());</span>
