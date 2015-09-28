@@ -4,7 +4,7 @@
     <parent>
         <groupId>net.trajano.doxdb</groupId>
         <artifactId>doxdb</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
     <artifactId>doxdb-rest</artifactId>
     <name>DoxDB REST API</name>
