@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-09-28T20:04:28.497">
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Country.java">
+<pmd version="5.0.5" timestamp="2015-09-28T20:23:18.786">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Country.java">
 <violation beginline="257" endline="257" begincolumn="20" endcolumn="39" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.sample.json" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
 </violation>
@@ -17,7 +17,7 @@ Parameter 'value' is not assigned and could be declared final
 Local variable 'constant' could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Horse.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Horse.java">
 <violation beginline="105" endline="105" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Horse" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'name' is not assigned and could be declared final
 </violation>
@@ -112,7 +112,7 @@ Parameter 'value' is not assigned and could be declared final
 Local variable 'constant' could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Ring.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Ring.java">
 <violation beginline="30" endline="30" begincolumn="13" endcolumn="31" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.sample.json" class="Ring" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
 </violation>
@@ -147,7 +147,7 @@ Parameter 'other' is not assigned and could be declared final
 Local variable 'rhs' could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Venue.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-sample-web/target/java-gen/net/trajano/doxdb/sample/json/Venue.java">
 <violation beginline="69" endline="69" begincolumn="25" endcolumn="35" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.sample.json" class="Venue" method="setName" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'name' is not assigned and could be declared final
 </violation>
