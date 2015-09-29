@@ -1,5 +1,5 @@
 angular.module('doxdbApp', [
-    'doxdb.module', 'ngRoute', 'ngAnimate', 'accordionTable'
+    'doxdb', 'ngRoute', 'ngAnimate', 'accordionTable'
 ])
 
 .config(function($compileProvider, $routeProvider) {
