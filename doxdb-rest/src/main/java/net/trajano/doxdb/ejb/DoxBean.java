@@ -161,12 +161,12 @@ public class DoxBean implements
     }
 
     @Override
-    public DoxMeta create(final String schemaName,
+    public DoxMeta create(final String collectionName,
         final JsonObject unsanitizedContent) {
 
         final Date ts = new Date();
-        final CollectionType config = configurationProvider.getDox(schemaName);
-        final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
+        final CollectionType config = configurationProvider.getDox(collectionName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         final JsonObject content = sanitize(unsanitizedContent);
         validate(schema, content);
