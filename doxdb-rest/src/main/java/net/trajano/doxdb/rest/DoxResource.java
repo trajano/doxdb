@@ -21,6 +21,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.OPTIONS;
@@ -40,11 +41,13 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.DatatypeConverter;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.SearchResult;
+import net.trajano.doxdb.ejb.DoxImport;
 import net.trajano.doxdb.ejb.DoxLocal;
 import net.trajano.doxdb.schema.CollectionType;
 import net.trajano.doxdb.schema.LookupType;
@@ -98,6 +101,9 @@ public class DoxResource {
 
     @EJB
     private DoxLocal dox;
+
+    @EJB
+    private DoxImport doxImport;
 
     @EJB
     private SessionManager sessionManager;
@@ -169,6 +175,34 @@ public class DoxResource {
         dox.delete(collection, doxid, version);
         sessionManager.sendMessage("DELETE", doxid, collection, new Date());
         return Response.noContent().build();
+    }
+
+    @POST
+    @Path("export")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(RESPONSE_TYPE)
+    public Response doxExport(@FormParam("path") final String exportPath,
+        @FormParam("schema") final String schema,
+        @FormParam("from") final String fromLastUpdatedOnString) {
+
+        Date fromLastUpdatedOn;
+        if (fromLastUpdatedOnString == null) {
+            fromLastUpdatedOn = null;
+
+        } else {
+            fromLastUpdatedOn = DatatypeConverter.parseDateTime(fromLastUpdatedOnString).getTime();
+        }
+
+        return Response.ok(doxImport.exportDox(exportPath, schema, fromLastUpdatedOn)).cacheControl(NO_CACHE).build();
+    }
+
+    @POST
+    @Path("import")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(RESPONSE_TYPE)
+    public Response doxImport(@FormParam("path") final String importPath) {
+
+        return Response.ok(doxImport.importDox(importPath)).cacheControl(NO_CACHE).build();
     }
 
     @GET

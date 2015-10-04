@@ -16,8 +16,10 @@ public final class DoxID implements
     Serializable {
 
     /**
-     * Set of allowed characters in the ID. Letters or numbers only. This
-     * provides higher than 128-bits but less than 256-bits of randommess.
+     * Set of allowed characters in the ID. Lower case letters or numbers only.
+     * This provides higher than 128-bits but less than 256-bits of randommess.
+     * Lower case letters are used to ensure exports using DOXID as a file name
+     * will work on case insensitive file systems.
      */
     private static final char[] ALLOWED;
 
@@ -38,7 +40,7 @@ public final class DoxID implements
     private static final long serialVersionUID = -1726922680838907757L;
 
     static {
-        ALLOWED = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+        ALLOWED = "0123456789abcdefghijklmnopqrstuvwxyz".toCharArray();
         ALLOWED_MAP = new boolean[256];
         for (final char allowedChar : ALLOWED) {
             ALLOWED_MAP[allowedChar] = true;

@@ -58,11 +58,20 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 
     @NamedQuery(name = Dox.READ_ALL_BY_SCHEMA_NAME,
         query = "from Dox e where e.collectionName = :collectionName",
+        lockMode = LockModeType.NONE),
+
+    @NamedQuery(name = Dox.COUNT,
+        query = "select count(e) from Dox e",
         lockMode = LockModeType.NONE)
 })
 public class Dox {
 
     public static final String COLLECTION_NAME = "collectionName";
+
+    /**
+     * Named query {@value #COUNT};
+     */
+    public static final String COUNT = "countDox";
 
     /**
      * Named query {@value #READ_ALL_BY_SCHEMA_NAME};

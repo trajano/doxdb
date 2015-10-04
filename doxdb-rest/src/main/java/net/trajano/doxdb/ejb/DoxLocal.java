@@ -64,6 +64,9 @@ public interface DoxLocal {
      */
     void noop();
 
+    /**
+     * Returns null if the record is not found.
+     */
     DoxMeta read(String collectionName,
         DoxID id);
 
@@ -100,6 +103,9 @@ public interface DoxLocal {
         String lookupName,
         String lookupKey);
 
+    /**
+     * Returns null if the record is not found.
+     */
     DoxMeta readByUniqueLookup(String collectionName,
         String lookupName,
         String lookupKey);

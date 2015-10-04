@@ -161,12 +161,12 @@ public class DoxBean implements
     }
 
     @Override
-    public DoxMeta create(final String schemaName,
+    public DoxMeta create(final String collectionName,
         final JsonObject unsanitizedContent) {
 
         final Date ts = new Date();
-        final CollectionType config = configurationProvider.getDox(schemaName);
-        final SchemaType schema = configurationProvider.getCollectionSchema(schemaName);
+        final CollectionType config = configurationProvider.getDox(collectionName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         final JsonObject content = sanitize(unsanitizedContent);
         validate(schema, content);
@@ -286,6 +286,9 @@ public class DoxBean implements
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DoxMeta read(final String collectionName,
         final DoxID doxid) {
@@ -293,8 +296,12 @@ public class DoxBean implements
         final CollectionType config = configurationProvider.getDox(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
-        final DoxMeta meta = em.createNamedQuery(Dox.READ_META_BY_SCHEMA_NAME_DOX_ID, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("collectionName", config.getName()).getSingleResult();
-
+        final DoxMeta meta;
+        try {
+            meta = em.createNamedQuery(Dox.READ_META_BY_SCHEMA_NAME_DOX_ID, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("collectionName", config.getName()).getSingleResult();
+        } catch (final NoResultException e) {
+            return null;
+        }
         meta.getAccessKey();
         // TODO check the security.
 
@@ -320,6 +327,9 @@ public class DoxBean implements
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String readAll(final String collectionName) {
 
@@ -338,6 +348,13 @@ public class DoxBean implements
 
     }
 
+    /**
+     * Reads all records in a collection and writes it to a file.
+     *
+     * @param collectionName
+     * @return
+     * @throws IOException
+     */
     private String readAllToFile(final String collectionName) throws IOException {
 
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
@@ -430,6 +447,9 @@ public class DoxBean implements
         return b.build();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DoxMeta readByUniqueLookup(final String collectionName,
         final String lookupName,
@@ -440,7 +460,6 @@ public class DoxBean implements
             .setParameter(DoxUnique.LOOKUP_NAME, lookupName)
             .setParameter(DoxUnique.LOOKUP_KEY, lookupKey).getSingleResult();
         return read(collectionName, dox.getDoxId());
-
     }
 
     private DoxMeta readMetaAndLock(
