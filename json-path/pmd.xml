@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-10-04T15:19:22.059">
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/Configuration.java">
+<pmd version="5.0.5" timestamp="2015-10-04T15:32:10.283">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/Configuration.java">
 <violation beginline="36" endline="36" begincolumn="29" endcolumn="43" rule="RedundantFieldInitializer" ruleset="Optimization" package="net.trajano.doxdb.jsonpath" class="Configuration" variable="DEFAULTS" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#RedundantFieldInitializer" priority="3">
 Avoid using redundant field initializer for 'DEFAULTS'
 </violation>
@@ -68,7 +68,7 @@ Unnecessary use of fully qualified name 'Arrays.asList' due to existing import '
 Parameter 'listeners' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/Criteria.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/Criteria.java">
 <violation beginline="17" endline="17" begincolumn="1" endcolumn="61" rule="UnusedImports" ruleset="Import Statements" package="net.trajano.doxdb.jsonpath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'net.trajano.doxdb.jsonpath.internal.Utils.join'
 </violation>
@@ -484,12 +484,12 @@ Local variable 'sb' could be declared final
 Parameter 'o' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/EvaluationListener.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/EvaluationListener.java">
 <violation beginline="44" endline="62" begincolumn="12" endcolumn="5" rule="UnusedModifier" ruleset="Unused Code" package="net.trajano.doxdb.jsonpath" class="EvaluationListener" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedModifier" priority="3">
 Avoid modifiers which are implied by the context
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/Filter.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/Filter.java">
 <violation beginline="40" endline="40" begincolumn="33" endcolumn="51" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath" class="Filter" method="filter" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'predicate' is not assigned and could be declared final
 </violation>
@@ -566,7 +566,7 @@ Local variable 'operator' could be declared final
 Parameter 'filter' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/InvalidCriteriaException.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/InvalidCriteriaException.java">
 <violation beginline="19" endline="20" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath" class="InvalidCriteriaException" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -583,7 +583,7 @@ Parameter 'message' is not assigned and could be declared final
 Parameter 'cause' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/InvalidJsonException.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/InvalidJsonException.java">
 <violation beginline="25" endline="27" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath" class="InvalidJsonException" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -600,12 +600,12 @@ Parameter 'message' is not assigned and could be declared final
 Parameter 'cause' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/InvalidModificationException.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/InvalidModificationException.java">
 <violation beginline="18" endline="18" begincolumn="41" endcolumn="54" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath" class="InvalidModificationException" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'message' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/InvalidPathException.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/InvalidPathException.java">
 <violation beginline="20" endline="21" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath" class="InvalidPathException" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -622,7 +622,7 @@ Parameter 'message' is not assigned and could be declared final
 Parameter 'cause' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/JsonPath.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/JsonPath.java">
 <violation beginline="97" endline="97" begincolumn="39" endcolumn="57" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath" class="JsonPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'filters' is not assigned and could be declared final
 </violation>
@@ -873,7 +873,7 @@ Parameter 'evaluationContext' is not assigned and could be declared final
 Parameter 'jsonObject' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/JsonPathException.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/JsonPathException.java">
 <violation beginline="19" endline="20" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath" class="JsonPathException" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -890,12 +890,12 @@ Parameter 'message' is not assigned and could be declared final
 Parameter 'cause' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/ParseContext.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/ParseContext.java">
 <violation beginline="20" endline="20" begincolumn="1" endcolumn="20" rule="UnusedImports" ruleset="Import Statements" package="net.trajano.doxdb.jsonpath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/imports.html#UnusedImports" priority="4">
 Avoid unused imports such as 'java.net.URL'
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/PathNotFoundException.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/PathNotFoundException.java">
 <violation beginline="19" endline="20" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath" class="PathNotFoundException" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -912,12 +912,12 @@ Parameter 'message' is not assigned and could be declared final
 Parameter 'cause' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/Predicate.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/Predicate.java">
 <violation beginline="26" endline="52" begincolumn="12" endcolumn="5" rule="UnusedModifier" ruleset="Unused Code" package="net.trajano.doxdb.jsonpath" class="Predicate" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedModifier" priority="3">
 Avoid modifiers which are implied by the context
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/TypeRef.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/TypeRef.java">
 <violation beginline="35" endline="35" begincolumn="9" endcolumn="59" rule="LocalVariableCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath" class="TypeRef" variable="superClass" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#LocalVariableCouldBeFinal" priority="3">
 Local variable 'superClass' could be declared final
 </violation>
@@ -925,7 +925,7 @@ Local variable 'superClass' could be declared final
 Parameter 'o' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/Cache.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/Cache.java">
 <violation beginline="28" endline="28" begincolumn="19" endcolumn="35" rule="UseConcurrentHashMap" ruleset="Controversial" package="net.trajano.doxdb.jsonpath.internal" class="Cache" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#UseConcurrentHashMap" priority="3">
 If you run in Java5 or newer and have concurrent access, you should use the ConcurrentHashMap implementation
 </violation>
@@ -960,7 +960,7 @@ Parameter 'key' is not assigned and could be declared final
 Parameter 'key' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/CompiledPath.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/CompiledPath.java">
 <violation beginline="27" endline="27" begincolumn="41" endcolumn="58" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal" class="CompiledPath" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'isRootPath' is not assigned and could be declared final
 </violation>
@@ -1001,7 +1001,7 @@ Parameter 'document' is not assigned and could be declared final
 Parameter 'rootDocument' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/JsonFormatter.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/JsonFormatter.java">
 <violation beginline="29" endline="29" begincolumn="38" endcolumn="53" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal" class="JsonFormatter" method="appendIndent" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'sb' is not assigned and could be declared final
 </violation>
@@ -1015,7 +1015,7 @@ Local variable 'output' could be declared final
 Local variable 'ch' could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/JsonReader.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/JsonReader.java">
 <violation beginline="41" endline="41" begincolumn="20" endcolumn="24" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb.jsonpath.internal" class="JsonReader" variable="patch" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'patch'.
 </violation>
@@ -1212,7 +1212,7 @@ Parameter 'limit' is not assigned and could be declared final
 Parameter 'found' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/PathCompiler.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/PathCompiler.java">
 <violation beginline="59" endline="59" begincolumn="13" endcolumn="89" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal" class="PathCompiler" method="compile" variable="filterList" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
 Avoid declaring a variable if it is unreferenced before a possible exit point.
 </violation>
@@ -1361,7 +1361,7 @@ Avoid using if...else statements without curly braces
 Avoid using if statements without curly braces
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/PathRef.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/PathRef.java">
 <violation beginline="18" endline="18" begincolumn="40" endcolumn="66" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal" class="PathRef" method="set" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'configuration' is not assigned and could be declared final
 </violation>
@@ -1561,7 +1561,7 @@ Parameter 'key' is not assigned and could be declared final
 Parameter 'newVal' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/Utils.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/Utils.java">
 <violation beginline="45" endline="45" begincolumn="56" endcolumn="62" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal" class="Utils" method="createRange" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'end' is not assigned and could be declared final
 </violation>
@@ -1710,7 +1710,7 @@ Parameter 'desc' is not assigned and could be declared final
 Local variable 'name' could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/ArrayPathToken.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/ArrayPathToken.java">
 <violation beginline="44" endline="48" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath.internal.token" class="ArrayPathToken" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -1745,7 +1745,7 @@ Avoid using if...else statements without curly braces
 Use explicit scoping instead of the default package private level
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/EvaluationContextImpl.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/EvaluationContextImpl.java">
 <violation beginline="49" endline="49" begincolumn="17" endcolumn="31" rule="RedundantFieldInitializer" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal.token" class="EvaluationContextImpl" variable="resultIndex" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#RedundantFieldInitializer" priority="3">
 Avoid using redundant field initializer for 'resultIndex'
 </violation>
@@ -1801,7 +1801,7 @@ Parameter 'path' is not assigned and could be declared final
 Parameter 'result' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/PathToken.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/PathToken.java">
 <violation beginline="30" endline="30" begincolumn="21" endcolumn="35" rule="RedundantFieldInitializer" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal.token" class="PathToken" variable="definite" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#RedundantFieldInitializer" priority="3">
 Avoid using redundant field initializer for 'definite'
 </violation>
@@ -1920,7 +1920,7 @@ Use explicit scoping instead of the default package private level
 Use explicit scoping instead of the default package private level
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/PredicateContextImpl.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/PredicateContextImpl.java">
 <violation beginline="31" endline="31" begincolumn="78" endcolumn="104" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal.token" class="PredicateContextImpl" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'configuration' is not assigned and could be declared final
 </violation>
@@ -1940,7 +1940,7 @@ Parameter 'path' is not assigned and could be declared final
 Parameter 'clazz' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/PredicatePathToken.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/PredicatePathToken.java">
 <violation beginline="42" endline="44" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath.internal.token" class="PredicatePathToken" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -1987,7 +1987,7 @@ Local variable 'predicate' could be declared final
 Use explicit scoping instead of the default package private level
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/PropertyPathToken.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/PropertyPathToken.java">
 <violation beginline="30" endline="32" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath.internal.token" class="PropertyPathToken" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -2010,7 +2010,7 @@ Parameter 'parent' is not assigned and could be declared final
 Use explicit scoping instead of the default package private level
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/RootPathToken.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/RootPathToken.java">
 <violation beginline="27" endline="30" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath.internal.token" class="RootPathToken" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -2036,7 +2036,7 @@ Local variable 'op' could be declared final
 Use explicit scoping instead of the default package private level
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/ScanPathToken.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/ScanPathToken.java">
 <violation beginline="28" endline="28" begincolumn="76" endcolumn="100" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal.token" class="ScanPathToken" method="evaluate" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'ctx' is not assigned and could be declared final
 </violation>
@@ -2179,7 +2179,7 @@ Parameter 'model' is not assigned and could be declared final
 Local variable 'keys' could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/WildcardPathToken.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/internal/token/WildcardPathToken.java">
 <violation beginline="29" endline="29" begincolumn="76" endcolumn="100" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.internal.token" class="WildcardPathToken" method="evaluate" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'ctx' is not assigned and could be declared final
 </violation>
@@ -2199,7 +2199,7 @@ Local variable 'property' could be declared final
 Use explicit scoping instead of the default package private level
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/json/AbstractJsonProvider.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/json/AbstractJsonProvider.java">
 <violation beginline="31" endline="31" begincolumn="28" endcolumn="37" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.spi.json" class="AbstractJsonProvider" method="isArray" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'obj' is not assigned and could be declared final
 </violation>
@@ -2288,7 +2288,7 @@ Avoid using if...else statements without curly braces
 Parameter 'obj' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/json/JacksonJsonNodeJsonProvider.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/json/JacksonJsonNodeJsonProvider.java">
 <violation beginline="43" endline="45" begincolumn="12" endcolumn="5" rule="CallSuperInConstructor" ruleset="Controversial" package="net.trajano.doxdb.jsonpath.spi.json" class="JacksonJsonNodeJsonProvider" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/controversial.html#CallSuperInConstructor" priority="3">
 It is a good practice to call super() in a constructor
 </violation>
@@ -2419,7 +2419,7 @@ Parameter 'o' is not assigned and could be declared final
 Parameter 'o' is not assigned and could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/json/JacksonJsonProvider.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/json/JacksonJsonProvider.java">
 <violation beginline="54" endline="54" begincolumn="32" endcolumn="56" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.spi.json" class="JacksonJsonProvider" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'objectMapper' is not assigned and could be declared final
 </violation>
@@ -2451,12 +2451,12 @@ Local variable 'writer' could be declared final
 Local variable 'generator' could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/json/JsonProvider.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/json/JsonProvider.java">
 <violation beginline="24" endline="24" begincolumn="18" endcolumn="49" rule="UnusedModifier" ruleset="Unused Code" package="net.trajano.doxdb.jsonpath.spi.json" class="JsonProvider" variable="UNDEFINED" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedModifier" priority="3">
 Avoid modifiers which are implied by the context
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/mapper/JacksonMappingProvider.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/mapper/JacksonMappingProvider.java">
 <violation beginline="31" endline="31" begincolumn="35" endcolumn="59" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.spi.mapper" class="JacksonMappingProvider" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'objectMapper' is not assigned and could be declared final
 </violation>
@@ -2479,7 +2479,7 @@ Parameter 'source' is not assigned and could be declared final
 Local variable 'type' could be declared final
 </violation>
 </file>
-<file name="/var/lib/jenkins/jobs/doxdb/workspace/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/mapper/MappingException.java">
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/json-path/src/main/java/net/trajano/doxdb/jsonpath/spi/mapper/MappingException.java">
 <violation beginline="21" endline="21" begincolumn="29" endcolumn="43" rule="MethodArgumentCouldBeFinal" ruleset="Optimization" package="net.trajano.doxdb.jsonpath.spi.mapper" class="MappingException" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#MethodArgumentCouldBeFinal" priority="3">
 Parameter 'cause' is not assigned and could be declared final
 </violation>
