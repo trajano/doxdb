@@ -2,9 +2,9 @@
 <pmd-cpd>
    <duplication lines="85" tokens="275">
       <file line="88"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/DoxLookup.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxLookup.java"/>
       <file line="92"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/DoxUnique.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxUnique.java"/>
       <codefragment><![CDATA[            final DoxLookup r = new DoxLookup();
             r.collectionName = dox.getCollectionName();
             r.dox = dox;
@@ -93,9 +93,9 @@
    </duplication>
    <duplication lines="29" tokens="251">
       <file line="232"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="286"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(queryBuilder.build(), MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
 
         final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
@@ -128,9 +128,9 @@
    </duplication>
    <duplication lines="25" tokens="228">
       <file line="109"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="144"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        final JsonObject results = jestProvider.getTarget().path(index).path("_search").request(MediaType.APPLICATION_JSON).post(Entity.entity(query, MediaType.APPLICATION_JSON)).readEntity(JsonObject.class);
 
         final JsonArray hits = results.getJsonObject("hits").getJsonArray("hits");
@@ -159,9 +159,9 @@
    </duplication>
    <duplication lines="22" tokens="166">
       <file line="112"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="236"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
         for (final JsonValue hitValue : hits) {
             final IndexView iv = new IndexView();
@@ -187,9 +187,9 @@
    </duplication>
    <duplication lines="22" tokens="165">
       <file line="189"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
       <file line="405"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[        entity.setVersion(1);
 
         em.persist(entity);
@@ -215,9 +215,9 @@
    </duplication>
    <duplication lines="25" tokens="165">
       <file line="147"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="236"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
         for (final JsonValue hitValue : hits) {
             final IndexView iv = new IndexView();
@@ -246,11 +246,11 @@
    </duplication>
    <duplication lines="21" tokens="163">
       <file line="112"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="147"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="290"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[        result.setTotalHits(results.getJsonObject("hits").getInt("total"));
         for (final JsonValue hitValue : hits) {
             final IndexView iv = new IndexView();
@@ -275,9 +275,9 @@
    </duplication>
    <duplication lines="22" tokens="147">
       <file line="211"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <file line="262"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
       <codefragment><![CDATA[    public SearchResult search(final String sourceIndex,
         final String queryString,
         final int limit,
@@ -303,9 +303,9 @@
    </duplication>
    <duplication lines="56" tokens="144">
       <file line="162"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
       <file line="137"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
       <codefragment><![CDATA[    }
 
     public void setContent(final byte[] content) {
@@ -365,9 +365,9 @@
    </duplication>
    <duplication lines="28" tokens="122">
       <file line="43"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxOobTombstone.java"/>
       <file line="28"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxTombstone.java"/>
       <codefragment><![CDATA[    @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(nullable = false,
@@ -399,9 +399,9 @@
    </duplication>
    <duplication lines="49" tokens="120">
       <file line="548"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
       <file line="440"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[    }
 
     @EJB
@@ -454,9 +454,9 @@
    </duplication>
    <duplication lines="35" tokens="108">
       <file line="656"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
       <file line="488"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[    }
 
     private void validate(final SchemaType schema,
@@ -495,9 +495,9 @@
    </duplication>
    <duplication lines="11" tokens="101">
       <file line="241"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <file line="266"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/target/checkout/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[            mimeBodyPart.setHeader("Collection-Schema-Version", collectionSchemaVersion);
 
             mimeBodyPart.setHeader("Created-By", rs.getString("CREATEDBY"));
