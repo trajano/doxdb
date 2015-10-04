@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxImportBean.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DoxDB REST API</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb.ejb</a> &gt; <span class="el_source">DoxImportBean.java</span></div><h1>DoxImportBean.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb.ejb;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.nio.ByteBuffer;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.security.Principal;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.enterprise.context.Dependent;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.sql.DataSource;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+import javax.validation.ValidationException;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.DatatypeConverter;
+
+import org.bson.BsonBinaryReader;
+import org.bson.BsonDocument;
+import org.bson.codecs.BsonDocumentCodec;
+import org.bson.codecs.DecoderContext;
+import org.bson.json.JsonWriterSettings;
+
+import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.report.ProcessingReport;
+import com.github.fge.jsonschema.main.JsonSchema;
+
+import net.trajano.doxdb.Dox;
+import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxLookup;
+import net.trajano.doxdb.DoxUnique;
+import net.trajano.doxdb.IndexView;
+import net.trajano.doxdb.ext.CollectionAccessControl;
+import net.trajano.doxdb.ext.ConfigurationProvider;
+import net.trajano.doxdb.ext.EventHandler;
+import net.trajano.doxdb.ext.Indexer;
+import net.trajano.doxdb.ext.Migrator;
+import net.trajano.doxdb.internal.DoxPrincipal;
+import net.trajano.doxdb.jsonpath.JsonPath;
+import net.trajano.doxdb.schema.CollectionType;
+import net.trajano.doxdb.schema.LookupType;
+import net.trajano.doxdb.schema.SchemaType;
+
+@TransactionManagement(TransactionManagementType.BEAN)
+@Stateless
+@Dependent
+@LocalBean
+@Local(DoxImport.class)
+<span class="nc" id="L90">public class DoxImportBean {</span>
+
+    private static Path buildFromCollectionAndDoxID(final String collectionName,
+        final String doxIdString) {
+
+<span class="nc" id="L95">        return Paths.get(collectionName, doxIdString.substring(0, 2), doxIdString.substring(2, 4), doxIdString.substring(4, 6));</span>
+    }
+
+    private CollectionAccessControl collectionAccessControl;
+
+    private ConfigurationProvider configurationProvider;
+
+    @Resource(name = &quot;doxDataSource&quot;,
+        lookup = &quot;java:comp/DefaultDataSource&quot;)
+    private DataSource doxDataSource;
+
+    private DoxSearch doxSearchBean;
+
+    private EntityManager em;
+
+    private EventHandler eventHandler;
+
+    private Indexer indexer;
+
+    private Migrator migrator;
+
+    @Resource
+    private UserTransaction txn;
+
+    public JsonObject exportDox(final String exportPath,
+        final String schema,
+        final Date fromLastUpdatedOn) {
+
+<span class="nc" id="L123">        final Path basePath = Paths.get(exportPath);</span>
+<span class="nc" id="L124">        final JsonObjectBuilder stats = Json.createObjectBuilder();</span>
+<span class="nc" id="L125">        final long start = System.currentTimeMillis();</span>
+        try {
+<span class="nc" id="L127">            Files.createDirectories(basePath);</span>
+
+<span class="nc bnc" id="L129" title="All 6 branches missed.">            if (!Files.isDirectory(basePath) ||</span>
+                !Files.isExecutable(basePath) ||
+                !Files.isWritable(basePath)) {
+<span class="nc" id="L132">                throw new PersistenceException(&quot;Unable to access export path&quot;);</span>
+            }
+
+<span class="nc bnc" id="L135" title="All 4 branches missed.">            if (fromLastUpdatedOn == null &amp;&amp; Files.newDirectoryStream(basePath).iterator().hasNext()) {</span>
+<span class="nc" id="L136">                throw new PersistenceException(&quot;Export path must be empty when starting date is not specified&quot;);</span>
+            }
+<span class="nc" id="L138">            txn.begin();</span>
+
+            final String dbSchema;
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            if (schema == null) {</span>
+<span class="nc" id="L142">                dbSchema = &quot;&quot;;</span>
+            } else {
+<span class="nc" id="L144">                dbSchema = schema + &quot;.&quot;;</span>
+            }
+<span class="nc" id="L146">            try (final Connection connection = doxDataSource.getConnection()) {</span>
+
+<span class="nc" id="L148">                int c = 0;</span>
+<span class="nc" id="L149">                Timestamp mostRecentUpdateOn = null;</span>
+<span class="nc" id="L150">                try (final PreparedStatement stmt = connection.prepareStatement(&quot;select collectionName, collectionSchemaVersion, doxid, content, createdOn, createdBy, lastupdatedOn, lastUpdatedBy, id from &quot; + dbSchema + &quot;dox where ? or lastUpdatedOn &gt;= ?&quot;)) {</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                    if (fromLastUpdatedOn == null) {</span>
+<span class="nc" id="L152">                        stmt.setBoolean(1, true);</span>
+<span class="nc" id="L153">                        stmt.setTimestamp(2, new Timestamp(0));</span>
+                    } else {
+<span class="nc" id="L155">                        stmt.setBoolean(1, false);</span>
+<span class="nc" id="L156">                        stmt.setTimestamp(2, new Timestamp(fromLastUpdatedOn.getTime()));</span>
+                    }
+
+<span class="nc" id="L159">                    try (final ResultSet rs = stmt.executeQuery()) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">                        while (rs.next()) {</span>
+<span class="nc" id="L161">                            final String collectionName = rs.getString(&quot;COLLECTIONNAME&quot;);</span>
+<span class="nc" id="L162">                            final String doxIdString = rs.getString(&quot;DOXID&quot;);</span>
+<span class="nc" id="L163">                            final Timestamp lastUpdatedOn = rs.getTimestamp(&quot;LASTUPDATEDON&quot;);</span>
+<span class="nc bnc" id="L164" title="All 4 branches missed.">                            if (mostRecentUpdateOn == null || lastUpdatedOn.after(mostRecentUpdateOn)) {</span>
+<span class="nc" id="L165">                                mostRecentUpdateOn = lastUpdatedOn;</span>
+                            }
+
+<span class="nc" id="L168">                            final MimeMultipart mimeMultipart = new MimeMultipart();</span>
+<span class="nc" id="L169">                            mimeMultipart.setSubType(&quot;mixed&quot;);</span>
+
+<span class="nc" id="L171">                            exportMainContentToMultipart(mimeMultipart, rs);</span>
+<span class="nc" id="L172">                            try (final PreparedStatement oobStmt = connection.prepareStatement(&quot;select oobName, content, createdOn, createdBy, lastupdatedOn, lastUpdatedBy from &quot; + dbSchema + &quot;doxoob where parentid = ?&quot;)) {</span>
+<span class="nc" id="L173">                                oobStmt.setLong(1, rs.getLong(&quot;ID&quot;));</span>
+<span class="nc" id="L174">                                try (final ResultSet oobRs = oobStmt.executeQuery()) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                                    while (oobRs.next()) {</span>
+<span class="nc" id="L176">                                        exportOobContentToMultipart(mimeMultipart, oobRs);</span>
+                                    }
+<span class="nc bnc" id="L178" title="All 8 branches missed.">                                }</span>
+<span class="nc bnc" id="L179" title="All 8 branches missed.">                            }</span>
+
+<span class="nc" id="L181">                            final Path outputPath = basePath.resolve(buildFromCollectionAndDoxID(collectionName, doxIdString));</span>
+<span class="nc" id="L182">                            Files.createDirectories(outputPath);</span>
+<span class="nc" id="L183">                            try (final OutputStream os = Files.newOutputStream(outputPath.resolve(doxIdString + &quot;.dox&quot;))) {</span>
+<span class="nc" id="L184">                                mimeMultipart.writeTo(os);</span>
+<span class="nc bnc" id="L185" title="All 8 branches missed.">                            }</span>
+<span class="nc" id="L186">                            ++c;</span>
+<span class="nc" id="L187">                        }</span>
+<span class="nc bnc" id="L188" title="All 8 branches missed.">                    }</span>
+
+<span class="nc bnc" id="L190" title="All 8 branches missed.">                }</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">                if (mostRecentUpdateOn != null) {</span>
+<span class="nc" id="L192">                    final Calendar mostRecentUpdateOnCal = Calendar.getInstance();</span>
+<span class="nc" id="L193">                    mostRecentUpdateOnCal.setTimeInMillis(mostRecentUpdateOn.getTime());</span>
+<span class="nc" id="L194">                    stats.add(&quot;most_recent_update_on&quot;, DatatypeConverter.printDateTime(mostRecentUpdateOnCal));</span>
+                }
+<span class="nc" id="L196">                stats.add(&quot;number_of_exported_documents&quot;, c);</span>
+<span class="nc" id="L197">                txn.commit();</span>
+<span class="nc bnc" id="L198" title="All 8 branches missed.">            } catch (SecurityException</span>
+                | IllegalStateException
+                | RollbackException
+                | IOException
+                | SQLException
+                | MessagingException
+                | HeuristicMixedException
+                | HeuristicRollbackException e) {
+<span class="nc" id="L206">                txn.rollback();</span>
+<span class="nc" id="L207">                throw new PersistenceException(e);</span>
+<span class="nc" id="L208">            }</span>
+<span class="nc" id="L209">        } catch (final SystemException</span>
+            | IOException
+            | NotSupportedException e) {
+<span class="nc" id="L212">            throw new PersistenceException(e);</span>
+<span class="nc" id="L213">        }</span>
+<span class="nc" id="L214">        stats.add(&quot;elapsed_time_millis&quot;, System.currentTimeMillis() - start);</span>
+<span class="nc" id="L215">        return stats.build();</span>
+
+    }
+
+    /**
+     * @param mimeMultipart
+     * @param rs
+     * @throws SQLException
+     * @throws MessagingException
+     */
+    private void exportMainContentToMultipart(final MimeMultipart mimeMultipart,
+        final ResultSet rs) throws SQLException,
+            MessagingException {
+
+        {
+<span class="nc" id="L230">            final String collectionName = rs.getString(&quot;COLLECTIONNAME&quot;);</span>
+<span class="nc" id="L231">            final String collectionSchemaVersion = String.valueOf(rs.getInt(&quot;COLLECTIONSCHEMAVERSION&quot;));</span>
+<span class="nc" id="L232">            final String doxIdString = rs.getString(&quot;DOXID&quot;);</span>
+
+<span class="nc" id="L234">            final BsonDocument decoded = new BsonDocumentCodec().decode(new BsonBinaryReader(ByteBuffer.wrap(rs.getBytes(&quot;CONTENT&quot;))), DecoderContext.builder()</span>
+                .build());
+<span class="nc" id="L236">            final MimeBodyPart mimeBodyPart = new MimeBodyPart();</span>
+<span class="nc" id="L237">            final String json = decoded.toJson(new JsonWriterSettings(true));</span>
+<span class="nc" id="L238">            mimeBodyPart.setText(json, &quot;UTF-8&quot;, &quot;json&quot;);</span>
+
+<span class="nc" id="L240">            mimeBodyPart.setHeader(&quot;Collection-Name&quot;, collectionName);</span>
+<span class="nc" id="L241">            mimeBodyPart.setHeader(&quot;Collection-Schema-Version&quot;, collectionSchemaVersion);</span>
+
+<span class="nc" id="L243">            mimeBodyPart.setHeader(&quot;Created-By&quot;, rs.getString(&quot;CREATEDBY&quot;));</span>
+<span class="nc" id="L244">            final Calendar createdOn = Calendar.getInstance();</span>
+<span class="nc" id="L245">            createdOn.setTimeInMillis(rs.getTimestamp(&quot;CREATEDON&quot;).getTime());</span>
+<span class="nc" id="L246">            mimeBodyPart.setHeader(&quot;Created-On&quot;, DatatypeConverter.printDateTime(createdOn));</span>
+
+<span class="nc" id="L248">            final Calendar lastUpdatedOn = Calendar.getInstance();</span>
+<span class="nc" id="L249">            lastUpdatedOn.setTimeInMillis(rs.getTimestamp(&quot;LASTUPDATEDON&quot;).getTime());</span>
+<span class="nc" id="L250">            mimeBodyPart.setHeader(&quot;Last-Updated-On&quot;, DatatypeConverter.printDateTime(lastUpdatedOn));</span>
+<span class="nc" id="L251">            mimeBodyPart.setHeader(&quot;Last-Updated-By&quot;, rs.getString(&quot;LASTUPDATEDBY&quot;));</span>
+
+<span class="nc" id="L253">            mimeBodyPart.setHeader(&quot;Content-Length&quot;,</span>
+                String.valueOf(json.length()));
+<span class="nc" id="L255">            mimeBodyPart.setFileName(doxIdString);</span>
+<span class="nc" id="L256">            mimeMultipart.addBodyPart(mimeBodyPart);</span>
+        }
+<span class="nc" id="L258">    }</span>
+
+    private void exportOobContentToMultipart(final MimeMultipart mimeMultipart,
+        final ResultSet rs) throws MessagingException,
+            SQLException {
+
+<span class="nc" id="L264">        final Blob contentBlob = rs.getBlob(&quot;CONTENT&quot;);</span>
+<span class="nc" id="L265">        final MimeBodyPart mimeBodyPart = new MimeBodyPart(contentBlob.getBinaryStream());</span>
+<span class="nc" id="L266">        mimeBodyPart.setFileName(rs.getString(&quot;OOBNAME&quot;));</span>
+
+<span class="nc" id="L268">        mimeBodyPart.setHeader(&quot;Created-By&quot;, rs.getString(&quot;CREATEDBY&quot;));</span>
+<span class="nc" id="L269">        final Calendar createdOn = Calendar.getInstance();</span>
+<span class="nc" id="L270">        createdOn.setTimeInMillis(rs.getTimestamp(&quot;CREATEDON&quot;).getTime());</span>
+<span class="nc" id="L271">        mimeBodyPart.setHeader(&quot;Created-On&quot;, DatatypeConverter.printDateTime(createdOn));</span>
+
+<span class="nc" id="L273">        final Calendar lastUpdatedOn = Calendar.getInstance();</span>
+<span class="nc" id="L274">        lastUpdatedOn.setTimeInMillis(rs.getTimestamp(&quot;LASTUPDATEDON&quot;).getTime());</span>
+<span class="nc" id="L275">        mimeBodyPart.setHeader(&quot;Last-Updated-On&quot;, DatatypeConverter.printDateTime(lastUpdatedOn));</span>
+<span class="nc" id="L276">        mimeBodyPart.setHeader(&quot;Last-Updated-By&quot;, rs.getString(&quot;LASTUPDATEDBY&quot;));</span>
+<span class="nc" id="L277">        mimeMultipart.addBodyPart(mimeBodyPart);</span>
+
+<span class="nc" id="L279">        contentBlob.free();</span>
+
+<span class="nc" id="L281">    }</span>
+
+    public JsonObject importDox(final String importPath) {
+
+<span class="nc" id="L285">        final JsonObjectBuilder stats = Json.createObjectBuilder();</span>
+<span class="nc" id="L286">        final long start = System.currentTimeMillis();</span>
+        try {
+<span class="nc" id="L288">            txn.begin();</span>
+
+<span class="nc" id="L290">            final long numberOfRecords = em.createNamedQuery(Dox.COUNT, Long.class).getSingleResult();</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">            if (numberOfRecords &gt; 0) {</span>
+<span class="nc" id="L292">                txn.rollback();</span>
+<span class="nc" id="L293">                throw new PersistenceException(&quot;cannot import when Dox is not empty&quot;);</span>
+            }
+
+<span class="nc" id="L296">            final Path basePath = Paths.get(importPath);</span>
+<span class="nc bnc" id="L297" title="All 6 branches missed.">            if (!Files.isDirectory(basePath) ||</span>
+                !Files.isExecutable(basePath) ||
+                !Files.isReadable(basePath)) {
+<span class="nc" id="L300">                txn.rollback();</span>
+<span class="nc" id="L301">                throw new PersistenceException(&quot;Unable to access import path&quot;);</span>
+            }
+
+            // collect the list of files first because Files.walk is not guaranteed to return in order.
+<span class="nc" id="L305">            final SortedSet&lt;Path&gt; files = new TreeSet&lt;&gt;();</span>
+
+<span class="nc" id="L307">            Files.walkFileTree(basePath, new SimpleFileVisitor&lt;Path&gt;() {</span>
+
+                @Override
+                public FileVisitResult visitFile(final Path file,
+                    final BasicFileAttributes attrs) throws IOException {
+
+<span class="nc" id="L313">                    files.add(file);</span>
+<span class="nc" id="L314">                    return FileVisitResult.CONTINUE;</span>
+                }
+
+            });
+
+<span class="nc" id="L319">            final JsonArrayBuilder failures = Json.createArrayBuilder();</span>
+<span class="nc" id="L320">            int c = 0;</span>
+<span class="nc bnc" id="L321" title="All 2 branches missed.">            for (final Path file : files) {</span>
+                try {
+<span class="nc" id="L323">                    processFile(file);</span>
+<span class="nc" id="L324">                } catch (IOException</span>
+                    | MessagingException
+                    | NullPointerException
+                    | PersistenceException e) {
+<span class="nc" id="L328">                    txn.rollback();</span>
+<span class="nc" id="L329">                    final JsonObjectBuilder failure = Json.createObjectBuilder();</span>
+<span class="nc" id="L330">                    failure.add(&quot;file&quot;, file.toString());</span>
+<span class="nc" id="L331">                    failure.add(&quot;reason&quot;, e.getMessage());</span>
+<span class="nc" id="L332">                    final StringWriter sw = new StringWriter();</span>
+<span class="nc" id="L333">                    e.printStackTrace(new PrintWriter(sw));</span>
+<span class="nc" id="L334">                    failure.add(&quot;stacktrace&quot;, sw.toString());</span>
+<span class="nc" id="L335">                    failures.add(failure);</span>
+<span class="nc" id="L336">                    txn.begin();</span>
+<span class="nc" id="L337">                }</span>
+<span class="nc" id="L338">                ++c;</span>
+<span class="nc bnc" id="L339" title="All 4 branches missed.">                if (c != 0 &amp;&amp; c % 10 == 0) {</span>
+<span class="nc" id="L340">                    txn.commit();</span>
+<span class="nc" id="L341">                    txn.begin();</span>
+                }
+<span class="nc" id="L343">            }</span>
+<span class="nc" id="L344">            stats.add(&quot;number_of_imported_documents&quot;, c);</span>
+<span class="nc" id="L345">            stats.add(&quot;failures&quot;, failures);</span>
+<span class="nc" id="L346">            txn.commit();</span>
+<span class="nc" id="L347">        } catch (final IOException</span>
+            | SystemException
+            | NotSupportedException
+            | SecurityException
+            | IllegalStateException
+            | RollbackException
+            | HeuristicMixedException
+            | HeuristicRollbackException e) {
+<span class="nc" id="L355">            throw new PersistenceException(e);</span>
+<span class="nc" id="L356">        }</span>
+<span class="nc" id="L357">        stats.add(&quot;elapsed_time_millis&quot;, System.currentTimeMillis() - start);</span>
+<span class="nc" id="L358">        return stats.build();</span>
+    }
+
+    private void processFile(final Path file) throws IOException,
+        MessagingException {
+
+<span class="nc" id="L364">        try (InputStream is = Files.newInputStream(file)) {</span>
+
+<span class="nc" id="L366">            final MimeMultipart mmp = new MimeMultipart(new ByteArrayDataSource(is, MediaType.MULTIPART_FORM_DATA));</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">            if (mmp.getCount() == 0) {</span>
+<span class="nc" id="L368">                throw new PersistenceException(&quot;No data was found for import&quot;);</span>
+            }
+<span class="nc" id="L370">            final BodyPart mainBody = mmp.getBodyPart(0);</span>
+
+<span class="nc" id="L372">            final DoxID doxId = new DoxID(mainBody.getFileName());</span>
+
+<span class="nc" id="L374">            final String collectionName = mainBody.getHeader(&quot;Collection-Name&quot;)[0];</span>
+<span class="nc" id="L375">            final int collectionSchemaVersion = Integer.valueOf(mainBody.getHeader(&quot;Collection-Schema-Version&quot;)[0]);</span>
+
+<span class="nc" id="L377">            final Principal createdBy = new DoxPrincipal(mainBody.getHeader(&quot;Created-By&quot;)[0]);</span>
+<span class="nc" id="L378">            final Principal lastUpdatedBy = new DoxPrincipal(mainBody.getHeader(&quot;Last-Updated-By&quot;)[0]);</span>
+
+<span class="nc" id="L380">            final Date createdOn = new Date(DatatypeConverter.parseDateTime(mainBody.getHeader(&quot;Created-On&quot;)[0])</span>
+                .getTimeInMillis());
+<span class="nc" id="L382">            final Date lastUpdatedOn = new Date(DatatypeConverter.parseDateTime(mainBody.getHeader(&quot;Last-Updated-On&quot;)[0])</span>
+                .getTimeInMillis());
+
+<span class="nc" id="L385">            final CollectionType config = configurationProvider.getDox(collectionName);</span>
+<span class="nc" id="L386">            final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);</span>
+
+<span class="nc" id="L388">            final JsonObject content = Json.createReader(mainBody.getInputStream()).readObject();</span>
+<span class="nc" id="L389">            validate(schema, content);</span>
+
+<span class="nc" id="L391">            final String inputJson = content.toString();</span>
+<span class="nc" id="L392">            final byte[] accessKey = collectionAccessControl.buildAccessKey(collectionName, inputJson, lastUpdatedBy.getName());</span>
+
+<span class="nc" id="L394">            final Dox entity = new Dox();</span>
+<span class="nc" id="L395">            entity.setDoxId(doxId);</span>
+<span class="nc" id="L396">            entity.setContent(content);</span>
+<span class="nc" id="L397">            entity.setCreatedBy(createdBy);</span>
+<span class="nc" id="L398">            entity.setCreatedOn(createdOn);</span>
+<span class="nc" id="L399">            entity.setLastUpdatedBy(lastUpdatedBy);</span>
+<span class="nc" id="L400">            entity.setLastUpdatedOn(lastUpdatedOn);</span>
+<span class="nc" id="L401">            entity.setCollectionName(collectionName);</span>
+<span class="nc" id="L402">            entity.setCollectionSchemaVersion(collectionSchemaVersion);</span>
+<span class="nc" id="L403">            entity.setAccessKey(accessKey);</span>
+<span class="nc" id="L404">            entity.setVersion(1);</span>
+<span class="nc" id="L405">            System.out.println(entity);</span>
+
+<span class="nc" id="L407">            em.persist(entity);</span>
+
+<span class="nc bnc" id="L409" title="All 2 branches missed.">            for (final LookupType unique : schema.getUnique()) {</span>
+<span class="nc" id="L410">                final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);</span>
+<span class="nc" id="L411">                final DoxUnique doxUnique = new DoxUnique();</span>
+<span class="nc" id="L412">                doxUnique.setCollectionName(config.getName());</span>
+<span class="nc" id="L413">                doxUnique.setDox(entity);</span>
+<span class="nc" id="L414">                doxUnique.setLookupName(unique.getName());</span>
+<span class="nc" id="L415">                doxUnique.setLookupKey(lookupKey);</span>
+<span class="nc" id="L416">                em.persist(doxUnique);</span>
+<span class="nc" id="L417">            }</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">            for (final LookupType unique : schema.getLookup()) {</span>
+<span class="nc" id="L419">                final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);</span>
+<span class="nc" id="L420">                final DoxLookup doxLookup = new DoxLookup();</span>
+<span class="nc" id="L421">                doxLookup.setCollectionName(config.getName());</span>
+<span class="nc" id="L422">                doxLookup.setDox(entity);</span>
+<span class="nc" id="L423">                doxLookup.setLookupName(unique.getName());</span>
+<span class="nc" id="L424">                doxLookup.setLookupKey(lookupKey);</span>
+<span class="nc" id="L425">                em.persist(doxLookup);</span>
+<span class="nc" id="L426">            }</span>
+
+<span class="nc" id="L428">            eventHandler.onRecordCreate(config.getName(), doxId, inputJson);</span>
+
+<span class="nc" id="L430">            final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);</span>
+<span class="nc bnc" id="L431" title="All 2 branches missed.">            for (final IndexView indexView : indexViews) {</span>
+<span class="nc" id="L432">                indexView.setCollection(config.getName());</span>
+<span class="nc" id="L433">                indexView.setDoxID(doxId);</span>
+            }
+<span class="nc bnc" id="L435" title="All 2 branches missed.">            if (indexViews.length &gt; 0) {</span>
+<span class="nc" id="L436">                doxSearchBean.addToIndex(indexViews);</span>
+            }
+<span class="nc bnc" id="L438" title="All 8 branches missed.">        }</span>
+
+<span class="nc" id="L440">    }</span>
+
+    @EJB
+    public void setCollectionAccessControl(final CollectionAccessControl collectionAccessControl) {
+
+<span class="nc" id="L445">        this.collectionAccessControl = collectionAccessControl;</span>
+<span class="nc" id="L446">    }</span>
+
+    @EJB
+    public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
+
+<span class="nc" id="L451">        this.configurationProvider = configurationProvider;</span>
+<span class="nc" id="L452">    }</span>
+
+    @EJB
+    public void setDoxSearchBean(final DoxSearch doxSearchBean) {
+
+<span class="nc" id="L457">        this.doxSearchBean = doxSearchBean;</span>
+<span class="nc" id="L458">    }</span>
+
+    /**
+     * Injects the {@link EntityManager}.
+     *
+     * @param em
+     *            entity manager
+     */
+    @PersistenceContext
+    public void setEntityManager(final EntityManager em) {
+
+<span class="nc" id="L469">        this.em = em;</span>
+<span class="nc" id="L470">    }</span>
+
+    @EJB
+    public void setEventHandler(final EventHandler eventHandler) {
+
+<span class="nc" id="L475">        this.eventHandler = eventHandler;</span>
+<span class="nc" id="L476">    }</span>
+
+    @EJB
+    public void setIndexer(final Indexer indexer) {
+
+<span class="nc" id="L481">        this.indexer = indexer;</span>
+<span class="nc" id="L482">    }</span>
+
+    @EJB
+    public void setMigrator(final Migrator migrator) {
+
+<span class="nc" id="L487">        this.migrator = migrator;</span>
+<span class="nc" id="L488">    }</span>
+
+    private void validate(final SchemaType schema,
+        final JsonObject content) {
+
+<span class="nc" id="L493">        validate(schema, content.toString());</span>
+
+<span class="nc" id="L495">    }</span>
+
+    /**
+     * Performs JSON validation using a schema
+     *
+     * @param schema
+     *            schema
+     * @param json
+     *            json to validate.
+     */
+    private void validate(final SchemaType schema,
+        final String json) {
+
+        try {
+
+<span class="nc" id="L510">            final JsonSchema jsonSchema = configurationProvider.getContentSchema(schema.getLocation());</span>
+
+<span class="nc" id="L512">            final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));</span>
+<span class="nc bnc" id="L513" title="All 2 branches missed.">            if (!validate.isSuccess()) {</span>
+<span class="nc" id="L514">                throw new ValidationException(validate.toString());</span>
+            }
+<span class="nc" id="L516">        } catch (ProcessingException</span>
+            | IOException e) {
+<span class="nc" id="L518">            throw new PersistenceException(e);</span>
+<span class="nc" id="L519">        }</span>
+<span class="nc" id="L520">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

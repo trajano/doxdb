@@ -16,8 +16,10 @@ public final class DoxID implements
     Serializable {
 
     /**
-     * Set of allowed characters in the ID. Letters or numbers only. This
-     * provides higher than 128-bits but less than 256-bits of randommess.
+     * Set of allowed characters in the ID. Lower case letters or numbers only.
+     * This provides higher than 128-bits but less than 256-bits of randommess.
+     * Lower case letters are used to ensure exports using DOXID as a file name
+     * will work on case insensitive file systems.
      */
     private static final char[] ALLOWED;
 
@@ -38,12 +40,12 @@ public final class DoxID implements
     private static final long serialVersionUID = -1726922680838907757L;
 
     static {
-<span class="fc" id="L41">        ALLOWED = &quot;0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;.toCharArray();</span>
-<span class="fc" id="L42">        ALLOWED_MAP = new boolean[256];</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        for (final char allowedChar : ALLOWED) {</span>
-<span class="fc" id="L44">            ALLOWED_MAP[allowedChar] = true;</span>
+<span class="fc" id="L43">        ALLOWED = &quot;0123456789abcdefghijklmnopqrstuvwxyz&quot;.toCharArray();</span>
+<span class="fc" id="L44">        ALLOWED_MAP = new boolean[256];</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (final char allowedChar : ALLOWED) {</span>
+<span class="fc" id="L46">            ALLOWED_MAP[allowedChar] = true;</span>
         }
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L48">    }</span>
 
     /**
      * Generate a new instance with a randomized ID value.
@@ -52,69 +54,69 @@ public final class DoxID implements
      */
     public static DoxID generate() {
 
-<span class="fc" id="L55">        return new DoxID();</span>
+<span class="fc" id="L57">        return new DoxID();</span>
 
     }
 
-<span class="fc" id="L59">    private final char[] b = new char[LENGTH];</span>
+<span class="fc" id="L61">    private final char[] b = new char[LENGTH];</span>
 
     /**
      * Calculated hashcode value.
      */
     private final int hash;
 
-<span class="fc" id="L66">    private DoxID() {</span>
+<span class="fc" id="L68">    private DoxID() {</span>
 
-<span class="fc" id="L68">        final ThreadLocalRandom random = ThreadLocalRandom.current();</span>
-<span class="fc" id="L69">        int currentHash = LENGTH;</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (int i = 0; i &lt; LENGTH; ++i) {</span>
-<span class="fc" id="L71">            final int rand = random.nextInt(0, ALLOWED.length);</span>
-<span class="fc" id="L72">            b[i] = ALLOWED[rand];</span>
-<span class="fc" id="L73">            currentHash += b[i];</span>
+<span class="fc" id="L70">        final ThreadLocalRandom random = ThreadLocalRandom.current();</span>
+<span class="fc" id="L71">        int currentHash = LENGTH;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for (int i = 0; i &lt; LENGTH; ++i) {</span>
+<span class="fc" id="L73">            final int rand = random.nextInt(0, ALLOWED.length);</span>
+<span class="fc" id="L74">            b[i] = ALLOWED[rand];</span>
+<span class="fc" id="L75">            currentHash += b[i];</span>
         }
-<span class="fc" id="L75">        hash = currentHash;</span>
+<span class="fc" id="L77">        hash = currentHash;</span>
 
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L79">    }</span>
 
-<span class="fc" id="L79">    public DoxID(final String s) {</span>
+<span class="fc" id="L81">    public DoxID(final String s) {</span>
 
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (s.length() != LENGTH) {</span>
-<span class="fc" id="L82">            throw new IllegalArgumentException(&quot;input needs to be &quot; + LENGTH + &quot; in length.&quot;);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (s.length() != LENGTH) {</span>
+<span class="fc" id="L84">            throw new IllegalArgumentException(&quot;input needs to be &quot; + LENGTH + &quot; in length.&quot;);</span>
         }
-<span class="fc" id="L84">        int currentHash = LENGTH;</span>
-<span class="fc" id="L85">        final char[] chars = s.toCharArray();</span>
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        for (int i = 0; i &lt; LENGTH; ++i) {</span>
-<span class="fc bfc" id="L87" title="All 2 branches covered.">            if (ALLOWED_MAP[chars[i]]) {</span>
-<span class="fc" id="L88">                b[i] = chars[i];</span>
-<span class="fc" id="L89">                currentHash += chars[i];</span>
+<span class="fc" id="L86">        int currentHash = LENGTH;</span>
+<span class="fc" id="L87">        final char[] chars = s.toCharArray();</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        for (int i = 0; i &lt; LENGTH; ++i) {</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">            if (ALLOWED_MAP[chars[i]]) {</span>
+<span class="fc" id="L90">                b[i] = chars[i];</span>
+<span class="fc" id="L91">                currentHash += chars[i];</span>
             } else {
-<span class="fc" id="L91">                throw new IllegalArgumentException(&quot;Invalid character for DoxID&quot;);</span>
+<span class="fc" id="L93">                throw new IllegalArgumentException(&quot;Invalid character for DoxID&quot;);</span>
             }
 
         }
-<span class="fc" id="L95">        hash = currentHash;</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L97">        hash = currentHash;</span>
+<span class="fc" id="L98">    }</span>
 
     @Override
     public boolean equals(final Object obj) {
 
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (this == obj) {</span>
-<span class="fc" id="L102">            return true;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (this == obj) {</span>
+<span class="fc" id="L104">            return true;</span>
         }
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (obj == null) {</span>
-<span class="fc" id="L105">            return false;</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (obj == null) {</span>
+<span class="fc" id="L107">            return false;</span>
         }
-<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (!(obj instanceof DoxID)) {</span>
-<span class="fc" id="L108">            return false;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (!(obj instanceof DoxID)) {</span>
+<span class="fc" id="L110">            return false;</span>
         }
-<span class="fc" id="L110">        final DoxID other = (DoxID) obj;</span>
-<span class="fc" id="L111">        return Arrays.equals(b, other.b);</span>
+<span class="fc" id="L112">        final DoxID other = (DoxID) obj;</span>
+<span class="fc" id="L113">        return Arrays.equals(b, other.b);</span>
     }
 
     @Override
     public int hashCode() {
 
-<span class="fc" id="L117">        return hash;</span>
+<span class="fc" id="L119">        return hash;</span>
     }
 
     /**
@@ -124,7 +126,7 @@ public final class DoxID implements
     @Override
     public String toString() {
 
-<span class="fc" id="L127">        return new String(b);</span>
+<span class="fc" id="L129">        return new String(b);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

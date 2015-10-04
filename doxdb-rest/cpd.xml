@@ -185,6 +185,34 @@
     @Override
     public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
    </duplication>
+   <duplication lines="22" tokens="165">
+      <file line="189"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
+      <file line="405"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+      <codefragment><![CDATA[        entity.setVersion(1);
+
+        em.persist(entity);
+
+        for (final LookupType unique : schema.getUnique()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            final DoxUnique doxUnique = new DoxUnique();
+            doxUnique.setCollectionName(config.getName());
+            doxUnique.setDox(entity);
+            doxUnique.setLookupName(unique.getName());
+            doxUnique.setLookupKey(lookupKey);
+            em.persist(doxUnique);
+        }
+        for (final LookupType unique : schema.getLookup()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            final DoxLookup doxLookup = new DoxLookup();
+            doxLookup.setCollectionName(config.getName());
+            doxLookup.setDox(entity);
+            doxLookup.setLookupName(unique.getName());
+            doxLookup.setLookupKey(lookupKey);
+            em.persist(doxLookup);
+        }]]></codefragment>
+   </duplication>
    <duplication lines="25" tokens="165">
       <file line="147"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
@@ -368,5 +396,118 @@
     private Date deletedOn;
 
     @Column(nullable = false,]]></codefragment>
+   </duplication>
+   <duplication lines="49" tokens="120">
+      <file line="548"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
+      <file line="440"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+      <codefragment><![CDATA[    }
+
+    @EJB
+    public void setCollectionAccessControl(final CollectionAccessControl collectionAccessControl) {
+
+        this.collectionAccessControl = collectionAccessControl;
+    }
+
+    @EJB
+    public void setConfigurationProvider(final ConfigurationProvider configurationProvider) {
+
+        this.configurationProvider = configurationProvider;
+    }
+
+    @EJB
+    public void setDoxSearchBean(final DoxSearch doxSearchBean) {
+
+        this.doxSearchBean = doxSearchBean;
+    }
+
+    /**
+     * Injects the {@link EntityManager}.
+     *
+     * @param em
+     *            entity manager
+     */
+    @PersistenceContext
+    public void setEntityManager(final EntityManager em) {
+
+        this.em = em;
+    }
+
+    @EJB
+    public void setEventHandler(final EventHandler eventHandler) {
+
+        this.eventHandler = eventHandler;
+    }
+
+    @EJB
+    public void setIndexer(final Indexer indexer) {
+
+        this.indexer = indexer;
+    }
+
+    @EJB
+    public void setMigrator(final Migrator migrator) {
+
+        this.migrator = migrator;
+    }]]></codefragment>
+   </duplication>
+   <duplication lines="35" tokens="108">
+      <file line="656"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
+      <file line="488"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+      <codefragment><![CDATA[    }
+
+    private void validate(final SchemaType schema,
+        final JsonObject content) {
+
+        validate(schema, content.toString());
+
+    }
+
+    /**
+     * Performs JSON validation using a schema
+     *
+     * @param schema
+     *            schema
+     * @param json
+     *            json to validate.
+     */
+    private void validate(final SchemaType schema,
+        final String json) {
+
+        try {
+
+            final JsonSchema jsonSchema = configurationProvider.getContentSchema(schema.getLocation());
+
+            final ProcessingReport validate = jsonSchema.validate(JsonLoader.fromString(json));
+            if (!validate.isSuccess()) {
+                throw new ValidationException(validate.toString());
+            }
+        } catch (ProcessingException
+            | IOException e) {
+            throw new PersistenceException(e);
+        }
+    }
+
+}]]></codefragment>
+   </duplication>
+   <duplication lines="11" tokens="101">
+      <file line="241"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+      <file line="266"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+      <codefragment><![CDATA[            mimeBodyPart.setHeader("Collection-Schema-Version", collectionSchemaVersion);
+
+            mimeBodyPart.setHeader("Created-By", rs.getString("CREATEDBY"));
+            final Calendar createdOn = Calendar.getInstance();
+            createdOn.setTimeInMillis(rs.getTimestamp("CREATEDON").getTime());
+            mimeBodyPart.setHeader("Created-On", DatatypeConverter.printDateTime(createdOn));
+
+            final Calendar lastUpdatedOn = Calendar.getInstance();
+            lastUpdatedOn.setTimeInMillis(rs.getTimestamp("LASTUPDATEDON").getTime());
+            mimeBodyPart.setHeader("Last-Updated-On", DatatypeConverter.printDateTime(lastUpdatedOn));
+            mimeBodyPart.setHeader("Last-Updated-By", rs.getString("LASTUPDATEDBY"));]]></codefragment>
    </duplication>
 </pmd-cpd>

@@ -6,4 +6,5 @@ net.trajano.doxdb.internal
 net.trajano.doxdb.rest
 net.trajano.doxdb.rest.internal
 net.trajano.doxdb.schema
+net.trajano.doxdb.servlet
 net.trajano.doxdb.ws

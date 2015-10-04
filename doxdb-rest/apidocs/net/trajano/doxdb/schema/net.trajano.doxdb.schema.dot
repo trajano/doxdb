@@ -10,44 +10,44 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.schema.DoxPersistence
-	c305 [label=<<table title="net.trajano.doxdb.schema.DoxPersistence" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxPersistence.html">
+	c371 [label=<<table title="net.trajano.doxdb.schema.DoxPersistence" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxPersistence.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxPersistence </td></tr>
 		</table></td></tr>
 		</table>>, URL="./DoxPersistence.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.schema.SchemaType
-	c306 [label=<<table title="net.trajano.doxdb.schema.SchemaType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SchemaType.html">
+	c372 [label=<<table title="net.trajano.doxdb.schema.SchemaType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SchemaType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SchemaType </td></tr>
 		</table></td></tr>
 		</table>>, URL="./SchemaType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.schema.ReadAllType
-	c307 [label=<<table title="net.trajano.doxdb.schema.ReadAllType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReadAllType.html">
+	c373 [label=<<table title="net.trajano.doxdb.schema.ReadAllType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReadAllType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ReadAllType </td></tr>
 		</table></td></tr>
 		</table>>, URL="./ReadAllType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.schema.IndexType
-	c308 [label=<<table title="net.trajano.doxdb.schema.IndexType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexType.html">
+	c374 [label=<<table title="net.trajano.doxdb.schema.IndexType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndexType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IndexType </td></tr>
 		</table></td></tr>
 		</table>>, URL="./IndexType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.schema.CollectionType
-	c309 [label=<<table title="net.trajano.doxdb.schema.CollectionType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CollectionType.html">
+	c375 [label=<<table title="net.trajano.doxdb.schema.CollectionType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CollectionType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> CollectionType </td></tr>
 		</table></td></tr>
 		</table>>, URL="./CollectionType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.schema.LookupType
-	c310 [label=<<table title="net.trajano.doxdb.schema.LookupType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LookupType.html">
+	c376 [label=<<table title="net.trajano.doxdb.schema.LookupType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LookupType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> LookupType </td></tr>
 		</table></td></tr>
 		</table>>, URL="./LookupType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// net.trajano.doxdb.schema.ObjectFactory
-	c311 [label=<<table title="net.trajano.doxdb.schema.ObjectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ObjectFactory.html">
+	c377 [label=<<table title="net.trajano.doxdb.schema.ObjectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ObjectFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ObjectFactory </td></tr>
 		</table></td></tr>

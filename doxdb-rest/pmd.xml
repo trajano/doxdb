@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pmd version="5.0.5" timestamp="2015-09-28T20:20:45.391">
+<pmd version="5.0.5" timestamp="2015-10-04T01:17:54.332">
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/Dox.java">
-<violation beginline="135" endline="135" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+<violation beginline="144" endline="144" begincolumn="32" endcolumn="35" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb" class="Dox" variable="oobs" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'oobs'.
 </violation>
-<violation beginline="168" endline="168" begincolumn="9" endcolumn="25" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="Dox" method="getAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
+<violation beginline="177" endline="177" begincolumn="9" endcolumn="25" rule="MethodReturnsInternalArray" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="Dox" method="getAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#MethodReturnsInternalArray" priority="3">
 Returning 'accessKey' may expose an internal array.
 </violation>
-<violation beginline="241" endline="241" begincolumn="30" endcolumn="51" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="Dox" method="setAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
+<violation beginline="250" endline="250" begincolumn="30" endcolumn="51" rule="ArrayIsStoredDirectly" ruleset="Security Code Guidelines" package="net.trajano.doxdb" class="Dox" method="setAccessKey" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/sunsecure.html#ArrayIsStoredDirectly" priority="3">
 The user-supplied array 'accessKey' is stored directly.
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/DoxID.java">
-<violation beginline="70" endline="74" begincolumn="9" endcolumn="9" rule="AvoidArrayLoops" ruleset="Optimization" package="net.trajano.doxdb" class="DoxID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#AvoidArrayLoops" priority="3">
+<violation beginline="72" endline="76" begincolumn="9" endcolumn="9" rule="AvoidArrayLoops" ruleset="Optimization" package="net.trajano.doxdb" class="DoxID" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#AvoidArrayLoops" priority="3">
 System.arraycopy is more efficient
 </violation>
 </file>
@@ -80,6 +80,23 @@ This call to String.startsWith can be rewritten using String.charAt(0)
 </violation>
 <violation beginline="237" endline="237" begincolumn="9" endcolumn="34" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxBean" method="delete" variable="ts" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
 Avoid declaring a variable if it is unreferenced before a possible exit point.
+</violation>
+<violation beginline="297" endline="297" begincolumn="9" endcolumn="91" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxBean" method="read" variable="schema" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
+Avoid declaring a variable if it is unreferenced before a possible exit point.
+</violation>
+</file>
+<file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java">
+<violation beginline="114" endline="114" begincolumn="22" endcolumn="29" rule="UnusedPrivateField" ruleset="Unused Code" package="net.trajano.doxdb.ejb" class="DoxImportBean" variable="migrator" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'migrator'.
+</violation>
+<violation beginline="125" endline="125" begincolumn="9" endcolumn="53" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxImportBean" method="exportDox" variable="start" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
+Avoid declaring a variable if it is unreferenced before a possible exit point.
+</violation>
+<violation beginline="286" endline="286" begincolumn="9" endcolumn="53" rule="PrematureDeclaration" ruleset="Optimization" package="net.trajano.doxdb.ejb" class="DoxImportBean" method="importDox" variable="start" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/optimizations.html#PrematureDeclaration" priority="3">
+Avoid declaring a variable if it is unreferenced before a possible exit point.
+</violation>
+<violation beginline="405" endline="405" begincolumn="13" endcolumn="30" rule="SystemPrintln" ruleset="Java Logging" package="net.trajano.doxdb.ejb" class="DoxImportBean" method="processFile" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.5/rules/java/logging-java.html#SystemPrintln" priority="2">
+System.out.print is used
 </violation>
 </file>
 <file name="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java">
