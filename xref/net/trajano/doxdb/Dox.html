@@ -57,11 +57,11 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  }) )
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  @NamedQueries({
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      @NamedQuery(name = Dox.READ_META_BY_SCHEMA_NAME_DOX_ID,
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          query = <span class="jxr_string">"select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId"</span>,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          query = <span class="jxr_string">"select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId"</span>,
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>          lockMode = LockModeType.OPTIMISTIC),
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      @NamedQuery(name = Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION,
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          query = <span class="jxr_string">"select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version"</span>,
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          query = <span class="jxr_string">"select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version"</span>,
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>          lockMode = LockModeType.OPTIMISTIC_FORCE_INCREMENT),
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      @NamedQuery(name = Dox.READ_ALL_BY_SCHEMA_NAME,
