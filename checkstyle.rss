@@ -26,8 +26,8 @@ under the License.
     <copyright>&#169;2015 Trajano</copyright>
     <item>
       <title>File: 91,
-             Errors: 3,
-             Warnings: 2410,
+             Errors: 4,
+             Warnings: 2385,
              Infos: 0
       </title>
             <link>http://site.trajano.net/doxdb//checkstyle.html</link>
@@ -430,7 +430,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  227
+                  213
                 </td>
                 <td>
                   1
@@ -517,7 +517,7 @@ under the License.
                   4
                 </td>
                 <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
@@ -752,7 +752,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  18
+                  20
                 </td>
                 <td>
                   0
@@ -850,7 +850,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  12
+                  11
                 </td>
                 <td>
                   0
@@ -1032,7 +1032,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  135
+                  124
                 </td>
                 <td>
                   0
@@ -1158,7 +1158,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  5
+                  4
                 </td>
                 <td>
                   0
