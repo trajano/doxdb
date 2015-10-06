@@ -70,6 +70,7 @@ import com.github.fge.jsonschema.main.JsonSchema;
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxLookup;
+import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.DoxUnique;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.ext.CollectionAccessControl;
@@ -112,6 +113,9 @@ public class DoxImportBean {
 
     private Indexer indexer;
 
+    /**
+     * Data migrator.
+     */
     private Migrator migrator;
 
     @Resource
@@ -403,7 +407,6 @@ public class DoxImportBean {
             entity.setCollectionSchemaVersion(collectionSchemaVersion);
             entity.setAccessKey(accessKey);
             entity.setVersion(1);
-            System.out.println(entity);
 
             em.persist(entity);
 
@@ -426,7 +429,15 @@ public class DoxImportBean {
                 em.persist(doxLookup);
             }
 
-            eventHandler.onRecordCreate(config.getName(), doxId, inputJson, Collections.<String, String> emptyMap());
+            final DoxMeta meta = new DoxMeta();
+            meta.setCollectionName(collectionName);
+            meta.setAccessKey(accessKey);
+            meta.setLastUpdatedBy(lastUpdatedBy);
+            meta.setLastUpdatedOn(lastUpdatedOn);
+            meta.setVersion(1);
+            meta.setDoxId(doxId);
+
+            eventHandler.onRecordCreate(meta, inputJson, Collections.<String, String> emptyMap());
 
             final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
             for (final IndexView indexView : indexViews) {

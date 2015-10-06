@@ -4,6 +4,8 @@ import java.util.Collections;
 
 import org.junit.Test;
 
+import net.trajano.doxdb.DoxMeta;
+import net.trajano.doxdb.internal.DoxPrincipal;
 import net.trajano.doxdb.sample.ejb.MyConfigurationProvider;
 import net.trajano.doxdb.sample.ejb.MyEventHandler;
 
@@ -24,10 +26,10 @@ public class MyClassTest {
     public void testMyEventHandler() {
 
         final MyEventHandler eventHandler = new MyEventHandler();
-        eventHandler.onRecordCreate("col", null, "", Collections.<String, String> emptyMap());
-        eventHandler.onRecordDelete("col", null, "", Collections.<String, String> emptyMap());
-        eventHandler.onRecordRead("col", null, "");
-        eventHandler.onRecordUpdate("col", null, "", Collections.<String, String> emptyMap());
+        eventHandler.onRecordCreate(new DoxMeta(), "", Collections.<String, String> emptyMap());
+        eventHandler.onRecordDelete(new DoxMeta(), "", Collections.<String, String> emptyMap());
+        eventHandler.onRecordRead(new DoxPrincipal("test"), "col", null, "");
+        eventHandler.onRecordUpdate(new DoxMeta(), "", Collections.<String, String> emptyMap());
     }
 
 }

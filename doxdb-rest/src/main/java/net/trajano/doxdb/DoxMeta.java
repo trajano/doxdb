@@ -27,6 +27,11 @@ public class DoxMeta implements
 
     private byte[] accessKey;
 
+    /**
+     * Collection name.
+     */
+    private String collectionName;
+
     private int collectionSchemaVersion;
 
     /**
@@ -57,6 +62,7 @@ public class DoxMeta implements
     public DoxMeta(final long id,
         final String doxid,
         final int version,
+        final String collectionName,
         final int collectionSchemaVersion,
         final byte[] accessKey,
         final String createdBy,
@@ -66,6 +72,7 @@ public class DoxMeta implements
         this.id = id;
         doxId = new DoxID(doxid);
         this.version = version;
+        this.collectionName = collectionName;
         this.collectionSchemaVersion = collectionSchemaVersion;
         this.accessKey = accessKey;
         this.createdBy = new DoxPrincipal(createdBy);
@@ -77,6 +84,11 @@ public class DoxMeta implements
     public byte[] getAccessKey() {
 
         return accessKey;
+    }
+
+    public String getCollectionName() {
+
+        return collectionName;
     }
 
     public int getCollectionSchemaVersion() {
@@ -121,6 +133,11 @@ public class DoxMeta implements
         return doxId;
     }
 
+    /**
+     * Primary key.
+     *
+     * @return
+     */
     public long getId() {
 
         return id;
@@ -156,6 +173,11 @@ public class DoxMeta implements
     public void setAccessKey(final byte[] accessKey) {
 
         this.accessKey = accessKey;
+    }
+
+    public void setCollectionName(final String collectionName) {
+
+        this.collectionName = collectionName;
     }
 
     public void setCollectionSchemaVersion(final int collectionSchemaVersion) {

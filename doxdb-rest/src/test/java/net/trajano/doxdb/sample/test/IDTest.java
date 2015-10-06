@@ -53,6 +53,12 @@ public class IDTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testInvalidCharacter2() throws Exception {
+
+        new DoxID("0123456789012345678901234567890A");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalidLength() throws Exception {
 
         new DoxID("01234567890123");

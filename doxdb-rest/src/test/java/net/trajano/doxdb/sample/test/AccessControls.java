@@ -1,11 +1,13 @@
 package net.trajano.doxdb.sample.test;
 
+import java.security.Principal;
 import java.util.Map;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.IndexView;
 import net.trajano.doxdb.ext.CollectionAccessControl;
 import net.trajano.doxdb.ext.EventHandler;
@@ -57,26 +59,25 @@ public class AccessControls implements
     }
 
     @Override
-    public void onRecordCreate(final String collection,
-        final DoxID doxid,
+    public void onRecordCreate(final DoxMeta meta,
         final String json,
         final Map<String, String> extra) {
 
-        System.out.println("created " + collection + " " + doxid + " " + json);
+        System.out.println("created " + meta.getCollectionName() + " " + meta.getDoxId() + " " + json);
     }
 
     @Override
-    public void onRecordDelete(final String collection,
-        final DoxID doxid,
+    public void onRecordDelete(final DoxMeta meta,
         final String json,
         final Map<String, String> extra) {
 
-        System.out.println("deleted " + collection + " " + doxid + " " + json);
+        System.out.println("deleted " + meta.getCollectionName() + " " + meta.getDoxId() + " " + json);
 
     }
 
     @Override
-    public void onRecordRead(final String collection,
+    public void onRecordRead(final Principal principal,
+        final String collection,
         final DoxID doxid,
         final String json) {
 
@@ -85,12 +86,11 @@ public class AccessControls implements
     }
 
     @Override
-    public void onRecordUpdate(final String collection,
-        final DoxID doxid,
+    public void onRecordUpdate(final DoxMeta meta,
         final String json,
         final Map<String, String> extra) {
 
-        System.out.println("updated " + collection + " " + doxid + " " + json);
+        System.out.println("updated " + meta.getCollectionName() + " " + meta.getDoxId() + " " + json);
 
     }
 }

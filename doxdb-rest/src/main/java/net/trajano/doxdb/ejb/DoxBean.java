@@ -240,14 +240,16 @@ public class DoxBean implements
             doxSearchBean.addToIndex(indexViews);
         }
         final DoxMeta meta = new DoxMeta();
+        meta.setCollectionName(collectionName);
         meta.setAccessKey(accessKey);
+        meta.setLastUpdatedBy(ctx.getCallerPrincipal());
         meta.setLastUpdatedOn(ts);
         meta.setVersion(1);
         meta.setDoxId(doxId);
 
         meta.setContentJson(content, doxId, 1);
 
-        eventHandler.onRecordCreate(config.getName(), doxId, inputJson, extra);
+        eventHandler.onRecordCreate(meta, content.toString(), extra);
         return meta;
     }
 
@@ -285,7 +287,7 @@ public class DoxBean implements
         }
 
         doxSearchBean.removeFromIndex(config.getName(), doxid);
-        eventHandler.onRecordDelete(config.getName(), doxid, contentJson, extra);
+        eventHandler.onRecordDelete(meta, contentJson, extra);
         return true;
 
     }
@@ -332,6 +334,7 @@ public class DoxBean implements
         if (meta.getCollectionSchemaVersion() != schema.getVersion()) {
             final Dox e = em.find(Dox.class, meta.getId(), LockModeType.OPTIMISTIC_FORCE_INCREMENT);
             final String contentJson = migrator.migrate(collectionName, e.getCollectionSchemaVersion(), schema.getVersion(), e.getJsonContent());
+            meta.setCollectionName(collectionName);
             meta.setCollectionSchemaVersion(schema.getVersion());
             e.setCollectionSchemaVersion(schema.getVersion());
             e.setContent(contentJson);
@@ -345,7 +348,7 @@ public class DoxBean implements
             final JsonObject content = e.getJsonObject();
             meta.setContentJson(content, meta.getDoxId(), meta.getVersion());
         }
-        eventHandler.onRecordRead(collectionName, doxid, meta.getContentJson());
+        eventHandler.onRecordRead(ctx.getCallerPrincipal(), collectionName, doxid, meta.getContentJson());
         return meta;
 
     }
@@ -464,7 +467,7 @@ public class DoxBean implements
                 // queue migrate later?
             } else {
                 b.add(decorateWithIdVersion(result.getJsonObject(), result.getDoxId(), result.getVersion()));
-                eventHandler.onRecordRead(collectionName, result.getDoxId(), result.getJsonContent());
+                eventHandler.onRecordRead(ctx.getCallerPrincipal(), collectionName, result.getDoxId(), result.getJsonContent());
             }
 
         }
@@ -674,8 +677,8 @@ public class DoxBean implements
         }
         doxSearchBean.addToIndex(indexViews);
 
-        eventHandler.onRecordUpdate(config.getName(), doxId, e.getJsonContent(), extra);
         meta.setContentJson(content, doxId, e.getVersion());
+        eventHandler.onRecordUpdate(meta, e.getJsonContent(), extra);
         return meta;
 
     }

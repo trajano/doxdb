@@ -6,6 +6,11 @@ import org.junit.Test;
 
 import net.trajano.doxdb.internal.DoxPrincipal;
 
+/**
+ * Tests {@link DoxPrincipal}.
+ *
+ * @author Archimedes Trajano
+ */
 public class PrincipalTest {
 
     @Test

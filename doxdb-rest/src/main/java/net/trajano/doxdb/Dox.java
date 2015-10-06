@@ -49,11 +49,11 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 }) )
 @NamedQueries({
     @NamedQuery(name = Dox.READ_META_BY_SCHEMA_NAME_DOX_ID,
-        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId",
+        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId",
         lockMode = LockModeType.OPTIMISTIC),
 
     @NamedQuery(name = Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION,
-        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version",
+        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version",
         lockMode = LockModeType.OPTIMISTIC_FORCE_INCREMENT),
 
     @NamedQuery(name = Dox.READ_ALL_BY_SCHEMA_NAME,
