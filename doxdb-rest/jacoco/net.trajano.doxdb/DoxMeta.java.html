@@ -27,6 +27,11 @@ public class DoxMeta implements
 
     private byte[] accessKey;
 
+    /**
+     * Collection name.
+     */
+    private String collectionName;
+
     private int collectionSchemaVersion;
 
     /**
@@ -50,38 +55,45 @@ public class DoxMeta implements
 
     private int version;
 
-<span class="fc" id="L53">    public DoxMeta() {</span>
+<span class="fc" id="L58">    public DoxMeta() {</span>
 
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L60">    }</span>
 
     public DoxMeta(final long id,
         final String doxid,
         final int version,
+        final String collectionName,
         final int collectionSchemaVersion,
         final byte[] accessKey,
         final String createdBy,
         final Date createdOn,
         final String lastUpdatedBy,
-<span class="fc" id="L65">        final Date lastUpdatedOn) {</span>
-<span class="fc" id="L66">        this.id = id;</span>
-<span class="fc" id="L67">        doxId = new DoxID(doxid);</span>
-<span class="fc" id="L68">        this.version = version;</span>
-<span class="fc" id="L69">        this.collectionSchemaVersion = collectionSchemaVersion;</span>
-<span class="fc" id="L70">        this.accessKey = accessKey;</span>
-<span class="fc" id="L71">        this.createdBy = new DoxPrincipal(createdBy);</span>
-<span class="fc" id="L72">        this.createdOn = createdOn;</span>
-<span class="fc" id="L73">        this.lastUpdatedBy = new DoxPrincipal(lastUpdatedBy);</span>
-<span class="fc" id="L74">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L71">        final Date lastUpdatedOn) {</span>
+<span class="fc" id="L72">        this.id = id;</span>
+<span class="fc" id="L73">        doxId = new DoxID(doxid);</span>
+<span class="fc" id="L74">        this.version = version;</span>
+<span class="fc" id="L75">        this.collectionName = collectionName;</span>
+<span class="fc" id="L76">        this.collectionSchemaVersion = collectionSchemaVersion;</span>
+<span class="fc" id="L77">        this.accessKey = accessKey;</span>
+<span class="fc" id="L78">        this.createdBy = new DoxPrincipal(createdBy);</span>
+<span class="fc" id="L79">        this.createdOn = createdOn;</span>
+<span class="fc" id="L80">        this.lastUpdatedBy = new DoxPrincipal(lastUpdatedBy);</span>
+<span class="fc" id="L81">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="fc" id="L82">    }</span>
 
     public byte[] getAccessKey() {
 
-<span class="fc" id="L79">        return accessKey;</span>
+<span class="fc" id="L86">        return accessKey;</span>
+    }
+
+    public String getCollectionName() {
+
+<span class="nc" id="L91">        return collectionName;</span>
     }
 
     public int getCollectionSchemaVersion() {
 
-<span class="fc" id="L84">        return collectionSchemaVersion;</span>
+<span class="fc" id="L96">        return collectionSchemaVersion;</span>
     }
 
     /**
@@ -91,77 +103,87 @@ public class DoxMeta implements
      */
     public JsonObject getContent() {
 
-<span class="fc" id="L94">        return Json.createReader(new StringReader(contentJson)).readObject();</span>
+<span class="fc" id="L106">        return Json.createReader(new StringReader(contentJson)).readObject();</span>
     }
 
     public String getContentJson() {
 
-<span class="fc" id="L99">        return contentJson;</span>
+<span class="fc" id="L111">        return contentJson;</span>
     }
 
     public Principal getCreatedBy() {
 
-<span class="nc" id="L104">        return createdBy;</span>
+<span class="nc" id="L116">        return createdBy;</span>
     }
 
     public Date getCreatedOn() {
 
-<span class="nc" id="L109">        return createdOn;</span>
+<span class="nc" id="L121">        return createdOn;</span>
     }
 
     public String getCreatedOnString() {
 
-<span class="nc" id="L114">        final Calendar cal = Calendar.getInstance();</span>
-<span class="nc" id="L115">        cal.setTime(createdOn);</span>
-<span class="nc" id="L116">        return DatatypeConverter.printDateTime(cal);</span>
+<span class="nc" id="L126">        final Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L127">        cal.setTime(createdOn);</span>
+<span class="nc" id="L128">        return DatatypeConverter.printDateTime(cal);</span>
     }
 
     public DoxID getDoxId() {
 
-<span class="fc" id="L121">        return doxId;</span>
+<span class="fc" id="L133">        return doxId;</span>
     }
 
+    /**
+     * Primary key.
+     *
+     * @return
+     */
     public long getId() {
 
-<span class="fc" id="L126">        return id;</span>
+<span class="fc" id="L143">        return id;</span>
     }
 
     public Principal getLastUpdatedBy() {
 
-<span class="nc" id="L131">        return lastUpdatedBy;</span>
+<span class="nc" id="L148">        return lastUpdatedBy;</span>
     }
 
     public Date getLastUpdatedOn() {
 
-<span class="nc" id="L136">        return lastUpdatedOn;</span>
+<span class="nc" id="L153">        return lastUpdatedOn;</span>
     }
 
     public String getLastUpdatedOnString() {
 
-<span class="nc" id="L141">        final Calendar cal = Calendar.getInstance();</span>
-<span class="nc" id="L142">        cal.setTime(lastUpdatedOn);</span>
-<span class="nc" id="L143">        return DatatypeConverter.printDateTime(cal);</span>
+<span class="nc" id="L158">        final Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L159">        cal.setTime(lastUpdatedOn);</span>
+<span class="nc" id="L160">        return DatatypeConverter.printDateTime(cal);</span>
     }
 
     public int getVersion() {
 
-<span class="fc" id="L148">        return version;</span>
+<span class="fc" id="L165">        return version;</span>
     }
 
     public void incrementVersion() {
 
-<span class="fc" id="L153">        ++version;</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L170">        ++version;</span>
+<span class="fc" id="L171">    }</span>
 
     public void setAccessKey(final byte[] accessKey) {
 
-<span class="fc" id="L158">        this.accessKey = accessKey;</span>
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L175">        this.accessKey = accessKey;</span>
+<span class="fc" id="L176">    }</span>
+
+    public void setCollectionName(final String collectionName) {
+
+<span class="fc" id="L180">        this.collectionName = collectionName;</span>
+<span class="fc" id="L181">    }</span>
 
     public void setCollectionSchemaVersion(final int collectionSchemaVersion) {
 
-<span class="nc" id="L163">        this.collectionSchemaVersion = collectionSchemaVersion;</span>
-<span class="nc" id="L164">    }</span>
+<span class="nc" id="L185">        this.collectionSchemaVersion = collectionSchemaVersion;</span>
+<span class="nc" id="L186">    }</span>
 
     /**
      * Sets the content JSON with the DoxID and optimistic locking version data
@@ -178,55 +200,55 @@ public class DoxMeta implements
         final DoxID doxId,
         final int version) {
 
-<span class="fc" id="L181">        final JsonObjectBuilder b = Json.createObjectBuilder();</span>
-<span class="fc" id="L182">        b.add(&quot;_id&quot;, doxId.toString());</span>
-<span class="fc" id="L183">        b.add(&quot;_version&quot;, version);</span>
-<span class="fc bfc" id="L184" title="All 2 branches covered.">        for (final String key : content.keySet()) {</span>
-<span class="pc bpc" id="L185" title="1 of 2 branches missed.">            if (!key.startsWith(&quot;_&quot;)) {</span>
-<span class="fc" id="L186">                b.add(key, content.get(key));</span>
+<span class="fc" id="L203">        final JsonObjectBuilder b = Json.createObjectBuilder();</span>
+<span class="fc" id="L204">        b.add(&quot;_id&quot;, doxId.toString());</span>
+<span class="fc" id="L205">        b.add(&quot;_version&quot;, version);</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        for (final String key : content.keySet()) {</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            if (!key.startsWith(&quot;_&quot;)) {</span>
+<span class="fc" id="L208">                b.add(key, content.get(key));</span>
             }
-<span class="fc" id="L188">        }</span>
-<span class="fc" id="L189">        contentJson = b.build().toString();</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L210">        }</span>
+<span class="fc" id="L211">        contentJson = b.build().toString();</span>
+<span class="fc" id="L212">    }</span>
 
     public void setContentJson(final String contentJson) {
 
-<span class="nc" id="L194">        this.contentJson = contentJson;</span>
-<span class="nc" id="L195">    }</span>
+<span class="nc" id="L216">        this.contentJson = contentJson;</span>
+<span class="nc" id="L217">    }</span>
 
     public void setCreatedBy(final Principal createdBy) {
 
-<span class="nc" id="L199">        this.createdBy = createdBy;</span>
-<span class="nc" id="L200">    }</span>
+<span class="nc" id="L221">        this.createdBy = createdBy;</span>
+<span class="nc" id="L222">    }</span>
 
     public void setCreatedOn(final Date createdOn) {
 
-<span class="nc" id="L204">        this.createdOn = createdOn;</span>
-<span class="nc" id="L205">    }</span>
+<span class="nc" id="L226">        this.createdOn = createdOn;</span>
+<span class="nc" id="L227">    }</span>
 
     public void setDoxId(final DoxID doxId) {
 
-<span class="fc" id="L209">        this.doxId = doxId;</span>
-<span class="fc" id="L210">    }</span>
+<span class="fc" id="L231">        this.doxId = doxId;</span>
+<span class="fc" id="L232">    }</span>
 
     public void setId(final long id) {
 
-<span class="nc" id="L214">        this.id = id;</span>
-<span class="nc" id="L215">    }</span>
+<span class="nc" id="L236">        this.id = id;</span>
+<span class="nc" id="L237">    }</span>
 
     public void setLastUpdatedBy(final Principal lastUpdatedBy) {
 
-<span class="nc" id="L219">        this.lastUpdatedBy = lastUpdatedBy;</span>
-<span class="nc" id="L220">    }</span>
+<span class="fc" id="L241">        this.lastUpdatedBy = lastUpdatedBy;</span>
+<span class="fc" id="L242">    }</span>
 
     public void setLastUpdatedOn(final Date lastUpdatedOn) {
 
-<span class="fc" id="L224">        this.lastUpdatedOn = lastUpdatedOn;</span>
-<span class="fc" id="L225">    }</span>
+<span class="fc" id="L246">        this.lastUpdatedOn = lastUpdatedOn;</span>
+<span class="fc" id="L247">    }</span>
 
     public void setVersion(final int version) {
 
-<span class="fc" id="L229">        this.version = version;</span>
-<span class="fc" id="L230">    }</span>
+<span class="fc" id="L251">        this.version = version;</span>
+<span class="fc" id="L252">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

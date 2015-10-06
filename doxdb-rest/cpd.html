@@ -249,6 +249,44 @@
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
+<td>net/trajano/doxdb/ejb/DoxBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L209">209</a></td></tr>
+<tr class="a">
+<td>net/trajano/doxdb/ejb/DoxImportBean.java</td>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L407">407</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>        entity.setCollectionSchemaVersion(schema.getVersion());
+        entity.setAccessKey(accessKey);
+        entity.setVersion(1);
+
+        em.persist(entity);
+
+        for (final LookupType unique : schema.getUnique()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            final DoxUnique doxUnique = new DoxUnique();
+            doxUnique.setCollectionName(config.getName());
+            doxUnique.setDox(entity);
+            doxUnique.setLookupName(unique.getName());
+            doxUnique.setLookupKey(lookupKey);
+            em.persist(doxUnique);
+        }
+        for (final LookupType unique : schema.getLookup()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            final DoxLookup doxLookup = new DoxLookup();
+            doxLookup.setCollectionName(config.getName());
+            doxLookup.setDox(entity);
+            doxLookup.setLookupName(unique.getName());
+            doxLookup.setLookupKey(lookupKey);
+            em.persist(doxLookup);
+        }
+
+        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
 <td>net/trajano/doxdb/ejb/EsJaxRsSearchBean.java</td>
 <td><a href="./xref/net/trajano/doxdb/ejb/EsJaxRsSearchBean.html#L112">112</a></td></tr>
 <tr class="a">
@@ -278,40 +316,6 @@
 
     @Override
     public SearchResult advancedSearch(final String sourceIndex,</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
-<td>net/trajano/doxdb/ejb/DoxBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L211">211</a></td></tr>
-<tr class="a">
-<td>net/trajano/doxdb/ejb/DoxImportBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L406">406</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>        entity.setVersion(1);
-
-        em.persist(entity);
-
-        for (final LookupType unique : schema.getUnique()) {
-            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
-            final DoxUnique doxUnique = new DoxUnique();
-            doxUnique.setCollectionName(config.getName());
-            doxUnique.setDox(entity);
-            doxUnique.setLookupName(unique.getName());
-            doxUnique.setLookupKey(lookupKey);
-            em.persist(doxUnique);
-        }
-        for (final LookupType unique : schema.getLookup()) {
-            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
-            final DoxLookup doxLookup = new DoxLookup();
-            doxLookup.setCollectionName(config.getName());
-            doxLookup.setDox(entity);
-            doxLookup.setLookupName(unique.getName());
-            doxLookup.setLookupKey(lookupKey);
-            em.persist(doxLookup);
-        }</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -533,10 +537,10 @@
 <th>Line</th></tr>
 <tr class="a">
 <td>net/trajano/doxdb/ejb/DoxBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L572">572</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L575">575</a></td></tr>
 <tr class="b">
 <td>net/trajano/doxdb/ejb/DoxImportBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L441">441</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L452">452</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>    }
@@ -594,10 +598,10 @@
 <th>Line</th></tr>
 <tr class="a">
 <td>net/trajano/doxdb/ejb/DoxBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L681">681</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxBean.html#L684">684</a></td></tr>
 <tr class="b">
 <td>net/trajano/doxdb/ejb/DoxImportBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L489">489</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L500">500</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>    }
@@ -641,10 +645,10 @@
 <th>Line</th></tr>
 <tr class="a">
 <td>net/trajano/doxdb/ejb/DoxImportBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L242">242</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L246">246</a></td></tr>
 <tr class="b">
 <td>net/trajano/doxdb/ejb/DoxImportBean.java</td>
-<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L267">267</a></td></tr>
+<td><a href="./xref/net/trajano/doxdb/ejb/DoxImportBean.html#L271">271</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>            mimeBodyPart.setHeader(&quot;Collection-Schema-Version&quot;, collectionSchemaVersion);

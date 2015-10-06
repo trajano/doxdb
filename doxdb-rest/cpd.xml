@@ -157,6 +157,38 @@
     @Override
     public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
    </duplication>
+   <duplication lines="26" tokens="178">
+      <file line="209"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
+      <file line="407"
+            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
+      <codefragment><![CDATA[        entity.setCollectionSchemaVersion(schema.getVersion());
+        entity.setAccessKey(accessKey);
+        entity.setVersion(1);
+
+        em.persist(entity);
+
+        for (final LookupType unique : schema.getUnique()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            final DoxUnique doxUnique = new DoxUnique();
+            doxUnique.setCollectionName(config.getName());
+            doxUnique.setDox(entity);
+            doxUnique.setLookupName(unique.getName());
+            doxUnique.setLookupKey(lookupKey);
+            em.persist(doxUnique);
+        }
+        for (final LookupType unique : schema.getLookup()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            final DoxLookup doxLookup = new DoxLookup();
+            doxLookup.setCollectionName(config.getName());
+            doxLookup.setDox(entity);
+            doxLookup.setLookupName(unique.getName());
+            doxLookup.setLookupKey(lookupKey);
+            em.persist(doxLookup);
+        }
+
+        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);]]></codefragment>
+   </duplication>
    <duplication lines="22" tokens="166">
       <file line="112"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/EsJaxRsSearchBean.java"/>
@@ -184,34 +216,6 @@
 
     @Override
     public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
-   </duplication>
-   <duplication lines="22" tokens="165">
-      <file line="211"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
-      <file line="406"
-            path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
-      <codefragment><![CDATA[        entity.setVersion(1);
-
-        em.persist(entity);
-
-        for (final LookupType unique : schema.getUnique()) {
-            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
-            final DoxUnique doxUnique = new DoxUnique();
-            doxUnique.setCollectionName(config.getName());
-            doxUnique.setDox(entity);
-            doxUnique.setLookupName(unique.getName());
-            doxUnique.setLookupKey(lookupKey);
-            em.persist(doxUnique);
-        }
-        for (final LookupType unique : schema.getLookup()) {
-            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
-            final DoxLookup doxLookup = new DoxLookup();
-            doxLookup.setCollectionName(config.getName());
-            doxLookup.setDox(entity);
-            doxLookup.setLookupName(unique.getName());
-            doxLookup.setLookupKey(lookupKey);
-            em.persist(doxLookup);
-        }]]></codefragment>
    </duplication>
    <duplication lines="25" tokens="165">
       <file line="147"
@@ -398,9 +402,9 @@
     @Column(nullable = false,]]></codefragment>
    </duplication>
    <duplication lines="49" tokens="120">
-      <file line="572"
+      <file line="575"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
-      <file line="441"
+      <file line="452"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[    }
 
@@ -453,9 +457,9 @@
     }]]></codefragment>
    </duplication>
    <duplication lines="35" tokens="108">
-      <file line="681"
+      <file line="684"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
-      <file line="489"
+      <file line="500"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[    }
 
@@ -494,9 +498,9 @@
 }]]></codefragment>
    </duplication>
    <duplication lines="11" tokens="101">
-      <file line="242"
+      <file line="246"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
-      <file line="267"
+      <file line="271"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[            mimeBodyPart.setHeader("Collection-Schema-Version", collectionSchemaVersion);
 
