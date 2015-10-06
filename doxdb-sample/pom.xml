@@ -4,7 +4,7 @@
     <parent>
         <groupId>net.trajano.doxdb</groupId>
         <artifactId>doxdb</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5-SNAPSHOT</version>
     </parent>
     <artifactId>doxdb-sample</artifactId>
     <packaging>ear</packaging>
@@ -12,7 +12,7 @@
     <description>Sample EAR containing the Sample Web Application</description>
     <scm>
         <connection>scm:git:ssh://git@github.com/trajano/doxdb-sample.git</connection>
-        <tag>doxdb-1.0.4</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/trajano/doxdb/doxdb-sample</url>
     </scm>
     <dependencies>

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Date;
@@ -170,9 +171,16 @@ public class DoxResource {
     @Path("{collection}/{id}")
     public Response delete(@PathParam("collection") final String collection,
         @PathParam("id") final DoxID doxid,
-        @QueryParam("v") final int version) {
+        @QueryParam("v") final int version,
+        @QueryParam("extra") final String extraJson) {
 
-        dox.delete(collection, doxid, version);
+        JsonObject extra;
+        if (extraJson != null) {
+            extra = Json.createReader(new StringReader(extraJson)).readObject();
+        } else {
+            extra = Json.createObjectBuilder().build();
+        }
+        dox.delete(collection, doxid, version, extra);
         sessionManager.sendMessage("DELETE", doxid, collection, new Date());
         return Response.noContent().build();
     }

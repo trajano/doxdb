@@ -42,11 +42,14 @@ public interface DoxLocal {
      *            Dox ID
      * @param version
      *            version
+     * @param extra
+     *            extra data
      * @return true if a record was deleted.
      */
     boolean delete(String collectionName,
         DoxID doxID,
-        int version);
+        int version,
+        JsonObject extra);
 
     DoxPersistence getConfiguration();
 

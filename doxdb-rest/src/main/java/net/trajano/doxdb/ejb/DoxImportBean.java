@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -425,7 +426,7 @@ public class DoxImportBean {
                 em.persist(doxLookup);
             }
 
-            eventHandler.onRecordCreate(config.getName(), doxId, inputJson);
+            eventHandler.onRecordCreate(config.getName(), doxId, inputJson, Collections.<String, String> emptyMap());
 
             final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
             for (final IndexView indexView : indexViews) {

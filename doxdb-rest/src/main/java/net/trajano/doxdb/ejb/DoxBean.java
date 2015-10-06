@@ -8,9 +8,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.Resource;
@@ -25,6 +27,7 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
@@ -100,6 +103,24 @@ public class DoxBean implements
     }
 
     /**
+     * Extracts the extra info. Extra info is any property that starts with
+     * {@code _} except for {@code _id} and {@code _version} that is a string.
+     *
+     * @param jsonObject
+     * @return
+     */
+    private static Map<String, String> getExtra(final JsonObject jsonObject) {
+
+        final Map<String, String> extra = new HashMap<>();
+        for (final String key : jsonObject.keySet()) {
+            if (key.startsWith("_") && !"_id".equals(key) && !"_version".equals(key) && jsonObject.getValueType() == JsonValue.ValueType.STRING) {
+                extra.put(key, jsonObject.getString(key));
+            }
+        }
+        return extra;
+    }
+
+    /**
      * This will create a new JsonObject with reserved properties removed.
      * Reserved properties start with "_" including "_id" and "_version".
      *
@@ -168,6 +189,7 @@ public class DoxBean implements
         final CollectionType config = configurationProvider.getDox(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
+        final Map<String, String> extra = getExtra(unsanitizedContent);
         final JsonObject content = sanitize(unsanitizedContent);
         validate(schema, content);
 
@@ -225,17 +247,19 @@ public class DoxBean implements
 
         meta.setContentJson(content, doxId, 1);
 
-        eventHandler.onRecordCreate(config.getName(), doxId, inputJson);
+        eventHandler.onRecordCreate(config.getName(), doxId, inputJson, extra);
         return meta;
     }
 
     @Override
     public boolean delete(final String collectionName,
         final DoxID doxid,
-        final int version) {
+        final int version,
+        final JsonObject extraJson) {
 
         final Date ts = new Date();
         final CollectionType config = configurationProvider.getDox(collectionName);
+        final Map<String, String> extra = getExtra(extraJson);
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
 
         meta.getAccessKey();
@@ -261,7 +285,7 @@ public class DoxBean implements
         }
 
         doxSearchBean.removeFromIndex(config.getName(), doxid);
-        eventHandler.onRecordDelete(config.getName(), doxid, contentJson);
+        eventHandler.onRecordDelete(config.getName(), doxid, contentJson, extra);
         return true;
 
     }
@@ -321,8 +345,7 @@ public class DoxBean implements
             final JsonObject content = e.getJsonObject();
             meta.setContentJson(content, meta.getDoxId(), meta.getVersion());
         }
-
-        eventHandler.onRecordCreate(config.getName(), doxid, meta.getContentJson());
+        eventHandler.onRecordRead(collectionName, doxid, meta.getContentJson());
         return meta;
 
     }
@@ -441,6 +464,7 @@ public class DoxBean implements
                 // queue migrate later?
             } else {
                 b.add(decorateWithIdVersion(result.getJsonObject(), result.getDoxId(), result.getVersion()));
+                eventHandler.onRecordRead(collectionName, result.getDoxId(), result.getJsonContent());
             }
 
         }
@@ -613,6 +637,7 @@ public class DoxBean implements
         final CollectionType config = configurationProvider.getDox(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
+        final Map<String, String> extra = getExtra(unsanitizedContent);
         final JsonObject content = sanitize(unsanitizedContent);
         final String inputJson = content.toString();
         validate(schema, inputJson);
@@ -649,7 +674,7 @@ public class DoxBean implements
         }
         doxSearchBean.addToIndex(indexViews);
 
-        eventHandler.onRecordUpdate(config.getName(), doxId, e.getJsonContent());
+        eventHandler.onRecordUpdate(config.getName(), doxId, e.getJsonContent(), extra);
         meta.setContentJson(content, doxId, e.getVersion());
         return meta;
 

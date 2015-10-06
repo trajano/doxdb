@@ -1,5 +1,7 @@
 package net.trajano.doxdb.sample.test;
 
+import java.util.Map;
+
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
@@ -57,7 +59,8 @@ public class AccessControls implements
     @Override
     public void onRecordCreate(final String collection,
         final DoxID doxid,
-        final String json) {
+        final String json,
+        final Map<String, String> extra) {
 
         System.out.println("created " + collection + " " + doxid + " " + json);
     }
@@ -65,7 +68,8 @@ public class AccessControls implements
     @Override
     public void onRecordDelete(final String collection,
         final DoxID doxid,
-        final String json) {
+        final String json,
+        final Map<String, String> extra) {
 
         System.out.println("deleted " + collection + " " + doxid + " " + json);
 
@@ -83,7 +87,8 @@ public class AccessControls implements
     @Override
     public void onRecordUpdate(final String collection,
         final DoxID doxid,
-        final String json) {
+        final String json,
+        final Map<String, String> extra) {
 
         System.out.println("updated " + collection + " " + doxid + " " + json);
 

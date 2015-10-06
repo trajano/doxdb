@@ -1,11 +1,13 @@
 package net.trajano.doxdb.ext;
 
+import java.util.Map;
+
 import net.trajano.doxdb.DoxID;
 
 /**
  * Default {@link EventHandler} that does not perform any operations.
  *
- * @author Archimedes
+ * @author Archimedes Trajano
  */
 public class DefaultEventHandler implements
     EventHandler {
@@ -13,14 +15,16 @@ public class DefaultEventHandler implements
     @Override
     public void onRecordCreate(final String collection,
         final DoxID doxid,
-        final String json) {
+        final String json,
+        final Map<String, String> extra) {
 
     }
 
     @Override
     public void onRecordDelete(final String collection,
         final DoxID doxid,
-        final String json) {
+        final String json,
+        final Map<String, String> extra) {
 
     }
 
@@ -34,7 +38,8 @@ public class DefaultEventHandler implements
     @Override
     public void onRecordUpdate(final String collection,
         final DoxID doxid,
-        final String json) {
+        final String json,
+        final Map<String, String> extra) {
 
     }
 
