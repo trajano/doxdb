@@ -186,9 +186,9 @@
     public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
    </duplication>
    <duplication lines="22" tokens="165">
-      <file line="189"
+      <file line="211"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
-      <file line="405"
+      <file line="406"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[        entity.setVersion(1);
 
@@ -398,9 +398,9 @@
     @Column(nullable = false,]]></codefragment>
    </duplication>
    <duplication lines="49" tokens="120">
-      <file line="548"
+      <file line="572"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
-      <file line="440"
+      <file line="441"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[    }
 
@@ -453,9 +453,9 @@
     }]]></codefragment>
    </duplication>
    <duplication lines="35" tokens="108">
-      <file line="656"
+      <file line="681"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
-      <file line="488"
+      <file line="489"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[    }
 
@@ -494,9 +494,9 @@
 }]]></codefragment>
    </duplication>
    <duplication lines="11" tokens="101">
-      <file line="241"
+      <file line="242"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
-      <file line="266"
+      <file line="267"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
       <codefragment><![CDATA[            mimeBodyPart.setHeader("Collection-Schema-Version", collectionSchemaVersion);
 
