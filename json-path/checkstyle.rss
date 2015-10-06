@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 46,
              Errors: 3,
-             Warnings: 2134,
+             Warnings: 2108,
              Infos: 0
       </title>
             <link>http://site.trajano.net/doxdb/json-path//checkstyle.html</link>
@@ -164,7 +164,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  12
+                  11
                 </td>
                 <td>
                   0
@@ -318,7 +318,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  135
+                  124
                 </td>
                 <td>
                   0
@@ -556,7 +556,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  227
+                  213
                 </td>
                 <td>
                   1
