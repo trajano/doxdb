@@ -25,7 +25,7 @@ public interface ConfigurationProvider {
      *            collection name
      * @return
      */
-    CollectionType getDox(String collectionName);
+    CollectionType getCollection(String collectionName);
 
     /**
      * Gets the mapped index name for a logical name.

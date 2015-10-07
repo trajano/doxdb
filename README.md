@@ -24,6 +24,7 @@ Completed:
    * Allow for retrieving large collections
    * [Import/Export][4]
    * Schema retrieval
+   * Explicit locking and unlocking of Dox records
    * Example with [Angular Schema Form][1]
    * AngularJS Module Generation
    * [Change database schema][2]

@@ -48,15 +48,19 @@ import net.trajano.doxdb.internal.DoxPrincipal;
         "collectionName"
 }) )
 @NamedQueries({
-    @NamedQuery(name = Dox.READ_META_BY_SCHEMA_NAME_DOX_ID,
+    @NamedQuery(name = Dox.READ_META_BY_COLLECTION_NAME_DOX_ID,
         query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId",
+        lockMode = LockModeType.OPTIMISTIC),
+
+    @NamedQuery(name = Dox.READ_BY_COLLECTION_NAME_DOX_ID,
+        query = "from Dox e where e.collectionName = :collectionName and e.doxId = :doxId",
         lockMode = LockModeType.OPTIMISTIC),
 
     @NamedQuery(name = Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION,
         query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version",
         lockMode = LockModeType.OPTIMISTIC_FORCE_INCREMENT),
 
-    @NamedQuery(name = Dox.READ_ALL_BY_SCHEMA_NAME,
+    @NamedQuery(name = Dox.READ_ALL_BY_COLLECTION_NAME,
         query = "from Dox e where e.collectionName = :collectionName",
         lockMode = LockModeType.NONE),
 
@@ -74,9 +78,14 @@ public class Dox {
     public static final String COUNT = "countDox";
 
     /**
-     * Named query {@value #READ_ALL_BY_SCHEMA_NAME};
+     * Named query {@value #READ_ALL_BY_COLLECTION_NAME};
      */
-    public static final String READ_ALL_BY_SCHEMA_NAME = "readAllBySchemaName";
+    public static final String READ_ALL_BY_COLLECTION_NAME = "readAllByCollectionName";
+
+    /**
+     * Named query {@value #READ_BY_COLLECTION_NAME_DOX_ID};
+     */
+    public static final String READ_BY_COLLECTION_NAME_DOX_ID = "readBySchemaNameDoxID";
 
     /**
      * Named query {@value #READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION};
@@ -84,9 +93,9 @@ public class Dox {
     public static final String READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION = "readForUpdateMetaBySchemaNameDoxIDVersion";
 
     /**
-     * Named query {@value #READ_META_BY_SCHEMA_NAME_DOX_ID};
+     * Named query {@value #READ_META_BY_COLLECTION_NAME_DOX_ID};
      */
-    public static final String READ_META_BY_SCHEMA_NAME_DOX_ID = "readMetaBySchemaNameDoxID";
+    public static final String READ_META_BY_COLLECTION_NAME_DOX_ID = "readMetaBySchemaNameDoxID";
 
     @Basic(fetch = FetchType.EAGER)
     @Column(nullable = true,

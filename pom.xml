@@ -227,7 +227,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <addClasspath />
+                                <addClasspath/>
                             </manifest>
                         </archive>
                         <ejbVersion>3.2</ejbVersion>

@@ -62,6 +62,21 @@ public interface DoxLocal {
      */
     InputStream getSchema(String path);
 
+    boolean isLocked(String collectionName,
+        DoxID doxId);
+
+    /**
+     * Locks a Dox.
+     *
+     * @param collectionName
+     *            collection name
+     * @param doxId
+     *            Dox ID
+     * @return lock ID as an integer
+     */
+    int lock(String collectionName,
+        DoxID doxId);
+
     /**
      * Does nothing, but calling it ensures that the EJB gets initialized.
      */
@@ -127,26 +142,64 @@ public interface DoxLocal {
         int limit,
         Integer fromDoc);
 
-    SearchResult searchWithSchemaName(String index,
-        String schemaName,
+    SearchResult searchWithCollectionName(String index,
+        String collectionName,
         String queryString,
         int limit,
         Integer fromDoc);
 
     /**
-     * Creates a dox record into the database. This will allocate a "_id" value
-     * for the record.
+     * Unlocks a record.
      *
-     * @param schemaName
-     *            schema name
-     * @param contents
-     *            dox contents as a BSON. The contents MUST be valid for the
+     * @param collectionName
+     * @param doxId
+     * @param lockId
+     */
+    void unlock(String collectionName,
+        DoxID doxId,
+        int lockId);
+
+    /**
+     * Updates a Dox record into the database. The collection must not support
+     * locking for this to work.
+     *
+     * @param collectionName
+     *            collection name
+     * @param doxId
+     *            DoxID
+     * @param content
+     *            dox contents as a JSON. The contents MUST be valid for the
      *            schema.
+     * @param version
+     *            optimistic locking version
      * @return dox meta with contents with "_id" and "_version" set.
      */
     DoxMeta update(String schemaName,
         DoxID id,
         JsonObject contents,
         int version);
+
+    /**
+     * Updates a locked Dox record into the database. The record must be locked
+     * before the update can be performed.
+     *
+     * @param collectionName
+     *            collection name
+     * @param doxId
+     *            DoxID
+     * @param content
+     *            dox contents as a JSON. The contents MUST be valid for the
+     *            schema.
+     * @param version
+     *            optimistic locking version
+     * @param lockId
+     *            lock ID
+     * @return dox meta with contents with "_id" and "_version" set.
+     */
+    DoxMeta update(String collectionName,
+        DoxID id,
+        JsonObject contents,
+        int version,
+        int lockId);
 
 }

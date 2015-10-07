@@ -387,7 +387,7 @@ public class DoxImportBean {
             final Date lastUpdatedOn = new Date(DatatypeConverter.parseDateTime(mainBody.getHeader("Last-Updated-On")[0])
                 .getTimeInMillis());
 
-            final CollectionType config = configurationProvider.getDox(collectionName);
+            final CollectionType config = configurationProvider.getCollection(collectionName);
             final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
             final JsonObject content = Json.createReader(mainBody.getInputStream()).readObject();

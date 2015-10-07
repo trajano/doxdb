@@ -7,6 +7,11 @@
 			<unique name="horseName" path="$.name"/>
 		</schema>
 	</collection>
+	<collection name="user" oob="true" lockable="true">
+		<schema version="1" location="user.json">
+			<unique name="username" path="$.email"/>
+		</schema>
+	</collection>
 	<index name="myindex" mappedName="testIndex1" />
 	<index name="maskedindex" mappedName="testIndex2" />
 </dox-persistence>

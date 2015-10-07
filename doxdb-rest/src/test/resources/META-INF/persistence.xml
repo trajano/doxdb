@@ -6,6 +6,7 @@
 	<persistence-unit name="default">
 		<class>net.trajano.doxdb.DoxMeta</class>
 		<class>net.trajano.doxdb.Dox</class>
+		<class>net.trajano.doxdb.DoxLock</class>
 		<class>net.trajano.doxdb.DoxTombstone</class>
 		<class>net.trajano.doxdb.DoxOob</class>
 		<class>net.trajano.doxdb.DoxOobTombstone</class>

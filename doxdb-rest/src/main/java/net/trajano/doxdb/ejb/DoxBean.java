@@ -45,6 +45,7 @@ import com.github.fge.jsonschema.main.JsonSchema;
 
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
+import net.trajano.doxdb.DoxLock;
 import net.trajano.doxdb.DoxLookup;
 import net.trajano.doxdb.DoxMeta;
 import net.trajano.doxdb.DoxTombstone;
@@ -186,7 +187,7 @@ public class DoxBean implements
         final JsonObject unsanitizedContent) {
 
         final Date ts = new Date();
-        final CollectionType config = configurationProvider.getDox(collectionName);
+        final CollectionType config = configurationProvider.getCollection(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         final Map<String, String> extra = getExtra(unsanitizedContent);
@@ -260,7 +261,7 @@ public class DoxBean implements
         final JsonObject extraJson) {
 
         final Date ts = new Date();
-        final CollectionType config = configurationProvider.getDox(collectionName);
+        final CollectionType config = configurationProvider.getCollection(collectionName);
         final Map<String, String> extra = getExtra(extraJson);
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
 
@@ -292,6 +293,61 @@ public class DoxBean implements
 
     }
 
+    /**
+     * Performs the update operation.
+     */
+    private DoxMeta doUpdate(final String collectionName,
+        final DoxID doxId,
+        final JsonObject unsanitizedContent,
+        final int version) {
+
+        final Timestamp ts = new Timestamp(System.currentTimeMillis());
+        final CollectionType config = configurationProvider.getCollection(collectionName);
+        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
+
+        final Map<String, String> extra = getExtra(unsanitizedContent);
+        final JsonObject content = sanitize(unsanitizedContent);
+        final String inputJson = content.toString();
+        validate(schema, inputJson);
+
+        final DoxMeta meta = readMetaAndLock(config.getName(), doxId, version);
+        meta.incrementVersion();
+
+        meta.getAccessKey();
+        // TODO check the security.
+
+        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
+
+        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());
+
+        final Dox e = em.find(Dox.class, meta.getId());
+        e.setLastUpdatedBy(ctx.getCallerPrincipal());
+        e.setLastUpdatedOn(ts);
+        e.setContent(content);
+        e.setAccessKey(accessKey);
+        em.persist(e);
+
+        for (final LookupType unique : schema.getUnique()) {
+            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
+            em.createNamedQuery(DoxUnique.UPDATE_UNIQUE_FOR_DOX).setParameter("dox", e).setParameter(DoxUnique.LOOKUP_KEY, lookupKey).executeUpdate();
+        }
+        for (final LookupType lookup : schema.getLookup()) {
+            final String lookupKey = JsonPath.compile(lookup.getPath()).read(inputJson);
+            em.createNamedQuery(DoxLookup.UPDATE_LOOKUP_FOR_DOX).setParameter("dox", e).setParameter(DoxUnique.LOOKUP_KEY, lookupKey).executeUpdate();
+        }
+
+        for (final IndexView indexView : indexViews) {
+            indexView.setCollection(config.getName());
+            indexView.setDoxID(doxId);
+        }
+        doxSearchBean.addToIndex(indexViews);
+
+        meta.setContentJson(content, doxId, e.getVersion());
+        eventHandler.onRecordUpdate(meta, e.getJsonContent(), extra);
+        return meta;
+
+    }
+
     @Override
     public DoxPersistence getConfiguration() {
 
@@ -308,6 +364,48 @@ public class DoxBean implements
     }
 
     @Override
+    public boolean isLocked(final String collectionName,
+        final DoxID doxId) {
+
+        if (!configurationProvider.getCollection(collectionName).isLockable()) {
+            throw new PersistenceException(collectionName + " is not lockable");
+        }
+
+        try {
+            em.createNamedQuery(DoxLock.READ_LOCK_BY_COLLECTION_NAME_DOX_ID)
+                .setParameter(DoxLock.COLLECTION_NAME, collectionName)
+                .setParameter(DoxLock.DOXID, doxId.toString())
+                .getSingleResult();
+            return true;
+        } catch (final NoResultException e) {
+            return false;
+        }
+
+    }
+
+    @Override
+    public int lock(final String collectionName,
+        final DoxID doxId) {
+
+        if (!configurationProvider.getCollection(collectionName).isLockable()) {
+            throw new PersistenceException(collectionName + " is not lockable");
+        }
+
+        final Date ts = new Date();
+        final DoxLock lock = new DoxLock();
+        lock.generateLockID();
+        lock.setLockedDox(em.createNamedQuery(Dox.READ_BY_COLLECTION_NAME_DOX_ID, Dox.class)
+            .setParameter(DoxLock.COLLECTION_NAME, collectionName)
+            .setParameter(DoxLock.DOXID, doxId.toString())
+            .getSingleResult());
+        lock.setLockedBy(ctx.getCallerPrincipal());
+        lock.setLockedOn(ts);
+
+        em.persist(lock);
+        return lock.getLockId();
+    }
+
+    @Override
     public void noop() {
 
     }
@@ -319,12 +417,12 @@ public class DoxBean implements
     public DoxMeta read(final String collectionName,
         final DoxID doxid) {
 
-        final CollectionType config = configurationProvider.getDox(collectionName);
+        final CollectionType config = configurationProvider.getCollection(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
         final DoxMeta meta;
         try {
-            meta = em.createNamedQuery(Dox.READ_META_BY_SCHEMA_NAME_DOX_ID, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("collectionName", config.getName()).getSingleResult();
+            meta = em.createNamedQuery(Dox.READ_META_BY_COLLECTION_NAME_DOX_ID, DoxMeta.class).setParameter("doxId", doxid.toString()).setParameter("collectionName", config.getName()).getSingleResult();
         } catch (final NoResultException e) {
             return null;
         }
@@ -359,7 +457,7 @@ public class DoxBean implements
     @Override
     public String readAll(final String collectionName) {
 
-        final CollectionType config = configurationProvider.getDox(collectionName);
+        final CollectionType config = configurationProvider.getCollection(collectionName);
         if (config.getReadAll() == ReadAllType.FILE) {
             try {
                 return readAllToFile(config.getName());
@@ -390,7 +488,7 @@ public class DoxBean implements
         try (final Writer os = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(f)), "UTF-8")) {
             os.write('[');
 
-            final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter("collectionName", collectionName).getResultList();
+            final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_COLLECTION_NAME, Dox.class).setParameter("collectionName", collectionName).getResultList();
             final Iterator<Dox> i = results.iterator();
             while (i.hasNext()) {
 
@@ -421,7 +519,7 @@ public class DoxBean implements
 
         final StringBuilder b = new StringBuilder("[");
 
-        final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter(Dox.COLLECTION_NAME, collectionName).getResultList();
+        final List<Dox> results = em.createNamedQuery(Dox.READ_ALL_BY_COLLECTION_NAME, Dox.class).setParameter(Dox.COLLECTION_NAME, collectionName).getResultList();
         for (final Dox result : results) {
 
             result.getAccessKey();
@@ -523,7 +621,7 @@ public class DoxBean implements
             final SchemaType schemaType = config.getSchema().get(config.getSchema().size() - 1);
 
             final List<IndexView> indexViews = new LinkedList<>();
-            for (final Dox e : em.createNamedQuery(Dox.READ_ALL_BY_SCHEMA_NAME, Dox.class).setParameter(Dox.COLLECTION_NAME, config.getName()).getResultList()) {
+            for (final Dox e : em.createNamedQuery(Dox.READ_ALL_BY_COLLECTION_NAME, Dox.class).setParameter(Dox.COLLECTION_NAME, config.getName()).getResultList()) {
 
                 for (final DoxUnique doxUnique : DoxUnique.fromDox(e, schemaType)) {
                     em.persist(doxUnique);
@@ -565,7 +663,7 @@ public class DoxBean implements
     }
 
     @Override
-    public SearchResult searchWithSchemaName(final String index,
+    public SearchResult searchWithCollectionName(final String index,
         final String schemaName,
         final String queryString,
         final int limit,
@@ -631,56 +729,51 @@ public class DoxBean implements
      * {@inheritDoc}
      */
     @Override
+    public void unlock(final String collectionName,
+        final DoxID doxId,
+        final int lockId) {
+
+        if (!configurationProvider.getCollection(collectionName).isLockable()) {
+            throw new PersistenceException(collectionName + " is not lockable");
+        }
+
+        em.createNamedQuery(DoxLock.REMOVE_LOCK_BY_COLLECTION_NAME_DOX_ID_LOCK_ID)
+            .setParameter(DoxLock.COLLECTION_NAME, collectionName)
+            .setParameter(DoxLock.DOXID, doxId.toString())
+            .setParameter(DoxLock.LOCKID, lockId).executeUpdate();
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public DoxMeta update(final String collectionName,
         final DoxID doxId,
-        final JsonObject unsanitizedContent,
+        final JsonObject contents,
         final int version) {
 
-        final Timestamp ts = new Timestamp(System.currentTimeMillis());
-        final CollectionType config = configurationProvider.getDox(collectionName);
-        final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
-
-        final Map<String, String> extra = getExtra(unsanitizedContent);
-        final JsonObject content = sanitize(unsanitizedContent);
-        final String inputJson = content.toString();
-        validate(schema, inputJson);
-
-        final DoxMeta meta = readMetaAndLock(config.getName(), doxId, version);
-        meta.incrementVersion();
-
-        meta.getAccessKey();
-        // TODO check the security.
-
-        final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
-
-        final byte[] accessKey = collectionAccessControl.buildAccessKey(config.getName(), inputJson, ctx.getCallerPrincipal().getName());
-
-        final Dox e = em.find(Dox.class, meta.getId());
-        e.setLastUpdatedBy(ctx.getCallerPrincipal());
-        e.setLastUpdatedOn(ts);
-        e.setContent(content);
-        e.setAccessKey(accessKey);
-        em.persist(e);
-
-        for (final LookupType unique : schema.getUnique()) {
-            final String lookupKey = JsonPath.compile(unique.getPath()).read(inputJson);
-            em.createNamedQuery(DoxUnique.UPDATE_UNIQUE_FOR_DOX).setParameter("dox", e).setParameter(DoxUnique.LOOKUP_KEY, lookupKey).executeUpdate();
+        if (configurationProvider.getCollection(collectionName).isLockable()) {
+            throw new PersistenceException("The lockId must be specified for updating " + collectionName);
         }
-        for (final LookupType lookup : schema.getLookup()) {
-            final String lookupKey = JsonPath.compile(lookup.getPath()).read(inputJson);
-            em.createNamedQuery(DoxLookup.UPDATE_LOOKUP_FOR_DOX).setParameter("dox", e).setParameter(DoxUnique.LOOKUP_KEY, lookupKey).executeUpdate();
+        return doUpdate(collectionName, doxId, contents, version);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DoxMeta update(final String collectionName,
+        final DoxID doxId,
+        final JsonObject contents,
+        final int version,
+        final int lockId) {
+
+        if (!configurationProvider.getCollection(collectionName).isLockable()) {
+            throw new PersistenceException(collectionName + " is not lockable");
         }
-
-        for (final IndexView indexView : indexViews) {
-            indexView.setCollection(config.getName());
-            indexView.setDoxID(doxId);
-        }
-        doxSearchBean.addToIndex(indexViews);
-
-        meta.setContentJson(content, doxId, e.getVersion());
-        eventHandler.onRecordUpdate(meta, e.getJsonContent(), extra);
-        return meta;
-
+        verifyLockedBy(collectionName, doxId, lockId);
+        return doUpdate(collectionName, doxId, contents, version);
     }
 
     private void validate(final SchemaType schema,
@@ -713,6 +806,26 @@ public class DoxBean implements
             | IOException e) {
             throw new PersistenceException(e);
         }
+    }
+
+    /**
+     * Check if a record is locked by the given lock ID.
+     *
+     * @param collectionName
+     *            collection name
+     * @param doxId
+     *            Dox ID
+     * @param lockId
+     *            lock ID
+     */
+    private void verifyLockedBy(final String collectionName,
+        final DoxID doxId,
+        final int lockId) {
+
+        em.createNamedQuery(DoxLock.READ_LOCK_BY_COLLECTION_NAME_DOX_ID_LOCK_ID)
+            .setParameter(DoxLock.COLLECTION_NAME, collectionName)
+            .setParameter(DoxLock.DOXID, doxId.toString())
+            .setParameter(DoxLock.LOCKID, lockId).getSingleResult();
     }
 
 }

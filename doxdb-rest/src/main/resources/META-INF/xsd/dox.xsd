@@ -92,6 +92,15 @@
 				</appinfo>
 			</annotation>
 		</attribute>
+		<attribute name="lockable" type="boolean" default="false">
+			<annotation>
+				<appinfo>
+					<jxb:property>
+						<jxb:javadoc>Indicates whether locks are required to make updates to the dox record.</jxb:javadoc>
+					</jxb:property>
+				</appinfo>
+			</annotation>
+		</attribute>
 	</complexType>
 	<simpleType name="ReadAllType">
 		<restriction base="token">

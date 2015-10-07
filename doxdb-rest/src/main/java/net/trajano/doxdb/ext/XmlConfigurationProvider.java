@@ -143,7 +143,7 @@ public class XmlConfigurationProvider implements
      */
     @Override
     @Lock(LockType.READ)
-    public CollectionType getDox(final String schemaName) {
+    public CollectionType getCollection(final String schemaName) {
 
         return doxen.get(schemaName);
     }

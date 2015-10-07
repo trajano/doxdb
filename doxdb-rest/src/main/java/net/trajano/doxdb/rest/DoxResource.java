@@ -216,10 +216,10 @@ public class DoxResource {
     @GET
     @Path("{collection}/{id}")
     @Produces(RESPONSE_TYPE)
-    public Response get(@PathParam("collection") final String collection,
-        @PathParam("id") final DoxID doxid) {
+    public Response get(@PathParam("collection") final String collectionName,
+        @PathParam("id") final DoxID doxId) {
 
-        final DoxMeta meta = dox.read(collection, doxid);
+        final DoxMeta meta = dox.read(collectionName, doxId);
         if (meta == null) {
             return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Dox not found").build();
         }
@@ -324,6 +324,18 @@ public class DoxResource {
             }
         };
         return Response.ok(out).encoding("UTF-8").build();
+    }
+
+    @POST
+    @Path("{collection}/{id}/lock")
+    @Produces(RESPONSE_TYPE)
+    public Response lock(@PathParam("collection") final String collectionName,
+        @PathParam("id") final DoxID doxId) {
+
+        final int lockId = dox.lock(collectionName, doxId);
+        final JsonObject lockJson = Json.createObjectBuilder().add("lockId", lockId).build();
+        sessionManager.sendMessage("LOCK", doxId, collectionName, new Date());
+        return Response.ok(lockJson).cacheControl(NO_CACHE).build();
     }
 
     /**
@@ -510,7 +522,7 @@ public class DoxResource {
         @QueryParam("f") final Integer from,
         @Context final UriInfo uriInfo) {
 
-        final SearchResult results = dox.searchWithSchemaName(index, schemaName, queryString, 50, from);
+        final SearchResult results = dox.searchWithCollectionName(index, schemaName, queryString, 50, from);
         final JsonObjectBuilder resultBuilder = searchResultBuilder(uriInfo, results);
         if (results.getBottomDoc() != null) {
             final String nextPage = uriInfo.getBaseUriBuilder().path("search").path(index).path(schemaName).queryParam("q", queryString).queryParam("f", results.getBottomDoc()).build().toASCIIString();
@@ -518,5 +530,18 @@ public class DoxResource {
         }
         final JsonObject resultJson = resultBuilder.build();
         return Response.ok(resultJson).cacheControl(NO_CACHE).build();
+    }
+
+    @DELETE
+    @Path("{collection}/{id}/lock/{lockId}")
+    @Produces(RESPONSE_TYPE)
+    public Response unlock(@PathParam("collection") final String collectionName,
+        @PathParam("id") final DoxID doxId,
+        @PathParam("lockId") final int lockId) {
+
+        dox.unlock(collectionName, doxId, lockId);
+        sessionManager.sendMessage("UNLOCK", doxId, collectionName, new Date());
+        return Response.noContent().build();
+
     }
 }

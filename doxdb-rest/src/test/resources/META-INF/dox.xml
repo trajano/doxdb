@@ -8,6 +8,11 @@
 			<unique name="horseFei" path="$.fei"/>
 		</schema>
 	</collection>
+	<collection name="user" oob="true" lockable="true">
+		<schema version="1" location="/schema/user.json">
+			<unique name="email" path="$.email"/>
+		</schema>
+	</collection>
 	<index name="myindex" mappedName="testIndex1" />
 	<index name="maskedindex" mappedName="testIndex2" />
 </dox-persistence>
