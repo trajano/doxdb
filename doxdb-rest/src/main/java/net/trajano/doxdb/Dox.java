@@ -49,7 +49,7 @@ import net.trajano.doxdb.internal.DoxPrincipal;
 }) )
 @NamedQueries({
     @NamedQuery(name = Dox.READ_META_BY_COLLECTION_NAME_DOX_ID,
-        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId",
+        query = "select new net.trajano.doxdb.DoxMeta(e.doxRecordId, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId",
         lockMode = LockModeType.OPTIMISTIC),
 
     @NamedQuery(name = Dox.READ_BY_COLLECTION_NAME_DOX_ID,
@@ -57,7 +57,7 @@ import net.trajano.doxdb.internal.DoxPrincipal;
         lockMode = LockModeType.OPTIMISTIC),
 
     @NamedQuery(name = Dox.READ_FOR_UPDATE_META_BY_SCHEMA_NAME_DOX_ID_VERSION,
-        query = "select new net.trajano.doxdb.DoxMeta(e.id, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version",
+        query = "select new net.trajano.doxdb.DoxMeta(e.doxRecordId, e.doxId, e.version, e.collectionName, e.collectionSchemaVersion, e.accessKey, e.createdBy, e.createdOn, e.lastUpdatedBy, e.lastUpdatedOn) from Dox e where e.collectionName = :collectionName and e.doxId = :doxId and e.version = :version",
         lockMode = LockModeType.OPTIMISTIC_FORCE_INCREMENT),
 
     @NamedQuery(name = Dox.READ_ALL_BY_COLLECTION_NAME,
@@ -136,7 +136,7 @@ public class Dox {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long doxRecordId;
 
     @Column(nullable = false,
         length = DoxLength.PRINCIPAL_LENGTH)
@@ -220,9 +220,9 @@ public class Dox {
         return new DoxID(doxId);
     }
 
-    public long getId() {
+    public long getDoxRecordId() {
 
-        return id;
+        return doxRecordId;
     }
 
     public String getJsonContent() {
@@ -331,9 +331,9 @@ public class Dox {
         this.doxId = doxId.toString();
     }
 
-    public void setId(final long id) {
+    public void setDoxRecordId(final long id) {
 
-        this.id = id;
+        doxRecordId = id;
     }
 
     public void setLastUpdatedBy(final Principal lastUpdatedBy) {

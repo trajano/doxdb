@@ -37,7 +37,7 @@ import net.trajano.doxdb.schema.SchemaType;
         "lookupName",
         "lookupKey"
 }) ,
-    indexes = @Index(columnList = "doxId") )
+    indexes = @Index(columnList = "doxRecordId") )
 @NamedQueries({
     @NamedQuery(name = DoxUnique.UNIQUE_LOOKUP,
         query = "select u.dox from DoxUnique u where u.collectionName = :collectionName and u.lookupName = :lookupName and u.lookupKey = :lookupKey",
@@ -108,7 +108,7 @@ public class DoxUnique {
 
     @ManyToOne(fetch = FetchType.LAZY,
         optional = false)
-    @JoinColumn(name = "doxId",
+    @JoinColumn(name = "doxRecordId",
         nullable = false)
     private Dox dox;
 

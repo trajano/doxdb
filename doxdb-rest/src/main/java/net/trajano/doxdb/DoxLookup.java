@@ -31,7 +31,7 @@ import net.trajano.doxdb.schema.SchemaType;
 @Entity
 @Table(
     indexes = {
-        @Index(columnList = "doxId"),
+        @Index(columnList = "doxRecordId"),
         @Index(columnList = "collectionName,lookupName,lookupKey")
 })
 @NamedQueries({
@@ -104,7 +104,7 @@ public class DoxLookup {
 
     @ManyToOne(fetch = FetchType.LAZY,
         optional = false)
-    @JoinColumn(name = "doxId",
+    @JoinColumn(name = "doxRecordId",
         nullable = false)
     private Dox dox;
 
