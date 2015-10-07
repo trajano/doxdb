@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// net.trajano.doxdb.ejb.internal.DoxLength
-	c145 [label=<<table title="net.trajano.doxdb.ejb.internal.DoxLength" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLength.html">
+	c149 [label=<<table title="net.trajano.doxdb.ejb.internal.DoxLength" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DoxLength.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DoxLength </td></tr>
 		</table></td></tr>

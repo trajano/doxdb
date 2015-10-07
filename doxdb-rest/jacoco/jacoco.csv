@@ -7,7 +7,7 @@ DoxDB REST API,net.trajano.doxdb.ejb,EsJaxRsSearchBean,905,0,56,0,140,0,39,0,11,
 DoxDB REST API,net.trajano.doxdb.ejb,DoxImportBean,1250,0,106,0,228,0,69,0,16,0
 DoxDB REST API,net.trajano.doxdb.ejb,DoxImportBean.new SimpleFileVisitor() {...},16,0,0,0,3,0,2,0,2,0
 DoxDB REST API,net.trajano.doxdb.ejb,EsJaxRsProvider,99,0,6,0,15,0,7,0,4,0
-DoxDB REST API,net.trajano.doxdb.ejb,DoxBean,760,681,54,26,131,137,47,26,15,18
+DoxDB REST API,net.trajano.doxdb.ejb,DoxBean,799,847,57,33,136,161,50,34,15,24
 DoxDB REST API,net.trajano.doxdb.internal,DoxPrincipal,9,39,3,3,4,13,4,5,1,5
 DoxDB REST API,net.trajano.doxdb.rest,EntityNotFoundMapper,11,0,0,0,2,0,2,0,2,0
 DoxDB REST API,net.trajano.doxdb.rest,DoxIDMapper,11,0,0,0,3,0,3,0,3,0
@@ -15,11 +15,12 @@ DoxDB REST API,net.trajano.doxdb.rest,DoxRestApplication,30,0,0,0,2,0,2,0,2,0
 DoxDB REST API,net.trajano.doxdb.rest,OptimisticLockingMapper,11,0,0,0,2,0,2,0,2,0
 DoxDB REST API,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},193,0,12,0,21,0,8,0,2,0
 DoxDB REST API,net.trajano.doxdb.rest,CorsFilter,17,0,2,0,4,0,3,0,2,0
-DoxDB REST API,net.trajano.doxdb.rest,DoxResource,765,0,52,0,127,0,46,0,20,0
+DoxDB REST API,net.trajano.doxdb.rest,DoxResource,810,0,52,0,134,0,48,0,22,0
 DoxDB REST API,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},76,0,12,0,10,0,8,0,2,0
 DoxDB REST API,net.trajano.doxdb.rest,DoxResource.new StreamingOutput() {...},83,0,10,0,10,0,7,0,2,0
 DoxDB REST API,net.trajano.doxdb,IndexView,126,0,0,0,35,0,19,0,19,0
 DoxDB REST API,net.trajano.doxdb,DoxOobTombstone,88,3,0,0,36,1,24,1,24,1
+DoxDB REST API,net.trajano.doxdb,DoxLock,16,26,0,0,5,10,4,6,4,6
 DoxDB REST API,net.trajano.doxdb,DoxOob,56,3,0,0,24,1,16,1,16,1
 DoxDB REST API,net.trajano.doxdb,DoxLookup,67,19,1,1,20,4,10,2,9,2
 DoxDB REST API,net.trajano.doxdb,DoxID,0,160,0,16,0,38,0,15,0,7
@@ -29,7 +30,7 @@ DoxDB REST API,net.trajano.doxdb,SearchResult,33,0,0,0,11,0,7,0,7,0
 DoxDB REST API,net.trajano.doxdb,DoxUnique,15,71,0,2,5,19,5,7,5,6
 DoxDB REST API,net.trajano.doxdb,DoxMeta,53,145,1,3,21,44,13,18,12,17
 DoxDB REST API,net.trajano.doxdb.schema,SchemaType,83,26,19,3,19,8,21,6,11,5
-DoxDB REST API,net.trajano.doxdb.schema,CollectionType,119,12,23,1,33,4,29,3,17,3
+DoxDB REST API,net.trajano.doxdb.schema,CollectionType,135,21,25,3,38,7,33,5,20,4
 DoxDB REST API,net.trajano.doxdb.schema,DoxPersistence,73,15,16,2,18,5,19,3,10,3
 DoxDB REST API,net.trajano.doxdb.schema,LookupType,22,9,4,0,6,3,6,3,4,3
 DoxDB REST API,net.trajano.doxdb.schema,ReadAllType,36,49,4,0,5,7,5,3,3,3

@@ -1,6 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./AbstractBeanTest.html" title="net.trajano.doxdb.sample.test.AbstractBeanTest" alt="" coords="16,17,140,42"/>
-<area shape="rect" id="node1" href="./AbstractBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="5,5,151,53"/>
-<area shape="rect" id="node2_1" href="./DoxBeanTest.html" title="net.trajano.doxdb.sample.test.DoxBeanTest" alt="" coords="28,113,128,138"/>
-<area shape="rect" id="node2" href="./DoxBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="17,101,139,149"/>
+<area shape="rect" id="node1_0" href="./AbstractBeanTest.html" title="net.trajano.doxdb.sample.test.AbstractBeanTest" alt="" coords="69,17,193,42"/>
+<area shape="rect" id="node1" href="./AbstractBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="59,5,204,53"/>
+<area shape="rect" id="node2_1" href="./DoxBeanTest.html" title="net.trajano.doxdb.sample.test.DoxBeanTest" alt="" coords="16,113,116,138"/>
+<area shape="rect" id="node2" href="./DoxBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="5,101,127,149"/>
+<area shape="rect" id="node3_2" href="./LockTest.html" title="net.trajano.doxdb.sample.test.LockTest" alt="" coords="161,113,235,138"/>
+<area shape="rect" id="node3" href="./LockTest.html" title="&lt;TABLE&gt;" alt="" coords="151,101,245,149"/>
 </map>

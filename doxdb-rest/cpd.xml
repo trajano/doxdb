@@ -158,7 +158,7 @@
     public SearchResult advancedSearch(final String sourceIndex,]]></codefragment>
    </duplication>
    <duplication lines="26" tokens="178">
-      <file line="209"
+      <file line="210"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
       <file line="407"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
@@ -402,7 +402,7 @@
     @Column(nullable = false,]]></codefragment>
    </duplication>
    <duplication lines="49" tokens="120">
-      <file line="575"
+      <file line="673"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
       <file line="452"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
@@ -456,8 +456,8 @@
         this.migrator = migrator;
     }]]></codefragment>
    </duplication>
-   <duplication lines="35" tokens="108">
-      <file line="684"
+   <duplication lines="33" tokens="107">
+      <file line="777"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxBean.java"/>
       <file line="500"
             path="/var/lib/jenkins/jobs/doxdb/workspace/doxdb-rest/src/main/java/net/trajano/doxdb/ejb/DoxImportBean.java"/>
@@ -493,9 +493,7 @@
             | IOException e) {
             throw new PersistenceException(e);
         }
-    }
-
-}]]></codefragment>
+    }]]></codefragment>
    </duplication>
    <duplication lines="11" tokens="101">
       <file line="246"

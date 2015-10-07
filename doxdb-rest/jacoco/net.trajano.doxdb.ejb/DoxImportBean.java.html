@@ -387,7 +387,7 @@ import net.trajano.doxdb.schema.SchemaType;
 <span class="nc" id="L387">            final Date lastUpdatedOn = new Date(DatatypeConverter.parseDateTime(mainBody.getHeader(&quot;Last-Updated-On&quot;)[0])</span>
                 .getTimeInMillis());
 
-<span class="nc" id="L390">            final CollectionType config = configurationProvider.getDox(collectionName);</span>
+<span class="nc" id="L390">            final CollectionType config = configurationProvider.getCollection(collectionName);</span>
 <span class="nc" id="L391">            final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);</span>
 
 <span class="nc" id="L393">            final JsonObject content = Json.createReader(mainBody.getInputStream()).readObject();</span>

@@ -395,7 +395,7 @@
 <a class="jxr_linenumber" name="L387" href="#L387">387</a>             <strong class="jxr_keyword">final</strong> Date lastUpdatedOn = <strong class="jxr_keyword">new</strong> Date(DatatypeConverter.parseDateTime(mainBody.getHeader(<span class="jxr_string">"Last-Updated-On"</span>)[0])
 <a class="jxr_linenumber" name="L388" href="#L388">388</a>                 .getTimeInMillis());
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>             <strong class="jxr_keyword">final</strong> CollectionType config = configurationProvider.getDox(collectionName);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>             <strong class="jxr_keyword">final</strong> CollectionType config = configurationProvider.getCollection(collectionName);
 <a class="jxr_linenumber" name="L391" href="#L391">391</a>             <strong class="jxr_keyword">final</strong> SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 
 <a class="jxr_linenumber" name="L393" href="#L393">393</a>             <strong class="jxr_keyword">final</strong> JsonObject content = Json.createReader(mainBody.getInputStream()).readObject();

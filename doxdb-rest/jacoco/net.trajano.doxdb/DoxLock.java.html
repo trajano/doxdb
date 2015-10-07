@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DoxLock.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DoxDB REST API</a> &gt; <a href="index.source.html" class="el_package">net.trajano.doxdb</a> &gt; <span class="el_source">DoxLock.java</span></div><h1>DoxLock.java</h1><pre class="source lang-java linenums">package net.trajano.doxdb;
+
+import java.security.Principal;
+import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.LockModeType;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+
+import net.trajano.doxdb.ejb.internal.DoxLength;
+import net.trajano.doxdb.internal.DoxPrincipal;
+
+@Entity
+@Table(
+    indexes = {
+        @Index(columnList = &quot;lockedDoxId,lockId&quot;)
+},
+    uniqueConstraints = @UniqueConstraint(columnNames = {
+        &quot;lockedDoxId&quot;
+}) )
+@NamedQueries({
+    @NamedQuery(name = DoxLock.READ_LOCK_BY_COLLECTION_NAME_DOX_ID,
+        query = &quot;from DoxLock e where e.lockedDox.collectionName = :collectionName and e.lockedDox.doxId = :doxId&quot;,
+        lockMode = LockModeType.NONE),
+
+    @NamedQuery(name = DoxLock.REMOVE_LOCK_BY_COLLECTION_NAME_DOX_ID_LOCK_ID,
+        query = &quot;delete from DoxLock e where e.lockedDox.collectionName = :collectionName and e.lockedDox.doxId = :doxId and e.lockId = :lockId&quot;),
+
+    @NamedQuery(name = DoxLock.READ_LOCK_BY_COLLECTION_NAME_DOX_ID_LOCK_ID,
+        query = &quot;from DoxLock e where e.lockedDox.collectionName = :collectionName and e.lockedDox.doxId = :doxId and e.lockId = :lockId&quot;,
+        lockMode = LockModeType.NONE)
+
+})
+<span class="fc" id="L48">public class DoxLock {</span>
+
+    public static final String COLLECTION_NAME = &quot;collectionName&quot;;
+
+    public static final String DOXID = &quot;doxId&quot;;
+
+    public static final String LOCKID = &quot;lockId&quot;;
+
+    /**
+     * Named query {@value #READ_LOCK_BY_COLLECTION_NAME_DOX_ID};
+     */
+    public static final String READ_LOCK_BY_COLLECTION_NAME_DOX_ID = &quot;readLockByCollectionNameDoxID&quot;;
+
+    /**
+     * Named query {@value #READ_LOCK_BY_COLLECTION_NAME_DOX_ID_LOCK_ID};
+     */
+    public static final String READ_LOCK_BY_COLLECTION_NAME_DOX_ID_LOCK_ID = &quot;readLockByCollectionNameDoxIDLockId&quot;;
+
+    /**
+     * Named query {@value #REMOVE_LOCK_BY_COLLECTION_NAME_DOX_ID_LOCK_ID};
+     */
+    public static final String REMOVE_LOCK_BY_COLLECTION_NAME_DOX_ID_LOCK_ID = &quot;removeLockByCollectionNameDoxIDLockId&quot;;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    /**
+     * Principal of the person that requested the lock.
+     */
+    @Column(nullable = false,
+        updatable = false,
+        length = DoxLength.PRINCIPAL_LENGTH)
+    private String lockedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY,
+        optional = false)
+    @JoinColumn(name = &quot;lockedDoxId&quot;,
+        nullable = false)
+    private Dox lockedDox;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lockedOn;
+
+    @Column(nullable = false)
+    private int lockId;
+
+    /**
+     * Generates a new lock ID. It does not use a cryptographically secure RNG,
+     * but this is not used for cryptography.
+     *
+     * @return the new lock ID.
+     */
+    public int generateLockID() {
+
+<span class="fc" id="L104">        lockId = ThreadLocalRandom.current().nextInt();</span>
+<span class="fc" id="L105">        return lockId;</span>
+    }
+
+    public Principal getLockedBy() {
+
+<span class="nc" id="L110">        return new DoxPrincipal(lockedBy);</span>
+    }
+
+    public Dox getLockedDox() {
+
+<span class="nc" id="L115">        return lockedDox;</span>
+    }
+
+    public Date getLockedOn() {
+
+<span class="nc" id="L120">        return lockedOn;</span>
+    }
+
+    public int getLockId() {
+
+<span class="fc" id="L125">        return lockId;</span>
+    }
+
+    public void setLockedBy(final Principal lockedBy) {
+
+<span class="fc" id="L130">        this.lockedBy = lockedBy.getName();</span>
+
+<span class="fc" id="L132">    }</span>
+
+    public void setLockedBy(final String lockedBy) {
+
+<span class="nc" id="L136">        this.lockedBy = lockedBy;</span>
+<span class="nc" id="L137">    }</span>
+
+    public void setLockedDox(final Dox lockedDox) {
+
+<span class="fc" id="L141">        this.lockedDox = lockedDox;</span>
+<span class="fc" id="L142">    }</span>
+
+    public void setLockedOn(final Date lastUpdatedOn) {
+
+<span class="fc" id="L146">        lockedOn = lastUpdatedOn;</span>
+<span class="fc" id="L147">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
