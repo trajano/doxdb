@@ -25,9 +25,9 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2015 Trajano</copyright>
     <item>
-      <title>File: 91,
+      <title>File: 92,
              Errors: 4,
-             Warnings: 2384,
+             Warnings: 2416,
              Infos: 0
       </title>
             <link>http://site.trajano.net/doxdb//checkstyle.html</link>
@@ -53,6 +53,20 @@ under the License.
                 </td>
                 <td>
                   3
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://site.trajano.net/doxdb//checkstyle.html#net.trajano.doxdb.DoxLock.java">net/trajano/doxdb/DoxLock.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
                 </td>
                 <td>
                   0
@@ -318,7 +332,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  22
+                  23
                 </td>
                 <td>
                   0
@@ -724,7 +738,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  17
+                  29
                 </td>
                 <td>
                   0
@@ -752,7 +766,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  20
+                  25
                 </td>
                 <td>
                   0
@@ -836,7 +850,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  22
+                  24
                 </td>
                 <td>
                   0
