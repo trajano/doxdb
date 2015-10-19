@@ -31,7 +31,8 @@ Completed:
    * Advanced [ElasticSearch][] queries
    * Unique lookup queries
    * Non-unique lookup queries
-   * Defining lookups via json-path  
+   * Defining lookups via json-path
+   * Scripting/Rule engine
 
 Remaining:
 
