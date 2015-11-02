@@ -1,7 +1,8 @@
 package net.trajano.doxdb.ext;
 
 import java.security.Principal;
-import java.util.Map;
+
+import javax.json.JsonObject;
 
 import net.trajano.doxdb.Dox;
 import net.trajano.doxdb.DoxID;
@@ -22,7 +23,7 @@ public interface EventHandler {
      */
     void onRecordCreate(DoxMeta meta,
         String content,
-        Map<String, String> extra);
+        JsonObject extra);
 
     /**
      * Called when a {@link Dox} record is deleted.
@@ -37,7 +38,7 @@ public interface EventHandler {
      */
     void onRecordDelete(DoxMeta meta,
         String content,
-        Map<String, String> extra);
+        JsonObject extra);
 
     /**
      * Called when a {@link Dox} record is read.
@@ -71,5 +72,5 @@ public interface EventHandler {
      */
     void onRecordUpdate(DoxMeta meta,
         String json,
-        Map<String, String> extra);
+        JsonObject extra);
 }

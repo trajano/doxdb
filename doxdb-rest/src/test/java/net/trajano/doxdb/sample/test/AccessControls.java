@@ -1,10 +1,10 @@
 package net.trajano.doxdb.sample.test;
 
 import java.security.Principal;
-import java.util.Map;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.json.JsonObject;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
@@ -61,7 +61,7 @@ public class AccessControls implements
     @Override
     public void onRecordCreate(final DoxMeta meta,
         final String json,
-        final Map<String, String> extra) {
+        final JsonObject extra) {
 
         System.out.println("created " + meta.getCollectionName() + " " + meta.getDoxId() + " " + json);
     }
@@ -69,7 +69,7 @@ public class AccessControls implements
     @Override
     public void onRecordDelete(final DoxMeta meta,
         final String json,
-        final Map<String, String> extra) {
+        final JsonObject extra) {
 
         System.out.println("deleted " + meta.getCollectionName() + " " + meta.getDoxId() + " " + json);
 
@@ -88,7 +88,7 @@ public class AccessControls implements
     @Override
     public void onRecordUpdate(final DoxMeta meta,
         final String json,
-        final Map<String, String> extra) {
+        final JsonObject extra) {
 
         System.out.println("updated " + meta.getCollectionName() + " " + meta.getDoxId() + " " + json);
 
