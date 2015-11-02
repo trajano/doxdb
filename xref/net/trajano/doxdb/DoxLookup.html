@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  @Entity
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  @Table(
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>      indexes = {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>          @Index(columnList = <span class="jxr_string">"doxId"</span>),
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>          @Index(columnList = <span class="jxr_string">"doxRecordId"</span>),
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>          @Index(columnList = <span class="jxr_string">"collectionName,lookupName,lookupKey"</span>)
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  })
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  @NamedQueries({
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>     @ManyToOne(fetch = FetchType.LAZY,
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>         optional = false)
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>     @JoinColumn(name = <span class="jxr_string">"doxId"</span>,
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>     @JoinColumn(name = <span class="jxr_string">"doxRecordId"</span>,
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>         nullable = false)
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>     <strong class="jxr_keyword">private</strong> <a href="../../../net/trajano/doxdb/Dox.html">Dox</a> dox;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
