@@ -1,7 +1,8 @@
 package net.trajano.doxdb.ext;
 
 import java.security.Principal;
-import java.util.Map;
+
+import javax.json.JsonObject;
 
 import net.trajano.doxdb.DoxID;
 import net.trajano.doxdb.DoxMeta;
@@ -14,20 +15,29 @@ import net.trajano.doxdb.DoxMeta;
 public class DefaultEventHandler implements
     EventHandler {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onRecordCreate(final DoxMeta meta,
         final String content,
-        final Map<String, String> extra) {
+        final JsonObject extra) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onRecordDelete(final DoxMeta meta,
         final String content,
-        final Map<String, String> extra) {
+        final JsonObject extra) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onRecordRead(final Principal userPrincipal,
         final String collectionName,
@@ -36,10 +46,13 @@ public class DefaultEventHandler implements
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onRecordUpdate(final DoxMeta meta,
         final String json,
-        final Map<String, String> extra) {
+        final JsonObject extra) {
 
     }
 

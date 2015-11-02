@@ -20,7 +20,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -90,6 +89,11 @@ import net.trajano.doxdb.schema.SchemaType;
 @LocalBean
 @Local(DoxImport.class)
 public class DoxImportBean {
+
+    /**
+     * An empty JsonObject.
+     */
+    private static final JsonObject EMPTY_EXTRA = Json.createObjectBuilder().build();
 
     private static Path buildFromCollectionAndDoxID(final String collectionName,
         final String doxIdString) {
@@ -437,7 +441,7 @@ public class DoxImportBean {
             meta.setVersion(1);
             meta.setDoxId(doxId);
 
-            eventHandler.onRecordCreate(meta, inputJson, Collections.<String, String> emptyMap());
+            eventHandler.onRecordCreate(meta, inputJson, EMPTY_EXTRA);
 
             final IndexView[] indexViews = indexer.buildIndexViews(config.getName(), inputJson);
             for (final IndexView indexView : indexViews) {

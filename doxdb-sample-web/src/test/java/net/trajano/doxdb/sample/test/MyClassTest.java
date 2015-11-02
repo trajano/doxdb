@@ -1,6 +1,6 @@
 package net.trajano.doxdb.sample.test;
 
-import java.util.Collections;
+import javax.json.Json;
 
 import org.junit.Test;
 
@@ -26,10 +26,10 @@ public class MyClassTest {
     public void testMyEventHandler() {
 
         final MyEventHandler eventHandler = new MyEventHandler();
-        eventHandler.onRecordCreate(new DoxMeta(), "", Collections.<String, String> emptyMap());
-        eventHandler.onRecordDelete(new DoxMeta(), "", Collections.<String, String> emptyMap());
+        eventHandler.onRecordCreate(new DoxMeta(), "", Json.createObjectBuilder().build());
+        eventHandler.onRecordDelete(new DoxMeta(), "", Json.createObjectBuilder().build());
         eventHandler.onRecordRead(new DoxPrincipal("test"), "col", null, "");
-        eventHandler.onRecordUpdate(new DoxMeta(), "", Collections.<String, String> emptyMap());
+        eventHandler.onRecordUpdate(new DoxMeta(), "", Json.createObjectBuilder().build());
     }
 
 }

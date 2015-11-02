@@ -8,11 +8,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.Resource;
@@ -105,20 +103,20 @@ public class DoxBean implements
 
     /**
      * Extracts the extra info. Extra info is any property that starts with
-     * {@code _} except for {@code _id} and {@code _version} that is a string.
+     * {@code _} except for {@code _id} and {@code _version}.
      *
      * @param jsonObject
-     * @return
+     * @return {@link JsonObject} containing only extra data.
      */
-    private static Map<String, String> getExtra(final JsonObject jsonObject) {
+    private static JsonObject getExtra(final JsonObject jsonObject) {
 
-        final Map<String, String> extra = new HashMap<>();
+        final JsonObjectBuilder b = Json.createObjectBuilder();
         for (final String key : jsonObject.keySet()) {
             if (key.startsWith("_") && !"_id".equals(key) && !"_version".equals(key) && jsonObject.getValueType() == JsonValue.ValueType.STRING) {
-                extra.put(key, jsonObject.getString(key));
+                b.add(key, jsonObject.get(key));
             }
         }
-        return extra;
+        return b.build();
     }
 
     /**
@@ -190,7 +188,7 @@ public class DoxBean implements
         final CollectionType config = configurationProvider.getCollection(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
-        final Map<String, String> extra = getExtra(unsanitizedContent);
+        final JsonObject extra = getExtra(unsanitizedContent);
         final JsonObject content = sanitize(unsanitizedContent);
         validate(schema, content);
 
@@ -262,7 +260,7 @@ public class DoxBean implements
 
         final Date ts = new Date();
         final CollectionType config = configurationProvider.getCollection(collectionName);
-        final Map<String, String> extra = getExtra(extraJson);
+        final JsonObject extra = getExtra(extraJson);
         final DoxMeta meta = readMetaAndLock(config.getName(), doxid, version);
 
         meta.getAccessKey();
@@ -305,7 +303,7 @@ public class DoxBean implements
         final CollectionType config = configurationProvider.getCollection(collectionName);
         final SchemaType schema = configurationProvider.getCollectionSchema(collectionName);
 
-        final Map<String, String> extra = getExtra(unsanitizedContent);
+        final JsonObject extra = getExtra(unsanitizedContent);
         final JsonObject content = sanitize(unsanitizedContent);
         final String inputJson = content.toString();
         validate(schema, inputJson);
